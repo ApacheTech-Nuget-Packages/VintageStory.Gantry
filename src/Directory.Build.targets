@@ -1,0 +1,14 @@
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- Set Package Version Info -->
+
+	<PropertyGroup>
+		<AssemblyFileVersion>$(Version)</AssemblyFileVersion>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+
+		<FileVersion>$(Version)</FileVersion>
+
+		<RootNamespace>$(AssemblyName)</RootNamespace>
+	</PropertyGroup>
+
+</Project>
