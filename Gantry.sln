@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gantry.Tests.Unit", "tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gantry.Tests.Benchmarks", "tests\Gantry.Tests.Benchmarks\Gantry.Tests.Benchmarks.csproj", "{884658E6-905D-44D3-A8DE-4F8A6F2EFB4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gantry.Tests.Integration", "Gantry.Tests.Integration\Gantry.Tests.Integration.csproj", "{5EDED8C7-F0EF-48FB-966A-179C0F92C8E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gantry.Tests.Integration", "tests\Gantry.Tests.Integration\Gantry.Tests.Integration.csproj", "{5EDED8C7-F0EF-48FB-966A-179C0F92C8E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

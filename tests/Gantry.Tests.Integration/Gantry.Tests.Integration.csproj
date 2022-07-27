@@ -140,7 +140,7 @@
     <Folder Include="_Includes\assets\gantryintegrationtests\worldproperties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Gantry.Core\Gantry.Core.csproj">
+    <ProjectReference Include="..\..\src\Gantry.Core\Gantry.Core.csproj">
       <Project>{2677e37d-3c60-40a2-9767-2c02c1085e20}</Project>
       <Name>Gantry.Core</Name>
     </ProjectReference>
