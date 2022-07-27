@@ -1,0 +1,45 @@
+﻿Installation Complete
+~~~~~~~~~~~~~~~~~~~~~
+
+Thank you for using the mod template, set up by Apache.
+
+Within the sample `ModSystem`, there is a client-side command, as a basic example of how the mod works.
+You should be able to set this project as the start-up project for the solution, and run the mod immediately.
+Once logged in, you should be able to type `.hello` in chat, and see the result, `"Hello World!"`, displayed as a chat notification.
+You can delete this file, once you have verified that the game can load the mod, and run the command.
+
+First Time Users
+~~~~~~~~~~~~~~~~
+
+If this is your first time using the mod template, and you have just set up your Environment Variables within
+the wizard, you will likely see a number of errors, and the mod will not run. This is because Visual Studio needs
+to be restarted, in order for the Environment Variables to be refreshed. Once you reopen your solutions, these
+error messages will disappear, and you'll be good to go.
+
+Finishing Steps
+~~~~~~~~~~~~~~~
+
+There are a number of optional completion steps that you may wish to take.
+
+ • Includes Folder
+    - Every file that is placed within the `_Includes` folder will be copied into the mod, when the project is built.
+      Use this folder to add assets, a mod icon, other forms of documentation, etc.
+
+ • Assets
+    - An `assets` folder has been included, with empty folders for each of the different asset categories.
+      Use, or delete these folders, as needed. An English language file has also been included, to show the
+      basic principle of translatable strings.
+
+ • Mod Info
+    - A minimal `modinfo.json` file has been included; but you should check to make sure all information is correct,
+      and add any missing records that your mod will need, in order to run.
+
+ • Readme File
+    - A basic `README.md` file has been included, which will be shipped along with your mod.
+      You should expand this file, and give information about your mod, and how to use it. You can also use this
+      as a template to add to the ModDB page, when you upload your mod.
+
+ • Licensing
+    - This mod has come packaged with a standard MIT License, from https://opensource.org/licenses/MIT.
+      Feel free to open `LICENSE.md`, and change the licensing text, as per your needs.
+

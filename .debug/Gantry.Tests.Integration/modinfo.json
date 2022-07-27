@@ -1,0 +1,9 @@
+{
+  "type": "Code",
+  "modid": "gantryintegrationtests",
+  "name": "Gantry - Integration Tests",
+  "description": "Integration Tests for the Gantry MDK Core Framework",
+  "authors": [ "Gantry" ],
+  "version": "0.1.0",
+  "side": "Client"
+}

@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5EDED8C7-F0EF-48FB-966A-179C0F92C8E4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Gantry.Tests.Integration</RootNamespace>
+    <AssemblyName>Gantry.Tests.Integration</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(VINTAGE_STORY)\Vintagestory.exe</StartProgram>
+    <StartArguments>--tracelog --addModPath="$(SolutionDir).debug"</StartArguments>
+    <StartWorkingDirectory>$(VINTAGE_STORY)</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(VINTAGE_STORY)\Vintagestory.exe</StartProgram>
+    <StartArguments>--tracelog --addModPath="$(SolutionDir).release"</StartArguments>
+    <StartWorkingDirectory>$(VINTAGE_STORY)</StartWorkingDirectory>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="VintagestoryAPI">
+      <HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VintagestoryLib">
+      <HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VSCreativeMod">
+      <HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VSSurvivalMod">
+      <HintPath>$(VINTAGE_STORY)\Mods\VSSurvivalMod.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VSEssentials">
+      <HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="AnimatedGif">
+      <HintPath>$(VINTAGE_STORY)\Lib\AnimatedGif.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="cairo-sharp">
+      <HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(VINTAGE_STORY)\Lib\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>$(VINTAGE_STORY)\Lib\OpenTK.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="protobuf-net">
+      <HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>$(VINTAGE_STORY)\Lib\System.Data.SQLite.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Tavis.JsonPatch">
+      <HintPath>$(VINTAGE_STORY)\Lib\Tavis.JsonPatch.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="_Documentation\Finishing Steps.txt" />
+    <Content Include="_Documentation\Modding Resources.txt" />
+    <Content Include="_Includes\LICENSE.md" />
+    <Content Include="_Includes\README.md" />
+    <Content Include="_Includes\CREDITS.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="_Includes\assets\gantryintegrationtests\lang\en.json" />
+    <None Include="_Includes\modinfo.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="GameContent\" />
+    <Folder Include="Patches\" />
+    <Folder Include="Services\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\blocktypes\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\config\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\dialog\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\entities\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\fonts\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\itemtypes\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\music\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\patches\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\recipes\grid\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\shaderincludes\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\shaders\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\shapes\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\sounds\effect\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\textures\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\worldgen\" />
+    <Folder Include="_Includes\assets\gantryintegrationtests\worldproperties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\Gantry.Core\Gantry.Core.csproj">
+      <Project>{2677e37d-3c60-40a2-9767-2c02c1085e20}</Project>
+      <Name>Gantry.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+:: Copy all relevant files to output directory. ::
+xcopy "$(TargetDir)" "$(SolutionDir).debug\$(ProjectName)" /y /e /s &gt; NUL
+xcopy "$(ProjectDir)_Includes" "$(SolutionDir).debug\$(ProjectName)" /y /e /s &gt; NUL
+
+:: Package mod as zip file. ::
+powershell -ExecutionPolicy Unrestricted $(ProjectDir)$(ProjectName).ps1 -ModInfoPath $(ProjectDir)_Includes\modinfo.json -SourceFiles $(SolutionDir).debug\$(ProjectName)\* -ArchiveName $(SolutionDir).release\$(ProjectName)
+echo Zip File can be found at:  $(SolutionDir).release\
+		</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+:: Clean output directories. ::
+del /f /s /q $(SolutionDir).debug\$(ProjectName) &gt; NUL
+rmdir /s /q $(SolutionDir).debug\$(ProjectName) &gt; NUL
+del /f /s /q $(SolutionDir).release\ &gt; NUL
+rmdir /s /q $(SolutionDir).release\ &gt; NUL
+
+:: Rebuild necessary folders. ::
+if not exist $(SolutionDir).debug\$(ProjectName)\ mkdir $(SolutionDir).debug\$(ProjectName)\
+if not exist $(SolutionDir).release\ mkdir $(SolutionDir).release\
+		</PreBuildEvent>
+  </PropertyGroup>
+</Project>
