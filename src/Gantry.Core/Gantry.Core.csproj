@@ -3,15 +3,8 @@
 	<!-- Basic Info is set within Directory.Build.props -->
 
 	<PropertyGroup>
-		<!-- Package Specifics -->
-		<Title>VintageMods - MDK: Core</Title>
+		<Title>Gantry - Vintage Story MDK: Core</Title>
 		<Version>0.1.0.0</Version>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<!-- Assembly Specifics -->
-		<AssemblyName>VintageStory.Gantry.Core</AssemblyName>
-		<Copyright>Copyright © ApacheTech Solutons, 2022. All Rights Reserved.</Copyright>
 	</PropertyGroup>
 
 </Project>
