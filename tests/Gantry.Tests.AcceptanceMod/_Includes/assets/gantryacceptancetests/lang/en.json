@@ -1,0 +1,38 @@
+﻿{
+  // ==================================================================================
+  //  Feature: Colour Correction
+  // ==================================================================================
+
+  "Features.ColourCorrection.Dialogue.Title": "Colour Correction",
+  "Features.ColourCorrection.Description": "Helps people with poor vision, light sensitivity, or colour-blindness. Playing around with the colour settings can give everything a warm, or cool hue.",
+
+  "Features.ColourCorrection.Dialogue.lblEnabled": "Enabled:",
+  "Features.ColourCorrection.Dialogue.lblEnabled.HoverText": "Toggles the colour correction shader.",
+
+  "Features.ColourCorrection.Dialogue.lblPreset": "Preset:",
+  "Features.ColourCorrection.Dialogue.lblPreset.HoverText": "Simulates a specific type of colour vision deficiency.",
+
+  "Features.ColourCorrection.Dialogue.lblRedBalance": "Red Balance:",
+  "Features.ColourCorrection.Dialogue.lblRedBalance.HoverText": "Changes how much Red to apply to the scene.",
+
+  "Features.ColourCorrection.Dialogue.lblGreenBalance": "Green Balance:",
+  "Features.ColourCorrection.Dialogue.lblGreenBalance.HoverText": "Changes how much Green to apply to the scene.",
+
+  "Features.ColourCorrection.Dialogue.lblBlueBalance": "Blue Balance:",
+  "Features.ColourCorrection.Dialogue.lblBlueBalance.HoverText": "Changes how much Blue to apply to the scene.",
+
+  "Features.ColourCorrection.Dialogue.lblSaturation": "Saturation:",
+  "Features.ColourCorrection.Dialogue.lblSaturation.HoverText": "Changes the colour saturation of the scene. Lower values fade colours out, higher values make colours more vibrant.",
+
+  "Features.ColourCorrection.Dialogue.btnReset": "Reset Values",
+
+  "Features.ColourCorrection.Dialogue.Presets.Trichromacy": "Trichromacy", // Normal Human Vision.
+  "Features.ColourCorrection.Dialogue.Presets.Protanopia": "Protanopia", // Red Colour-Blindness
+  "Features.ColourCorrection.Dialogue.Presets.Deuteranopia": "Deuteranopia", // Green Colour-Blindness
+  "Features.ColourCorrection.Dialogue.Presets.Tritanopia": "Tritanopia", // Blue Colour-Blindness
+  "Features.ColourCorrection.Dialogue.Presets.Protanomaly": "Protanomaly", // Red Colour-Insensitivity
+  "Features.ColourCorrection.Dialogue.Presets.Deuteranomaly": "Deuteranomaly", // Green Colour-Insensitivity
+  "Features.ColourCorrection.Dialogue.Presets.Tritanomaly": "Tritanomaly", // Blue Colour-Insensitivity
+  "Features.ColourCorrection.Dialogue.Presets.Achromatopsia": "Achromatopsia", // Greyscale
+  "Features.ColourCorrection.Dialogue.Presets.Achromatomaly": "Achromatomaly" // Greyscale (Blue-Cone)
+}

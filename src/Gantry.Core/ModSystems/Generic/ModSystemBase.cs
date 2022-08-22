@@ -1,4 +1,7 @@
-﻿using Vintagestory.API.Common;
+﻿using JetBrains.Annotations;
+using Vintagestory.API.Client;
+using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace Gantry.Core.ModSystems.Generic
 {
@@ -6,8 +9,18 @@ namespace Gantry.Core.ModSystems.Generic
     ///     Base representation of a ModSystem used to extend Vintage Story.
     /// </summary>
     /// <seealso cref="ModSystem" />
+    [UsedImplicitly(ImplicitUseTargetFlags.All)]
     public abstract class ModSystemBase : ModSystem
     {
+        /// <summary>
+        ///     Initialises a new instance of the <see cref="ModSystemBase"/> class.
+        /// </summary>
+        protected ModSystemBase()
+        {
+            if (ModEx.ModInfo is not null) return;
+            ModEx.Initialise(GetType().Assembly);
+        }
+
         /// <summary>
         ///     Common API Components that are available on the server and the client.<br/>
         ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
@@ -23,8 +36,33 @@ namespace Gantry.Core.ModSystems.Generic
         /// </param>
         public override void StartPre(ICoreAPI api)
         {
-            UApi = api;
+            ApiEx.Initialise(api);
+            StartPreUniversal(UApi = api);
+            switch (api)
+            {
+                case ICoreClientAPI capi:
+                    StartPreClientSide(capi);
+                    break;
+                case ICoreServerAPI sapi:
+                    StartPreServerSide(sapi);
+                    break;
+            }
         }
+
+        /// <summary>
+        ///     Called during initial mod loading, called before any mod receives the call to Start().
+        /// </summary>
+        protected virtual void StartPreUniversal(ICoreAPI api) { }
+
+        /// <summary>
+        ///     Called during initial mod loading, called before any mod receives the call to Start().
+        /// </summary>
+        protected virtual void StartPreServerSide(ICoreServerAPI sapi) { }
+
+        /// <summary>
+        ///     Called during initial mod loading, called before any mod receives the call to Start().
+        /// </summary>
+        protected virtual void StartPreClientSide(ICoreClientAPI capi) { }
 
         /// <summary>
         ///     If you need mods to be executed in a certain order, adjust this methods return value.<br/>

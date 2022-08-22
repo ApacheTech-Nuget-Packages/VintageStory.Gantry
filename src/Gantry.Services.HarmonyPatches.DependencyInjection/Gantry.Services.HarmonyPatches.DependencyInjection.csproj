@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+
+	<!-- Basic Info is set within Directory.Build.props -->
+
+	<PropertyGroup>
+		<Title>Gantry MDK: Harmony Patching Service - Dependency Injection Extensions</Title>
+		<Description>Extension methods to aid the the registration of the Harmony Patching Service, into an Gantry MDK mod.</Description>
+		<Version>0.2.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.2.0" />
+		<PackageReference Include="VintageStory.Gantry.Services.HarmonyPatches" Version="0.2.0" />
+	</ItemGroup>
+
+</Project>

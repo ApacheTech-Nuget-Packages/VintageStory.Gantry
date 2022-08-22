@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-
-// ReSharper disable NonReadonlyMemberInGetHashCode
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedType.Global
+using JetBrains.Annotations;
 
 namespace Gantry.Core.Abstractions
 {
     /// <summary>
-    ///     Simple implementation of a string-based enumeration, allowing equatable string constants that can be implicitly
-    ///     cast to strings.
+    ///     Simple implementation of a string-based enumeration, allowing
+    ///     equatable string constants that can be implicitly cast to strings.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IEquatable{T}" />
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public abstract class StringEnum<T> : IEquatable<T> where T : StringEnum<T>, new()
     {
         /// <summary>
@@ -27,7 +23,7 @@ namespace Gantry.Core.Abstractions
         /// <summary>
         ///     The value given to this StringEnum member.
         /// </summary>
-        protected string Value { get; set; }
+        protected string Value { get; init; }
 
         bool IEquatable<T>.Equals(T other)
         {

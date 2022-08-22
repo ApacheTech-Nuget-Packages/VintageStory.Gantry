@@ -1,9 +1,7 @@
 ﻿using Gantry.Core.ModSystems.Generic;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
-
-// ReSharper disable UnusedType.Global
-// ReSharper disable UnusedMember.Global
 
 namespace Gantry.Core.ModSystems
 {
@@ -27,5 +25,14 @@ namespace Gantry.Core.ModSystems
         {
             return forSide.IsServer();
         }
+
+        /// <inheritdoc />
+        public sealed override void StartClientSide(ICoreClientAPI api) { }
+
+        /// <inheritdoc />
+        protected sealed override void StartPreClientSide(ICoreClientAPI capi) { }
+
+        /// <inheritdoc />
+        protected sealed override void StartPreUniversal(ICoreAPI api) { }
     }
 }

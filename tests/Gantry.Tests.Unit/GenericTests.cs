@@ -1,8 +1,9 @@
 using NUnit.Framework;
 
-namespace ApacheTech.VintageMods.MDK.Core.Tests.Unit
+namespace Gantry.Tests.Unit
 {
-    public class GenericTests
+    [TestFixture]
+    public class GantryTests
     {
         [Test]
         public void SanityCheck()

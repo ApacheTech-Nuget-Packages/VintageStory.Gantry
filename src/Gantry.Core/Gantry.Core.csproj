@@ -1,10 +1,54 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
 
 	<!-- Basic Info is set within Directory.Build.props -->
-
+	
 	<PropertyGroup>
-		<Title>Gantry - Vintage Story MDK: Core</Title>
-		<Version>0.1.0.0</Version>
+		<Title>Gantry Mod Development Kit</Title>
+		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
+		<Version>0.2.0</Version>
 	</PropertyGroup>
+	
+	<ItemGroup>
+	  <None Remove="_EmbeddedResources\lang\ar.json" />
+	  <None Remove="_EmbeddedResources\lang\de.json" />
+	  <None Remove="_EmbeddedResources\lang\en.json" />
+	  <None Remove="_EmbeddedResources\lang\eo.json" />
+	  <None Remove="_EmbeddedResources\lang\es-es.json" />
+	  <None Remove="_EmbeddedResources\lang\fr.json" />
+	  <None Remove="_EmbeddedResources\lang\it.json" />
+	  <None Remove="_EmbeddedResources\lang\ja.json" />
+	  <None Remove="_EmbeddedResources\lang\nl.json" />
+	  <None Remove="_EmbeddedResources\lang\pl.json" />
+	  <None Remove="_EmbeddedResources\lang\pt-br.json" />
+	  <None Remove="_EmbeddedResources\lang\ru.json" />
+	  <None Remove="_EmbeddedResources\lang\sk.json" />
+	  <None Remove="_EmbeddedResources\lang\sv-se.json" />
+	  <None Remove="_EmbeddedResources\lang\uk.json" />
+	  <None Remove="_EmbeddedResources\lang\zh-cn.json" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <EmbeddedResource Include="_EmbeddedResources\lang\de.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\nl.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\fr.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\eo.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\it.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\ja.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\pl.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\pt-br.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\es-es.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\sk.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\sv-se.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\uk.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\zh-cn.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\ar.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\en.json" />
+	  <EmbeddedResource Include="_EmbeddedResources\lang\ru.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="ApacheTech.Common.Extensions" Version="1.2.0" />
+	  <PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.2.0" />
+	</ItemGroup>
 
 </Project>

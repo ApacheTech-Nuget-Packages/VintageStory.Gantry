@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk"  ToolsVersion="Current">
+
+	<!-- Basic Info is set within Directory.Build.props -->
+
+	<PropertyGroup>
+		<Title>Gantry MDK: Dependency Injection Engine</Title>
+		<Description>Adds an IoC container for the game, using`ApacheTech.Common.DependencyInjection` as the injection engine. It manages the dependencies between classes, so that mods can stay easy to change, as they grow in size and complexity. </Description>
+		<Version>0.2.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="ApacheTech.Common.DependencyInjection"  Version="2.1.0" />
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.2.0" />
+	</ItemGroup>
+
+</Project>

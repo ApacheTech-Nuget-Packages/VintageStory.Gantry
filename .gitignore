@@ -13,6 +13,7 @@
 # Mod hosting folders
 .debug/
 .release/
+.publish/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

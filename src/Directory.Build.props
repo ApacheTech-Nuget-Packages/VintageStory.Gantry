@@ -1,10 +1,11 @@
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
 	<!-- Language Specifics -->
 
 	<PropertyGroup>
 		<LangVersion>10</LangVersion>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<EnablePackageValidation>true</EnablePackageValidation>
 	</PropertyGroup>
 
 	<!-- General Package Details -->
@@ -20,14 +21,13 @@
 
 		<DebugSymbols>True</DebugSymbols>
 		<DebugType>embedded</DebugType>
-		<Description>Gantry MDK ("Mod Development Kit") is a toolkit for aiding the development of third-party plugins, for Vintage Story.</Description>
 		<Deterministic>True</Deterministic>
 
 		<EmbedUntrackedSources>True</EmbedUntrackedSources>
 
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+		<PublishOnBuild>False</PublishOnBuild>
 
 		<NeutralLanguage>en</NeutralLanguage>
 
@@ -48,33 +48,19 @@
 	<!-- Test Suite Visibility -->
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="$(SolutionName).Tests.Unit" />
-		<InternalsVisibleTo Include="$(SolutionName).Tests.Integration" />
-		<InternalsVisibleTo Include="$(SolutionName).Tests.Acceptance" />
+		<InternalsVisibleTo Include="$(SolutionName).Tests.AcceptanceMod" />
 		<InternalsVisibleTo Include="$(SolutionName).Tests.Benchmarking" />
-	</ItemGroup>
-
-	<!-- Vintage Story Game Engine -->
-
-	<ItemGroup>
-		<Reference Include="VintagestoryAPI">
-			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="VintagestoryLib">
-			<HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-
-		<!-- Vintage Story Game Libraries -->
-		<Reference Include="0Harmony">
-			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
+		<InternalsVisibleTo Include="$(SolutionName).Tests.Integration" />
+		<InternalsVisibleTo Include="$(SolutionName).Tests.Unit" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="README.md" Link="README.md">
+		<InternalsVisibleTo Include="$(AssemblyName).DependencyInjection" />
+		<InternalsVisibleTo Include="$(ProjectName).DependencyInjection" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="README.md">
 			<Pack>True</Pack>
 			<PackagePath></PackagePath>
 		</None>
@@ -93,6 +79,51 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- Vintage Story Game Engine -->
+		<Reference Include="VintagestoryAPI">
+			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VintagestoryLib">
+			<HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSEssentials">
+			<HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSSurvivalMod">
+			<HintPath>$(VINTAGE_STORY)\Mods\VSSurvivalMod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSCreativeMod">
+			<HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<!-- Vintage Story Game Libraries -->
+		<Reference Include="0Harmony">
+			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(VINTAGE_STORY)\Lib\Newtonsoft.Json.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="protobuf-net">
+			<HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="cairo-sharp">
+			<HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IsExternalInit" Version="1.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
