@@ -20,15 +20,20 @@ namespace Gantry.Services.FileSystem
         /// <summary>
         /// 	Initialises static members of the <see cref="ModPaths" /> class.
         /// </summary>
-        public static void Initialise(string rootDirectoryName)
+        public static void Initialise(string rootDirectoryName, string worldIdentifier)
         {
             ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath,
                 rootDirectoryName.IfNullOrWhitespace(ModEx.ModInfo.ModID ?? Guid.NewGuid().ToString())));
             ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
-            ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, "World", ApiEx.Current.World.SavegameIdentifier)); 
+            ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, WorldGuid = worldIdentifier)); 
             ModRootPath = Path.GetDirectoryName(ModEx.ModAssembly.Location)!;
             ModAssetsPath = Path.Combine(ModRootPath, "assets");
         }
+
+        /// <summary>
+        ///     Gets the world unique identifier.
+        /// </summary>
+        public static string WorldGuid { get; private set; }
 
         /// <summary>
         ///     Gets the root path for all VintageMods mod files.
@@ -53,7 +58,7 @@ namespace Gantry.Services.FileSystem
         ///     Gets the path used for storing per-world data files.
         /// </summary>
         /// <value>A path on the filesystem, used to store mod files.</value>
-        public static string ModDataWorldPath { get; internal set; }
+        public static string ModDataWorldPath { get; private set; }
 
         /// <summary>
         ///     Gets the path that the mod library is stored in.
@@ -113,6 +118,7 @@ namespace Gantry.Services.FileSystem
             ModDataWorldPath = null;
             ModRootPath = null;
             ModAssetsPath = null;
+            WorldGuid = null;
         }
     }
 }

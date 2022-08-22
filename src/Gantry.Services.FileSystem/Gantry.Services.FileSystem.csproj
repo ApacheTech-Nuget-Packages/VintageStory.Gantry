@@ -5,9 +5,11 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service</Title>
 		<Description>Provides a service for interacting with the file system, when using Gantry MDK.</Description>
-		<Version>0.2.1</Version>
+		<Version>0.2.1.1</Version>
 		<PackageReleaseNotes>
-			Fixed: Settings files not saving changes correctly.
+			- Added: Conditional initialisation of ModPaths if world GUIDs don't match.
+			- Fixed: ModPaths now initialised with the World's GUID.
+			- Fixed: ModPaths file wasn't being disposed.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

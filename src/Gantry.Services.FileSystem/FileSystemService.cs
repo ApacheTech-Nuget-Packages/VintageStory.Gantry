@@ -37,7 +37,9 @@ namespace Gantry.Services.FileSystem
         public FileSystemService(FileSystemServiceOptions options)
         {
             _registeredFiles = new Dictionary<string, ModFileBase>();
-            if (string.IsNullOrWhiteSpace(ModPaths.ModRootPath)) ModPaths.Initialise(options.RootFolderName);
+            if (string.IsNullOrWhiteSpace(ModPaths.ModRootPath) || 
+                ModPaths.WorldGuid != ApiEx.Current.World.SavegameIdentifier) 
+                ModPaths.Initialise(options.RootFolderName, ApiEx.Current.World.SavegameIdentifier);
             if (options.RegisterSettingsFiles) this.RegisterSettingsFiles();
         }
 
@@ -189,6 +191,7 @@ namespace Gantry.Services.FileSystem
         public void Dispose()
         {
            ModSettings.Dispose();
+           ModPaths.Dispose();
             _registeredFiles.Clear();
         }
     }
