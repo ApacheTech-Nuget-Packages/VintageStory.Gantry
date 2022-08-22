@@ -95,16 +95,7 @@ namespace Gantry.Services.FileSystem.Configuration
         {
             featureName ??= typeof(T).Name.Replace("Settings", "");
             var json = File.ParseAs<JObject>() ?? JObject.Parse("{ \"Features\": {  } }");
-            var featureObj = json.SelectToken($"$.Features.{featureName}");
-            switch (featureObj)
-            {
-                case null:
-                    json.SelectToken("$.Features")[featureName] = JToken.FromObject(settings);
-                    break;
-                default:
-                    featureObj.Replace(JToken.FromObject(settings));
-                    break;
-            }
+            json.SelectToken("$.Features")[featureName] = JToken.FromObject(settings);
             File.SaveFrom(json.ToString(Formatting.Indented));
         }
 
