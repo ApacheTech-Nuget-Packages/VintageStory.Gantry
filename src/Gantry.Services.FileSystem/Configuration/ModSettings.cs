@@ -1,5 +1,7 @@
-﻿using Gantry.Core;
+﻿using System;
+using Gantry.Core;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
+using Gantry.Services.FileSystem.Enums;
 
 namespace Gantry.Services.FileSystem.Configuration
 {
@@ -43,7 +45,7 @@ namespace Gantry.Services.FileSystem.Configuration
         /// </summary>
         /// <value>The local settings.</value>
         internal static Abstractions.IJsonSettingsFile ServerLocal { get; set; }
-        
+
         /// <summary>
         ///     The global mod settings; these settings will persist through each gameworld.
         /// </summary>
@@ -61,6 +63,21 @@ namespace Gantry.Services.FileSystem.Configuration
         /// </summary>
         /// <value>The local settings.</value>
         public static Abstractions.IJsonSettingsFile Local => ApiEx.OneOf(ClientLocal, ServerLocal);
+
+        /// <summary>
+        ///     The mod settings for a specific <see cref="FileScope"/>.
+        /// </summary>
+        /// <value>The global settings.</value>
+        public static Abstractions.IJsonSettingsFile For(FileScope scope)
+        {
+            return scope switch
+            {
+                FileScope.Global => Global,
+                FileScope.World => World,
+                FileScope.Local => Local,
+                _ => throw new ArgumentOutOfRangeException(nameof(scope))
+            };
+        }
 
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

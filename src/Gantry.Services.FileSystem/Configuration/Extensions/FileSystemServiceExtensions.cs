@@ -2,17 +2,14 @@
 using Gantry.Core;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
-
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedType.Global
+using JetBrains.Annotations;
 
 namespace Gantry.Services.FileSystem.Configuration.Extensions
 {
     /// <summary>
     ///     Extension methods for use within the File System Service.
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class FileSystemServiceExtensions
     {
         /// <summary>
@@ -32,7 +29,7 @@ namespace Gantry.Services.FileSystem.Configuration.Extensions
             FileScope scope)
         {
             fileSystem.RegisterFile(fileName, scope);
-            var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName));
+            var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName), scope);
             switch (scope)
             {
                 case FileScope.Global:

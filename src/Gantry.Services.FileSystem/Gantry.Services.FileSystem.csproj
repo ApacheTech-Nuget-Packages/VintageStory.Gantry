@@ -5,11 +5,19 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service</Title>
 		<Description>Provides a service for interacting with the file system, when using Gantry MDK.</Description>
-		<Version>0.2.1.1</Version>
+		<Version>0.2.2</Version>
 		<PackageReleaseNotes>
-			- Added: Conditional initialisation of ModPaths if world GUIDs don't match.
-			- Fixed: ModPaths now initialised with the World's GUID.
-			- Fixed: ModPaths file wasn't being disposed.
+			**FileSystem Service 0.2.2**
+
+			 - Replaced: `DynamicNotifyPropertyChanged&lt;T&gt;` with `ObservableObject&lt;T&gt;`
+			 - Replaced: `ObservableFeature&lt;T&gt;` with `ObservableFeatureSettings&lt;T&gt;`.
+
+			 - Fixed: Observed instance not being passed properly, within dynamically observed features.
+
+			 - Added: `ModSettings.For(FileScope)`, for easier access to settings files.
+			 - Added: `JsonSettingsFile` is now aware of its own file scope.
+
+			 - Removed: All `events` for observable instances. Now using `Action&lt;T, string&gt;`.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 

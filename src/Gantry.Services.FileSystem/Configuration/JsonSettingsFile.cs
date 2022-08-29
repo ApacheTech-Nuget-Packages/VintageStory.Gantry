@@ -5,6 +5,7 @@ using ApacheTech.Common.Extensions.System;
 using Gantry.Core;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Configuration.ObservableFeatures;
+using Gantry.Services.FileSystem.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -16,7 +17,8 @@ namespace Gantry.Services.FileSystem.Configuration
     /// <seealso cref="Abstractions.IJsonSettingsFile" />
     public class JsonSettingsFile : Abstractions.IJsonSettingsFile
     {
-        private readonly List<IDisposable> _observers = new();
+        private readonly Dictionary<Type, IObservableObject> _observers = new();
+        private readonly FileScope _scope;
 
         /// <summary>
         ///     Gets the underlying <see cref="IJsonModFile" /> that this instance wraps.
@@ -30,13 +32,15 @@ namespace Gantry.Services.FileSystem.Configuration
         /// 	Initialises a new instance of the <see cref="JsonSettingsFile"/> class.
         /// </summary>
         /// <param name="file">The underlying file, registered within the file system service.</param>
-        private JsonSettingsFile(IJsonModFile file) => File = file;
+        /// <param name="scope">The scope that the settings file resides in.</param>
+        private JsonSettingsFile(IJsonModFile file, FileScope scope) => (File, _scope) = (file, scope);
 
         /// <summary>
         /// 	Initialises a new instance of the <see cref="JsonSettingsFile"/> class.
         /// </summary>
         /// <param name="file">The underlying file, registered within the file system service.</param>
-        public static JsonSettingsFile FromJsonFile(IJsonModFile file) => new(file);
+        /// <param name="scope">The scope that the settings file resides in.</param>
+        public static JsonSettingsFile FromJsonFile(IJsonModFile file, FileScope scope) => new(file, scope);
 
         /// <summary>
         ///     Binds the specified feature to a POCO class object; dynamically adding an implementation of <see cref="INotifyPropertyChanged"/>, 
@@ -44,38 +48,30 @@ namespace Gantry.Services.FileSystem.Configuration
         /// </summary>
         /// <remarks>
         ///     NOTE: Over-enthusiastic use of property setting within the POCO class, may result in excessive writes to the JSON file.
+        ///           Sliders, in particular should be set to only fire on mouse up.
         /// </remarks>
         /// <typeparam name="T">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
         /// <param name="featureName">The name of the feature.</param>
         /// <returns>An object, that represents the settings for a given mod feature.</returns>
         public T Feature<T>(string featureName = null) where T: class, new()
         {
+            if (_observers.ContainsKey(typeof(T))) return (T)_observers[typeof(T)].Object;
+            
             featureName ??= typeof(T).Name.Replace("Settings", "");
             try
             {
                 var json = File.ParseAs<JObject>();
-                if (json is null)
-                {
-                    var defaultData = new T();
-                    Save(json = JObject.FromObject(defaultData), featureName);
-                }
-                T featureObj;
+                if (json is null) Save(json = JObject.FromObject(new T()), featureName);
+                
                 var obj = json.SelectToken($"$.Features.{featureName}");
-                if (obj is null)
-                {
-                    featureObj = new T();
-                    var args = new FeatureSettingsChangedEventArgs<T>(featureName, featureObj);
-                    OnPropertyChanged(args);
-                }
-                else
-                {
-                    featureObj = obj.ToObject<T>();
-                }
+                if (obj is null) Save(new T());
+                var featureObj = obj?.ToObject<T>() ?? new T();
+                
+                var observer = ObservableFeatureSettings<T>.Bind(featureObj, featureName, _scope);
+                _observers.AddIfNotPresent(typeof(T), observer);
 
-                var observer = ObservableFeature<T>.Bind(featureName, featureObj);
-                _observers.AddIfNotPresent(observer);
-                observer.PropertyChanged += OnPropertyChanged;
-                return featureObj;
+                observer.Active = true;
+                return (T)observer.Object;
             }
             catch (Exception exception)
             {
@@ -99,16 +95,13 @@ namespace Gantry.Services.FileSystem.Configuration
             File.SaveFrom(json.ToString(Formatting.Indented));
         }
 
-        private void OnPropertyChanged<T>(FeatureSettingsChangedEventArgs<T> args) 
-            => Save(args.FeatureSettings, args.FeatureName);
-
         /// <summary>
         ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-            _observers.Purge();
+            _observers.Values.DisposeAll();
         }
     }
 }
