@@ -6,6 +6,7 @@ using Gantry.Core;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Configuration.ObservableFeatures;
 using Gantry.Services.FileSystem.Enums;
+using HarmonyLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -17,8 +18,9 @@ namespace Gantry.Services.FileSystem.Configuration
     /// <seealso cref="Abstractions.IJsonSettingsFile" />
     public class JsonSettingsFile : Abstractions.IJsonSettingsFile
     {
-        private readonly Dictionary<Type, IObservableObject> _observers = new();
+        private readonly Dictionary<string, IObservableObject> _observers = new();
         private readonly FileScope _scope;
+        private readonly Harmony _harmony;
 
         /// <summary>
         ///     Gets the underlying <see cref="IJsonModFile" /> that this instance wraps.
@@ -33,14 +35,16 @@ namespace Gantry.Services.FileSystem.Configuration
         /// </summary>
         /// <param name="file">The underlying file, registered within the file system service.</param>
         /// <param name="scope">The scope that the settings file resides in.</param>
-        private JsonSettingsFile(IJsonModFile file, FileScope scope) => (File, _scope) = (file, scope);
+        /// <param name="harmony">The harmony instance to use to patch the files.</param>
+        private JsonSettingsFile(IJsonModFile file, FileScope scope, Harmony harmony) => (File, _scope, _harmony) = (file, scope, harmony);
 
         /// <summary>
         /// 	Initialises a new instance of the <see cref="JsonSettingsFile"/> class.
         /// </summary>
         /// <param name="file">The underlying file, registered within the file system service.</param>
         /// <param name="scope">The scope that the settings file resides in.</param>
-        public static JsonSettingsFile FromJsonFile(IJsonModFile file, FileScope scope) => new(file, scope);
+        /// <param name="harmony">The harmony instance to use to patch the files.</param>
+        public static JsonSettingsFile FromJsonFile(IJsonModFile file, FileScope scope, Harmony harmony) => new(file, scope, harmony);
 
         /// <summary>
         ///     Binds the specified feature to a POCO class object; dynamically adding an implementation of <see cref="INotifyPropertyChanged"/>, 
@@ -55,9 +59,8 @@ namespace Gantry.Services.FileSystem.Configuration
         /// <returns>An object, that represents the settings for a given mod feature.</returns>
         public T Feature<T>(string featureName = null) where T: class, new()
         {
-            if (_observers.ContainsKey(typeof(T))) return (T)_observers[typeof(T)].Object;
-            
             featureName ??= typeof(T).Name.Replace("Settings", "");
+            if (_observers.ContainsKey(featureName)) return (T)_observers[featureName].Object;
             try
             {
                 var json = File.ParseAs<JObject>();
@@ -67,8 +70,8 @@ namespace Gantry.Services.FileSystem.Configuration
                 if (obj is null) Save(new T());
                 var featureObj = obj?.ToObject<T>() ?? new T();
                 
-                var observer = ObservableFeatureSettings<T>.Bind(featureObj, featureName, _scope);
-                _observers.AddIfNotPresent(typeof(T), observer);
+                var observer = ObservableFeatureSettings<T>.Bind(featureObj, featureName, _scope, _harmony);
+                _observers.AddIfNotPresent(featureName, observer);
 
                 observer.Active = true;
                 return (T)observer.Object;
@@ -93,15 +96,6 @@ namespace Gantry.Services.FileSystem.Configuration
             var json = File.ParseAs<JObject>() ?? JObject.Parse("{ \"Features\": {  } }");
             json.SelectToken("$.Features")[featureName] = JToken.FromObject(settings);
             File.SaveFrom(json.ToString(Formatting.Indented));
-        }
-
-        /// <summary>
-        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            _observers.Values.DisposeAll();
         }
     }
 }

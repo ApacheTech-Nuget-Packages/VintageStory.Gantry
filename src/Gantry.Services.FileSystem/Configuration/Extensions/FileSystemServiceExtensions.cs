@@ -29,7 +29,7 @@ namespace Gantry.Services.FileSystem.Configuration.Extensions
             FileScope scope)
         {
             fileSystem.RegisterFile(fileName, scope);
-            var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName), scope);
+            var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName), scope, ModSettings.FeaturePatcher);
             switch (scope)
             {
                 case FileScope.Global:

@@ -11,7 +11,6 @@ using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Configuration.Extensions;
 using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.Extensions;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Gantry.Services.FileSystem
@@ -19,7 +18,6 @@ namespace Gantry.Services.FileSystem
     /// <summary>
     ///     Provides a means for handling files, including embedded resources, used within a mod.
     /// </summary>
-    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class FileSystemService : IFileSystemService
     {
         private readonly IDictionary<string, ModFileBase> _registeredFiles;

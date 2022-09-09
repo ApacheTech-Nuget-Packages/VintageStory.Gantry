@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Gantry.Services.FileSystem.Enums;
-
-// ReSharper disable UnusedMethodReturnValue.Global
-// ReSharper disable UnusedMemberInSuper.Global
-// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
-// ReSharper disable MemberCanBePrivate.Global
-// ReSharper disable UnusedMember.Global
-// ReSharper disable UnusedType.Global
+using JetBrains.Annotations;
 
 namespace Gantry.Services.FileSystem.Abstractions.Contracts
 {
     /// <summary>
     ///     Provides a means for handling files, including embedded resources, used within a mod.
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.All)]
     public interface IFileSystemService : IDisposable
     {
         /// <summary>

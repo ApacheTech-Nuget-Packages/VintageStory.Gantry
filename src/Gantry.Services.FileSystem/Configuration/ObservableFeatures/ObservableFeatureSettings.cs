@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Gantry.Services.FileSystem.Enums;
+using HarmonyLib;
 
 namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
 {
@@ -20,7 +21,8 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         /// <param name="instance">The instance.</param>
         /// <param name="featureName">Name of the feature.</param>
         /// <param name="scope">Scope of the feature.</param>
-        public ObservableFeatureSettings(T instance, string featureName, FileScope scope) : base(instance)
+        /// <param name="harmony">The harmony instance to use to patch the files.</param>
+        public ObservableFeatureSettings(T instance, string featureName, FileScope scope, Harmony harmony) : base(instance, harmony)
         {
             _featureName = featureName;
             _scope = scope;
@@ -34,9 +36,10 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         /// <param name="featureName">The name of the feature being observed.</param>
         /// <param name="instance">The instance of the POCO class that manages the feature settings.</param>
         /// <param name="scope">Scope of the feature.</param>
+        /// <param name="harmony">The harmony instance to use to patch the files.</param>
         /// <returns>An instance of <see cref="ObservableFeatureSettings{T}"/>, which exposes the <c>PropertyChanged</c> event.</returns>
-        public static ObservableFeatureSettings<T> Bind(T instance, string featureName, FileScope scope) => 
-            new(instance, featureName, scope);
+        public static ObservableFeatureSettings<T> Bind(T instance, string featureName, FileScope scope, Harmony harmony) => 
+            new(instance, featureName, scope, harmony);
 
         private void OnPropertyChanged(object instance, string propertyName) => 
             ModSettings.For(_scope).Save(Object, _featureName);

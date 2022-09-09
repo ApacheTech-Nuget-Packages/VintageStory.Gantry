@@ -2,6 +2,7 @@
 using Gantry.Core;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
+using HarmonyLib;
 
 namespace Gantry.Services.FileSystem.Configuration
 {
@@ -84,31 +85,24 @@ namespace Gantry.Services.FileSystem.Configuration
         /// </summary>
         public static void Dispose()
         {
+            FeaturePatcher.UnpatchAll();
             ApiEx.Run(ClientDispose, ServerDispose);
         }
 
         private static void ClientDispose()
         {
-            ClientGlobal?.Dispose();
             ClientGlobal = null;
-
-            ClientWorld?.Dispose();
             ClientWorld = null;
-
-            ClientLocal?.Dispose();
             ClientLocal = null;
         }
 
         private static void ServerDispose()
         {
-            ServerGlobal?.Dispose();
             ServerGlobal = null;
-
-            ServerWorld?.Dispose();
             ServerWorld = null;
-
-            ServerLocal?.Dispose();
             ServerLocal = null;
         }
+
+        internal static Harmony FeaturePatcher { get; } = new ($"{ModEx.ModInfo.ModID}_ObservableFeatures");
     }
 }

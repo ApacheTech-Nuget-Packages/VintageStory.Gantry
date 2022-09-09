@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ApacheTech.Common.Extensions.Harmony;
@@ -36,21 +37,24 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         /// <summary>
         ///     Initialises a new instance of the <see cref="ObservableObject{T}"/> class.
         /// </summary>
-        public ObservableObject() : this(new T()) { }
+        public ObservableObject(Harmony harmony) : this(new T(), harmony) { }
 
         /// <summary>
-        ///     Initialises a new instance of the <see cref="ObservableObject{T}"/> class.
+        /// Initialises a new instance of the <see cref="ObservableObject{T}" /> class.
         /// </summary>
         /// <param name="instance">The instance.</param>
-        public ObservableObject(T instance)
+        /// <param name="harmony">The harmony instance to use to patch the files.</param>
+        public ObservableObject(T instance, Harmony harmony)
         {
             Object = instance;
+            _harmony = harmony;
+            var postfix = new HarmonyMethod(this.GetMethod(nameof(Patch_Property_SetMethod_Postfix)));
             var objectType = instance.GetType();
-            _harmony = new Harmony(objectType.FullName);
-            var postfix = this.GetMethod(nameof(Patch_PropertySetMethod_Postfix));
             foreach (var propertyInfo in objectType.GetProperties())
             {
-                _harmony.Patch(propertyInfo.SetMethod, postfix: new HarmonyMethod(postfix));
+                var methodInfo = propertyInfo.SetMethod;
+                if (Harmony.GetPatchInfo(methodInfo)?.Postfixes.Any() ?? false) continue;
+                _harmony.Patch(methodInfo, postfix: postfix);
             }
         }
 
@@ -60,10 +64,11 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         ///     every time a property within the POCO class, is set.
         /// </summary>
         /// <param name="instance">The instance of the POCO class that manages the feature settings.</param>
+        /// <param name="harmony">The harmony instance to use to patch the files.</param>
         /// <returns>An instance of <see cref="ObservableObject{T}"/>, which exposes the <c>PropertyChanged</c> event.</returns>
-        public static ObservableObject<T> Bind(T instance)
+        public static ObservableObject<T> Bind(T instance, Harmony harmony)
         {
-            return new ObservableObject<T>(instance);
+            return new ObservableObject<T>(instance, harmony);
         }
 
         /// <summary>
@@ -82,18 +87,9 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
             get => _onObjectPropertyChanged;
             set => _onObjectPropertyChanged = value;
         }
-
-        /// <summary>
-        ///     Un-patches the dynamic property watch on the POCO class. 
-        /// </summary>
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
-            _harmony.UnpatchAll();
-        }
-
+        
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private static void Patch_PropertySetMethod_Postfix(MemberInfo __originalMethod)
+        private static void Patch_Property_SetMethod_Postfix(MemberInfo __originalMethod)
         {
             if (!_active) return;
             var propertyName = __originalMethod.Name.Remove(0, 4);

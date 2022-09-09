@@ -9,7 +9,7 @@ namespace Gantry.Services.FileSystem.Configuration.Abstractions
     /// <summary>
     ///     Represents a settings file for the mod, in JSON format.
     /// </summary>
-    public interface IJsonSettingsFile : IDisposable
+    public interface IJsonSettingsFile
     {
         /// <summary>
         ///     Gets the underlying <see cref="IJsonModFile"/> that this instance wraps.

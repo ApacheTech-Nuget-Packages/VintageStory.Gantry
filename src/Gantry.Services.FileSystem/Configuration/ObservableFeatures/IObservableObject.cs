@@ -7,7 +7,7 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
     ///     Represents a class that notifies observers that a property value has changed within a wrapped POCO class.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.All)]
-    public interface IObservableObject : IDisposable
+    public interface IObservableObject
     {
         /// <summary>
         ///     The instance of the object being observed.
