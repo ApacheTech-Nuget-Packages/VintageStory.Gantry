@@ -8,6 +8,7 @@
   "confirmation-no": "No",
   "confirmation-ignore": "Ignore",
   "confirmation-retry": "Retry",
+  "confirmation-delete": "Delete",
   "confirmation-abort": "Abort",
   "confirmation-export": "Export",
   "confirmation-import": "Import",

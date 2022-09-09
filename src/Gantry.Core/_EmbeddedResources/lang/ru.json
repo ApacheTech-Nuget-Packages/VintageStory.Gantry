@@ -8,6 +8,7 @@
   "confirmation-no": "Нет",
   "confirmation-ignore": "Игнорировать",
   "confirmation-retry": "Повторить",
+  "confirmation-delete": "Удалить",
   "confirmation-abort": "Отмена",
   "confirmation-export": "Экспорт",
   "confirmation-import": "Импорт",
@@ -15,8 +16,8 @@
   "confirmation-confirmation": "Подтверждение",
   "confirmation-information": "Информация",
   "confirmation-default-message": "Вы уверены, что хотите выполнить это действие?",
-  "confirmation-invalid-syntax": "Invalid syntax.",
-  "confirmation-try-again": "Please try again.",
+  "confirmation-invalid-syntax": "Неверный синтаксис.",
+  "confirmation-try-again": "Пожалуйста, попробуйте еще раз.",
 
   "datetime-months-abbr-0": "Янв",
   "datetime-months-full-0": "Январь",

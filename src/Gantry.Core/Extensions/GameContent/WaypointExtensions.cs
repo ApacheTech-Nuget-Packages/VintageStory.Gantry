@@ -36,6 +36,22 @@ namespace Gantry.Core.Extensions.GameContent
         }
 
         /// <summary>
+        ///     Determines whether the specified waypoint is within a set horizontal distance of a specific block, or location within the game world.
+        /// </summary>
+        /// <param name="waypoint">The waypoint.</param>
+        /// <param name="targetPosition">The target position.</param>
+        /// <param name="blockRadius">The radius tolerance, in blocks.</param>
+        /// <returns>System.Boolean.</returns>
+        public static bool IsInHorizontalRangeOf(this Waypoint waypoint, BlockPos targetPosition, int blockRadius)
+        {
+            var waypointPos = waypoint.Position.AsBlockPos;
+            var num = waypointPos.X - targetPosition.X;
+            var num2 = waypointPos.Z - targetPosition.Z;
+            var distance = num * num + num2 * num2;
+            return distance <= Math.Pow(blockRadius, 2);
+        }
+
+        /// <summary>
         ///     Adds a waypoint at the a position within the world, relative to the global spawn point.
         /// </summary>
         /// <param name="pos">The position to add the waypoint at. World Pos - Not Relative to Spawn!</param>

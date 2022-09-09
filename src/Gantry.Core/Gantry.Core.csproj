@@ -5,7 +5,15 @@
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.2.0</Version>
+		<Version>0.2.1</Version>
+		<PackageReleaseNotes>
+			Added: Confirmation Message - "Delete".
+			Added: Translations for all languages.
+			Added: Extension methods merged from Campaign Cartographer.
+			Added: Command Pattern Contract.
+
+			COMMUNITY NOTE: If you can improve on any of the translations within the translation files, please submit a pull request.
+		</PackageReleaseNotes>
 	</PropertyGroup>
 	
 	<ItemGroup>

@@ -18,6 +18,7 @@ This library is required by, and automatically supplied to, Gantry services that
 |"confirmation-yes"|*"Yes"*|
 |"confirmation-no"|*"No"*|
 |"confirmation-ignore"|*"Ignore"*|
+|"confirmation-delete"|*"Delete"*|
 |"confirmation-retry"|*"Retry"*|
 |"confirmation-abort"|*"Abort"*|
 |"confirmation-export"|*"Export"*|
