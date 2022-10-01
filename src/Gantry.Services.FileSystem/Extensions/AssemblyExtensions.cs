@@ -6,12 +6,14 @@ using System.Runtime.CompilerServices;
 using ApacheTech.Common.Extensions.System;
 using Gantry.Services.FileSystem.Configuration.Consumers;
 using HarmonyLib;
+using JetBrains.Annotations;
 
 namespace Gantry.Services.FileSystem.Extensions
 {
     /// <summary>
     ///     Extension methods to aid assembly level reflection.
     /// </summary>
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class AssemblyExtensions
     {
         /// <summary>
