@@ -6,11 +6,18 @@
 		<Title>Gantry MDK: File System Service - Dependency Injection Extensions</Title>
 		<Description>Extension methods to aid the the registration of the File System Service, into an Gantry MDK mod.</Description>
 		<Version>0.2.0</Version>
+		<PackageReleaseNotes>
+			Update to 0.2.5 (Parity Update)
+
+			 - Removed: All code-flow related to "Local" file scoping.
+
+			 - Update: Updated FileSystem Service dependency to 0.2.5. 
+		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.2.0" />
-		<PackageReference Include="VintageStory.Gantry.Services.FileSystem" Version="0.2.0" />
+		<PackageReference Include="VintageStory.Gantry.Services.FileSystem" Version="0.2.5" />
 	</ItemGroup>
 
 </Project>

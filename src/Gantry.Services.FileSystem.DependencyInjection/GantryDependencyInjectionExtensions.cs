@@ -69,19 +69,5 @@ namespace Gantry.Services.FileSystem.DependencyInjection
             services.AddSingleton(_ => ModSettings.Global.Feature<TSettings>(featureName));
             return services;
         }
-
-        /// <summary>
-        ///     Adds a local settings service for a specific feature.
-        /// </summary>
-        /// <typeparam name="TSettings">The type of the settings.</typeparam>
-        /// <param name="services">The services collection to add the service to.</param>
-        /// <param name="featureName">The name of the feature.</param>
-        /// <returns>A reference to this instance, after the this operation has completed.</returns>
-        public static IServiceCollection AddFeatureLocalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
-        {
-            if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
-            services.AddSingleton(_ => ModSettings.Local.Feature<TSettings>(featureName));
-            return services;
-        }
     }
 }
