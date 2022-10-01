@@ -86,26 +86,15 @@ namespace Gantry.Services.FileSystem
             return dir.FullName;
         }
 
-        internal static string GetScopedPath(FileScope scope, string fileName)
+        internal static string GetScopedPath(string fileName, FileScope scope)
         {
             var directory = scope switch
             {
                 FileScope.Global => ModDataGlobalPath,
                 FileScope.World => ModDataWorldPath,
-                FileScope.Local => ModRootPath,
                 _ => throw new ArgumentOutOfRangeException(nameof(scope), scope, null)
             };
-
-            if (scope is not FileScope.Local) return Path.Combine(directory, fileName);
-            if (File.Exists(directory)) return Path.Combine(directory, fileName);
-
-            var files = Directory.GetFiles(ModRootPath, fileName, SearchOption.AllDirectories);
-            return files.Length switch
-            {
-                1 => files[0],
-                < 1 => throw new FileNotFoundException($"Local file, `{fileName}`, does not exist within the mod folder."),
-                > 1 => throw new FileLoadException($"Local file, `{fileName}`, is duplicated within the mod folder.")
-            };
+            return Path.Combine(directory, fileName);
         }
         
         /// <summary>

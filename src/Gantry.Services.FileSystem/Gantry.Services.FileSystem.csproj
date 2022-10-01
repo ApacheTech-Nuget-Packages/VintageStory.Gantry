@@ -5,15 +5,30 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service</Title>
 		<Description>Provides a service for interacting with the file system, when using Gantry MDK.</Description>
-		<Version>0.2.4</Version>
+		<Version>0.2.5</Version>
 		<PackageReleaseNotes>
-			FileSystem Service 0.2.4
+			FileSystem Service 0.2.5
 
-			 - Fixed: Added guard clause to `ObservableObject`, to ensure properties are only patched once.
+			This update mainly concerns fixing a nasty bug with static scope members. The bug caused settings consumers, such as GUIs, and patch clases, to hold settings from previous worlds. The current fix is a jury-rig. It fixes the issue in a very brute force way.
 
-			 - Refactor: Harmony shared instance moved to `ModSettings`.
+			There is also some internal preparation and forward compatibility for v2 of the file service, and asset management service.
+
+			- Removed: All code-flow regarding "Local" File Scope. (YAGNI)
+			- Removed: `SettingsConsumer` abstract class. (DRY Anti-Pattern)
+
+			- Added: Extension methods to aid assembly level reflection.
+			- Added: `ISettingsConsumer` marker interface for World and Global Settings Consumers.
+			- Added: `IDisposable` implementation to `JsonSettingsFile` class.
+
+			- Refactor: Changed parameter order in `GetScopedPath`. (Forwards Compatibility)
 		</PackageReleaseNotes>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="v2\**" />
+	  <EmbeddedResource Remove="v2\**" />
+	  <None Remove="v2\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="VintageStory.Gantry.Core" Version="0.2.0" />

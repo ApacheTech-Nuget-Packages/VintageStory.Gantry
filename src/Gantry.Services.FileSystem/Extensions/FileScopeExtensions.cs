@@ -23,7 +23,6 @@ namespace Gantry.Services.FileSystem.Extensions
             {
                 FileScope.Global => nameof(FileScope.Global),
                 FileScope.World => nameof(FileScope.World),
-                FileScope.Local => nameof(FileScope.Local),
                 _ => throw new ArgumentOutOfRangeException(nameof(scope), scope, null)
             };
         }

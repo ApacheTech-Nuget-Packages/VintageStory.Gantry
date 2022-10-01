@@ -93,9 +93,18 @@ namespace Gantry.Services.FileSystem.Configuration
         public void Save<T>(T settings, string featureName = null)
         {
             featureName ??= typeof(T).Name.Replace("Settings", "");
-            var json = File.ParseAs<JObject>() ?? JObject.Parse("{ \"Features\": {  } }");
+            var json = File.ParseAs<JObject>() ?? JObject.Parse("{ Features: {  } }");
             json.SelectToken("$.Features")[featureName] = JToken.FromObject(settings);
             File.SaveFrom(json.ToString(Formatting.Indented));
+        }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            _observers.Clear();
+
         }
     }
 }

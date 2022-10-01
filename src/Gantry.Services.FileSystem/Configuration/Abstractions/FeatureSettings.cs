@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Gantry.Services.FileSystem.Features
+namespace Gantry.Services.FileSystem.Configuration.Abstractions
 {
     /// <summary>
     ///     Acts as a base class for all settings POCO Classes for a given feature.

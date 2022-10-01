@@ -24,12 +24,6 @@ namespace Gantry.Services.FileSystem.Configuration
         internal static Abstractions.IJsonSettingsFile ClientWorld { get; set; }
 
         /// <summary>
-        ///     The local mod settings; these settings are only ever used when the mod is being initialised, and are not intended to be changed by the user.
-        /// </summary>
-        /// <value>The local settings.</value>
-        internal static Abstractions.IJsonSettingsFile ClientLocal { get; set; }
-
-        /// <summary>
         ///     The global mod settings; these settings will persist through each gameworld.
         /// </summary>
         /// <value>The global settings.</value>
@@ -40,12 +34,6 @@ namespace Gantry.Services.FileSystem.Configuration
         /// </summary>
         /// <value>The per-world settings.</value>
         internal static Abstractions.IJsonSettingsFile ServerWorld { get; set; }
-
-        /// <summary>
-        ///     The local mod settings; these settings are only ever used when the mod is being initialised, and are not intended to be changed by the user.
-        /// </summary>
-        /// <value>The local settings.</value>
-        internal static Abstractions.IJsonSettingsFile ServerLocal { get; set; }
 
         /// <summary>
         ///     The global mod settings; these settings will persist through each gameworld.
@@ -60,12 +48,6 @@ namespace Gantry.Services.FileSystem.Configuration
         public static Abstractions.IJsonSettingsFile World => ApiEx.OneOf(ClientWorld, ServerWorld);
 
         /// <summary>
-        ///     The local mod settings; these settings are only ever used when the mod is being initialised, and are not intended to be changed by the user.
-        /// </summary>
-        /// <value>The local settings.</value>
-        public static Abstractions.IJsonSettingsFile Local => ApiEx.OneOf(ClientLocal, ServerLocal);
-
-        /// <summary>
         ///     The mod settings for a specific <see cref="FileScope"/>.
         /// </summary>
         /// <value>The global settings.</value>
@@ -75,7 +57,6 @@ namespace Gantry.Services.FileSystem.Configuration
             {
                 FileScope.Global => Global,
                 FileScope.World => World,
-                FileScope.Local => Local,
                 _ => throw new ArgumentOutOfRangeException(nameof(scope))
             };
         }
@@ -91,16 +72,20 @@ namespace Gantry.Services.FileSystem.Configuration
 
         private static void ClientDispose()
         {
+            ClientWorld?.Dispose();
             ClientGlobal = null;
+
+            ClientGlobal?.Dispose();
             ClientWorld = null;
-            ClientLocal = null;
         }
 
         private static void ServerDispose()
         {
+            ServerGlobal?.Dispose();
             ServerGlobal = null;
+
+            ServerWorld?.Dispose();
             ServerWorld = null;
-            ServerLocal = null;
         }
 
         internal static Harmony FeaturePatcher { get; } = new ($"{ModEx.ModInfo.ModID}_ObservableFeatures");

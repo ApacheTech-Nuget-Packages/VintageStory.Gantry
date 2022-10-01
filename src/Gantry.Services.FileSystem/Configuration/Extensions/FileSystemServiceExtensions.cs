@@ -38,9 +38,6 @@ namespace Gantry.Services.FileSystem.Configuration.Extensions
                 case FileScope.World:
                     ApiEx.Run(() => ModSettings.ClientWorld = file, () => ModSettings.ServerWorld = file);
                     break;
-                case FileScope.Local:
-                    ApiEx.Run(() => ModSettings.ClientLocal = file, () => ModSettings.ServerLocal = file);
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(scope), scope, null);
             }

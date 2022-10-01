@@ -35,10 +35,12 @@ namespace Gantry.Services.FileSystem
         public FileSystemService(FileSystemServiceOptions options)
         {
             _registeredFiles = new Dictionary<string, ModFileBase>();
-            if (string.IsNullOrWhiteSpace(ModPaths.ModRootPath) || 
-                ModPaths.WorldGuid != ApiEx.Current.World.SavegameIdentifier) 
+            if (string.IsNullOrWhiteSpace(ModPaths.ModRootPath) ||
+                ModPaths.WorldGuid != ApiEx.Current.World.SavegameIdentifier)
                 ModPaths.Initialise(options.RootFolderName, ApiEx.Current.World.SavegameIdentifier);
-            if (options.RegisterSettingsFiles) this.RegisterSettingsFiles();
+            if (!options.RegisterSettingsFiles) return;
+            this.RegisterSettingsFiles();
+            ModEx.ModAssembly.InitialiseSettingsConsumers();
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace Gantry.Services.FileSystem
         /// <param name="scope">The scope of the file, be it global, or per-world.</param>
         public IFileSystemService RegisterFile(string fileName, FileScope scope)
         {
-            var file = new FileInfo(ModPaths.GetScopedPath(scope, fileName));
+            var file = new FileInfo(ModPaths.GetScopedPath(fileName, scope));
             _registeredFiles.Add(fileName, file.CreateModFileWrapper());
             if (!file.Exists)
             {
@@ -188,8 +190,8 @@ namespace Gantry.Services.FileSystem
         /// </summary>
         public void Dispose()
         {
-           ModSettings.Dispose();
-           ModPaths.Dispose();
+            ModSettings.Dispose();
+            ModPaths.Dispose();
             _registeredFiles.Clear();
         }
     }

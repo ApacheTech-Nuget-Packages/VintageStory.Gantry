@@ -66,9 +66,6 @@ namespace Gantry.Services.FileSystem.Dialogue
                 case FileScope.World:
                     ModSettings.World.Save(Settings);
                     break;
-                case FileScope.Local:
-                    ModSettings.Local.Save(Settings);
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(scope), scope, null);
             }

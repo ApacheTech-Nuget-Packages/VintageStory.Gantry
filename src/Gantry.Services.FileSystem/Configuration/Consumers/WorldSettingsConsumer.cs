@@ -1,19 +1,19 @@
-﻿using Gantry.Services.FileSystem.Configuration;
+﻿using Gantry.Services.FileSystem.Configuration.Abstractions;
 using JetBrains.Annotations;
 
-namespace Gantry.Services.FileSystem.Features
+namespace Gantry.Services.FileSystem.Configuration.Consumers
 {
     /// <summary>
     ///     Represents a class that affects, or is affected by specific feature settings.
     /// </summary>
     /// <typeparam name="T">The settings file to use within the patches in this class.</typeparam>
-    [UsedImplicitly(ImplicitUseTargetFlags.All)]
-    public abstract class SettingsConsumer<T> where T : FeatureSettings, new()
+    [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+    public abstract class WorldSettingsConsumer<T> : ISettingsConsumer where T : FeatureSettings, new()
     {
-        /// <summary>
-        ///     Initialises a new instance of the <see cref="SettingsConsumer{T}"/> class.
-        /// </summary>
-        internal SettingsConsumer() { }
+        internal static void Initialise()
+        {
+            Settings = ModSettings.World?.Feature<T>();
+        }
 
         /// <summary>
         ///     Gets or sets the settings.
@@ -21,7 +21,7 @@ namespace Gantry.Services.FileSystem.Features
         /// <value>
         ///     The settings.
         /// </value>
-        public static T Settings { get; } = ModSettings.World.Feature<T>();
+        protected static T Settings { get; private set; }
 
         /// <summary>
         ///     Gets or sets the name of the feature.
@@ -29,11 +29,14 @@ namespace Gantry.Services.FileSystem.Features
         /// <value>
         ///     The name of the feature.
         /// </value>
-        public static string FeatureName { get; } = typeof(T).Name.Replace("Settings", "");
+        protected static string FeatureName => typeof(T).Name.Replace("Settings", "");
 
         /// <summary>
         ///     Saves any changes to the mod settings file.
         /// </summary>
-        protected abstract void SaveChanges();
+        protected void SaveChanges()
+        {
+            ModSettings.World.Save(Settings, FeatureName);
+        }
     }
 }
