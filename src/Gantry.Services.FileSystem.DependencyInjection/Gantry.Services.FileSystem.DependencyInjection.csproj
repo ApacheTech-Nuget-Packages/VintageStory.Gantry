@@ -5,7 +5,7 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service - Dependency Injection Extensions</Title>
 		<Description>Extension methods to aid the the registration of the File System Service, into an Gantry MDK mod.</Description>
-		<Version>0.2.0</Version>
+		<Version>0.2.5</Version>
 		<PackageReleaseNotes>
 			Update to 0.2.5 (Parity Update)
 

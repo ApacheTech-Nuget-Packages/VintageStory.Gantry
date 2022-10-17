@@ -19,16 +19,11 @@
 			- Added: Extension methods to aid assembly level reflection.
 			- Added: `ISettingsConsumer` marker interface for World and Global Settings Consumers.
 			- Added: `IDisposable` implementation to `JsonSettingsFile` class.
+			- Added: [EXPERIMENTAL] `FileSystemService` now initialises all settings consumer classes within the mod assembly.
 
 			- Refactor: Changed parameter order in `GetScopedPath`. (Forwards Compatibility)
 		</PackageReleaseNotes>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="v2\**" />
-	  <EmbeddedResource Remove="v2\**" />
-	  <None Remove="v2\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="VintageStory.Gantry.Core" Version="0.2.0" />
