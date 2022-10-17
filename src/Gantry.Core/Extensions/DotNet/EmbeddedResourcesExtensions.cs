@@ -45,18 +45,30 @@ namespace Gantry.Core.Extensions.DotNet
         }
 
         /// <summary>
-        ///     Reads the resource, and passes back the output as a string
+        ///     Reads the resource, and passes back the output as a string, as UTF8.
         /// </summary>
         /// <param name="assembly">The assembly to load the resource from.</param>
         /// <param name="fileName">Name of the file, embedded within the assembly.</param>
         /// <returns>The contents of the file, as a string.</returns>
         /// <exception cref="FileNotFoundException">Embedded data file not found.</exception>
-        public static string GetResourceContent(this Assembly assembly, string fileName)
+        public static string GetResourceContent(this Assembly assembly, string fileName) => GetResourceContent(assembly, fileName, Encoding.UTF8);
+
+        /// <summary>
+        ///     Reads the resource, and passes back the output as a string
+        /// </summary>
+        /// <param name="assembly">The assembly to load the resource from.</param>
+        /// <param name="fileName">Name of the file, embedded within the assembly.</param>
+        /// <param name="encoding">The encoding to apply to the resource.</param>
+        /// <returns>The contents of the file, as a string.</returns>
+        /// <exception cref="FileNotFoundException">Embedded data file not found.</exception>
+        public static string GetResourceContent(this Assembly assembly, string fileName, Encoding encoding)
         {
             if (!assembly.ResourceExists(fileName)) return string.Empty;
             var stream = assembly.GetResourceStream(fileName);
-            using var reader = new StreamReader(stream, Encoding.Unicode);
-            return reader.ReadToEnd();
+            using var reader = new StreamReader(stream, Encoding.UTF8, true, 1024, false);
+            var content = reader.ReadToEnd();
+            reader.Close();
+            return content;
         }
 
         /// <summary>
