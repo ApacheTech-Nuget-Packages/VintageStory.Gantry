@@ -55,7 +55,7 @@ namespace Gantry.Core.Extensions.DotNet
         {
             if (!assembly.ResourceExists(fileName)) return string.Empty;
             var stream = assembly.GetResourceStream(fileName);
-            using var reader = new StreamReader(stream, Encoding.Default);
+            using var reader = new StreamReader(stream, Encoding.Unicode);
             return reader.ReadToEnd();
         }
 
