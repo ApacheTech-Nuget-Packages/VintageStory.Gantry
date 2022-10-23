@@ -7,11 +7,9 @@
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
 		<Version>0.2.3</Version>
 		<PackageReleaseNotes>
-			Gantry.Core v0.2.3
+			Gantry.Core v0.2.4
 
-			Fixed: Embedded files are now read as UTF8, to provide support for non-Latin alphabets. 
-
-			COMMUNITY NOTE: If you can improve on any of the translations within the translation files, please submit a pull request.
+			Tweak: GenericDialogue can now be made transparent.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 	

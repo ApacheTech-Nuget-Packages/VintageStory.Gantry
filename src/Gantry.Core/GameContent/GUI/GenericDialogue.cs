@@ -112,6 +112,11 @@ namespace Gantry.Core.GameContent.GUI
         protected bool ShowTitleBar { get; set; } = true;
 
         /// <summary>
+        ///     Determines whether or not to display an opaque background.
+        /// </summary>
+        protected bool TransparentBackground { get; set; }
+
+        /// <summary>
         ///     Refreshes the displayed values on the form.
         /// </summary>
         protected virtual void RefreshValues()
@@ -153,8 +158,12 @@ namespace Gantry.Core.GameContent.GUI
             DialogueBounds.BothSizing = ElementSizing.FitToChildren;
 
             var composer = capi.Gui
-                .CreateCompo(ToggleKeyCombinationCode, dialogueBounds)
-                .AddShadedDialogBG(DialogueBounds);
+                .CreateCompo(ToggleKeyCombinationCode, dialogueBounds);
+
+            if (!TransparentBackground)
+            {
+                composer.AddShadedDialogBG(DialogueBounds);
+            }
 
             if (!ShowTitleBar) return composer;
 
