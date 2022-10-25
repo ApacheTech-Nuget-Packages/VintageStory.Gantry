@@ -1,9 +1,4 @@
-﻿
-
-// ReSharper disable UnusedType.Global
-// ReSharper disable UnusedMember.Global
-
-using System;
+﻿using System;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
 using ApacheTech.Common.Extensions.System;
