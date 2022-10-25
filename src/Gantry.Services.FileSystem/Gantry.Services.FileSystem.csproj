@@ -5,28 +5,20 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service</Title>
 		<Description>Provides a service for interacting with the file system, when using Gantry MDK.</Description>
-		<Version>0.2.5</Version>
+		<Version>0.3.0</Version>
 		<PackageReleaseNotes>
-			FileSystem Service 0.2.5
+			Gantry.Services.FileSystem v0.3.0
 
-			This update mainly concerns fixing a nasty bug with static scope members. The bug caused settings consumers, such as GUIs, and patch clases, to hold settings from previous worlds. The current fix is a jury-rig. It fixes the issue in a very brute force way.
-
-			There is also some internal preparation and forward compatibility for v2 of the file service, and asset management service.
-
-			- Removed: All code-flow regarding "Local" File Scope. (YAGNI)
-			- Removed: `SettingsConsumer` abstract class. (DRY Anti-Pattern)
-
-			- Added: Extension methods to aid assembly level reflection.
-			- Added: `ISettingsConsumer` marker interface for World and Global Settings Consumers.
-			- Added: `IDisposable` implementation to `JsonSettingsFile` class.
-			- Added: [EXPERIMENTAL] `FileSystemService` now initialises all settings consumer classes within the mod assembly.
-
-			- Refactor: Changed parameter order in `GetScopedPath`. (Forwards Compatibility)
+			- Core: ABI changes require parity update.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.2.0" />
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
 	</ItemGroup>
 
 </Project>
