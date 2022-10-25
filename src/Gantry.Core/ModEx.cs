@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Threading;
 using Gantry.Core.Diagnostics;
-using Gantry.Core.Extensions.Helpers;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
 
@@ -13,12 +12,6 @@ namespace Gantry.Core
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class ModEx
     {
-        /// <summary>
-        ///     The main assembly for the mod that initialised the Gantry MDK.
-        /// </summary>
-        /// HACK: Potential Integration Bug: Is this global, static object shared among disparate mods?
-        public static Assembly ModAssembly { get; private set; }
-
         // NB:  My thinking here, is that if this dll is loaded once by the game,
         //      then only one static value will be held here. Last in, first out.
         //      However, if the game creates aliases, and loads each unpack directory
@@ -28,27 +21,39 @@ namespace Gantry.Core
         //      stable, and testable state.
 
         /// <summary>
-        ///     The mod's metadata.
-        /// </summary>
-        public static ModInfoAttribute ModInfo { get; private set; }
-
-        /// <summary>
         ///     Gets the side designated within the mod information.
         /// </summary>
         /// <exception cref="GantryException">Cannot determine app-side before `ApiEx` is intialised.</exception>
         public static EnumAppSide ModAppSide { get; private set; }
 
-        internal static void Initialise(Assembly modAssembly)
+        /// <summary>
+        ///     The main assembly for the mod that initialised the Gantry MDK.
+        /// </summary>
+        /// HACK: Potential Integration Bug: Is this global, static object shared among disparate mods?
+        public static Assembly ModAssembly { get; private set; }
+
+        /// <summary>
+        ///     The mod's metadata.
+        /// </summary>
+        public static ModInfo ModInfo { get; private set; }
+
+        /// <summary>
+        ///     Represents the current mod, as registered with the mod manager.
+        /// </summary>
+        public static Mod Mod { get; private set; }
+
+        internal static void Initialise(Mod mod, Assembly modAssembly)
         {
             ModAssembly = modAssembly;
-            ModInfo = modAssembly.GetCustomAttribute<ModInfoAttribute>();
+            ModInfo = mod.Info;
 
             if (ModInfo is null)
-            {
-                throw new GantryException($"Could not find `ModInfoAttribute` within assembly: {ModAssembly.FullName}");
-            }
+                throw new GantryException(
+                    @$"Could not find mod information for assembly: {ModAssembly.FullName}. " +
+                    "Are you missing a modinfo.json file, or `ModInfoAttribute` declaration?");
 
-            ModAppSide = EnumEx.Parse<EnumAppSide>(ModInfo.Side);
+            ModAppSide = ModInfo.Side;
+            Mod = mod;
         }
 
         /// <summary>

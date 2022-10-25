@@ -18,7 +18,7 @@ namespace Gantry.Core.ModSystems.Generic
         protected ModSystemBase()
         {
             if (ModEx.ModInfo is not null) return;
-            ModEx.Initialise(GetType().Assembly);
+            ModEx.Initialise(Mod, GetType().Assembly);
         }
 
         /// <summary>
