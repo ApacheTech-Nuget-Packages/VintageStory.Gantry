@@ -17,8 +17,6 @@ namespace Gantry.Core.ModSystems.Generic
         /// </summary>
         protected ModSystemBase()
         {
-            if (ModEx.ModInfo is not null) return;
-            ModEx.Initialise(Mod, GetType().Assembly);
         }
 
         /// <summary>
@@ -36,7 +34,11 @@ namespace Gantry.Core.ModSystems.Generic
         /// </param>
         public override void StartPre(ICoreAPI api)
         {
-            ApiEx.Initialise(api);
+            if (ModEx.ModInfo is null)
+            {
+                ModEx.Initialise(Mod, GetType().Assembly);
+                ApiEx.Initialise(api);
+            }
             StartPreUniversal(UApi = api);
             switch (api)
             {
