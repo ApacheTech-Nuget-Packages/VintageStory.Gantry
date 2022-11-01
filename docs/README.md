@@ -127,7 +127,7 @@ The service also comes with a Dependency Injection satellite library that makes 
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.2.0" />
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.0" />
 	</ItemGroup>
 
 </Project>  
@@ -155,7 +155,7 @@ The service also comes with a Dependency Injection satellite library that makes 
         }
     }
 ```
- 5. Add a `ModInfoAttribute` to the assembly. This is required for the MDK.
+ 5. Add a `ModInfoAttribute` to the assembly.
   
 ```csharp  
 [assembly: ModInfo(
