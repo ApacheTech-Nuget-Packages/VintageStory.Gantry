@@ -32,10 +32,10 @@ namespace Gantry.Core
             switch (api.Side)
             {
                 case EnumAppSide.Server:
-                    Server = api as ICoreServerAPI;
+                    Server ??= api as ICoreServerAPI;
                     break;
                 case EnumAppSide.Client:
-                    Client = api as ICoreClientAPI;
+                    Client ??= api as ICoreClientAPI;
                     break;
                 case EnumAppSide.Universal:
                 default:
