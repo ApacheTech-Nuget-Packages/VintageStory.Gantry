@@ -66,13 +66,10 @@ namespace Gantry.Core.DependencyInjection.Extensions
         /// <param name="services">The service collection to add the <see cref="ModSystem"/>s to.</param>
         public static void AddModSystems(this IServiceCollection services)
         {
-            var modSystems = ModEx.ModAssembly.GetTypes()
-                .Where(p => p.IsSubclassOf(typeof(ModSystem)) && !p.IsAbstract);
-
-            foreach (var type in modSystems)
+            var modSystems = ModEx.Mod.Systems.Where(p => p.ShouldLoad(ApiEx.Side));
+            foreach (var system in modSystems)
             {
-                var system = ApiEx.Current.ModLoader.GetModSystem(type.FullName);
-                services.Add(new ServiceDescriptor(type, system, ServiceLifetime.Singleton));
+                services.AddSingleton(system.GetType(), system);
             }
         }
 

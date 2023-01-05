@@ -5,17 +5,17 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: Dependency Injection Engine</Title>
 		<Description>Adds an IoC container for the game, using`ApacheTech.Common.DependencyInjection` as the injection engine. It manages the dependencies between classes, so that mods can stay easy to change, as they grow in size and complexity. </Description>
-		<Version>0.3.0</Version>
+		<Version>0.3.1</Version>
 		<PackageReleaseNotes>
-			Gantry.Core.DependencyInjection v0.3.0
+			Gantry.Core.DependencyInjection v0.3.1
 
-			- Core: ABI changes require parity update.
+			- Fixed: Changed `AddModSystems()` to use `ModEx.Mod.Systems`, rather than using reflection. Should solve sync issues between world loads.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="2.1.0" />
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.0" />
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
