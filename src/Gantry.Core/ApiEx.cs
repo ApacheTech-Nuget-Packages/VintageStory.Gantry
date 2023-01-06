@@ -31,11 +31,11 @@ namespace Gantry.Core
         {
             switch (api.Side)
             {
-                case EnumAppSide.Server:
-                    Server ??= api as ICoreServerAPI;
-                    break;
-                case EnumAppSide.Client:
-                    Client ??= api as ICoreClientAPI;
+                case EnumAppSide.Server: 
+                    Server = api as ICoreServerAPI;                    
+                    break;                        
+                case EnumAppSide.Client:                       
+                    Client = api as ICoreClientAPI;
                     break;
                 case EnumAppSide.Universal:
                 default:
@@ -53,14 +53,23 @@ namespace Gantry.Core
         ///     Contains all sub-components, and some miscellaneous methods.
         /// </summary>
         /// <value>The client-side API.</value>
-        public static ICoreClientAPI Client { get; private set; }
+        public static ICoreClientAPI Client {
+            get => _clients.FirstOrDefault(); 
+            private set => _clients.Push(value);
+        }
 
         /// <summary>
         ///     The core API implemented by the server.<br/>
         ///     The main interface for accessing the server.<br/>
         ///     Contains all sub-components, and some miscellaneous methods.
         /// </summary>
-        public static ICoreServerAPI Server { get; private set; }
+        public static ICoreServerAPI Server { 
+            get => _servers.FirstOrDefault();
+            private set => _servers.Push(value); 
+        }
+
+        private static Stack<ICoreServerAPI> _servers = new();
+        private static Stack<ICoreClientAPI> _clients = new();
 
         /// <summary>
         ///     Common API Components that are available on the server and the client.<br/>
