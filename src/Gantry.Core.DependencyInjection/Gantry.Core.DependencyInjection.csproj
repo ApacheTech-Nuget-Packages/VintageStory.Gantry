@@ -7,19 +7,23 @@
 		<Description>Adds an IoC container for the game, using`ApacheTech.Common.DependencyInjection` as the injection engine. It manages the dependencies between classes, so that mods can stay easy to change, as they grow in size and complexity. </Description>
 		<Version>0.3.1</Version>
 		<PackageReleaseNotes>
-			Gantry.Core.DependencyInjection v0.3.1
+			Gantry.Core.DependencyInjection v0.3.2
 
-			- Fixed: Changed `AddModSystems()` to use `ModEx.Mod.Systems`, rather than using reflection. Should solve sync issues between world loads.
+			 - Updated: Nuget package dependency versions.
+			
+			 - Fixed:  
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="2.1.0" />
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.1" />
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<PackageReference Include="ApacheTech.Common.DependencyInjection" Version="2.1.1" />
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.3" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+	<ItemGroup Condition="'$(Configuration)' != 'Release'">
 		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
+		<ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.DependencyInjection\ApacheTech.Common.DependencyInjection.Abstractions\ApacheTech.Common.DependencyInjection.Abstractions.csproj" />
+		<ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.DependencyInjection\ApacheTech.Common.DependencyInjection\ApacheTech.Common.DependencyInjection.csproj" />
 	</ItemGroup>
 
 </Project>

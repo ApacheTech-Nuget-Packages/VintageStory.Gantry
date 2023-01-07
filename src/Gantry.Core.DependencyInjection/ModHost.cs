@@ -54,7 +54,6 @@ namespace Gantry.Core.DependencyInjection
 
         #region Server Configuration
 
-
         private void BuildServerHost(ICoreServerAPI sapi)
         {
             //  1. Configure game API services.
@@ -215,6 +214,13 @@ namespace Gantry.Core.DependencyInjection
         /// </summary>
         public override void Dispose()
         {
+            //foreach (var service in _services)
+            //{
+            //    if (service.Implementation is not IDisposable implementation ||
+            //        implementation.GetType().Assembly != ModEx.ModAssembly || 
+            //        !implementation.GetType().Assembly.FullName.Contains("Gantry")) continue;
+            //    implementation.Dispose();                
+            //}
             DisposeOnLeaveWorld();
             base.Dispose();
         }
