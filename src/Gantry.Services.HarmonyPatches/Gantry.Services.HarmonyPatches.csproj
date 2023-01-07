@@ -5,20 +5,24 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: Harmony Patching Service</Title>
 		<Description>Provides a service for patching the game with Harmony, when using Gantry MDK.</Description>
-		<Version>0.3.0</Version>
+		<Version>0.3.2</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.HarmonyPatches v0.3.0
+			Gantry.Services.HarmonyPatches v0.3.2
 
-			- Core: ABI changes require parity update.
+			- Updated: Nuget package dependency versions.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.0" />
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.3" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+	<ItemGroup Condition="'$(Configuration)' != 'Release'">
 		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Gantry.Services.HarmonyPatches.DependencyInjection" />
 	</ItemGroup>
 
 </Project>
