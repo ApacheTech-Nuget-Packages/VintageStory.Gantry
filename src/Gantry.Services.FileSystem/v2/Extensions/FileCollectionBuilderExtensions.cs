@@ -9,7 +9,7 @@ namespace Gantry.Services.FileSystem.v2.Extensions
     ///     Extension methods to aid the building of an <see cref="IFileProvider"/> from an <see cref="IFileCollection"/>.
     /// </summary>
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    internal static class FileCollectionBuilderExtensions
+    public static class FileCollectionBuilderExtensions
     {
         /// <summary>
         ///     Creates a <see cref="FileProvider"/> containing files from the provided <see cref="IFileCollection"/>.

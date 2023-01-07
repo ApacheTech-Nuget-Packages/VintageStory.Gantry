@@ -5,16 +5,21 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service</Title>
 		<Description>Provides a service for interacting with the file system, when using Gantry MDK.</Description>
-		<Version>0.3.0</Version>
+		<Version>0.3.3</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.FileSystem v0.3.0
+			Gantry.Services.FileSystem v0.3.3
 
-			- Core: ABI changes require parity update.
+			- Added: `ObservableObject` now includes an option to manually unpatch the observed object.
+
+			- Fixed: `ModPath` now ensures world GUID is correct for the current world.
+			- Fixed: Settings consumers now nullify their settings prior to initialisation. Overly cautious approach to inter-world synchronisation.
+			- Fixed: `ObservableFeatureSettings` will no longer save the settings to file, if observation is disabled for the instance.
+			- Fixed: `JsonSettingsFile` is now explicitly disposable.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.0" />
+	<ItemGroup Condition="'$(Configuration)' != 'Debug'">
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.3" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Debug'">

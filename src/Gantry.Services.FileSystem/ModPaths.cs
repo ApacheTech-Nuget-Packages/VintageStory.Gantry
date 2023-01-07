@@ -2,6 +2,7 @@
 using System.IO;
 using ApacheTech.Common.Extensions.System;
 using Gantry.Core;
+using Gantry.Core.Diagnostics;
 using Gantry.Services.FileSystem.Enums;
 using Vintagestory.API.Config;
 
@@ -22,10 +23,11 @@ namespace Gantry.Services.FileSystem
         /// </summary>
         public static void Initialise(string rootDirectoryName, string worldIdentifier)
         {
+            WorldGuid = Ensure.PopulatedWith(WorldGuid, worldIdentifier);
             ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath,
                 rootDirectoryName.IfNullOrWhitespace(ModEx.ModInfo.ModID ?? Guid.NewGuid().ToString())));
             ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
-            ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, WorldGuid = worldIdentifier)); 
+            ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, worldIdentifier)); 
             ModRootPath = Path.GetDirectoryName(ModEx.ModAssembly.Location)!;
             ModAssetsPath = Path.Combine(ModRootPath, "assets");
         }

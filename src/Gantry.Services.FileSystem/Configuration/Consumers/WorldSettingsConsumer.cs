@@ -12,6 +12,7 @@ namespace Gantry.Services.FileSystem.Configuration.Consumers
     {
         internal static void Initialise()
         {
+            Settings = null;
             Settings = ModSettings.World?.Feature<T>();
         }
 

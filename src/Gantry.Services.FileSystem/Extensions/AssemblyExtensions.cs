@@ -4,9 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ApacheTech.Common.Extensions.System;
+using Gantry.Core;
 using Gantry.Services.FileSystem.Configuration.Consumers;
 using HarmonyLib;
 using JetBrains.Annotations;
+using Vintagestory.API.Common;
 
 namespace Gantry.Services.FileSystem.Extensions
 {
@@ -53,7 +55,11 @@ namespace Gantry.Services.FileSystem.Extensions
             var consumers = assembly.GetAllTypesImplementing<ISettingsConsumer>();
             foreach (var consumer in consumers)
             {
-                AccessTools.Method(consumer, "Initialise")?.Invoke(null, null);
+                var sideInfo = consumer.GetCustomAttribute<SettingsConsumerAttribute>()
+                               ?? throw new InvalidOperationException($"Missing `{nameof(SettingsConsumerAttribute)}` Attribute for class: {consumer.FullName}.");
+
+                if (sideInfo.Side == EnumAppSide.Universal || sideInfo.Side == ApiEx.Side)
+                    AccessTools.Method(consumer, "Initialise")?.Invoke(null, null);
             }
         }
 

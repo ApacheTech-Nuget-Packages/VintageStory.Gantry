@@ -48,13 +48,29 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         {
             Object = instance;
             _harmony = harmony;
+            Patch();
+        }
+
+        private void Patch()
+        {
             var postfix = new HarmonyMethod(this.GetMethod(nameof(Patch_Property_SetMethod_Postfix)));
-            var objectType = instance.GetType();
-            foreach (var propertyInfo in objectType.GetProperties())
+            foreach (var propertyInfo in typeof(T).GetProperties())
             {
-                var methodInfo = propertyInfo.SetMethod;
-                if (Harmony.GetPatchInfo(methodInfo)?.Postfixes.Any() ?? false) continue;
-                _harmony.Patch(methodInfo, postfix: postfix);
+                var original = propertyInfo.SetMethod;
+                if (Harmony.GetPatchInfo(original)?.Postfixes.Any() ?? false) continue;
+                _harmony.Patch(original, postfix: postfix);
+            }
+        }
+
+        /// <summary>
+        ///     Removes the postfix patches from the observed item.
+        /// </summary>
+        public void UnPatch()
+        {
+            foreach (var propertyInfo in typeof(T).GetProperties())
+            {
+                var original = propertyInfo.SetMethod;
+                _harmony.Unpatch(original, HarmonyPatchType.Postfix);
             }
         }
 
@@ -72,12 +88,16 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         }
 
         /// <summary>
-        ///     Sets a value indicating whether this <see cref="ObservableObject{T}"/> is active.
+        ///     A value indicating whether this <see cref="ObservableObject{T}"/> is active.
         /// </summary>
         /// <value>
         ///   <c>true</c> if active; otherwise, <c>false</c>.
         /// </value>
-        public bool Active { set => _active = value; }
+        public bool Active
+        {
+            get => _active; 
+            set => _active = value;
+        }
 
         /// <summary>
         ///     Occurs when a property value is changed, within the observed POCO class.

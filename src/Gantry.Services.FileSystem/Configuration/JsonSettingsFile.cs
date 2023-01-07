@@ -16,11 +16,11 @@ namespace Gantry.Services.FileSystem.Configuration
     ///     Represents a settings file for the mod, in JSON format.
     /// </summary>
     /// <seealso cref="Abstractions.IJsonSettingsFile" />
-    public class JsonSettingsFile : Abstractions.IJsonSettingsFile
+    public class JsonSettingsFile : Abstractions.IJsonSettingsFile, IDisposable
     {
-        private readonly Dictionary<string, IObservableObject> _observers = new();
         private readonly FileScope _scope;
         private readonly Harmony _harmony;
+        private Dictionary<string, IObservableObject> _observers;
 
         /// <summary>
         ///     Gets the underlying <see cref="IJsonModFile" /> that this instance wraps.
@@ -36,7 +36,11 @@ namespace Gantry.Services.FileSystem.Configuration
         /// <param name="file">The underlying file, registered within the file system service.</param>
         /// <param name="scope">The scope that the settings file resides in.</param>
         /// <param name="harmony">The harmony instance to use to patch the files.</param>
-        private JsonSettingsFile(IJsonModFile file, FileScope scope, Harmony harmony) => (File, _scope, _harmony) = (file, scope, harmony);
+        private JsonSettingsFile(IJsonModFile file, FileScope scope, Harmony harmony)
+        {
+            (File, _scope, _harmony) = (file, scope, harmony);
+            _observers = new Dictionary<string, IObservableObject>();
+        }
 
         /// <summary>
         /// 	Initialises a new instance of the <see cref="JsonSettingsFile"/> class.
@@ -60,7 +64,10 @@ namespace Gantry.Services.FileSystem.Configuration
         public T Feature<T>(string featureName = null) where T: class, new()
         {
             featureName ??= typeof(T).Name.Replace("Settings", "");
-            if (_observers.ContainsKey(featureName)) return (T)_observers[featureName].Object;
+            if (_observers.ContainsKey(featureName))
+            {
+                return (T)_observers[featureName].Object;
+            }
             try
             {
                 var json = File.ParseAs<JObject>();
@@ -103,8 +110,13 @@ namespace Gantry.Services.FileSystem.Configuration
         /// </summary>
         public void Dispose()
         {
+            foreach (var observer in _observers.Values)
+            {
+                observer.Active = false;
+                observer.UnPatch();
+            }
             _observers.Clear();
-
+            _observers = null;
         }
     }
 }

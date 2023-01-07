@@ -149,7 +149,7 @@ namespace Gantry.Services.FileSystem.FileAdaptors
         }
 
         /// <summary>
-        /// Parses the file into a memory stream.
+        ///     Parses the file into a memory stream.
         /// </summary>
         /// <returns>An instance of type <see cref="MemoryStream" />, populated with data from this file.</returns>
         public MemoryStream ParseAsMemoryStream()
@@ -158,7 +158,7 @@ namespace Gantry.Services.FileSystem.FileAdaptors
         }
 
         /// <summary>
-        /// Parses the file into a memory stream.
+        ///     Parses the file into a memory stream.
         /// </summary>
         /// <returns>An instance of type <see cref="MemoryStream" />, populated with data from this file.</returns>
         public Task<MemoryStream> ParseAsMemoryStreamAsync()

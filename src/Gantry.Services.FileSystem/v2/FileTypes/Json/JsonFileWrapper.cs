@@ -16,6 +16,3 @@ namespace Gantry.Services.FileSystem.v2.FileTypes.Json
             => new JsonFile(file, scope);
     }
 }
-
-// Client.settings.json
-// Server.settings.json

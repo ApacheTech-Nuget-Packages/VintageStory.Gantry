@@ -26,5 +26,10 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         ///     Occurs when a property value is changed, within the observed POCO class.
         /// </summary>
         Action<object, string> OnObjectPropertyChanged { get; set; }
+
+        /// <summary>
+        ///     Removes the postfix patches from the observed item.
+        /// </summary>
+        void UnPatch();
     }
 }

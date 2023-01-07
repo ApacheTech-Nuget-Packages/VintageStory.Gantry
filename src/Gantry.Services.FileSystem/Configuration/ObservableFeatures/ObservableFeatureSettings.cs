@@ -41,7 +41,10 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures
         public static ObservableFeatureSettings<T> Bind(T instance, string featureName, FileScope scope, Harmony harmony) => 
             new(instance, featureName, scope, harmony);
 
-        private void OnPropertyChanged(object instance, string propertyName) => 
+        private void OnPropertyChanged(object instance, string propertyName)
+        {
+            if (!Active) return;
             ModSettings.For(_scope).Save(Object, _featureName);
+        }
     }
 }

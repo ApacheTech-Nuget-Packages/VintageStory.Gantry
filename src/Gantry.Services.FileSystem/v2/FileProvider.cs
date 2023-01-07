@@ -15,7 +15,7 @@ namespace Gantry.Services.FileSystem.v2
     /// </summary>
     /// <seealso cref="IFileProvider" />
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-    internal class FileProvider : IFileProvider
+    public class FileProvider : IFileProvider
     {
         private readonly IEnumerable<FileDescriptor> _fileDescriptors;
         private readonly FileProviderOptions _options;
