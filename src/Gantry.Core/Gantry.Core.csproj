@@ -5,16 +5,11 @@
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.3.2</Version>
+		<Version>0.3.3</Version>
 		<PackageReleaseNotes>
-			Gantry.Core v0.3.2
+			Gantry.Core v0.3.3
 
-			- Added: `Ensure` helper class to guard against unsafe member population, between worlds.
-			
-			- Removed: Duplicate `RandomEx` class from the maths library.
-
-			- Fixed: Multiple minor bugs that caused issues with synchronisation between worlds.
-			- Fixed: `ApiEx` now resolves the Client and Server APIs through `GameMain`, rather than vice versa. This ensures a singleton API.
+			- Updated: Reference updates for nuget packages.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
