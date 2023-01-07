@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using System;
+using System.Threading;
 
 namespace Gantry.Core.Extensions.Helpers
 {
@@ -9,17 +10,13 @@ namespace Gantry.Core.Extensions.Helpers
     [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public static class RandomEx
     {
-        /// <summary>
-        ///     A pseudo-random number generator, which is a device that produces a sequence
-        ///     of numbers that meet certain statistical requirements for randomness.
-        /// </summary>
-        [ThreadStatic]
-        public static readonly Random Shared;
+        private static ThreadLocal<Random> _random = new();
 
-        static RandomEx()
-        {
-            Shared = new Random();
-        }
+        /// <summary>
+        ///     Returns a shared instance of <see cref="Random"/> that can safely be used across threads.
+        /// </summary>
+        public static Random Shared => _random.Value ??= new Random((int)
+            ((1 + Thread.CurrentThread.ManagedThreadId) * DateTime.UtcNow.Ticks));
 
         /// <summary>
         ///     Returns a random <see langword="double"/> that is within a specified range.

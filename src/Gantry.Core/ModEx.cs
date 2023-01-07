@@ -44,8 +44,9 @@ namespace Gantry.Core
 
         internal static void Initialise(Mod mod, Assembly modAssembly)
         {
-            ModAssembly ??= modAssembly;
-            ModInfo ??= mod.Info;
+            Mod = Ensure.PopulatedWith(Mod, mod);
+            ModAssembly = Ensure.PopulatedWith(ModAssembly, modAssembly);
+            ModInfo = Ensure.PopulatedWith(ModInfo, mod.Info);
 
             if (ModInfo is null)
                 throw new GantryException(
@@ -53,7 +54,6 @@ namespace Gantry.Core
                     "Are you missing a modinfo.json file, or `ModInfoAttribute` declaration?");
 
             ModAppSide = ModInfo.Side;
-            Mod ??= mod;
         }
 
         /// <summary>

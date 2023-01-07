@@ -34,10 +34,11 @@ namespace Gantry.Core.ModSystems.Generic
         /// </param>
         public override void StartPre(ICoreAPI api)
         {
+            UApi = api;
             ModEx.Initialise(Mod, GetType().Assembly);
-            ApiEx.Initialise(api);
-            StartPreUniversal(UApi = api);
-            switch (api)
+            ApiEx.Initialise(UApi);
+            StartPreUniversal(UApi);
+            switch (UApi)
             {
                 case ICoreClientAPI capi:
                     StartPreClientSide(capi);

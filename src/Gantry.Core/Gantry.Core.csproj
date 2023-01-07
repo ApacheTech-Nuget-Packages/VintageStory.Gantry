@@ -5,11 +5,16 @@
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.3.1</Version>
+		<Version>0.3.2</Version>
 		<PackageReleaseNotes>
-			Gantry.Core v0.3.1
+			Gantry.Core v0.3.2
 
-			- Fixed: `ModEx` and `ApiEx` will now be properly initialised within single-player games.
+			- Added: `Ensure` helper class to guard against unsafe member population, between worlds.
+			
+			- Removed: Duplicate `RandomEx` class from the maths library.
+
+			- Fixed: Multiple minor bugs that caused issues with synchronisation between worlds.
+			- Fixed: `ApiEx` now resolves the Client and Server APIs through `GameMain`, rather than vice versa. This ensures a singleton API.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
@@ -51,9 +56,15 @@
 		<EmbeddedResource Include="_EmbeddedResources\lang\ru.json" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(Configuration)' != 'Debug'">
 		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.2.0" />
 		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.2.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+	  <ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.Extensions.Harmony\ApacheTech.Common.Extensions.Harmony\ApacheTech.Common.Extensions.Harmony.csproj" />
+	  <ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.Extensions\ApacheTech.Common.Extensions\ApacheTech.Common.Extensions.csproj" />
+	  <ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.FunctionalCSharp\src\ApacheTech.Common.FunctionalCSharp\ApacheTech.Common.FunctionalCSharp.csproj" />
 	</ItemGroup>
 
 </Project>
