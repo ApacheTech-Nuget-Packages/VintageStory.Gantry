@@ -5,20 +5,20 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: Network Service - Dependency Injection Extensions</Title>
 		<Description>Extension methods to aid the the registration of the Network Service, into an Gantry MDK mod.</Description>
-		<Version>0.3.0</Version>
+		<Version>0.3.1</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.Network.DependencyInjection v0.3.0
+			Gantry.Services.Network.DependencyInjection v0.3.1
 
-			- Core: ABI changes require parity update.
+			- Updated: Nuget package dependency versions.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.3.0" />
-		<PackageReference Include="VintageStory.Gantry.Services.Network" Version="0.3.0" />
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.3.2" />
+		<PackageReference Include="VintageStory.Gantry.Services.Network" Version="0.3.1" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+	<ItemGroup Condition="'$(Configuration)' != 'Release'">
 		<ProjectReference Include="..\Gantry.Core.DependencyInjection\Gantry.Core.DependencyInjection.csproj" />
 		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
 		<ProjectReference Include="..\Gantry.Services.Network\Gantry.Services.Network.csproj" />

@@ -5,20 +5,20 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service - Dependency Injection Extensions</Title>
 		<Description>Extension methods to aid the the registration of the File System Service, into an Gantry MDK mod.</Description>
-		<Version>0.3.0</Version>
+		<Version>0.3.1</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.FileSystem.DependencyInjection v0.3.0
+			Gantry.Services.FileSystem.DependencyInjection v0.3.1
 
-			- Core: ABI changes require parity update.
+			- Updated: Nuget package dependency versions.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.3.0" />
-		<PackageReference Include="VintageStory.Gantry.Services.FileSystem" Version="0.3.0" />
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.3.2" />
+		<PackageReference Include="VintageStory.Gantry.Services.FileSystem" Version="0.3.3" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
+	<ItemGroup Condition="'$(Configuration)' != 'Release'">
 		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
 		<ProjectReference Include="..\Gantry.Core.DependencyInjection\Gantry.Core.DependencyInjection.csproj" />
 		<ProjectReference Include="..\Gantry.Services.FileSystem\Gantry.Services.FileSystem.csproj" />
