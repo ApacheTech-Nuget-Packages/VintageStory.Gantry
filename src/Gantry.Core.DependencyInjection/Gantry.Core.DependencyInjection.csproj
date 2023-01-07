@@ -5,13 +5,11 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: Dependency Injection Engine</Title>
 		<Description>Adds an IoC container for the game, using`ApacheTech.Common.DependencyInjection` as the injection engine. It manages the dependencies between classes, so that mods can stay easy to change, as they grow in size and complexity. </Description>
-		<Version>0.3.1</Version>
+		<Version>0.3.2</Version>
 		<PackageReleaseNotes>
 			Gantry.Core.DependencyInjection v0.3.2
 
 			 - Updated: Nuget package dependency versions.
-			
-			 - Fixed:  
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
