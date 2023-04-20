@@ -5,6 +5,7 @@ using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Tests.AcceptanceMod.Features.FileSystem.Abstractions;
 using Gantry.Tests.AcceptanceMod.Features.FileSystem.Settings;
+using Gantry.Tests.AcceptanceMod.Features.Network.Packets;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 
@@ -30,7 +31,15 @@ namespace Gantry.Tests.AcceptanceMod.Features.FileSystem
             _embeddedWorldSettings = _fileSystemService.ParseEmbeddedJsonFile<EmbeddedJsonSettings>("embedded-world-client.json");
             _embeddedGlobalSettings = _fileSystemService.ParseEmbeddedJsonFile<EmbeddedJsonSettings>("embedded-global-client.json");
 
-            api.RegisterCommand("filesystemtest", "", "", Handler);
+            Capi.ChatCommands
+                .Create()
+                .WithName("filesystemtest")
+                .WithDescription("Test the Gantry File System Service.")
+                .HandleWith(a =>
+                {
+                    Handler(a.Caller.FromChatGroupId, a.RawArgs);
+                    return TextCommandResult.Success();
+                });
         }
 
         private void Handler(int groupId, CmdArgs args)

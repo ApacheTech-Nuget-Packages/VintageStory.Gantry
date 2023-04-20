@@ -28,13 +28,17 @@ namespace Gantry.Tests.AcceptanceMod.Features.FileSystem
             _embeddedWorldSettings = _fileSystemService.ParseEmbeddedJsonFile<EmbeddedJsonSettings>("embedded-world-server.json");
             _embeddedGlobalSettings = _fileSystemService.ParseEmbeddedJsonFile<EmbeddedJsonSettings>("embedded-global-server.json");
 
-            api.RegisterCommand("filesystemtest", "", "", Handler);
+            api.ChatCommands
+                .Create()
+                .WithName("filesystemtest")
+                .HandleWith(Handler);
         }
 
-        private void Handler(IServerPlayer player, int groupId, CmdArgs args)
+        private TextCommandResult Handler(TextCommandCallingArgs args)
         {
-            var scope = args.PopWord("world");
-            var type = args.PopWord("file");
+            var a = args.RawArgs;
+            var scope = a.PopWord("world");
+            var type = a.PopWord("file");
             var provider = type switch
             {
                 "file" when scope is "world" => _worldSettings,
@@ -43,7 +47,7 @@ namespace Gantry.Tests.AcceptanceMod.Features.FileSystem
                 "embedded" when scope is "global" => _embeddedGlobalSettings,
                 _ => _worldSettings
             };
-            Sapi.SendMessage(player, groupId, provider.Message, EnumChatType.CommandSuccess);
+            return TextCommandResult.Success(provider.Message);
         }
     }
 }

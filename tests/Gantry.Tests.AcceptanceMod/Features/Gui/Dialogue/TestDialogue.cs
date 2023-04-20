@@ -42,10 +42,10 @@ namespace Gantry.Tests.AcceptanceMod.Features.Gui.Dialogue
             composer.AddInset(insetBounds);
 
             composer.AddButton("Open Message Box", OnOpenMessageBox, controlRowBoundsLeftFixed.FixedUnder(insetBounds, 10.0),
-                CairoFont.ButtonText(), EnumButtonStyle.Normal, EnumTextOrientation.Center, "btnMessageBox");
+                CairoFont.ButtonText(), EnumButtonStyle.Normal, "btnMessageBox");
 
             composer.AddButton("Close", TryClose, controlRowBoundsRightFixed.FixedUnder(insetBounds, 10.0),
-                CairoFont.ButtonText(), EnumButtonStyle.Normal, EnumTextOrientation.Center, "btnClose");
+                CairoFont.ButtonText(), EnumButtonStyle.Normal, "btnClose");
         }
 
         private bool OnOpenMessageBox()

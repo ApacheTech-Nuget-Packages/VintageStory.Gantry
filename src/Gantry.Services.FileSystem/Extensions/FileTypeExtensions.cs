@@ -30,9 +30,8 @@ namespace Gantry.Services.FileSystem.Extensions
         /// <returns></returns>
         public static FileType ParseFileType(this FileSystemInfo file)
         {
-            var extension = file.Extension;
-            return Types.ContainsKey(extension) 
-                ? Types[extension] 
+            return Types.TryGetValue(file.Extension, out var extension) 
+                ? extension
                 : FileType.Binary;
         }
 

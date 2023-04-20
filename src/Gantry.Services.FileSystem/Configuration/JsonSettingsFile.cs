@@ -64,9 +64,9 @@ namespace Gantry.Services.FileSystem.Configuration
         public T Feature<T>(string featureName = null) where T: class, new()
         {
             featureName ??= typeof(T).Name.Replace("Settings", "");
-            if (_observers.ContainsKey(featureName))
+            if (_observers.TryGetValue(featureName, out var cachedObserver))
             {
-                return (T)_observers[featureName].Object;
+                return (T)cachedObserver.Object;
             }
             try
             {

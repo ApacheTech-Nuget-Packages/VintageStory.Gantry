@@ -74,7 +74,7 @@ namespace Gantry.Services.FileSystem
         /// <returns>Return an <see cref="IModFile" /> representation of the file, on disk.</returns>
         public object GetRegisteredFile(string fileName)
         {
-            if (_registeredFiles.ContainsKey(fileName)) return _registeredFiles[fileName];
+            if (_registeredFiles.TryGetValue(fileName, out var file)) return file;
             throw new FileNotFoundException(
                 $"File `{fileName}` either does not exist, or has not yet been registered with the FileSystem Service.");
         }
