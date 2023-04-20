@@ -5,16 +5,14 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: Harmony Patching Service</Title>
 		<Description>Provides a service for patching the game with Harmony, when using Gantry MDK.</Description>
-		<Version>0.3.2</Version>
+		<Version>0.4.0</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.HarmonyPatches v0.3.2
-
-			- Updated: Nuget package dependency versions.
+			Gantry.Services.HarmonyPatches v0.4.0: Parity update for Vintage Story 1.18
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.3" />
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' != 'Release'">

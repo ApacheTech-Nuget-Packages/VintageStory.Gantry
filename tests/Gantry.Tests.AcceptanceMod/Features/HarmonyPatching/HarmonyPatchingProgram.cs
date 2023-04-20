@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
+using static OpenTK.Graphics.OpenGL.GL;
 
 // ReSharper disable StringLiteralTypo
 
@@ -34,8 +35,15 @@ namespace Gantry.Tests.AcceptanceMod.Features.HarmonyPatching
             _harmony.Default.Patch(method, postfix: new HarmonyMethod(postfix));
 
             // Assert
-            api.RegisterCommand("harmonytest", "", "",
-                (_, _) => _originalClass.OriginalClientMethod(api));
+            Capi.ChatCommands
+                .Create()
+                .WithName("harmonytest")
+                .WithDescription("Test the Gantry Harmony Service.")
+                .HandleWith(a =>
+                {
+                    _originalClass.OriginalClientMethod(api);
+                    return TextCommandResult.Success();
+                });
         }
 
         private void Should_Patch_OriginalClass_On_Server(ICoreServerAPI sapi)
@@ -49,8 +57,15 @@ namespace Gantry.Tests.AcceptanceMod.Features.HarmonyPatching
             _harmony.Default.Patch(method, postfix: new HarmonyMethod(postfix));
 
             // Assert
-            sapi.RegisterCommand("harmonytest", "", "", (player, id, _) =>
-                _originalClass.OriginalServerMethod(sapi, player, id));
+            Capi.ChatCommands
+                .Create()
+                .WithName("harmonytest")
+                .WithDescription("Test the Gantry Harmony Service.")
+                .HandleWith(a =>
+                {
+                    _originalClass.OriginalServerMethod(sapi, a.Caller.Player as IServerPlayer, a.Caller.FromChatGroupId);
+                    return TextCommandResult.Success();
+                });
         }
     }
 }

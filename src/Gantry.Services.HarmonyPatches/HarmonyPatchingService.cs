@@ -48,9 +48,9 @@ namespace Gantry.Services.HarmonyPatches
         /// <returns>A <see cref="Harmony" /> patch host.</returns>
         public Harmony CreateOrUseInstance(string harmonyId)
         {
-            if (_instances.ContainsKey(harmonyId))
+            if (_instances.TryGetValue(harmonyId, out var instance))
             {
-                return _instances[harmonyId];
+                return instance;
             }
 
             var harmony = new Harmony(harmonyId);
@@ -79,10 +79,10 @@ namespace Gantry.Services.HarmonyPatches
                 PatchAll(harmony, assembly);
                 var patches = harmony.GetPatchedMethods().ToList();
                 if (!patches.Any()) return;
-                ApiEx.Current.Logger.Notification($"\t{assembly.GetName()} - Patched Methods:");
+                ApiEx.Current.Logger.VerboseDebug($"\t[Gantry] {assembly.GetName()} - Patched Methods:");
                 foreach (var method in patches)
                 {
-                    ApiEx.Current.Logger.Notification($"\t\t{method.FullDescription()}");
+                    ApiEx.Current.Logger.VerboseDebug($"\t\t{method.FullDescription()}");
                 }
             }
             catch (Exception ex)
@@ -121,7 +121,7 @@ namespace Gantry.Services.HarmonyPatches
             foreach (var (type, attribute) in sidedPatches)
             {
                 if (attribute.Side is not EnumAppSide.Universal && attribute.Side != ApiEx.Side) continue;
-                ApiEx.Current.Logger.Debug($"Patching {type}");
+                ApiEx.Current.Logger.VerboseDebug($"[Gantry] Patching {type}");
                 var processor = instance.CreateClassProcessor(type);
                 processor.Patch();
             }
