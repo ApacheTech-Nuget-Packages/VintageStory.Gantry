@@ -40,10 +40,15 @@ namespace Gantry.Tests.AcceptanceMod.Features.Network
                 .SetMessageHandler<TestMessagePacket>(
                     p => ApiEx.Client.ShowChatMessage(p.Message));
 
-            Capi.RegisterCommand(
-                "testmessage",
-                "Sends a test message packet to the server", "[message]",
-                (_, _) => _clientChannel.SendPacket(new TestMessagePacket { Message = "Test Successful." }));
+            Capi.ChatCommands
+                .Create()
+                .WithName("testmessage")
+                .WithDescription("Sends a test message packet to the server.")
+                .HandleWith(_ =>
+                {
+                    _clientChannel.SendPacket(new TestMessagePacket { Message = "Test Successful." });
+                    return TextCommandResult.Success("Packet sent.");
+                });
         }
     }
 }

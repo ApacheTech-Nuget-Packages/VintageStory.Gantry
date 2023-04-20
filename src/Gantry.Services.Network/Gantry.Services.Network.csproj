@@ -5,16 +5,14 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: Network Service</Title>
 		<Description>Provides a service for communicating between client, and server, when using Gantry MDK.</Description>
-		<Version>0.3.1</Version>
+		<Version>0.4.0</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.Network v0.3.1
-
-			- Updated: Nuget package dependency versions.
+			Gantry.Services.Network v0.4.0: Parity update for Vintage Story 1.18
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.3" />
+		<PackageReference Include="VintageStory.Gantry.Core" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' != 'Release'">
