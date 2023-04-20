@@ -5,17 +5,15 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: Network Service - Dependency Injection Extensions</Title>
 		<Description>Extension methods to aid the the registration of the Network Service, into an Gantry MDK mod.</Description>
-		<Version>0.3.1</Version>
+		<Version>0.4.0</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.Network.DependencyInjection v0.3.1
-
-			- Updated: Nuget package dependency versions.
+			Gantry.Services.Network.DependencyInjection v0.4.0: Parity update for Vintage Story 1.18
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
-		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.3.2" />
-		<PackageReference Include="VintageStory.Gantry.Services.Network" Version="0.3.1" />
+		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.4.0" />
+		<PackageReference Include="VintageStory.Gantry.Services.Network" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' != 'Release'">
