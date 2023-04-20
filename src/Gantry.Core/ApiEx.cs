@@ -248,17 +248,18 @@ namespace Gantry.Core
             // Obtaining the app-side, without having direct access to a specific CoreAPI.
             // NB: This is not a fool-proof. This is a drawback of using a Threaded Server, over Dedicated Server for Single-Player games.
 
-            // 1. If modinfo.json states the mod is only for a single side, return that side.
+            // 1. If modinfo.json states the mod is only for a single side, return that side. CLIENT or SERVER.
             if (ModEx.ModAppSide is not EnumAppSide.Universal)
             {
 #if DEBUG
-                Server.Logger.Audit($"Stage 1: Determined App-Side for thread {thread.ManagedThreadId} ({thread.Name}), as {ModEx.ModAppSide}.");
+                var api = Server as ICoreAPI ?? Client;
+                api.Logger.Audit($"Stage 1: Determined App-Side for thread {thread.ManagedThreadId} ({thread.Name}), as {ModEx.ModAppSide}.");
                 Debug.WriteLine($"Stage 1: Determined App-Side for thread {thread.ManagedThreadId} ({thread.Name}), as {ModEx.ModAppSide}.");
 #endif
                 return ModEx.ModAppSide;
             }
 
-            // 2. If the current thread name is "SingleplayerServer", we are on the server. 
+            // 2. If the current thread name is "SingleplayerServer", we are on the SERVER. 
             // NB: A thread's name filters down through child threads, and thread-pool threads, unless manually changed.
             if (string.Equals(thread.Name, "SingleplayerServer", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -269,7 +270,7 @@ namespace Gantry.Core
                 return EnumAppSide.Server;
             }
 
-            // 3. If the process name is "VintagestoryServer", we are on the server.
+            // 3. If the process name is "VintagestoryServer", we are on the SERVER.
             if (Process.GetCurrentProcess().ProcessName == "VintagestoryServer")
             {
 #if DEBUG
@@ -279,8 +280,9 @@ namespace Gantry.Core
                 return EnumAppSide.Server;
             }
 
-            // By this stage, we know that we're in a single player game, or at least on a Threaded Server; and the ServerMain member should be populated.
-            // 4. If ServerMain is not populated, we're on the Client, or within a Client-Only context.
+            // NB: By this stage, we know that we're in a single player game, or at least on a Threaded Server; and the ServerMain member should be populated.
+
+            // 4. If ServerMain is not populated, we're on the CLIENT.
             if (ServerMain is null)
             {
 #if DEBUG
@@ -290,7 +292,7 @@ namespace Gantry.Core
                 return EnumAppSide.Client;
             }
 
-            // 5. If the thread's ID matches one within the server's thread list, we are on the server.
+            // 5. If the thread's ID matches one within the server's thread list, we are on the SERVER.
             if (ServerMain.Serverthreads.Any(p => thread.ManagedThreadId == p.ManagedThreadId))
             {
 #if DEBUG
@@ -300,10 +302,11 @@ namespace Gantry.Core
                 return EnumAppSide.Server;
             }
 
-            // 6. By this stage, we return Client as a fallback; having exhausted all knowable reasons why we'd be on the Server.
+            // 6. By this stage, we return CLIENT as a fallback; having exhausted all knowable reasons why we'd be on the Server.
 #if DEBUG
+            var capi = Client as ICoreAPI ?? Server;
+            capi.Logger.Audit($"Stage 6: Determined App-Side for thread {thread.ManagedThreadId} ({thread.Name}), as {EnumAppSide.Client}.");
             Debug.WriteLine($"Stage 6: Determined App-Side for thread {thread.ManagedThreadId} ({thread.Name}), as {EnumAppSide.Client}.");
-            Client.Logger.Audit($"Stage 6: Determined App-Side for thread {thread.ManagedThreadId} ({thread.Name}), as {EnumAppSide.Client}.");
 #endif
             return EnumAppSide.Client;
         }

@@ -73,9 +73,9 @@ namespace Gantry.Core.GameContent.GUI
             var controlRowBoundsLeftFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.LeftBottom);
             var controlRowBoundsRightFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.RightBottom);
             composer
-                .AddSmallButton(confirmButtonText, OnOkButtonPressed, controlRowBoundsRightFixed, EnumButtonStyle.Normal, EnumTextOrientation.Center, "btnOk")
+                .AddSmallButton(confirmButtonText, OnOkButtonPressed, controlRowBoundsRightFixed, EnumButtonStyle.Normal, "btnOk")
                 .AddIf(_buttons == ButtonLayout.OkCancel)
-                .AddSmallButton(cancelButtonText, OnCancelButtonPressed, controlRowBoundsLeftFixed, EnumButtonStyle.Normal, EnumTextOrientation.Center, "btnCancel")
+                .AddSmallButton(cancelButtonText, OnCancelButtonPressed, controlRowBoundsLeftFixed, EnumButtonStyle.Normal, "btnCancel")
                 .EndIf();
         }
 

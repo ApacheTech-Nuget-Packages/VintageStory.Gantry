@@ -5,11 +5,9 @@
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.3.3</Version>
+		<Version>0.4.0</Version>
 		<PackageReleaseNotes>
-			Gantry.Core v0.3.3
-
-			- Updated: Reference updates for nuget packages.
+			Gantry.Core v0.4.0: Parity update for Vintage Story 1.18
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
@@ -52,14 +50,12 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' != 'Debug'">
-		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.2.0" />
 		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" Version="1.2.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
-	  <ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.Extensions.Harmony\ApacheTech.Common.Extensions.Harmony\ApacheTech.Common.Extensions.Harmony.csproj" />
-	  <ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.Extensions\ApacheTech.Common.Extensions\ApacheTech.Common.Extensions.csproj" />
-	  <ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.FunctionalCSharp\src\ApacheTech.Common.FunctionalCSharp\ApacheTech.Common.FunctionalCSharp.csproj" />
+		<ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.Extensions.Harmony\ApacheTech.Common.Extensions.Harmony\ApacheTech.Common.Extensions.Harmony.csproj" />
+		<ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.Extensions\ApacheTech.Common.Extensions\ApacheTech.Common.Extensions.csproj" />
+		<ProjectReference Include="..\..\..\..\..\..\..\..\dev\ApacheTech\src\ApacheTech.Common.FunctionalCSharp\src\ApacheTech.Common.FunctionalCSharp\ApacheTech.Common.FunctionalCSharp.csproj" />
 	</ItemGroup>
-
 </Project>
