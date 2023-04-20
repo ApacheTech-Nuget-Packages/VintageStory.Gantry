@@ -5,17 +5,15 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service - Dependency Injection Extensions</Title>
 		<Description>Extension methods to aid the the registration of the File System Service, into an Gantry MDK mod.</Description>
-		<Version>0.3.1</Version>
+		<Version>0.4.0</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.FileSystem.DependencyInjection v0.3.1
-
-			- Updated: Nuget package dependency versions.
+			Gantry.Services.FileSystem.DependencyInjection v0.4.0: Parity update for Vintage Story 1.18
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(Configuration)' == 'Release'">
-		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.3.2" />
-		<PackageReference Include="VintageStory.Gantry.Services.FileSystem" Version="0.3.3" />
+		<PackageReference Include="VintageStory.Gantry.Core.DependencyInjection" Version="0.4.0" />
+		<PackageReference Include="VintageStory.Gantry.Services.FileSystem" Version="0.4.0" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' != 'Release'">
