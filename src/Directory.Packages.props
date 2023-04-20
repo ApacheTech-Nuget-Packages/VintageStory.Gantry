@@ -3,10 +3,4 @@
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageVersion Include="ApacheTech.Common.Extensions" Version="2.0.1" />
-    <PackageVersion Include="ApacheTech.Common.Extensions.Harmony" Version="2.0.1" />
-    <PackageVersion Include="PolySharp" Version="1.13.1" />
-    <PackageVersion Include="VintageStory.Gantry.Core" Version="0.3.3" />
-  </ItemGroup>
 </Project>
