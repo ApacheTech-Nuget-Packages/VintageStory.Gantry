@@ -1,6 +1,10 @@
 ﻿<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
-    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
-  </PropertyGroup>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+		<CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+	</PropertyGroup>
+  <ItemGroup>
+	  <PackageVersion Include="ApacheTech.Common.Extensions.Harmony" Version="2.0.1" />
+	  <PackageVersion Include="ApacheTech.Common.Extensions" Version="2.0.1" />
+  </ItemGroup>
 </Project>

@@ -16,10 +16,4 @@
 		<PackageReference Include="VintageStory.Gantry.Services.Network" Version="0.4.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' != 'Release'">
-		<ProjectReference Include="..\Gantry.Core.DependencyInjection\Gantry.Core.DependencyInjection.csproj" />
-		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
-		<ProjectReference Include="..\Gantry.Services.Network\Gantry.Services.Network.csproj" />
-	</ItemGroup>
-
 </Project>

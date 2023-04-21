@@ -17,8 +17,6 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(Configuration)' != 'Release'">
-		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
-		<ProjectReference Include="..\Gantry.Core.DependencyInjection\Gantry.Core.DependencyInjection.csproj" />
 		<ProjectReference Include="..\Gantry.Services.FileSystem\Gantry.Services.FileSystem.csproj" />
 	</ItemGroup>
 

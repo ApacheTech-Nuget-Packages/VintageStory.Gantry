@@ -15,8 +15,4 @@
 		<PackageReference Include="VintageStory.Gantry.Core" Version="0.4.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
-		<ProjectReference Include="..\Gantry.Core\Gantry.Core.csproj" />
-	</ItemGroup>
-
 </Project>
