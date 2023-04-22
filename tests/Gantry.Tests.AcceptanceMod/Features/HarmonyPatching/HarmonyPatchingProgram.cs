@@ -8,7 +8,6 @@ using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
-using static OpenTK.Graphics.OpenGL.GL;
 
 // ReSharper disable StringLiteralTypo
 

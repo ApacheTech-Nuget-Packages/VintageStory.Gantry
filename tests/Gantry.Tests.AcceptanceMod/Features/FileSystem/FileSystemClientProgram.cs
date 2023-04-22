@@ -5,7 +5,6 @@ using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Tests.AcceptanceMod.Features.FileSystem.Abstractions;
 using Gantry.Tests.AcceptanceMod.Features.FileSystem.Settings;
-using Gantry.Tests.AcceptanceMod.Features.Network.Packets;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 

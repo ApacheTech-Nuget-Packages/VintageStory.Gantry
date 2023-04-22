@@ -19,8 +19,15 @@ namespace Gantry.Core
         /// </summary>
         static LangEx()
         {
-            var json = typeof(LangEx).Assembly.GetResourceContent($"{Lang.CurrentLocale}.json");
-            Translations = JsonObject.FromJson(json);
+            var json = typeof(LangEx).Assembly.GetResourceContent("en.json");
+            try
+            {
+                json = typeof(LangEx).Assembly.GetResourceContent($"{Lang.CurrentLocale}.json");
+            }
+            finally
+            {
+                Translations = JsonObject.FromJson(json);
+            }
         }
 
         /// <summary>

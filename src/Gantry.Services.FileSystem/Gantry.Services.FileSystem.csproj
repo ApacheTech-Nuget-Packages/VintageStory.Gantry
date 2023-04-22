@@ -5,14 +5,20 @@
 	<PropertyGroup>
 		<Title>Gantry MDK: File System Service</Title>
 		<Description>Provides a service for interacting with the file system, when using Gantry MDK.</Description>
-		<Version>0.4.0</Version>
+		<Version>0.5.0</Version>
 		<PackageReleaseNotes>
-			Gantry.Services.FileSystem v0.4.0: Parity update for Vintage Story 1.18
+			Gantry MDK v0.5.0: IOC Consolidation Update
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)' != 'Debug'">
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.4.0" />
+	<ItemGroup>
+		<PackageReference Include="VintageStory.Gantry.Core" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="DependencyInjection\README.md">
+	    <Pack>True</Pack>
+	  </None>
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 	<PropertyGroup>
-		<ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
-		<CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 
 	<!-- Language Specifics -->
@@ -57,10 +56,7 @@
 		<InternalsVisibleTo Include="$(SolutionName).Tests.Unit" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<InternalsVisibleTo Include="$(AssemblyName).DependencyInjection" />
-		<InternalsVisibleTo Include="$(ProjectName).DependencyInjection" />
-	</ItemGroup>
+	<!-- File Includes -->
 
 	<ItemGroup>
 		<None Include="README.md">
@@ -80,6 +76,8 @@
 			<PackagePath></PackagePath>
 		</None>
 	</ItemGroup>
+
+	<!-- Game Library Imports -->
 
 	<ItemGroup>
 		<!-- Vintage Story Game Engine -->
@@ -122,15 +120,27 @@
 		</Reference>
 	</ItemGroup>
 
+	<!-- Generic Package Imports -->
+
 	<ItemGroup>
-		<PackageReference Include="PolySharp" Version="1.13.1">
+		<PackageReference Include="PolySharp">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+		<PackageReference Include="Microsoft.SourceLink.GitHub">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<!-- Own Package Imports -->
+
+	<ItemGroup>
+		<PackageReference Include="ApacheTech.Common.Extensions" />
+		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" />
+		<PackageReference Include="ApacheTech.Common.FunctionalCSharp" />
+		<PackageReference Include="ApacheTech.Common.DependencyInjection" />
+		<PackageReference Include="ApacheTech.Common.DependencyInjection.Abstractions" />
 	</ItemGroup>
 
 </Project>
