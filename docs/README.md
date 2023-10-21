@@ -114,8 +114,8 @@ The service also comes with a Dependency Injection satellite library that makes 
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>10</LangVersion>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>11</LangVersion>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
@@ -127,7 +127,7 @@ The service also comes with a Dependency Injection satellite library that makes 
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry.Core" Version="0.3.0" />
+		<PackageReference Include="VintageStory.Gantry" Version="0.6.0" />
 	</ItemGroup>
 
 </Project>  
@@ -136,7 +136,7 @@ The service also comes with a Dependency Injection satellite library that makes 
  3. If you wish to use the Nuget Package Installer, you can install Gantry using the following command:
 
 ```text
-    Install-Package VintageStory.Gantry.Core  
+    Install-Package VintageStory.Gantry  
 ```
 
  4. Once installed, you can start using the Gantrified `ModSystem` base classes, and flesh out your mod to your liking. 
@@ -174,7 +174,7 @@ The service also comes with a Dependency Injection satellite library that makes 
 ## **Support the Author:**
 
 The Gantry Mod Development Kit is developed, and maintained by me; Apache. 
-I'm a freelance developer, a content creator, and and a long time player, and modder, of Vintage Story.
+I'm a professional .NET developer, a content creator, and and a long time player, and modder, of Vintage Story.
 I've contributed code to the game, including a re-write of the translation engine, 
 some OpenGL GUI Elements, and a number of optimisations, and bug fixes.
 

@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- Basic Info is set within Directory.Build.props -->
+
+	<PropertyGroup>
+		<Title>Gantry Mod Development Kit</Title>
+		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
+		<Version>0.5.3</Version>
+		<PackageReleaseNotes>
+			Gantry MDK v0.5.3:
+
+			Tweak: Don't cache main process threads when determining side.
+		</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="_EmbeddedResources\**" />
+		<None Remove="_EmbeddedResources\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IronSoftware.System.Drawing" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Services\FileSystem\DependencyInjection\README.md">
+	    <Pack>True</Pack>
+	  </None>
+	  <None Update="Services\FileSystem\README.md">
+	    <Pack>True</Pack>
+	  </None>
+	  <None Update="Services\HarmonyPatches\README.md">
+	    <Pack>True</Pack>
+	  </None>
+	  <None Update="Services\HarmonyPatches\__Icon.ico">
+	    <Pack>True</Pack>
+	  </None>
+	  <None Update="Services\Network\LICENCE.md">
+	    <Pack>True</Pack>
+	  </None>
+	  <None Update="Services\Network\README.md">
+	    <Pack>True</Pack>
+	  </None>
+	  <None Update="Services\Network\__Icon.ico">
+	    <Pack>True</Pack>
+	  </None>
+	  <None Update="Services\Network\__PreviewImage.png">
+	    <Pack>True</Pack>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="PolySharp">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>

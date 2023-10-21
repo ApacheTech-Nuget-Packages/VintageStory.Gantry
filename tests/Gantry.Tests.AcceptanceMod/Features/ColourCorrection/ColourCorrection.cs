@@ -31,7 +31,8 @@ namespace Gantry.Tests.AcceptanceMod.Features.ColourCorrection
         ///     Allows a mod to include Singleton, or Transient services to the IOC Container.
         /// </summary>
         /// <param name="services">The service collection.</param>
-        public void ConfigureClientModServices(IServiceCollection services)
+        /// <param name="capi">The client-side API.</param>
+        public void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi)
         {
             services.AddFeatureWorldSettings<ColourCorrectionSettings>();
             services.AddSingleton<ColourCorrectionRenderer>();

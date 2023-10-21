@@ -1,22 +1,20 @@
 ﻿<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-	</PropertyGroup>
-
-	<ItemGroup Label="Framework Dependencies">
-		<PackageVersion Include="PolySharp" Version="1.13.1" />
-		<PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-	</ItemGroup>
-
-	<ItemGroup Label="Common Dependencies">
-		<PackageVersion Include="ApacheTech.Common.DependencyInjection" Version="2.1.1" />
-		<PackageVersion Include="ApacheTech.Common.DependencyInjection.Abstractions" Version="2.1.1" />
-		<PackageVersion Include="ApacheTech.Common.Extensions.Harmony" Version="2.0.1" />
-		<PackageVersion Include="ApacheTech.Common.Extensions" Version="2.0.1" />
-		<PackageVersion Include="ApacheTech.Common.FunctionalCSharp" Version="1.0.0" />
-	</ItemGroup>
-
-	<ItemGroup Label="Gantry Core">
-		<PackageVersion Include="VintageStory.Gantry.Core" Version="0.5.0" />
-	</ItemGroup>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup Label="Framework Dependencies">
+    <PackageVersion Include="IronSoftware.System.Drawing" Version="2023.11.1" />
+    <PackageVersion Include="PolySharp" Version="1.13.2" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+  </ItemGroup>
+  <ItemGroup Label="Common Dependencies">
+    <PackageVersion Include="ApacheTech.Common.DependencyInjection" Version="2.1.1" />
+    <PackageVersion Include="ApacheTech.Common.DependencyInjection.Abstractions" Version="2.1.1" />
+    <PackageVersion Include="ApacheTech.Common.Extensions.Harmony" Version="2.0.1" />
+    <PackageVersion Include="ApacheTech.Common.Extensions" Version="2.0.2" />
+    <PackageVersion Include="ApacheTech.Common.FunctionalCSharp" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup Label="Gantry Core">
+    <PackageVersion Include="VintageStory.Gantry.Core" Version="0.5.0" />
+  </ItemGroup>
 </Project>

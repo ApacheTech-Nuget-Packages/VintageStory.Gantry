@@ -11,7 +11,7 @@ namespace Gantry.Tests.AcceptanceMod.Features.Gui
 {
     internal sealed class GuiProgram : ClientModSystem, IClientServiceRegistrar
     {
-        public void ConfigureClientModServices(IServiceCollection services)
+        public void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi)
         {
             services.AddSingleton<TestDialogue>();
         }

@@ -1,4 +1,4 @@
-﻿using Gantry.Services.FileSystem.Features;
+﻿using Gantry.Services.FileSystem.Configuration.Abstractions;
 using Gantry.Tests.AcceptanceMod.Features.ColourCorrection.Enums;
 using Newtonsoft.Json;
 

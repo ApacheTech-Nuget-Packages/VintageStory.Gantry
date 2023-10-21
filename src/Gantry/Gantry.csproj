@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<!-- Basic Info is set within Directory.Build.props -->
+
+	<PropertyGroup>
+		<Title>Gantry Mod Development Kit</Title>
+		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
+		<Version>0.6.0</Version>
+		<PackageReleaseNotes>
+			Gantry MDK v0.6.0:
+
+			The Consolidation Update: Squishing everything back into a single library.
+		</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="_EmbeddedResources\**" />
+		<None Remove="_EmbeddedResources\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="IronSoftware.System.Drawing" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="PolySharp">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+</Project>

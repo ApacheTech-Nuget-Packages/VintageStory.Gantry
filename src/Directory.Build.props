@@ -6,8 +6,9 @@
 	<!-- Language Specifics -->
 
 	<PropertyGroup>
-		<LangVersion>10</LangVersion>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>11</LangVersion>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<EnablePackageValidation>true</EnablePackageValidation>
 	</PropertyGroup>
 
@@ -20,7 +21,7 @@
 
 		<Company>ApacheTech Solutions</Company>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<Copyright>Copyright © ApacheTech Solutons, 2022. All Rights Reserved.</Copyright>
+		<Copyright>Copyright © ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
 
 		<DebugSymbols>True</DebugSymbols>
 		<DebugType>embedded</DebugType>

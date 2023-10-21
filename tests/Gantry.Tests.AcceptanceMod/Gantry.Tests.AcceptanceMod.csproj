@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>10</LangVersion>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>11</LangVersion>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<OutputType>Library</OutputType>
 		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
@@ -12,114 +12,56 @@
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningsAsErrors />
 		<Version>1.0.0.0</Version>
-		<!-- Environment Variable not recongised by Visual Studio Analysers. -->
-		<!-- ReSharper disable once UnknownProperty -->
-		<EnvironmentVariable>$(VINTAGE_STORY)</EnvironmentVariable>
-	</PropertyGroup>
-
-	<PropertyGroup>
-		<VintageStoryDirectory>D:\Games\Vintage Story\</VintageStoryDirectory>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="_EmbeddedResources\**" />
+	  <ProjectReference Include="..\..\src\Gantry\Gantry.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Remove="_Includes\assets\gantryacceptancetests\shaderincludes\daltonise.ash" />
-		<None Remove="_Includes\assets\gantryacceptancetests\shaderincludes\hsl.ash" />
-		<None Remove="_Includes\assets\gantryacceptancetests\shaders\colour-correction.fsh" />
-		<None Remove="_Includes\assets\gantryacceptancetests\shaders\colour-correction.vsh" />
-	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="_Includes\assets\gantryacceptancetests\shaderincludes\daltonise.ash">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="_Includes\assets\gantryacceptancetests\shaderincludes\hsl.ash">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="_Includes\assets\gantryacceptancetests\shaders\colour-correction.fsh">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-		<Content Include="_Includes\assets\gantryacceptancetests\shaders\colour-correction.vsh">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Version="0.2.0" Include="VintageStory.Gantry.Services.FileSystem.DependencyInjection" />
-		<PackageReference Version="0.2.0" Include="VintageStory.Gantry.Services.HarmonyPatches.DependencyInjection" />
-		<PackageReference Version="0.2.0" Include="VintageStory.Gantry.Services.Network.DependencyInjection" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<!-- Vintage Story Game Libraries -->
-		<Reference Include="Vintagestory">
-			<HintPath>$(EnvironmentVariable)\Vintagestory.exe</HintPath>
-			<Private>false</Private>
-		</Reference>
+		<!-- Vintage Story Game Engine -->
 		<Reference Include="VintagestoryAPI">
-			<HintPath>$(EnvironmentVariable)\VintagestoryAPI.dll</HintPath>
+			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VintagestoryLib">
-			<HintPath>$(EnvironmentVariable)\VintagestoryLib.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="VSCreativeMod">
-			<HintPath>$(EnvironmentVariable)\Mods\VSCreativeMod.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="VSSurvivalMod">
-			<HintPath>$(EnvironmentVariable)\Mods\VSSurvivalMod.dll</HintPath>
+			<HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="VSEssentials">
-			<HintPath>$(EnvironmentVariable)\Mods\VSEssentials.dll</HintPath>
+			<HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<!-- Vintage Story Included Libraries -->
+		<Reference Include="VSSurvivalMod">
+			<HintPath>$(VINTAGE_STORY)\Mods\VSSurvivalMod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="VSCreativeMod">
+			<HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<!-- Vintage Story Game Libraries -->
 		<Reference Include="0Harmony">
-			<HintPath>$(EnvironmentVariable)\Lib\0Harmony.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="AnimatedGif">
-			<HintPath>$(EnvironmentVariable)\Lib\AnimatedGif.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="cairo-sharp">
-			<HintPath>$(EnvironmentVariable)\Lib\cairo-sharp.dll</HintPath>
+			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Newtonsoft.Json">
-			<HintPath>$(EnvironmentVariable)\Lib\Newtonsoft.Json.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="OpenTK">
-			<HintPath>$(EnvironmentVariable)\Lib\OpenTK.dll</HintPath>
+			<HintPath>$(VINTAGE_STORY)\Lib\Newtonsoft.Json.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="protobuf-net">
-			<HintPath>$(EnvironmentVariable)\Lib\protobuf-net.dll</HintPath>
+			<HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="System.Data.SQLite">
-			<HintPath>$(EnvironmentVariable)\Lib\System.Data.SQLite.dll</HintPath>
+		<Reference Include="cairo-sharp">
+			<HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="Tavis.JsonPatch">
-			<HintPath>$(EnvironmentVariable)\Lib\Tavis.JsonPatch.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="ApacheTech.Common.Extensions" Version="1.2.0" />
 	</ItemGroup>
 
 	<PropertyGroup>
-		<ModPackagerDir>C:\Users\Apache\source\repos\ModPackager\ModPackager\bin\Release\net6.0\publish\win-x64\</ModPackagerDir>
+		<ModPackagerDir>C:\Users\Apache\source\repos\.tools\packager\</ModPackagerDir>
 		<ModPackagerName>ModPackager.exe</ModPackagerName>
 		<ModPackagerPath>$(ModPackagerDir)$(ModPackagerName)</ModPackagerPath>
 
@@ -131,13 +73,6 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Package|AnyCPU'">
 		<DefineConstants>TRACE</DefineConstants>
 		<Optimize>true</Optimize>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>C:\Users\Apache\source\repos\ApacheTech.VintageMods.AccessibilityTweaks\ApacheTech.VintageMods.AccessibilityTweaks\ApacheTech.VintageMods.AccessibilityTweaks.xml</DocumentationFile>
-		<GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
-		<DebugType>embedded</DebugType>
-		<DebugSymbols>true</DebugSymbols>
 	</PropertyGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
