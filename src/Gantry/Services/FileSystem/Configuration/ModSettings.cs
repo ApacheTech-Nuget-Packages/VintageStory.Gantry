@@ -1,5 +1,4 @@
-﻿using System;
-using Gantry.Core;
+﻿using Gantry.Core;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
 using HarmonyLib;
