@@ -6,11 +6,11 @@ The MDK provides a framework that can be used to develop mods with Clean Code as
 
 ## Prerequisites:
 
- - Vintage Story 1.17.x
- - Visual Studio 2022, with support for .NET Standard 2.0 development.
+ - Vintage Story 1.18.15
+ - Visual Studio 2022, with support for .NET 7.0 development.
  - `VINTAGE_STORY` Environment Variable that point to the game install directory.
- - Works well with the [Vintage Story Mod Template (.NET Framework)](https://marketplace.visualstudio.com/items?itemName=ApacheTechSolutions.vsmodtemplate) extension, for Visual Studio 2022.
- 
+ - `VINTAGE_STORY_DATA` Environment Variable that point to the game data directory.
+
 ## Recommended Tools:
  
  - **[dnSpy](https://github.com/dnSpy/dnSpy)**: Debugger and .NET assembly editor. Traverse the game's API, analyse code, convert C# to IL, and back.

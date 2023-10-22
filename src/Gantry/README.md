@@ -1,6 +1,28 @@
 # Gantry - Vintage Story MDK
 
-The Gantry Mod Development Kit is a Core Framework that makes it easier to make Code Mods for Vintage Story.
+Gantry MDK ("Mod Development Kit") is a toolkit for aiding the development of third-party plugins (mods), for Vintage Story, by Anego Studios.
+
+The MDK provides a framework that can be used to develop mods with Clean Code as a foundation. Many of the features streamline the ability to implement design and architecture patterns within your mods.
+
+## Prerequisites:
+
+ - Vintage Story 1.18.15
+ - Visual Studio 2022, with support for .NET 7.0 development.
+ - `VINTAGE_STORY` Environment Variable that point to the game install directory.
+ - `VINTAGE_STORY_DATA` Environment Variable that point to the game data directory.
+
+## Recommended Tools:
+ 
+ - **[dnSpy](https://github.com/dnSpy/dnSpy)**: Debugger and .NET assembly editor. Traverse the game's API, analyse code, convert C# to IL, and back.
+ - **[RedGate Smart Assembly](https://www.red-gate.com/products/dotnet-development/smartassembly/)**: Merge Gantry MDK into your mod, resulting in a single DLL file for release. 
+ - **[JetBrains ReSharper](https://www.jetbrains.com/resharper/)**: Essential plugin for Visual Studio 2022. Hugely increases your productivity, and actively helps you become a better developer.
+ - **[SubMain GhostDoc](https://submain.com/ghostdoc/)**: Create XML documentation within your code, with just a keyboard shortcut.
+
+## Libraries:
+
+The MDK is split into a number of libraries, all available for installation through Nuget. This will allow you to customise your Gantry installation, and minimise the overall size of the resulting Mod, without packing a lot of bloat into the mod archive that isn't being used.
+
+### Core:
 
 This library is required, and contains the core functionality of the MDK. A lot of the core features are designed to streamline mod development, and allow for rapid prototyping of new mod features.
 
@@ -24,9 +46,20 @@ The Core comes with a fully-featured array of tools, such as:
  - support for visual user feedback, via `MessageBox.Show(...)`;
  - scaled image support for displaying images on GUI forms;
 
- ## File System Service
+### Dependency Injection:
 
-Provides a service for interacting with the file system.
+This library includes a bespoke dependency injection engine, which can be used to produce very flexible, scalable, and highly optimised mods. This allows large mods to be handled very easily, especially when being used within a vertical slice architecture, where each feature of your mod is separate from eachother, within their own folders. 
+
+Comes with a fully-featured array of tools, such as:
+
+ - easy integration into mods, via the `ModHost` base class;
+ - static access to the mod's service provider, via the `IOC` static class;
+ - interfaces that allow existing classes to register services at startup;
+ - sided constructor attributes that allow classes to be instantiated differently on the client, and server;
+ - automatic addition of the core game API, into the service collection;
+ - automatic addition of key game features, into the service collection;
+
+### File System Service:
 
 The file system service allows easy access to files on the hard-drive, as well as embedded resources within the mod's assembly.
 
@@ -41,9 +74,9 @@ The service comes with a fully-featured array of tools, such as:
  - base classes for classes that consume feature settings, such as Harmony patch classes;
  - base classes for feature settings dialogue windows;
 
-## Harmony Patching Service
+The service also comes with a Dependency Injection satellite library that makes it easy to add the service into the mod's service collection.
 
-Provides a service for patching the game with Harmony, when using Gantry MDK.
+### Harmony Patching Service:
 
 The harmony patching service is a simple, yet powerful solution to streamlining the inclusion of harmony patches within mods.
 
@@ -58,9 +91,7 @@ The service comes with a fully-featured array of tools, such as:
 
 The service also comes with a Dependency Injection satellite library that makes it easy to add the service into the mod's service collection.
 
-## Network Service
-
-Provides a service for communicating between client, and server, when using Gantry MDK.
+### Network Service:
 
 The network service acts as a one-stop solution for IPC between the client, and server.
 
@@ -74,10 +105,76 @@ The service comes with a fully-featured array of tools, such as:
 
 The service also comes with a Dependency Injection satellite library that makes it easy to add the service into the mod's service collection.
 
+## Quick Start
+
+ 1. Start a new Class Library project in Visual Studio 2022, targetting .NET Standard 2.0.
+ 2. Open the `.csproj` file, and add the following:  
+  
+```xml  
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>11</LangVersion>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="VintagestoryAPI">
+			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="VintageStory.Gantry" Version="0.6.0" />
+	</ItemGroup>
+
+</Project>  
+```
+
+ 3. If you wish to use the Nuget Package Installer, you can install Gantry using the following command:
+
+```text
+    Install-Package VintageStory.Gantry  
+```
+
+ 4. Once installed, you can start using the Gantrified `ModSystem` base classes, and flesh out your mod to your liking. 
+
+```csharp
+    public class QuickStartModSystem : ClientModSystem
+    {
+        public override void StartClientSide(ICoreClientAPI capi)
+        {
+            capi.RegisterCommand("hello", Lang.Get("samplegantrymod:hello-world-description"), string.Empty, OnChatCommand);
+        }
+        
+        private void OnChatCommand(int groupId, CmdArgs args)
+        {
+            ApiEx.Client.ShowChatMessage(Lang.Get("samplegantrymod:hello-world-text"));
+        }
+    }
+```
+ 5. Add a `ModInfoAttribute` to the assembly.
+  
+```csharp  
+[assembly: ModInfo(
+    "Sample Gantry Mod",
+    "samplegantrymod",
+    Description = "A sample mod, using the Gantry MDK.",
+    Side = "Universal",
+    Version = "0.0.1",
+    Website = "https://apachetech.co.uk",
+    Contributors = new[] { "ApacheTech Solutions" },
+    Authors = new[] { "ApacheTech Solutions" })];
+```  
+ 
+ 6. Package all required `.dll` files within your mod archive, from the output directory, when you run your mod.
+
 ## **Support the Author:**
 
 The Gantry Mod Development Kit is developed, and maintained by me; Apache. 
-I'm a freelance developer, a content creator, and and a long time player, and modder, of Vintage Story.
+I'm a professional .NET developer, a content creator, and and a long time player, and modder, of Vintage Story.
 I've contributed code to the game, including a re-write of the translation engine, 
 some OpenGL GUI Elements, and a number of optimisations, and bug fixes.
 
@@ -96,3 +193,5 @@ Thank you to everyone that does support me, and my work.
 
 All donations go towards making new content on a non-profit basis. Software purchases and subscriptions, hardware upgrades, training, etc. 
 Any profit made will be donated to [Macmillan Cancer Support](https://www.macmillan.org.uk/), and [The British Liver Trust](https://britishlivertrust.org.uk/), in memory of my father, who died of Liver Cancer in 2015.
+
+
