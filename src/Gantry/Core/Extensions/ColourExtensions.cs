@@ -1,8 +1,8 @@
-﻿using ApacheTech.Common.Extensions.System;
+﻿using System.Drawing;
+using ApacheTech.Common.Extensions.System;
 using Gantry.Core.GameContent.AssetEnum;
 using JetBrains.Annotations;
 using Vintagestory.API.MathTools;
-using Color = System.Drawing.Color;
 
 namespace Gantry.Core.Extensions;
 
@@ -50,7 +50,7 @@ public static class ColourExtensions
     /// </summary>
     public static Vec4f ToRgbaVec4F(this NamedColour colourString)
     {
-        var colour = colourString.ToString().ToColour();
+        var colour = colourString.ToString()!.ToColour();
         return new Vec4f(colour.R, colour.G, colour.B, colour.A);
     }
 }

@@ -33,8 +33,8 @@ public static class EnumEx
     ///     <paramref name="value">value</paramref> is outside the range of the
     ///     underlying type of <typeparamref name="TEnum">enumType</typeparamref>.
     /// </exception>
-    public static TEnum Parse<TEnum>(string value, bool ignoreCase = false) where TEnum : System.Enum
+    public static TEnum Parse<TEnum>(string value, bool ignoreCase = false) where TEnum : Enum
     {
-        return (TEnum)System.Enum.Parse(typeof(TEnum), value, ignoreCase);
+        return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
     }
 }

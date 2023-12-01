@@ -2,7 +2,6 @@
 using Vintagestory.API.Client;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
-using Color = Cairo.Color;
 
 namespace Gantry.Core.GameContent.GUI.Elements;
 

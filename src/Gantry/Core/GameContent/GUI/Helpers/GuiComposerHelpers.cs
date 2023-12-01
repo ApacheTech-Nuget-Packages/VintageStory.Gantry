@@ -5,6 +5,7 @@ using Gantry.Core.GameContent.GUI.Elements;
 using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using GuiElementImage = Gantry.Core.GameContent.GUI.Elements.GuiElementImage;
 
 namespace Gantry.Core.GameContent.GUI.Helpers;
 
@@ -43,7 +44,7 @@ public static class GuiComposerHelpers
     {
         if (!composer.Composed)
         {
-            composer.AddStaticElement(new Elements.GuiElementImage(composer.Api, bounds, imageAsset, blendMode));
+            composer.AddStaticElement(new GuiElementImage(composer.Api, bounds, imageAsset, blendMode));
         }
         return composer;
     }
