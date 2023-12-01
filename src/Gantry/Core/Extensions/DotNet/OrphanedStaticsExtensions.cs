@@ -33,7 +33,7 @@ public static class OrphanedStaticsExtensions
         if (fieldInfo.FieldType is IDisposable)
         {
             var disposable = (IDisposable)fieldInfo.GetValue(null);
-            disposable.Dispose();
+            disposable?.Dispose();
         }
         fieldInfo.SetValue(null, null);
     }
@@ -43,9 +43,9 @@ public static class OrphanedStaticsExtensions
         if (!propertyInfo.CanWrite) return;
         if (propertyInfo.PropertyType is IDisposable)
         {
-            var disposable = (IDisposable)propertyInfo.GetMethod.Invoke(null, null);
-            disposable.Dispose();
+            var disposable = (IDisposable)propertyInfo.GetMethod?.Invoke(null, null);
+            disposable?.Dispose();
         }
-        propertyInfo.SetMethod.Invoke(null, null);
+        propertyInfo.SetMethod?.Invoke(null, null);
     }
 }

@@ -55,9 +55,7 @@ public static class WorldAccessorExtensions
     public static TResult WalkBlocks<TResult>(
         this IBlockAccessor walker,
         BlockPos minPos,
-        BlockPos maxPos,
-        System.Func<Block, BlockPos, bool> onBlockPredicate,
-        System.Func<Block, BlockPos, TResult> onBlockMap,
+        BlockPos maxPos, System.Func<Block, BlockPos, bool> onBlockPredicate, System.Func<Block, BlockPos, TResult> onBlockMap,
         bool centreOrder)
         where TResult : class
     {
@@ -89,8 +87,7 @@ public static class WorldAccessorExtensions
         this IWorldAccessor world,
         BlockPos origin,
         float horizontalRange,
-        float verticalRange,
-        System.Func<TBlock, bool> predicate) where TBlock : Block
+        float verticalRange, System.Func<TBlock, bool> predicate) where TBlock : Block
     {
         var walker = world.GetBlockAccessorPrefetch(false, false);
         var (minPos, maxPos) = origin.GetBlockRange(horizontalRange, verticalRange);

@@ -1,8 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Drawing;
+using System.Reflection;
 using ApacheTech.Common.Extensions.System;
 using Gantry.Core.Abstractions;
 using JetBrains.Annotations;
-using Color = System.Drawing.Color;
 
 #pragma warning disable CS1591
 

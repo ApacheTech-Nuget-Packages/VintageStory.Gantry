@@ -1,6 +1,6 @@
-﻿using JetBrains.Annotations;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 
 namespace Gantry.Core.Extensions.Helpers;
 

@@ -45,7 +45,7 @@ public abstract class InterpolationBase : IInterpolator
     ///     Initialises a new instance of the <see cref="InterpolationBase"/> class.
     /// </summary>
     /// <param name="points">The points.</param>
-    /// <exception cref="System.ArgumentException">At least two points are needed! - points</exception>
+    /// <exception cref="ArgumentException">At least two points are needed! - points</exception>
     protected InterpolationBase(params double[] points)
     {
         if (points.Length < 2)

@@ -3,7 +3,7 @@
 /// <summary>
 ///     Cubic Interpolation
 /// </summary>
-/// <seealso cref="Gantry.Core.Maths.Interpolation.InterpolationBase" />
+/// <seealso cref="InterpolationBase" />
 public class CubicInterpolation : InterpolationBase
 {
     private readonly double _beginVec;

@@ -1,6 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics;
+using ApacheTech.Common.Extensions.Harmony;
+using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
@@ -8,7 +9,6 @@ using Vintagestory.API.Server;
 using Vintagestory.Client;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
-using ApacheTech.Common.Extensions.Harmony;
 
 namespace Gantry.Core.Extensions.Api;
 
@@ -119,7 +119,7 @@ public static class ApiExtensions
     {
         var eventManager = (capi.World as ClientMain).GetField<ClientEventManager>("eventManager");
         var chatCommands = eventManager.GetField<Dictionary<string, ChatCommand>>("chatCommands");
-        if (chatCommands.ContainsKey(commandName)) chatCommands.Remove(commandName);
+        chatCommands.Remove(commandName);
         eventManager.SetField("chatCommands", chatCommands);
     }
 
