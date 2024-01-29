@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Gantry.Services.FileSystem.v2.DataStructures;
+﻿using Gantry.Services.FileSystem.v2.DataStructures;
 
-namespace Gantry.Services.FileSystem.v2.Abstractions
+namespace Gantry.Services.FileSystem.v2.Abstractions;
+
+internal interface IFileTypeWrapper
 {
-    internal interface IFileTypeWrapper
-    {
-        IEnumerable<string> Extensions { get; }
+    IEnumerable<string> Extensions { get; }
 
-        ModFileInfo Wrap(FileInfo file, FileScope scope);
-    }
+    ModFileInfo Wrap(FileInfo file, FileScope scope);
 }

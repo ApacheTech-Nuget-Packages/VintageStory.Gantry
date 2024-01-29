@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.Loader;
 using HarmonyLib;
 using JetBrains.Annotations;
 
@@ -91,7 +92,7 @@ public static class GameAssemblies
     {
 #if NET5_0_OR_GREATER
         // TODO: Remove pragma conditionals, once migrated.
-        return System.Runtime.Loader.AssemblyLoadContext.Default.Assemblies;
+        return AssemblyLoadContext.Default.Assemblies;
 #else
             return AppDomain.CurrentDomain.GetAssemblies();
 #endif
