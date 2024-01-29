@@ -1,6 +1,7 @@
 ﻿using Gantry.Core.Extensions.Helpers;
 using JetBrains.Annotations;
 using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Extensions;
@@ -19,7 +20,7 @@ public static class PositionExtensions
     {
         var worldSpawn = ApiEx.Current.World.DefaultSpawnPosition.XYZ.AsBlockPos;
         var blockPos = pos.SubCopy(worldSpawn);
-        return new BlockPos(blockPos.X, pos.Y, blockPos.Z);
+        return new BlockPos(blockPos.X, pos.Y, blockPos.Z, Dimensions.NormalWorld);
     }
 
     /// <summary>
@@ -57,8 +58,8 @@ public static class PositionExtensions
     {
         var blockAccessor = ApiEx.Current.World.BlockAccessor;
         var maxY = blockAccessor.GetTerrainMapheightAt(pos);
-        var minPos = new BlockPos(pos.X, 1, pos.Z);
-        var maxPos = new BlockPos(pos.X, blockAccessor.MapSizeY, pos.Z);
+        var minPos = new BlockPos(pos.X, 1, pos.Z, Dimensions.NormalWorld);
+        var maxPos = new BlockPos(pos.X, blockAccessor.MapSizeY, pos.Z, Dimensions.NormalWorld);
         blockAccessor.WalkBlocks(minPos, maxPos, (block, _, y, _) =>
         {
             if (!block.SideSolid[BlockFacing.indexUP]) return;

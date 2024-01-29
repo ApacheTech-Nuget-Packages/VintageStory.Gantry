@@ -1,6 +1,7 @@
 ﻿using Gantry.Core.Abstractions;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Extensions.Api;
@@ -67,7 +68,7 @@ public static class WorldAccessorExtensions
         walker.WalkBlocks(minPos, maxPos, (b, x, y, z) =>
         {
             if (found) return;
-            var pos = new BlockPos(x, y, z);
+            var pos = new BlockPos(x, y, z, Dimensions.NormalWorld);
             if (!onBlockPredicate(b, pos)) return;
             result = onBlockMap(b, pos);
             found = true;
@@ -138,7 +139,7 @@ public static class WorldAccessorExtensions
 
         world.BlockAccessor.WalkBlocks(minPos, maxPos, (_, x, y, z) =>
         {
-            var position = new BlockPos(x, y, z);
+            var position = new BlockPos(x, y, z, Dimensions.NormalWorld);
             var entity = walker.GetBlockEntity(position);
             if (entity is null) return;
             if (!(entity.GetType() == typeof(TBlockEntity))) return;
@@ -184,7 +185,7 @@ public static class WorldAccessorExtensions
             if (found) return;
             if (block.GetType() != typeof(TBlock) || !predicate((TBlock)block)) return;
             blockEntity = (TBlock)block;
-            blockPosTemp = new BlockPos(x, y, z);
+            blockPosTemp = new BlockPos(x, y, z, Dimensions.NormalWorld);
             found = true;
         }, true);
         blockPosOut = blockPosTemp;
