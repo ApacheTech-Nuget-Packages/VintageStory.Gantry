@@ -19,7 +19,7 @@ public static class GantryDependencyInjectionExtensions
     /// </summary>
     /// <param name="services">The services collection to add the service to.</param>
     /// <param name="options">The options to pass to the service.</param>
-    /// <returns>A reference to this instance, after the this operation has completed.</returns>
+    /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddHarmonyPatchingService(
         this IServiceCollection services, 
         Action<HarmonyPatchingServiceOptions> options)
@@ -34,7 +34,7 @@ public static class GantryDependencyInjectionExtensions
     ///     Adds the embedded resources service to the service collection.
     /// </summary>
     /// <param name="services">The services collection to add the service to.</param>
-    /// <returns>A reference to this instance, after the this operation has completed.</returns>
+    /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddHarmonyPatchingService(this IServiceCollection services)
     {
         return services.AddHarmonyPatchingService(_ => { });

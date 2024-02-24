@@ -2,7 +2,7 @@
 using Gantry.Core;
 using Gantry.Core.Diagnostics;
 using Gantry.Services.FileSystem.Enums;
-using Gantry.Services.FileSystem.Extensions;
+using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -23,6 +23,8 @@ public static class ModPaths
     public static void Initialise(string rootDirectoryName, string worldIdentifier)
     {
         WorldGuid = Ensure.PopulatedWith(WorldGuid, worldIdentifier);
+        VintageModsRootPath = Path.Combine(Path.Combine(GamePaths.DataPath, "ModData"),
+            ModInfo.ToModID(ModEx.ModInfo.Authors[0].IfNullOrWhitespace("Gantry")));
         ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath,
             rootDirectoryName.IfNullOrWhitespace(ModEx.ModInfo.ModID ?? Guid.NewGuid().ToString())));
         ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
@@ -40,7 +42,7 @@ public static class ModPaths
     ///     Gets the root path for all VintageMods mod files.
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
-    public static string VintageModsRootPath { get; } = LegacyFolderFix();
+    public static string VintageModsRootPath { get; private set; }
 
     /// <summary>
     ///     Gets the path used for storing data files for a particular mod.
@@ -108,20 +110,5 @@ public static class ModPaths
         ModRootPath = null;
         ModAssetsPath = null;
         WorldGuid = null;
-    }
-
-    private static string LegacyFolderFix()
-    {
-        var directory = CreateDirectory(Path.Combine(GamePaths.DataPath, "ModData", ModEx.ModInfo.Authors[0].Replace(" ", "")));
-        if (!ModEx.ModInfo.Authors[0].Contains(' ')) return directory;
-        var legacyDirectory = new DirectoryInfo(Path.Combine(GamePaths.DataPath, "ModData", ModEx.ModInfo.Authors[0], ModEx.ModInfo.ModID));
-        if (!legacyDirectory.Exists) return directory;
-        var newPath = Path.Combine(directory, ModEx.ModInfo.ModID);
-        legacyDirectory.MoveTo(newPath);
-        if (legacyDirectory.Parent.IsEmpty())
-        {
-            legacyDirectory.Parent!.Delete();
-        }
-        return directory;
     }
 }

@@ -1,7 +1,10 @@
 ﻿using System.Reflection;
+using ApacheTech.Common.Extensions.System;
 using Gantry.Core.Diagnostics;
+using Gantry.Services.FileSystem.Extensions;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 
 namespace Gantry.Core;
 
@@ -55,13 +58,41 @@ public static class ModEx
         Mod = Ensure.PopulatedWith(Mod, mod);
         ModAssembly = Ensure.PopulatedWith(ModAssembly, modAssembly);
         ModInfo = Ensure.PopulatedWith(ModInfo, mod.Info);
+        CreateInitialDirectory();
 
         if (ModInfo is null)
             throw new GantryException(
-                @$"Could not find mod information for assembly: {ModAssembly.FullName}. " +
+                $"Could not find mod information for assembly: {ModAssembly.FullName}. " +
                 "Are you missing a modinfo.json file, or `ModInfoAttribute` declaration?");
 
         ModAppSide = ModInfo.Side;
+    }
+
+    /// <summary>
+    ///     Cleans up the mess I made of the previous attempt to fix Linux being a pain!
+    /// </summary>
+    private static string CreateInitialDirectory()
+    {
+        var baseDir = Path.Combine(GamePaths.DataPath, "ModData");
+
+        var legacyFolderName = ModInfo.Authors[0].IfNullOrWhitespace("Gantry");
+        var legacyFolderName2 = legacyFolderName.Replace(" ", "");
+        var newFolderName = ModInfo.ToModID(legacyFolderName);
+
+        var legacyDir = new DirectoryInfo(Path.Combine(baseDir, legacyFolderName));
+        var legacyDir2 = new DirectoryInfo(Path.Combine(baseDir, legacyFolderName2));
+        var newDir = new DirectoryInfo(Path.Combine(baseDir, newFolderName));
+
+        // Fix my failed fix.
+        if (legacyDir2.Exists) legacyDir2.Rename(newFolderName);
+
+        // Fix the original issue.
+        if (legacyDir.Exists) legacyDir.Rename(newFolderName);
+
+        // New players caught in the crossfire.
+        if (!newDir.Exists) newDir.Create();
+
+        return newDir.FullName;
     }
 
     /// <summary>

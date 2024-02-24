@@ -3,6 +3,4 @@
 /// <summary>
 ///     Represents a JSON file, on the file system.
 /// </summary>
-public interface IJsonSettingsFile
-{
-}
+public interface IJsonSettingsFile;

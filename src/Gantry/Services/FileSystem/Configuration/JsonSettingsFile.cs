@@ -14,12 +14,12 @@ namespace Gantry.Services.FileSystem.Configuration;
 /// <summary>
 ///     Represents a settings file for the mod, in JSON format.
 /// </summary>
-/// <seealso cref="Abstractions.IJsonSettingsFile" />
+/// <seealso cref="IJsonSettingsFile" />
 public class JsonSettingsFile : IJsonSettingsFile, IDisposable
 {
     private readonly FileScope _scope;
     private readonly Harmony _harmony;
-    private Dictionary<string, IObservableObject> _observers;
+    private Dictionary<string, IObservableObject> _observers = [];
 
     /// <summary>
     ///     Gets the underlying <see cref="IJsonModFile" /> that this instance wraps.
@@ -38,7 +38,6 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     private JsonSettingsFile(IJsonModFile file, FileScope scope, Harmony harmony)
     {
         (File, _scope, _harmony) = (file, scope, harmony);
-        _observers = new Dictionary<string, IObservableObject>();
     }
 
     /// <summary>
@@ -109,6 +108,7 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     /// </summary>
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         foreach (var observer in _observers.Values)
         {
             observer.Active = false;

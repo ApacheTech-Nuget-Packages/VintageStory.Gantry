@@ -36,12 +36,12 @@ namespace Gantry.Tests.AcceptanceMod.Features.FileSystem
                 .WithDescription("Test the Gantry File System Service.")
                 .HandleWith(a =>
                 {
-                    Handler(a.Caller.FromChatGroupId, a.RawArgs);
+                    Handler(a.RawArgs);
                     return TextCommandResult.Success();
                 });
         }
 
-        private void Handler(int groupId, CmdArgs args)
+        private void Handler(CmdArgs args)
         {
             var scope = args.PopWord("world");
             var type = args.PopWord("file");

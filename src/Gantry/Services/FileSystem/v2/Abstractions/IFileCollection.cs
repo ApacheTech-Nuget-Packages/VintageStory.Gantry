@@ -7,6 +7,4 @@ namespace Gantry.Services.FileSystem.v2.Abstractions;
 ///     A File Container, which holds references to Added files, and their <see cref="FileDescriptor"/> representations.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public interface IFileCollection : IList<FileDescriptor>
-{
-}
+public interface IFileCollection : IList<FileDescriptor>;

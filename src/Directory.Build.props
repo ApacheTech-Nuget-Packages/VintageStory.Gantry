@@ -6,7 +6,7 @@
 	<!-- Language Specifics -->
 
 	<PropertyGroup>
-		<LangVersion>11</LangVersion>
+		<LangVersion>12</LangVersion>
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<EnablePackageValidation>true</EnablePackageValidation>
@@ -140,8 +140,6 @@
 		<PackageReference Include="ApacheTech.Common.Extensions" />
 		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" />
 		<PackageReference Include="ApacheTech.Common.FunctionalCSharp" />
-		<PackageReference Include="ApacheTech.Common.DependencyInjection" />
-		<PackageReference Include="ApacheTech.Common.DependencyInjection.Abstractions" />
 	</ItemGroup>
 
 </Project>

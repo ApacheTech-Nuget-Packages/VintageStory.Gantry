@@ -5,12 +5,12 @@
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.6.4</Version>
+		<Version>0.7.4</Version>
 		<Configurations>Debug;Release;Package</Configurations>
 		<PackageReleaseNotes>
-			Gantry MDK v0.6.4:
+			Gantry MDK v0.7.4:
 
-			Fixed: Compatibility with VS 1.19.3
+			Fixed: Teething issues with BrighterSlim, and Dependency Injection.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
@@ -20,6 +20,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="ApacheTech.Common.BrighterSlim" />
+	  <PackageReference Include="ApacheTech.Common.DependencyInjection" />
+	  <PackageReference Include="ApacheTech.Common.DependencyInjection.Abstractions" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Update="Microsoft.SourceLink.GitHub">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Update="PolySharp">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

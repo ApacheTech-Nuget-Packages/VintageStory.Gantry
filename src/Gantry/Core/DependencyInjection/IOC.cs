@@ -1,4 +1,7 @@
-﻿using Vintagestory.API.Common;
+﻿using ApacheTech.Common.BrighterSlim;
+using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+using JetBrains.Annotations;
+using Vintagestory.API.Common;
 
 namespace Gantry.Core.DependencyInjection;
 
@@ -15,6 +18,7 @@ namespace Gantry.Core.DependencyInjection;
 ///     used them anywhere they are needed, in lieu of being able to pass it in through
 ///     an importing constructor.
 /// </summary>
+[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class IOC
 {
     /// <summary>
@@ -34,4 +38,9 @@ public static class IOC
     /// </summary>
     /// <value>The IOC Resolver for the current app-side.</value>
     public static IServiceProvider Services => ApiEx.OneOf(ClientIOC, ServerIOC);
+    
+    /// <summary>
+    ///     Universal access to the Brighter command processor.
+    /// </summary>
+    public static IAmACommandProcessor Brighter => Services.Resolve<IAmACommandProcessor>();
 }

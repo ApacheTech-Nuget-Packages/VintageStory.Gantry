@@ -21,10 +21,10 @@ internal static class ClientApiRegistrar
     {
         services.AddSingleton(capi);
         services.AddSingleton(capi.World);
-        services.AddSingleton(capi.World as ClientMain);
+        services.AddSingleton((capi.World as ClientMain)!);
         services.AddSingleton(capi as ICoreAPICommon);
         services.AddSingleton(capi as ICoreAPI);
         services.AddSingleton(ScreenManager.Platform);
-        services.AddSingleton(ScreenManager.Platform as ClientPlatformWindows);
+        services.AddSingleton((ScreenManager.Platform as ClientPlatformWindows)!);
     }
 }

@@ -3,6 +3,4 @@
 /// <summary>
 ///     Represents a binary file, on the file system.
 /// </summary>
-public interface IBinaryFile
-{
-}
+public interface IBinaryFile;

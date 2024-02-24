@@ -2,6 +2,7 @@
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Extensions;
 using ApacheTech.Common.Extensions.System;
+using Gantry.Core.Brighter.Hosting;
 using Gantry.Core.DependencyInjection.Extensions;
 using Gantry.Core.DependencyInjection.Registration;
 using Gantry.Core.DependencyInjection.Registration.Api;
@@ -18,7 +19,7 @@ namespace Gantry.Core.DependencyInjection;
 /// <summary>
 ///     Only one derived instance of this base-class should be added to any single mod within
 ///     the VintageMods domain. This base-class will enable Dependency Injection, and add all
-///     of the domain services. Derived instances should only have minimal functionality, 
+///     the domain services. Derived instances should only have minimal functionality, 
 ///     instantiating, and adding Application specific services to the IOC Container.
 /// </summary>
 /// <seealso cref="ModSystem" />
@@ -29,7 +30,6 @@ public abstract class ModHost : UniversalModSystem
     private List<IUniversalServiceRegistrar> _universalServiceRegistrars;
     private List<IServerServiceRegistrar> _serverServiceRegistrars;
     private List<IClientServiceRegistrar> _clientServiceRegistrars;
-
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="ModHost" /> class.
@@ -46,7 +46,15 @@ public abstract class ModHost : UniversalModSystem
     /// </summary>
     /// <param name="services">The as-of-yet un-built services container.</param>
     /// <param name="api">Access to the universal API.</param>
-    protected virtual void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api) { }
+    protected virtual void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
+    {
+    }
+
+    private void ConfigureBrighter(IServiceCollection services)
+    {
+        var brighterBuilder = services.AddBrighter();
+        brighterBuilder.AutoFromAssemblies(typeof(ModHost).Assembly, ModEx.ModAssembly);
+    }
 
     #endregion
 
@@ -62,6 +70,7 @@ public abstract class ModHost : UniversalModSystem
 
         //  3. Delegate mod service configuration to derived class.
         _services
+            .With(ConfigureBrighter)
             .With(ioc => ConfigureUniversalModServices(ioc, sapi))
             .With(ioc => ConfigureServerModServices(ioc, sapi));
 
@@ -89,7 +98,6 @@ public abstract class ModHost : UniversalModSystem
 
     #region Client Configuration
 
-
     private void BuildClientHost(ICoreClientAPI capi)
     {
         //  1. Configure game API services.
@@ -100,6 +108,7 @@ public abstract class ModHost : UniversalModSystem
 
         //  3. Delegate mod service configuration to derived class.
         _services
+            .With(ConfigureBrighter)
             .With(ioc => ConfigureUniversalModServices(ioc, capi))
             .With(ioc => ConfigureClientModServices(ioc, capi));
 
@@ -186,8 +195,8 @@ public abstract class ModHost : UniversalModSystem
     public virtual void StartUniversal(ICoreAPI api) { }
 
     /// <summary>
-    ///     If you need mods to be executed in a certain order, adjust this methods return value.
-    ///     The server will call each Mods Start() method the ascending order of each mods execute order value.
+    ///     If you need mods to be executed in a certain order, adjust this method's return value.
+    ///     The server will call each Mods Start() method the ascending order of each mod's execute order value.
     ///     And thus, as long as every mod registers it's event handlers in the Start() method, all event handlers
     ///     will be called in the same execution order. Default execute order of some survival mod parts.
     /// 

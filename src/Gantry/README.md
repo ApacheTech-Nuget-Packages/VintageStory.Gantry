@@ -6,7 +6,7 @@ The MDK provides a framework that can be used to develop mods with Clean Code as
 
 ## Prerequisites:
 
- - Vintage Story 1.18.15
+ - Vintage Story 1.19.3
  - Visual Studio 2022, with support for .NET 7.0 development.
  - `VINTAGE_STORY` Environment Variable that point to the game install directory.
  - `VINTAGE_STORY_DATA` Environment Variable that point to the game data directory.
@@ -115,7 +115,7 @@ The service also comes with a Dependency Injection satellite library that makes 
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
-		<LangVersion>11</LangVersion>
+		<LangVersion>12</LangVersion>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
@@ -127,7 +127,7 @@ The service also comes with a Dependency Injection satellite library that makes 
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry" Version="0.6.0" />
+		<PackageReference Include="VintageStory.Gantry" Version="0.7.0" />
 	</ItemGroup>
 
 </Project>  
@@ -146,12 +146,7 @@ The service also comes with a Dependency Injection satellite library that makes 
     {
         public override void StartClientSide(ICoreClientAPI capi)
         {
-            capi.RegisterCommand("hello", Lang.Get("samplegantrymod:hello-world-description"), string.Empty, OnChatCommand);
-        }
-        
-        private void OnChatCommand(int groupId, CmdArgs args)
-        {
-            ApiEx.Client.ShowChatMessage(Lang.Get("samplegantrymod:hello-world-text"));
+            
         }
     }
 ```
@@ -169,7 +164,9 @@ The service also comes with a Dependency Injection satellite library that makes 
     Authors = new[] { "ApacheTech Solutions" })];
 ```  
  
- 6. Package all required `.dll` files within your mod archive, from the output directory, when you run your mod.
+ 6. Package all required `.dll` files within your mod archive, from the output directory, when you run your mod. 
+    For best results, use your preferred IL weaving tool to trim, and merge assemblies into a single `.dll` file.
+    My personal recommendation is `SmartAssembly`, but `ILWeave`, or `DotNet Reactor` work well, as well.
 
 ## **Support the Author:**
 
@@ -193,5 +190,3 @@ Thank you to everyone that does support me, and my work.
 
 All donations go towards making new content on a non-profit basis. Software purchases and subscriptions, hardware upgrades, training, etc. 
 Any profit made will be donated to [Macmillan Cancer Support](https://www.macmillan.org.uk/), and [The British Liver Trust](https://britishlivertrust.org.uk/), in memory of my father, who died of Liver Cancer in 2015.
-
-

@@ -48,7 +48,7 @@ public static class ApiEx
     /// <summary>
     ///     The core API implemented by the client.<br/>
     ///     The main interface for accessing the client.<br/>
-    ///     Contains all sub-components, and some miscellaneous methods.
+    ///     Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
     /// <value>The client-side API.</value>
     public static ICoreClientAPI Client => ClientMain?.Api as ICoreClientAPI;
@@ -56,7 +56,7 @@ public static class ApiEx
     /// <summary>
     ///     The core API implemented by the server.<br/>
     ///     The main interface for accessing the server.<br/>
-    ///     Contains all sub-components, and some miscellaneous methods.
+    ///     Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
     public static ICoreServerAPI Server => ServerMain?.Api as ICoreServerAPI;
 
@@ -122,7 +122,7 @@ public static class ApiEx
                 break;
             default:
                 throw new ArgumentOutOfRangeException(
-                    nameof(ModEx.ModAppSide),
+                    nameof(clientAction),
                     ModEx.ModAppSide,
                     "Mod app-side cannot be determined. Have you included a ModInfoAttribute within your assembly?");
         }
@@ -218,7 +218,7 @@ public static class ApiEx
     /// </remarks>
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
-    public static T Return<T>(System.Func<T> clientAction, System.Func<T> serverAction)
+    public static T Return<T>(Func<T> clientAction, Func<T> serverAction)
     {
         return (T)OneOf(clientAction, serverAction).DynamicInvoke();
     }
@@ -232,7 +232,7 @@ public static class ApiEx
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
     /// <param name="parameter">The parameter to pass to the invoked action.</param>
-    public static T Return<T>(System.Func<T> clientAction, System.Func<T> serverAction, T parameter)
+    public static T Return<T>(Func<T> clientAction, Func<T> serverAction, T parameter)
     {
         return (T)OneOf(clientAction, serverAction).DynamicInvoke(parameter);
     }
@@ -243,6 +243,7 @@ public static class ApiEx
     /// <typeparam name="T"></typeparam>
     /// <param name="clientObject">The client object.</param>
     /// <param name="serverObject">The server object.</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     /// <returns>
     ///     Returns <paramref name="clientObject"/> if called from the client, or <paramref name="serverObject"/> if called from the server.
     /// </returns>
@@ -253,7 +254,7 @@ public static class ApiEx
             EnumAppSide.Client => clientObject,
             EnumAppSide.Server => serverObject,
             EnumAppSide.Universal => Side.IsClient() ? clientObject : serverObject,
-            _ => throw new ArgumentOutOfRangeException(nameof(ModInfo.Side), ModEx.ModAppSide, "Corrupted ModInfo data.")
+            _ => throw new ArgumentOutOfRangeException(nameof(clientObject), ModEx.ModAppSide, "Corrupted ModInfo data.")
         };
     }
 
@@ -264,7 +265,7 @@ public static class ApiEx
     /// <summary>
     ///     Gets the current app-side.
     /// </summary>
-    /// <value>An <see cref="EnumAppSide"/> value, representing current app-side; Client, or Server.</value>
+    /// <value>A <see cref="EnumAppSide"/> value, representing current app-side; Client, or Server.</value>
     public static EnumAppSide Side
     {
         get
@@ -274,20 +275,17 @@ public static class ApiEx
                 return Process.GetCurrentProcess().ProcessName == "VintagestoryServer"
                     ? EnumAppSide.Server
                     : EnumAppSide.Client;
+
             if (thread.IsThreadPoolThread) return DetermineAppSide(thread);
-            try
-            {
-                return ThreadSideCache[thread.ManagedThreadId];
-            }
-            catch (KeyNotFoundException)
-            {
-                var side = DetermineAppSide(thread);
-                return CacheAppSide(side, thread);
-            }
+            if (ThreadSideCache.TryGetValue(thread.ManagedThreadId, out var side)) return side;
+
+            side = DetermineAppSide(thread);
+            ThreadSideCache.Add(thread.ManagedThreadId, side);
+            return side;
         }
     }
 
-    internal static Dictionary<int, EnumAppSide> ThreadSideCache { get; } = new();
+    internal static Dictionary<int, EnumAppSide> ThreadSideCache { get; } = [];
 
     private static EnumAppSide DetermineAppSide(Thread thread)
     {

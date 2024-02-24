@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿#nullable enable
+using System.Reflection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
 using Gantry.Core.DependencyInjection.Annotation;
@@ -31,7 +32,7 @@ public static class HostExtensions
     /// </summary>
     /// <param name="provider">The service provider to use to resolve dependencies for the instantiated class.</param>
     /// <param name="serviceType">An object that specifies the type of service object to get.</param>
-    /// <param name="args">An optional list of arguments, sent the the constructor of the instantiated class.</param>
+    /// <param name="args">An optional list of arguments, sent the constructor of the instantiated class.</param>
     /// <returns>A service object of type <paramref name="serviceType" />.
     /// 
     /// -or-
@@ -47,7 +48,7 @@ public static class HostExtensions
     /// </summary>
     /// <typeparam name="T">The type of object to create.</typeparam>
     /// <param name="provider">The service provider to use to resolve dependencies for the instantiated class.</param>
-    /// <param name="args">An optional list of arguments, sent the the constructor of the instantiated class.</param>
+    /// <param name="args">An optional list of arguments, sent the constructor of the instantiated class.</param>
     /// <returns>An object of type <typeparamref name="T" />.
     /// 
     /// -or-
@@ -65,7 +66,7 @@ public static class HostExtensions
     /// <param name="side">The app side to load systems from.</param>
     public static void AddModSystems(this IServiceCollection services, EnumAppSide side)
     {
-        var modSystems = ModEx.Mod.Systems.Where(p => p.ShouldLoad(ApiEx.Side));
+        var modSystems = ModEx.Mod.Systems.Where(p => p.ShouldLoad(side));
         foreach (var system in modSystems)
         {
             services.AddSingleton(system.GetType(), system);
@@ -80,4 +81,41 @@ public static class HostExtensions
     {
         services.AddSingleton(_ => ApiEx.Current.ModLoader.GetModSystem<T>());
     }
+
+    /// <summary>
+    ///     Gets the service object of the specified type.
+    /// </summary>
+    /// <param name="serviceProvider">And object that provides access to the service collection.</param>
+    /// <param name="service">The service being requested.</param>
+    /// <typeparam name="T">The type of service object to get.</typeparam>
+    /// <returns>A service object of type <typeparamref name="T" />.
+    /// 
+    /// -or-
+    /// 
+    /// <see langword="null" /> if there is no service object of type <typeparamref name="T" />.</returns>
+    public static bool TryResolve<T>(this IServiceProvider serviceProvider, out T? service) where T : class
+    {
+        try
+        {
+            service = serviceProvider.GetService(typeof(T)) as T;
+        }
+        catch (KeyNotFoundException)
+        {
+            service = null;
+        }
+        return service is not null;
+    }
+
+    /// <summary>
+    ///     Gets the service object of the specified type.
+    /// </summary>
+    /// <param name="serviceProvider">And object that provides access to the service collection.</param>
+    /// <typeparam name="T">The type of service object to get.</typeparam>
+    /// <returns>A service object of type <typeparamref name="T" />.
+    /// 
+    /// -or-
+    /// 
+    /// <see langword="null" /> if there is no service object of type <typeparamref name="T" />.</returns>
+    public static T? GetService<T>(this IServiceProvider serviceProvider) where T : class
+        => serviceProvider.GetService(typeof(T)) as T;
 }

@@ -18,7 +18,7 @@ public static class GantryDependencyInjectionExtensions
     /// </summary>
     /// <param name="services">The services collection to add the service to.</param>
     /// <param name="options">The services collection to add the service to.</param>
-    /// <returns>A reference to this instance, after the this operation has completed.</returns>
+    /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddNetworkService(this IServiceCollection services, Action<NetworkServiceOptions> options)
     {
         var service = new GantryNetworkService(ApiEx.Current, NetworkServiceOptions.Default.With(options));
@@ -33,7 +33,7 @@ public static class GantryDependencyInjectionExtensions
     ///     Adds the embedded resources service to the service collection.
     /// </summary>
     /// <param name="services">The services collection to add the service to.</param>
-    /// <returns>A reference to this instance, after the this operation has completed.</returns>
+    /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddNetworkService(this IServiceCollection services)
     {
         return services.AddNetworkService(_ => { });

@@ -2,6 +2,7 @@
 using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
 using Gantry.Core;
 using Gantry.Core.DependencyInjection;
+using Gantry.Core.DependencyInjection.Extensions;
 using Gantry.Core.DependencyInjection.Registration;
 using Gantry.Core.Extensions;
 using Gantry.Core.Extensions.GameContent.Gui;

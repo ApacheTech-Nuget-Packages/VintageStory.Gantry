@@ -8,6 +8,8 @@ using Gantry.Tests.AcceptanceMod.Features.FileSystem.Settings;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
+// ReSharper disable StringLiteralTypo
+
 namespace Gantry.Tests.AcceptanceMod.Features.FileSystem
 {
     internal sealed class FileSystemServerProgram : ServerModSystem

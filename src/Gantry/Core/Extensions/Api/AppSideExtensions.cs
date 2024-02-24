@@ -61,7 +61,7 @@ public static class AppSideExtensions
     /// <param name="side">The app side in question.</param>
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
-    public static T ReturnOneOf<T>(this EnumAppSide side, System.Func<T> clientAction, System.Func<T> serverAction)
+    public static T ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction)
     {
         return (T)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke();
     }
@@ -76,7 +76,7 @@ public static class AppSideExtensions
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
     /// <param name="parameter">The parameter to pass to the invoked action.</param>
-    public static T ReturnOneOf<T>(this EnumAppSide side, System.Func<T> clientAction, System.Func<T> serverAction, T parameter)
+    public static T ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction, T parameter)
     {
         return (T)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke(parameter);
     }

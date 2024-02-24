@@ -17,6 +17,7 @@ internal static class ActivatorEx
         GetMethodInfo<Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
 
     /// <summary>
+    ///     Creates an instance of a specified type.
     /// </summary>
     /// <param name="provider">The service provider used to resolve dependencies</param>
     /// <param name="instanceType">The type to activate</param>
@@ -34,7 +35,7 @@ internal static class ActivatorEx
             foreach (var constructor in instanceType
                          .GetTypeInfo()
                          .DeclaredConstructors
-                         .Where(c => !c.IsStatic && c.IsPublic))
+                         .Where(c => c is { IsStatic: false, IsPublic: true }))
             {
                 var matcher = new ConstructorMatcher(constructor);
 
@@ -82,16 +83,14 @@ internal static class ActivatorEx
     }
 
     /// <summary>
-    /// Create a delegate that will instantiate a type with constructor arguments provided directly
-    /// and/or from an <see cref="IServiceProvider"/>.
+    ///     Create a delegate that will instantiate a type with constructor arguments provided directly and/or from an instance of <see cref="IServiceProvider"/>.
     /// </summary>
     /// <param name="instanceType">The type to activate</param>
     /// <param name="argumentTypes">
-    /// The types of objects, in order, that will be passed to the returned function as its second parameter
+    ///     The types of objects, in order, that will be passed to the returned function as its second parameter
     /// </param>
     /// <returns>
-    /// A factory that will instantiate instanceType using an <see cref="IServiceProvider"/>
-    /// and an argument array containing objects matching the types defined in argumentTypes
+    ///     A factory that will instantiate instanceType using an instance of <see cref="IServiceProvider"/>, and an argument array containing objects matching the types defined in argumentTypes
     /// </returns>
     public static ObjectFactory CreateFactory(Type instanceType, Type[] argumentTypes)
     {
@@ -109,7 +108,7 @@ internal static class ActivatorEx
     }
 
     /// <summary>
-    /// Instantiate a type with constructor arguments provided directly and/or from an <see cref="IServiceProvider"/>.
+    ///     Instantiate a type with constructor arguments provided directly and/or from an instance of <see cref="IServiceProvider"/>.
     /// </summary>
     /// <typeparam name="T">The type to activate</typeparam>
     /// <param name="provider">The service provider used to resolve dependencies</param>
@@ -122,7 +121,7 @@ internal static class ActivatorEx
 
 
     /// <summary>
-    /// Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+    ///     Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
     /// </summary>
     /// <typeparam name="T">The type of the service</typeparam>
     /// <param name="provider">The service provider used to resolve dependencies</param>
@@ -133,7 +132,7 @@ internal static class ActivatorEx
     }
 
     /// <summary>
-    /// Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+    ///     Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
     /// </summary>
     /// <param name="provider">The service provider</param>
     /// <param name="type">The type of the service</param>

@@ -20,7 +20,7 @@ internal static class ServerApiRegistrar
     {
         services.AddSingleton(sapi);
         services.AddSingleton(sapi.World);
-        services.AddSingleton(sapi.World as ServerMain);
+        services.AddSingleton((sapi.World as ServerMain)!);
         services.AddSingleton(sapi as ICoreAPICommon);
         services.AddSingleton(sapi as ICoreAPI);
     }
