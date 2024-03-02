@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Common;
+﻿using JetBrains.Annotations;
+using Vintagestory.API.Common;
 
 namespace Gantry.Services.FileSystem.Configuration.Consumers;
 
@@ -7,6 +8,7 @@ namespace Gantry.Services.FileSystem.Configuration.Consumers;
 /// </summary>
 /// <seealso cref="Attribute" />
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
+[UsedImplicitly]
 public sealed class SettingsConsumerAttribute : Attribute
 {
     /// <summary>

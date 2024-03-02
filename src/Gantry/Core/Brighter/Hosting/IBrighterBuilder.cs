@@ -15,8 +15,7 @@ public interface IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests, IHandleRequestsAsync, IAmAMessageMapper and register them with ServiceCollection.
     /// </summary>
-    /// <param name="assemblies">The assemblies to scan</param>
-    IBrighterBuilder AutoFromAssemblies(params Assembly[] assemblies);
+    IBrighterBuilder AutoFromAssemblies();
 
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequestsAsync and register them with ServiceCollection.

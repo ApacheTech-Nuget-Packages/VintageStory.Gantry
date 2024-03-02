@@ -26,8 +26,10 @@ public static class GantryDependencyInjectionExtensions
         this IServiceCollection services, 
         Action<FileSystemServiceOptions> options)
     {
-        services.TryAddSingleton<IFileSystemService>(
-            new FileSystemService(FileSystemServiceOptions.Default.With(options)));
+        var fileSystemServiceOptions = FileSystemServiceOptions.Default.With(options);
+        services.TryAddSingleton<IFileSystemService>(sp =>
+            ActivatorUtilities.CreateInstance<FileSystemService>(sp, fileSystemServiceOptions));
+
         return services;
     }
 

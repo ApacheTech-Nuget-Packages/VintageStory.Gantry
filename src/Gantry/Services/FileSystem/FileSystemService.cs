@@ -1,4 +1,7 @@
-﻿using Gantry.Core;
+﻿using ApacheTech.Common.DependencyInjection.Abstractions;
+using ApacheTech.Common.Extensions.System;
+using Gantry.Core;
+using Gantry.Core.Diagnostics;
 using Gantry.Core.Extensions.DotNet;
 using Gantry.Services.FileSystem.Abstractions;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
@@ -7,6 +10,10 @@ using Gantry.Services.FileSystem.Configuration.Extensions;
 using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.Extensions;
 using Newtonsoft.Json;
+using Vintagestory.API.Common;
+using Vintagestory.API.Config;
+
+using static Gantry.Services.FileSystem.ModPaths;
 
 namespace Gantry.Services.FileSystem;
 
@@ -20,26 +27,38 @@ public sealed class FileSystemService : IFileSystemService
     /// <summary>
     ///     Initialises a new instance of the <see cref="FileSystemService"/> class.
     /// </summary>
-    public FileSystemService() : this(FileSystemServiceOptions.Default)
-    {
-    }
-
-    /// <summary>
-    ///     Initialises a new instance of the <see cref="FileSystemService"/> class.
-    /// </summary>
-    public FileSystemService(FileSystemServiceOptions options)
+    [InjectableConstructor]
+    public FileSystemService(ICoreAPI api, FileSystemServiceOptions options)
     {
         _registeredFiles = new Dictionary<string, ModFileBase>();
 
-        if (string.IsNullOrWhiteSpace(ModPaths.ModRootPath) ||
-            ModPaths.WorldGuid != ApiEx.Current.World.SavegameIdentifier)
-        {
-            ModPaths.Initialise(options.RootFolderName, ApiEx.Current.World.SavegameIdentifier);
-        }
-        if (!options.RegisterSettingsFiles) return;
-        this.RegisterSettingsFiles();
-            
-        ModEx.ModAssembly.InitialiseSettingsConsumers();
+        var modId = ModEx.ModInfo.ModID;
+
+        var worldIdentifier = api.World.SavegameIdentifier;
+        WorldGuid = Ensure.PopulatedWith(WorldGuid, worldIdentifier);
+        api.Logger.VerboseDebug($"[Gantry] {modId} WorldGuid: {WorldGuid}");
+
+        var rootPath = ModInfo.ToModID(ModEx.ModInfo.Authors[0].IfNullOrWhitespace("Gantry"));
+        VintageModsRootPath = CreateDirectory(Path.Combine(GamePaths.DataPath, "ModData", rootPath));
+        api.Logger.VerboseDebug($"[Gantry] {modId} VintageModsRootPath: {VintageModsRootPath}");
+
+        var rootFolderName = options.RootFolderName.IfNullOrWhitespace(modId);
+        ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, rootFolderName));
+        api.Logger.VerboseDebug($"[Gantry] {modId} ModDataRootPath: {ModDataRootPath}");
+
+        ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
+        api.Logger.VerboseDebug($"[Gantry] {modId} ModDataGlobalPath: {ModDataGlobalPath}");
+
+        ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, worldIdentifier));
+        api.Logger.VerboseDebug($"[Gantry] {modId} ModDataWorldPath: {ModDataWorldPath}");
+
+        ModRootPath = Path.GetDirectoryName(ModEx.ModAssembly.Location)!;
+        api.Logger.VerboseDebug($"[Gantry] {modId} ModRootPath: {ModRootPath}");
+
+        ModAssetsPath = Path.Combine(ModRootPath, "assets");
+        api.Logger.VerboseDebug($"[Gantry] {modId} ModAssetsPath: {ModAssetsPath}");
+
+        if (options.RegisterSettingsFiles) this.RegisterSettingsFiles(api);
     }
 
     /// <summary>
@@ -53,7 +72,7 @@ public sealed class FileSystemService : IFileSystemService
     /// <param name="scope">The scope of the file, be it global, or per-world.</param>
     public IFileSystemService RegisterFile(string fileName, FileScope scope)
     {
-        var file = new FileInfo(ModPaths.GetScopedPath(fileName, scope));
+        var file = new FileInfo(GetScopedPath(fileName, scope));
         _registeredFiles.Add(fileName, file.CreateModFileWrapper());
         if (!file.Exists)
         {
@@ -66,7 +85,7 @@ public sealed class FileSystemService : IFileSystemService
     ///     Retrieves a file that has previously been registered with the FileSystem Service.
     /// </summary>
     /// <param name="fileName">Name of the file.</param>
-    /// <returns>Return an <see cref="IModFile" /> representation of the file, on disk.</returns>
+    /// <returns>Return a <see cref="IModFile" /> representation of the file, on disk.</returns>
     public object GetRegisteredFile(string fileName)
     {
         if (_registeredFiles.TryGetValue(fileName, out var file)) return file;
@@ -79,7 +98,7 @@ public sealed class FileSystemService : IFileSystemService
     /// </summary>
     /// <typeparam name="TFileType">The type of the file type to return as.</typeparam>
     /// <param name="fileName">The name of the file, including file extension.</param>
-    /// <returns>Return an <typeparamref name="TFileType" /> representation of the file, on disk.</returns>
+    /// <returns>Return a <typeparamref name="TFileType" /> representation of the file, on disk.</returns>
     public TFileType GetRegisteredFile<TFileType>(string fileName) where TFileType : IModFileBase
     {
         return (TFileType)GetRegisteredFile(fileName);
@@ -89,7 +108,7 @@ public sealed class FileSystemService : IFileSystemService
     /// Retrieves a file that has previously been registered with the FileSystem Service.
     /// </summary>
     /// <param name="fileName">Name of the file.</param>
-    /// <returns>Return an <see cref="IJsonModFile" /> representation of the file, on disk.</returns>
+    /// <returns>Return a <see cref="IJsonModFile" /> representation of the file, on disk.</returns>
     public IJsonModFile GetJsonFile(string fileName)
     {
         return GetRegisteredFile<IJsonModFile>(fileName);
@@ -99,7 +118,7 @@ public sealed class FileSystemService : IFileSystemService
     /// Retrieves a file that has previously been registered with the FileSystem Service.
     /// </summary>
     /// <param name="fileName">The name of the file, including file extension.</param>
-    /// <returns>Return an <see cref="IBinaryModFile" /> representation of the file, on disk.</returns>
+    /// <returns>Return a <see cref="IBinaryModFile" /> representation of the file, on disk.</returns>
     public IBinaryModFile GetBinaryFile(string fileName)
     {
         return GetRegisteredFile<IBinaryModFile>(fileName);
@@ -149,7 +168,7 @@ public sealed class FileSystemService : IFileSystemService
     /// Retrieves a file that has previously been registered with the FileSystem Service.
     /// </summary>
     /// <param name="fileName">Name of the file.</param>
-    /// <returns>Return an <see cref="ITextModFile" /> representation of the file, on disk.</returns>
+    /// <returns>Return a <see cref="ITextModFile" /> representation of the file, on disk.</returns>
     public ITextModFile GetTextFile(string fileName)
     {
         return GetRegisteredFile<ITextModFile>(fileName);
@@ -166,8 +185,8 @@ public sealed class FileSystemService : IFileSystemService
 
         var locations = new List<string>
         {
-            Path.Combine(ModPaths.ModAssetsPath, file.Name),
-            Path.Combine(ModPaths.ModRootPath, file.Name)
+            Path.Combine(ModAssetsPath, file.Name),
+            Path.Combine(ModRootPath, file.Name)
         };
         foreach (var location in locations.Where(File.Exists))
         {
@@ -189,8 +208,14 @@ public sealed class FileSystemService : IFileSystemService
     /// </summary>
     public void Dispose()
     {
+        ModDataRootPath = null;
+        ModDataGlobalPath = null;
+        ModDataWorldPath = null;
+        ModRootPath = null;
+        ModAssetsPath = null;
+        WorldGuid = null;
+
         ModSettings.Dispose();
-        ModPaths.Dispose();
         _registeredFiles.Clear();
     }
 }

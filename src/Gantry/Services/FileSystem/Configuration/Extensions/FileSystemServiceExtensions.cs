@@ -2,6 +2,7 @@
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
 using JetBrains.Annotations;
+using Vintagestory.API.Common;
 
 namespace Gantry.Services.FileSystem.Configuration.Extensions;
 
@@ -47,9 +48,9 @@ public static class FileSystemServiceExtensions
     /// <summary>
     ///     Registers settings files.
     /// </summary>
-    public static IFileSystemService RegisterSettingsFiles(this IFileSystemService fileSystem)
+    public static IFileSystemService RegisterSettingsFiles(this IFileSystemService fileSystem, ICoreAPI api)
     {
-        var side = ApiEx.Side.ToString().ToLower();
+        var side = api.Side.ToString().ToLower();
         return fileSystem
             .RegisterSettingsFile($"settings-world-{side}.json", FileScope.World)
             .RegisterSettingsFile($"settings-global-{side}.json", FileScope.Global);

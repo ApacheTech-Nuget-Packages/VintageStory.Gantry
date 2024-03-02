@@ -10,11 +10,7 @@ namespace Gantry.Services.FileSystem.Configuration.Consumers;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class WorldSettingsConsumer<T> : ISettingsConsumer where T : FeatureSettings, new()
 {
-    internal static void Initialise()
-    {
-        Settings = null;
-        Settings = ModSettings.World?.Feature<T>();
-    }
+    private static T _settings;
 
     /// <summary>
     ///     Gets or sets the settings.
@@ -22,7 +18,7 @@ public abstract class WorldSettingsConsumer<T> : ISettingsConsumer where T : Fea
     /// <value>
     ///     The settings.
     /// </value>
-    protected static T Settings { get; private set; }
+    protected static T Settings => _settings ??= ModSettings.World?.Feature<T>();
 
     /// <summary>
     ///     Gets or sets the name of the feature.

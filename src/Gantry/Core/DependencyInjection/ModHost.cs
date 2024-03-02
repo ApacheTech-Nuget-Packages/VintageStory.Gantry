@@ -53,7 +53,7 @@ public abstract class ModHost : UniversalModSystem
     private void ConfigureBrighter(IServiceCollection services)
     {
         var brighterBuilder = services.AddBrighter();
-        brighterBuilder.AutoFromAssemblies(typeof(ModHost).Assembly, ModEx.ModAssembly);
+        brighterBuilder.AutoFromAssemblies();
     }
 
     #endregion

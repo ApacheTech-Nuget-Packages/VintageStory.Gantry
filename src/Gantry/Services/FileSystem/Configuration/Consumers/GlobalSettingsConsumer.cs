@@ -10,19 +10,15 @@ namespace Gantry.Services.FileSystem.Configuration.Consumers;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class GlobalSettingsConsumer<T> : ISettingsConsumer where T : FeatureSettings, new()
 {
-    internal static void Initialise()
-    {
-        Settings = null;
-        Settings = ModSettings.Global?.Feature<T>();
-    }
-
+    private static T _settings;
+    
     /// <summary>
     ///     Gets or sets the settings.
     /// </summary>
     /// <value>
     ///     The settings.
     /// </value>
-    protected internal static T Settings { get; protected set; }
+    protected internal static T Settings => _settings ??= ModSettings.Global?.Feature<T>();
 
     /// <summary>
     ///     Gets or sets the name of the feature.

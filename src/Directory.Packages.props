@@ -5,6 +5,10 @@
   <ItemGroup Label="Framework Dependencies">
     <PackageVersion Include="ApacheTech.Common.BrighterSlim" Version="9.7.6" />
     <PackageVersion Include="IronSoftware.System.Drawing" Version="2023.11.1" />
+    <PackageVersion Include="Microsoft.Bcl.AsyncInterfaces" Version="[6.0.0]" />
+    <PackageVersion Include="Microsoft.Bcl.TimeProvider" Version="8.0.0" />
+    <PackageVersion Include="Polly" Version="8.3.0" />
+    <PackageVersion Include="Polly.Core" Version="8.3.0" />
     <PackageVersion Include="PolySharp" Version="1.14.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
   </ItemGroup>

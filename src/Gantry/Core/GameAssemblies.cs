@@ -90,11 +90,6 @@ public static class GameAssemblies
 
     private static IEnumerable<Assembly> GetLoadedAssemblies()
     {
-#if NET5_0_OR_GREATER
-        // TODO: Remove pragma conditionals, once migrated.
         return AssemblyLoadContext.Default.Assemblies;
-#else
-            return AppDomain.CurrentDomain.GetAssemblies();
-#endif
     }
 }

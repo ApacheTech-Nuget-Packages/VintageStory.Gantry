@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Reflection;
+﻿using System.Reflection;
 using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using JetBrains.Annotations;
@@ -82,15 +81,10 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests, IHandleRequestsAsync, IAmAMessageMapper and register them with ServiceCollection
     /// </summary>
-    /// <param name="extraAssemblies">The assemblies to scan</param>
     /// <returns></returns>
-    public IBrighterBuilder AutoFromAssemblies(params Assembly[] extraAssemblies)
+    public IBrighterBuilder AutoFromAssemblies()
     {
-        var appDomainAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a =>
-            !a.IsDynamic && !a.FullName!.StartsWith("Microsoft.", true, CultureInfo.InvariantCulture) &&
-            !a.FullName.StartsWith("System.", true, CultureInfo.InvariantCulture));
-
-        var assemblies = appDomainAssemblies.Concat(extraAssemblies).ToArray();
+        var assemblies = new[] { GetType().Assembly, ModEx.ModAssembly }.Distinct().ToArray();
 
         MapperRegistryFromAssemblies(assemblies);
         HandlersFromAssemblies(assemblies);

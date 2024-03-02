@@ -21,13 +21,8 @@ public static class AssemblyExtensions
     /// <typeparam name="T">The type of interface to scan the assembly for concrete implementations of.</typeparam>
     /// <param name="assembly">The assembly to scan.</param>
     /// <returns></returns>
-    public static IEnumerable<T> InstantiateAllTypesImplementing<T>(this Assembly assembly)
-    {
-        return assembly
-            .GetAllTypesImplementing<T>()
-            .Select(Activator.CreateInstance)
-            .Select(p => p.To<T>());
-    }
+    public static IEnumerable<T> InstantiateAllTypesImplementing<T>(this Assembly assembly) =>
+        assembly.GetAllTypesImplementing<T>().Select(Activator.CreateInstance).Select(p => p.To<T>());
 
     /// <summary>
     ///     Gets all types within the assembly that implement a specific interface.
@@ -36,29 +31,10 @@ public static class AssemblyExtensions
     /// <param name="assembly">The assembly to scan.</param>
     /// <returns></returns>
     public static IEnumerable<Type> GetAllTypesImplementing<T>(this Assembly assembly)
-    {
-        return assembly.GetTypes()
+        => assembly.GetTypes()
             .Where(p => !p.IsAbstract)
             .Where(p => !p.IsInterface)
             .Where(p => p.GetInterfaces().Contains(typeof(T)));
-    }
-
-    /// <summary>
-    ///     Initialises classes that implement the <see cref="ISettingsConsumer"/> interface, within the given assembly.
-    /// </summary>
-    /// <param name="assembly">The assembly.</param>
-    public static void InitialiseSettingsConsumers(this Assembly assembly)
-    {
-        var consumers = assembly.GetAllTypesImplementing<ISettingsConsumer>();
-        foreach (var consumer in consumers)
-        {
-            var sideInfo = consumer.GetCustomAttribute<SettingsConsumerAttribute>()
-                           ?? throw new InvalidOperationException($"Missing `{nameof(SettingsConsumerAttribute)}` Attribute for class: {consumer.FullName}.");
-
-            if (sideInfo.Side == EnumAppSide.Universal || sideInfo.Side == ApiEx.Side)
-                AccessTools.Method(consumer, "Initialise")?.Invoke(null, null);
-        }
-    }
 
     /// <summary>
     ///     Invokes the type constructor for the specified type.

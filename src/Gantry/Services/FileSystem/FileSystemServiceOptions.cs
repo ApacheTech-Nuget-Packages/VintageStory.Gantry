@@ -27,7 +27,7 @@ public class FileSystemServiceOptions
     public string RootFolderName { get; set; } = ModEx.ModInfo.ModID ?? Guid.NewGuid().ToString();
 
     /// <summary>
-    ///     Determines whether or not to register the standard settings files for the mod. Default: False.
+    ///     Determines whether to register the standard settings files for the mod. Default: False.
     /// </summary>
     /// <remarks>
     ///     "%VINTAGE_STORY_DATA%\ModData\{RootFolderName}\{Scope}\settings-{scope}-{side}.json"
