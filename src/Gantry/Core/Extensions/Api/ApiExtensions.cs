@@ -187,7 +187,7 @@ public static class ApiExtensions
     }
 
     /// <summary>
-    ///     Converts an side-agnostic API to a client-side API.
+    ///     Converts a side-agnostic API to a client-side API.
     /// </summary>
     /// <param name="api">The core game API.</param>
     public static ICoreClientAPI ForClient(this ICoreAPI api)

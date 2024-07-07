@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using System.Text;
 
 namespace Gantry.Core.Extensions.DotNet;
 
@@ -16,5 +17,28 @@ public static class StringExtensions
     public static string EmptyIfNull(this string param)
     {
         return param ?? string.Empty;
+    }
+
+    /// <summary>
+    ///     Extracts the initials from a PascalCase string and converts them to lowercase.
+    /// </summary>
+    /// <param name="value">The PascalCase string from which to extract initials.</param>
+    /// <returns>A lowercase string containing the initials of the PascalCase string.</returns>
+    /// <example>
+    /// <code>
+    /// var result = "HelloWorld".ToLowerCaseInitials();
+    /// Console.WriteLine(result); // hw
+    /// </code>
+    /// </example>
+    public static string ToLowerCaseInitials(this string value)
+    {
+        if (string.IsNullOrEmpty(value)) return string.Empty;
+        var initials = new StringBuilder();
+        initials.Append(value[0]);
+        for (var i = 1; i < value.Length; i++)
+        {
+            if (char.IsUpper(value[i])) initials.Append(value[i]);
+        }
+        return initials.ToString().ToLower();
     }
 }

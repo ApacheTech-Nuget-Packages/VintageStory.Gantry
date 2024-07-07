@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using ApacheTech.Common.Extensions.Harmony;
 using Gantry.Core;
-using Gantry.Core.GameContent.GUI;
+using Gantry.Core.GameContent.GUI.Abstractions;
 using Vintagestory.API.Client;
 
 namespace Gantry.Services.FileSystem.Dialogue;

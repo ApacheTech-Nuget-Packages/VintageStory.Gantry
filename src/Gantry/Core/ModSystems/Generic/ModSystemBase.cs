@@ -24,7 +24,7 @@ public abstract class ModSystemBase : ModSystem
     ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
     protected ICoreAPI UApi { get; private set; }
-
+    
     /// <summary>
     ///     Called during initial mod loading, called before any mod receives the call to Start().
     /// </summary>
@@ -32,11 +32,9 @@ public abstract class ModSystemBase : ModSystem
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI or ICoreClientAPI to access side specific features.
     /// </param>
-    public override void StartPre(ICoreAPI api)
+    public sealed override void StartPre(ICoreAPI api)
     {
         UApi = api;
-        ModEx.Initialise(Mod, GetType().Assembly);
-        ApiEx.Initialise(UApi);
         StartPreUniversal(UApi);
         switch (UApi)
         {

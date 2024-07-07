@@ -1,7 +1,7 @@
-﻿using Gantry.Core;
-using Gantry.Services.FileSystem.v2.Abstractions;
+﻿using Gantry.Services.FileSystem.v2.Abstractions;
 using Gantry.Services.FileSystem.v2.DataStructures;
 using JetBrains.Annotations;
+using Vintagestory.API.Common;
 
 namespace Gantry.Services.FileSystem.v2.FileTypes.JsonSettings;
 
@@ -44,23 +44,26 @@ public static class JsonSettingsFileProviderExtensions
     /// </summary>
     /// <param name="provider">The provider.</param>
     /// <param name="scope">The scope of the file.</param>
+    /// <param name="side">Which side to get the settings for.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetSettings(this IFileProvider provider, FileScope scope)
-        => provider.Wrap<IJsonSettingsFile>($"{ApiEx.Current.Side}.settings.json", scope);
+    public static IJsonSettingsFile GetSettings(this IFileProvider provider, FileScope scope, EnumAppSide side)
+        => provider.Wrap<IJsonSettingsFile>($"{side}.settings.json", scope);
 
     /// <summary>
     ///     Gets the world settings file for the current app side.
     /// </summary>
     /// <param name="provider">The provider.</param>
+    /// <param name="side">Which side to get the settings for.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetWorldSettings(this IFileProvider provider)
-        => provider.Wrap<IJsonSettingsFile>($"{ApiEx.Current.Side}.settings.json", FileScope.World);
+    public static IJsonSettingsFile GetWorldSettings(this IFileProvider provider, EnumAppSide side)
+        => provider.Wrap<IJsonSettingsFile>($"{side}.settings.json", FileScope.World);
 
     /// <summary>
     ///     Gets the global settings file for the current app side.
     /// </summary>
     /// <param name="provider">The provider.</param>
+    /// <param name="side">Which side to get the settings for.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetGlobalSettings(this IFileProvider provider)
-        => provider.Wrap<IJsonSettingsFile>($"{ApiEx.Current.Side}.settings.json", FileScope.Global);
+    public static IJsonSettingsFile GetGlobalSettings(this IFileProvider provider, EnumAppSide side)
+        => provider.Wrap<IJsonSettingsFile>($"{side}.settings.json", FileScope.Global);
 }

@@ -48,36 +48,38 @@ public static class WaypointExtensions
     }
 
     /// <summary>
-    ///     Adds a waypoint at the a position within the world, relative to the global spawn point.
+    ///     Adds a waypoint at a position within the world, relative to the global spawn point.
     /// </summary>
+    /// <param name="world">The world to add the waypoint to.</param>
     /// <param name="pos">The position to add the waypoint at. World Pos - Not Relative to Spawn!</param>
     /// <param name="icon">The icon to use for the waypoint.</param>
     /// <param name="colour">The colour of the waypoint.</param>    
     /// <param name="title">The title to set.</param>
     /// <param name="pinned">if set to <c>true</c>, the waypoint will be pinned to the world map.</param>
     /// <param name="allowDuplicates">if set to <c>true</c>, the waypoint will not be placed, if another similar waypoint already exists at that position.</param>
-    public static void AddWaypointAtPos(this BlockPos pos, string icon, string colour, string title, bool pinned, bool allowDuplicates = false)
+    public static void AddWaypointAtPos(this IWorldAccessor world, BlockPos pos, string icon, string colour, string title, bool pinned, bool allowDuplicates = false)
     {
         if (pos is null) return;
         if (!allowDuplicates)
         {
             if (pos.WaypointExistsAtPos(p => p.Icon == icon)) return;
         }
-        pos = pos.RelativeToSpawn();
-        ApiEx.Client.SendChatMessage($"/waypoint addati {icon} {pos.X} {pos.Y} {pos.Z} {(pinned ? "true" : "false")} {colour} {title}");
+        pos = pos.RelativeToSpawn(world);
+        ApiEx.Client!.SendChatMessage($"/waypoint addati {icon} {pos.X} {pos.Y} {pos.Z} {(pinned ? "true" : "false")} {colour} {title}");
     }
 
     /// <summary>
-    ///     Asynchronously adds a waypoint at the a position within the world, relative to the global spawn point.
+    ///     Asynchronously adds a waypoint at a position within the world, relative to the global spawn point.
     /// </summary>
+    /// <param name="world">The world to add the waypoint to.</param>
     /// <param name="pos">The position to add the waypoint at. World Pos - Not Relative to Spawn!</param>
     /// <param name="icon">The icon to use for the waypoint.</param>
     /// <param name="colour">The colour of the waypoint.</param>    
     /// <param name="title">The title to set.</param>
     /// <param name="pinned">if set to <c>true</c>, the waypoint will be pinned to the world map.</param>
-    public static Task AddWaypointAtPosAsync(this BlockPos pos, string icon, string colour, string title, bool pinned)
+    public static Task AddWaypointAtPosAsync(this IWorldAccessor world, BlockPos pos, string icon, string colour, string title, bool pinned)
     {
-        return Task.Factory.StartNew(() => pos.AddWaypointAtPos(icon, colour, title, pinned));
+        return Task.Factory.StartNew(() => world.AddWaypointAtPos(pos, icon, colour, title, pinned));
     }
 
     /// <summary>
@@ -92,7 +94,7 @@ public static class WaypointExtensions
     {
         try
         {
-            var waypointMapLayer = ApiEx.Client.ModLoader.GetModSystem<WorldMapManager>().WaypointMapLayer();
+            var waypointMapLayer = ApiEx.Client!.ModLoader.GetModSystem<WorldMapManager>().WaypointMapLayer();
             var waypoints =
                 waypointMapLayer.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.InRangeCubic(position, horizontalRadius, verticalRadius) ?? false).ToList();
             if (!waypoints.Any()) return false;
@@ -125,7 +127,7 @@ public static class WaypointExtensions
     /// <returns><c>true</c> if a waypoint already exists at the specified position, <c>false</c> otherwise.</returns>
     public static bool WaypointExistsAtPos(this BlockPos pos, System.Func<Waypoint, bool> filter = null)
     {
-        var waypointMapLayer = ApiEx.Client.ModLoader.GetModSystem<WorldMapManager>().WaypointMapLayer();
+        var waypointMapLayer = ApiEx.Client!.ModLoader.GetModSystem<WorldMapManager>().WaypointMapLayer();
         var waypoints = waypointMapLayer.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.Equals(pos) ?? false).ToList();
         if (!waypoints.Any()) return false;
         return filter == null || waypoints.Any(filter);
@@ -169,26 +171,28 @@ public static class WaypointExtensions
     /// <summary>
     ///     Asynchronously adds a <see cref="Waypoint"/> for a specific <see cref="Block"/>, at a given <see cref="BlockPos"/>.
     /// </summary>
+    /// <param name="world">The world to add the waypoints to.</param>
     /// <param name="blockPosPair">The <see cref="Block"/>, with its <see cref="BlockPos"/> as a key.</param>
     /// <param name="icon">The icon to add to the waypoint.</param>
     /// <param name="colour">The colour to set the waypoint as.</param>
-    public static async Task AddWaypointForBlockPosPairAsync(this KeyValuePair<BlockPos, Block> blockPosPair, string icon, string colour)
+    public static async Task AddWaypointForBlockPosPairAsync(this IWorldAccessor world, KeyValuePair<BlockPos, Block> blockPosPair, string icon, string colour)
     {
-        await Task.FromResult(() => blockPosPair.AddWaypointForBlockPosPair(icon, colour));
+        await Task.FromResult(() => world.AddWaypointForBlockPosPair(blockPosPair, icon, colour));
     }
 
     /// <summary>
     ///     Adds a <see cref="Waypoint"/> for a specific <see cref="Block"/>, at a given <see cref="BlockPos"/>.
     /// </summary>
+    /// <param name="world">The world to add the waypoints to.</param>
     /// <param name="blockPosPair">The <see cref="Block"/>, with its <see cref="BlockPos"/> as a key.</param>
     /// <param name="icon">The icon to add to the waypoint.</param>
     /// <param name="colour">The colour to set the waypoint as.</param>
-    public static void AddWaypointForBlockPosPair(this KeyValuePair<BlockPos, Block> blockPosPair, string icon, string colour)
+    public static void AddWaypointForBlockPosPair(this IWorldAccessor world, KeyValuePair<BlockPos, Block> blockPosPair, string icon, string colour)
     {
         var blockPos = blockPosPair.Key;
         var block = blockPosPair.Value;
         if (blockPos.WaypointExistsWithinRadius(15, 256, p => p.Icon == icon)) return;
         var displayName = block.GetPlacedBlockName(ApiEx.ClientMain, blockPos);
-        blockPos.AddWaypointAtPos(icon, colour, $"{displayName}, Y = {blockPos.Y}", true);
+        world.AddWaypointAtPos(blockPos, icon, colour, $"{displayName}, Y = {blockPos.Y}", true);
     }
 }

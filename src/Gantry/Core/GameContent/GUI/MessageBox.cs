@@ -1,4 +1,6 @@
 ﻿using ApacheTech.Common.Extensions.System;
+using Gantry.Core.GameContent.GUI.Abstractions;
+using Gantry.Core.GameContent.GUI.Models;
 using JetBrains.Annotations;
 using Vintagestory.API.Client;
 

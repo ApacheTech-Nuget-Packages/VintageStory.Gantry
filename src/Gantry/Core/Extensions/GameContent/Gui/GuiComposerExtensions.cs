@@ -57,7 +57,7 @@ public static class GuiComposerExtensions
     /// <returns></returns>
     public static bool ToggleGui<TDialogue>(this TDialogue dialogue) where TDialogue : GuiDialog
     {
-        return ApiEx.Client.OpenedGuis.Contains(dialogue.ToggleKeyCombinationCode)
+        return ApiEx.Client!.OpenedGuis.Contains(dialogue.ToggleKeyCombinationCode)
             ? dialogue.TryClose()
             : dialogue.TryOpen();
     }

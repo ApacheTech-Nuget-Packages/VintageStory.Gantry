@@ -5,6 +5,7 @@ using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.Extensions;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Vintagestory.API.Datastructures;
 
 namespace Gantry.Services.FileSystem.FileAdaptors;
@@ -16,6 +17,15 @@ namespace Gantry.Services.FileSystem.FileAdaptors;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public sealed class JsonModFile : ModFile, IJsonModFile
 {
+    /// <summary>
+    ///     Gets the json serialiser settings.
+    /// </summary>
+    public static JsonSerializerSettings JsonSerialiserSettings { get; } = new()
+    {
+        Converters = [new StringEnumConverter()],
+        Formatting = Formatting.Indented
+    };
+
     /// <summary>
     /// 	Initialises a new instance of the <see cref="JsonModFile"/> class.
     /// </summary>
@@ -48,7 +58,7 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     {
         try
         {
-            return JsonConvert.DeserializeObject<TModel>(File.ReadAllText(ModFileInfo.FullName));
+            return JsonConvert.DeserializeObject<TModel>(File.ReadAllText(ModFileInfo.FullName), JsonSerialiserSettings);
         }
         catch (Exception )
         {
@@ -77,7 +87,7 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     {
         try
         {
-            return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(ModFileInfo.FullName));
+            return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(ModFileInfo.FullName), JsonSerialiserSettings);
         }
         catch (Exception)
         {
@@ -103,8 +113,17 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     /// <param name="instance">The instance of the object to serialise.</param>
     public override void SaveFrom<TModel>(TModel instance)
     {
-        var json = JsonConvert.SerializeObject(instance, Formatting.Indented);
-        SaveFrom(json, Formatting.Indented);
+        var json = JsonConvert.SerializeObject(instance, JsonSerialiserSettings);
+        SaveFrom(json);
+    }
+
+    /// <summary>
+    ///     Serialises the specified collection of objects, and saves the resulting data to file.
+    /// </summary>
+    /// <param name="file">The file to save.</param>
+    public void SaveFrom(IJsonModFile file)
+    {
+        SaveFrom(file.ReadAllText());
     }
 
     /// <summary>
@@ -161,22 +180,10 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     /// </summary>
     /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
     /// <param name="collection">The collection of the objects to save to a single file.</param>
-    /// <param name="formatting">The JSON formatting style to use when serialising the data.</param>
-    public void SaveFrom<TModel>(IEnumerable<TModel> collection, Formatting formatting)
-    {
-        var json = JsonConvert.SerializeObject(collection, formatting);
-        SaveFrom(json);
-    }
-
-    /// <summary>
-    ///     Serialises the specified collection of objects, and saves the resulting data to file.
-    /// </summary>
-    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
-    /// <param name="collection">The collection of the objects to save to a single file.</param>
     public override void SaveFrom<TModel>(IEnumerable<TModel> collection)
     {
-        var json = JsonConvert.SerializeObject(collection);
-        SaveFrom(json, Formatting.Indented);
+        var json = JsonConvert.SerializeObject(collection, JsonSerialiserSettings);
+        SaveFrom(json);
     }
 
     /// <summary>
@@ -191,8 +198,8 @@ public sealed class JsonModFile : ModFile, IJsonModFile
         }
         catch (IOException e)
         {
-            ApiEx.Current.Logger.Warning($"Failed to save JSON file: {ModFileInfo.FullName}");
-            ApiEx.Current.Logger.Warning(e.Message);
+            ModEx.Mod.Logger.Warning($"[Gantry] Failed to save JSON file: {ModFileInfo.FullName}");
+            ModEx.Mod.Logger.Warning(e.Message);
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
 using JetBrains.Annotations;
+using Vintagestory.API.Config;
 
 namespace Gantry.Core.Extensions.Helpers;
 
@@ -14,31 +14,29 @@ public static class BrowserEx
     ///     Opens a URL within the user's default browser.
     /// </summary>
     /// <param name="url">The URL to browse to.</param>
-    public static void OpenUrl(string url)
+    public static bool TryOpenUrl(string url)
     {
         try
         {
             Process.Start(url);
+            return true;
         }
         catch
         {
-            // https://github.com/dotnet/corefx/issues/10361
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            switch (RuntimeEnv.OS)
             {
-                url = url.Replace("&", "^&");
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Process.Start("xdg-open", url);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                Process.Start("open", url);
-            }
-            else
-            {
-                throw;
+                case OS.Windows:
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                    return true;
+                case OS.Linux:
+                    Process.Start("xdg-open", url);
+                    return true;
+                case OS.Mac:
+                    Process.Start("open", url);
+                    return true;
+                default:
+                    return false;
             }
         }
     }

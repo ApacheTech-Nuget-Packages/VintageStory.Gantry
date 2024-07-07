@@ -3,6 +3,7 @@ using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using JetBrains.Annotations;
 using Polly.Registry;
+using Vintagestory.API.Common;
 
 namespace Gantry.Core.Brighter.Hosting;
 
@@ -15,7 +16,7 @@ public interface IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests, IHandleRequestsAsync, IAmAMessageMapper and register them with ServiceCollection.
     /// </summary>
-    IBrighterBuilder AutoFromAssemblies();
+    IBrighterBuilder AutoFromAssemblies(ICoreAPI api);
 
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequestsAsync and register them with ServiceCollection.
@@ -27,9 +28,10 @@ public interface IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests and register them with ServiceCollection.
     /// </summary>
+    /// <param name="side">Determines the app side to register the handlers on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
-    IBrighterBuilder AsyncHandlersFromAssemblies(params Assembly[] assemblies);
+    IBrighterBuilder AsyncHandlersFromAssemblies(EnumAppSide side, params Assembly[] assemblies);
 
     /// <summary>
     ///     Register handlers with the built-in subscriber registry
@@ -41,9 +43,10 @@ public interface IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests and register them with ServiceCollection.
     /// </summary>
+    /// <param name="side">Determines the app side to register the handlers on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
-    IBrighterBuilder HandlersFromAssemblies(params Assembly[] assemblies);
+    IBrighterBuilder HandlersFromAssemblies(EnumAppSide side, params Assembly[] assemblies);
 
     /// <summary>
     ///     Register message mappers.
@@ -55,16 +58,18 @@ public interface IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IAmAMessageMapper and register them with ServiceCollection.
     /// </summary>
+    /// <param name="side">Determines the app side to register the mappers on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
-    IBrighterBuilder MapperRegistryFromAssemblies(params Assembly[] assemblies);
+    IBrighterBuilder MapperRegistryFromAssemblies(EnumAppSide side, params Assembly[] assemblies);
 
     /// <summary>
     ///     Scan the assemblies for implementations of IAmAMessageTransformAsync and register them with ServiceCollection.
     /// </summary>
+    /// <param name="side">Determines the app side to register the transforms on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
-    IBrighterBuilder TransformsFromAssemblies(params Assembly[] assemblies);
+    IBrighterBuilder TransformsFromAssemblies(EnumAppSide side, params Assembly[] assemblies);
 
     /// <summary>
     ///     The policy registry to use for the command processor and the event bus

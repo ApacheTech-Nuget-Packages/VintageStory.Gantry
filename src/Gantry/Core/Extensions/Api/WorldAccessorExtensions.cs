@@ -1,42 +1,9 @@
-﻿using Gantry.Core.Abstractions;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Extensions.Api;
-
-/// <summary>
-///     Extension methods that aid scanning for blocks, and block entities.
-/// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public static class BlockPosExtensions
-{
-    /// <summary>
-    ///     Gets the block at the specified position within the gameworld.
-    /// </summary>
-    /// <typeparam name="TBlock">The type of the block.</typeparam>
-    /// <param name="this">The <see cref="BlockPos"/> to find the block at.</param>
-    /// <param name="layer">Each block pos can house a liquid, and a solid. Defaults to solid blocks.</param>
-    public static TBlock GetBlock<TBlock>(this BlockPos @this, BlockLayer layer = BlockLayer.Default)
-        where TBlock : Block
-    {
-        return ApiEx.Current.World.BlockAccessor.GetBlock(@this, (int)layer) as TBlock;
-    }
-
-    /// <summary>
-    ///     Gets the block entity at the specified position within the gameworld.
-    /// </summary>
-    /// <typeparam name="TBlockEntity">The type of the block.</typeparam>
-    /// <param name="this">The <see cref="BlockPos"/> to find the block at.</param>
-    public static TBlockEntity GetBlockEntity<TBlockEntity>(this BlockPos @this)
-        where TBlockEntity : BlockEntity
-    {
-        return ApiEx.Current.World.BlockAccessor.GetBlockEntity(@this) as TBlockEntity;
-    }
-}
-
-
 
 /// <summary>
 ///     Extension methods that aid scanning for blocks, and block entities.
@@ -91,7 +58,7 @@ public static class WorldAccessorExtensions
         float verticalRange, System.Func<TBlock, bool> predicate) where TBlock : Block
     {
         var walker = world.GetBlockAccessorPrefetch(false, false);
-        var (minPos, maxPos) = origin.GetBlockRange(horizontalRange, verticalRange);
+        var (minPos, maxPos) = world.GetBlockRange(origin, horizontalRange, verticalRange);
         walker.PrefetchBlocks(minPos, maxPos);
 
         var blockPos = walker.WalkBlocks(minPos, maxPos,
@@ -102,16 +69,16 @@ public static class WorldAccessorExtensions
         return blockPos;
     }
 
-    private static (BlockPos MinPos, BlockPos MaxPos) GetBlockRange(
-        this BlockPos origin, float horizontalRange, float verticalRange)
+    private static (BlockPos MinPos, BlockPos MaxPos) GetBlockRange(this IWorldAccessor world,
+        BlockPos origin, float horizontalRange, float verticalRange)
     {
         var minPos = origin
             .AddCopy(-horizontalRange, -verticalRange, -horizontalRange)
-            .ClampToWorldBounds();
+            .ClampToWorldBounds(world.BlockAccessor);
 
         var maxPos = origin
             .AddCopy(horizontalRange, verticalRange, horizontalRange)
-            .ClampToWorldBounds();
+            .ClampToWorldBounds(world.BlockAccessor);
 
         return (minPos, maxPos);
     }
@@ -130,8 +97,8 @@ public static class WorldAccessorExtensions
     {
         var walker = world.GetBlockAccessorPrefetch(false, false);
         TBlockEntity blockEntity = null;
-        var minPos = origin.AddCopy(-horRange, -vertRange, -horRange).ClampToWorldBounds();
-        var maxPos = origin.AddCopy(horRange, vertRange, horRange).ClampToWorldBounds();
+        var minPos = origin.AddCopy(-horRange, -vertRange, -horRange).ClampToWorldBounds(world.BlockAccessor);
+        var maxPos = origin.AddCopy(horRange, vertRange, horRange).ClampToWorldBounds(world.BlockAccessor);
         walker.PrefetchBlocks(minPos, maxPos);
 
         world.BlockAccessor.WalkBlocks(minPos, maxPos, (_, x, y, z) =>

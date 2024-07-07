@@ -1,5 +1,6 @@
 ﻿using Gantry.Core.Extensions.Helpers;
 using JetBrains.Annotations;
+using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
@@ -16,21 +17,22 @@ public static class PositionExtensions
     ///     Gets the position relative to spawn, given an absolute position within the game world.
     /// </summary>
     /// <param name="pos">The absolute position of the block being queried.</param>
-    public static BlockPos RelativeToSpawn(this BlockPos pos)
+    /// <param name="world">The world being played.</param>
+    public static BlockPos RelativeToSpawn(this BlockPos pos, IWorldAccessor world)
     {
-        var worldSpawn = ApiEx.Current.World.DefaultSpawnPosition.XYZ.AsBlockPos;
+        var worldSpawn = world.DefaultSpawnPosition.XYZ.AsBlockPos;
         var blockPos = pos.SubCopy(worldSpawn);
         return new BlockPos(blockPos.X, pos.Y, blockPos.Z, Dimensions.NormalWorld);
     }
 
     /// <summary>
-    ///     Ensures that a <see cref="BlockPos"/> is inside of the world borders.
+    ///     Ensures that a <see cref="BlockPos"/> is inside the world borders.
     /// </summary>
-    public static BlockPos ClampToWorldBounds(this BlockPos blockPos)
+    public static BlockPos ClampToWorldBounds(this BlockPos blockPos, IBlockAccessor blockAccessor)
     {
-        blockPos.X = GameMath.Clamp(blockPos.X, 0, ApiEx.Current.World.BlockAccessor.MapSizeX);
-        blockPos.Y = GameMath.Clamp(blockPos.Y, 0, ApiEx.Current.World.BlockAccessor.MapSizeY);
-        blockPos.Z = GameMath.Clamp(blockPos.Z, 0, ApiEx.Current.World.BlockAccessor.MapSizeZ);
+        blockPos.X = GameMath.Clamp(blockPos.X, 0, blockAccessor.MapSizeX);
+        blockPos.Y = GameMath.Clamp(blockPos.Y, 0, blockAccessor.MapSizeY);
+        blockPos.Z = GameMath.Clamp(blockPos.Z, 0, blockAccessor.MapSizeZ);
         return blockPos;
     }
 
@@ -53,10 +55,10 @@ public static class PositionExtensions
     ///     Gets the surface level at the specified block position. This is the highest point on the Y axis, where the block is solid, from above.
     /// </summary>
     /// <param name="pos">The position.</param>
-    /// <returns>An <see cref="int"/> value, representing the highest Y value with a solid block underneath it.</returns>
-    public static int GetSurfaceLevel(this BlockPos pos)
+    /// <param name="blockAccessor">The block accessor for the current world.</param>
+    /// <returns>A <see cref="int"/> value, representing the highest Y value with a solid block underneath it.</returns>
+    public static int GetSurfaceLevel(this BlockPos pos, IBlockAccessor blockAccessor)
     {
-        var blockAccessor = ApiEx.Current.World.BlockAccessor;
         var maxY = blockAccessor.GetTerrainMapheightAt(pos);
         var minPos = new BlockPos(pos.X, 1, pos.Z, Dimensions.NormalWorld);
         var maxPos = new BlockPos(pos.X, blockAccessor.MapSizeY, pos.Z, Dimensions.NormalWorld);

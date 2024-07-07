@@ -3,7 +3,7 @@ using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.BrighterSlim.FeatureSwitch;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using Gantry.Core.DependencyInjection.Extensions;
+using Gantry.Core.Hosting.Extensions;
 using JetBrains.Annotations;
 using Polly.Registry;
 

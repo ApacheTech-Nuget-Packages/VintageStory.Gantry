@@ -1,5 +1,5 @@
 ﻿using Gantry.Core;
-using Gantry.Core.GameContent.GUI;
+using Gantry.Core.GameContent.GUI.Abstractions;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Enums;
 using Vintagestory.API.Client;

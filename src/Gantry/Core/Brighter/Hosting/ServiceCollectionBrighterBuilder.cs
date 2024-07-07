@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.DependencyInjection.Abstractions;
+using Gantry.Core.Annotation;
 using JetBrains.Annotations;
 using Polly.Registry;
+using Vintagestory.API.Common;
 
 namespace Gantry.Core.Brighter.Hosting;
 
@@ -70,11 +72,12 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests and register them with ServiceCollection 
     /// </summary>
+    /// <param name="side">Determines the app side to register the handlers on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
-    public IBrighterBuilder AsyncHandlersFromAssemblies(params Assembly[] assemblies)
+    public IBrighterBuilder AsyncHandlersFromAssemblies(EnumAppSide side, params Assembly[] assemblies)
     {
-        RegisterHandlersFromAssembly(typeof(IHandleRequestsAsync<>), assemblies, typeof(IHandleRequestsAsync<>).Assembly);
+        RegisterHandlersFromAssembly(side, typeof(IHandleRequestsAsync<>), assemblies, typeof(IHandleRequestsAsync<>).Assembly);
         return this;
     }
 
@@ -82,14 +85,16 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
     ///     Scan the assemblies provided for implementations of IHandleRequests, IHandleRequestsAsync, IAmAMessageMapper and register them with ServiceCollection
     /// </summary>
     /// <returns></returns>
-    public IBrighterBuilder AutoFromAssemblies()
+    public IBrighterBuilder AutoFromAssemblies(ICoreAPI api)
     {
         var assemblies = new[] { GetType().Assembly, ModEx.ModAssembly }.Distinct().ToArray();
 
-        MapperRegistryFromAssemblies(assemblies);
-        HandlersFromAssemblies(assemblies);
-        AsyncHandlersFromAssemblies(assemblies);
-        TransformsFromAssemblies(assemblies);
+        var side = api.Side;
+
+        MapperRegistryFromAssemblies(side, assemblies);
+        HandlersFromAssemblies(side, assemblies);
+        AsyncHandlersFromAssemblies(side, assemblies);
+        TransformsFromAssemblies(side, assemblies);
 
         return this;
     }
@@ -111,15 +116,16 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IAmAMessageMapper and register them with ServiceCollection
     /// </summary>
+    /// <param name="side">Determines the app side to register the mappers on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
-    public IBrighterBuilder MapperRegistryFromAssemblies(params Assembly[] assemblies)
+    public IBrighterBuilder MapperRegistryFromAssemblies(EnumAppSide side, params Assembly[] assemblies)
     {
         if (assemblies.Length == 0)
             throw new ArgumentException("Value cannot be an empty collection.", nameof(assemblies));
 
-        RegisterMappersFromAssemblies(assemblies);
-        RegisterAsyncMappersFromAssemblies(assemblies);
+        RegisterMappersFromAssemblies(side, assemblies);
+        RegisterAsyncMappersFromAssemblies(side, assemblies);
 
         return this;
     }
@@ -143,21 +149,23 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests and register them with ServiceCollection
     /// </summary>
+    /// <param name="side">Determines the app side to register the handlers on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
-    public IBrighterBuilder HandlersFromAssemblies(params Assembly[] assemblies)
+    public IBrighterBuilder HandlersFromAssemblies(EnumAppSide side, params Assembly[] assemblies)
     {
-        RegisterHandlersFromAssembly(typeof(IHandleRequests<>), assemblies, typeof(IHandleRequests<>).Assembly);
+        RegisterHandlersFromAssembly(side, typeof(IHandleRequests<>), assemblies, typeof(IHandleRequests<>).Assembly);
         return this;
     }
 
     /// <summary>
     ///     Scan the assemblies for implementations of IAmAMessageTransformAsync and register them with the ServiceCollection
     /// </summary>
+    /// <param name="side">Determines the app side to register the transforms on.</param>
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
     /// <exception cref="ArgumentException">Thrown if there are no assemblies passed to the method</exception>
-    public IBrighterBuilder TransformsFromAssemblies(params Assembly[] assemblies)
+    public IBrighterBuilder TransformsFromAssemblies(EnumAppSide side, params Assembly[] assemblies)
     {
         if (assemblies.Length == 0)
             throw new ArgumentException("Value cannot be an empty collection.", nameof(assemblies));
@@ -167,6 +175,7 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
             where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
             from i in ti.ImplementedInterfaces
             where i == typeof(IAmAMessageTransformAsync)
+            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
             select new { TransformType = ti.AsType() };
 
         foreach (var transform in transforms)
@@ -177,15 +186,16 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
         return this;
     }
 
-    private void RegisterHandlersFromAssembly(Type interfaceType, IEnumerable<Assembly> assemblies, Assembly assembly)
+    private void RegisterHandlersFromAssembly(EnumAppSide side, Type interfaceType, IEnumerable<Assembly> assemblies, Assembly assembly)
     {
-        assemblies = assemblies.Concat(new[] { assembly }).ToArray();
+        assemblies = assemblies.Concat([assembly]).ToArray();
 
         var subscribers =
             from ti in assemblies.SelectMany(a => a.DefinedTypes).Distinct()
             where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
             from i in ti.ImplementedInterfaces
             where i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType
+            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
             select new { RequestType = i.GenericTypeArguments.First(), HandlerType = ti.AsType() };
 
         foreach (var subscriber in subscribers)
@@ -194,13 +204,14 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
         }
     }
 
-    private void RegisterMappersFromAssemblies(Assembly[] assemblies)
+    private void RegisterMappersFromAssemblies(EnumAppSide side, Assembly[] assemblies)
     {
         var mappers =
             from ti in assemblies.SelectMany(a => a.DefinedTypes).Distinct()
             where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
             from i in ti.ImplementedInterfaces
             where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAmAMessageMapper<>)
+            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
             select new { RequestType = i.GenericTypeArguments.First(), HandlerType = ti.AsType() };
 
         foreach (var mapper in mappers)
@@ -209,13 +220,14 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
         }
     }
 
-    private void RegisterAsyncMappersFromAssemblies(Assembly[] assemblies)
+    private void RegisterAsyncMappersFromAssemblies(EnumAppSide side, Assembly[] assemblies)
     {
         var mappers =
             from ti in assemblies.SelectMany(a => a.DefinedTypes).Distinct()
             where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
             from i in ti.ImplementedInterfaces
             where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAmAMessageMapperAsync<>)
+            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
             select new { RequestType = i.GenericTypeArguments.First(), HandlerType = ti.AsType() };
 
         foreach (var mapper in mappers)

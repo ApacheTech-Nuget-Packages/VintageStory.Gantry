@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Vintagestory.API.Datastructures;
+﻿using Vintagestory.API.Datastructures;
 
 // ReSharper disable UnusedMemberInSuper.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -29,10 +28,8 @@ public interface IJsonModFile : IModFile, ITextModFile
     /// <summary>
     ///     Serialises the specified collection of objects, and saves the resulting data to file.
     /// </summary>
-    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
-    /// <param name="collection">The collection of the objects to save to a single file.</param>
-    /// <param name="formatting">The JSON formatting style to use when serialising the data.</param>
-    public void SaveFrom<TModel>(IEnumerable<TModel> collection, Formatting formatting = Formatting.Indented);
+    /// <param name="file">The file to save.</param>
+    public void SaveFrom(IJsonModFile file);
 
     /// <summary>
     ///     Serialises the specified collection of objects, and saves the resulting data to file.

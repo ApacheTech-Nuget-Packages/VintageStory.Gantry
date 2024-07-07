@@ -58,7 +58,7 @@ public static class ModPaths
     {
         var dir = new DirectoryInfo(path);
         if (dir.Exists) return dir.FullName;
-        ApiEx.Current?.Logger.VerboseDebug($"[Gantry] Creating folder: {dir}");
+        ModEx.Mod.Logger.VerboseDebug($"[Gantry] Creating folder: {dir}");
         dir.Create();
         return dir.FullName;
     }

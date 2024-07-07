@@ -83,8 +83,8 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
         }
         catch (Exception exception)
         {
-            ApiEx.Current.Logger.Error($"Error loading feature `{featureName}` from file `{File.AsFileInfo().Name}`: {exception.Message}");
-            ApiEx.Current.Logger.Error(exception.StackTrace);
+            ModEx.Mod.Logger.Error($"[Gantry] Error loading feature `{featureName}` from file `{File.AsFileInfo().Name}`: {exception.Message}");
+            ModEx.Mod.Logger.Error(exception.StackTrace);
             throw;
         }
     }

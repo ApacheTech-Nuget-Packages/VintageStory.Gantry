@@ -17,6 +17,6 @@ public static class LoadedTextureExtensions
     public static void Delete(this LoadedTexture texture)
     {
         if (ApiEx.Side.IsServer()) return;
-        ApiEx.Client.Gui.DeleteTexture(texture.TextureId);
+        ApiEx.Client!.Gui.DeleteTexture(texture.TextureId);
     }
 }

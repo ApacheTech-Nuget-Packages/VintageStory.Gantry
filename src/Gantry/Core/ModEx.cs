@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using ApacheTech.Common.Extensions.System;
 using Gantry.Core.Diagnostics;
+using Gantry.Core.Extensions.Api;
 using Gantry.Services.FileSystem.Extensions;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
@@ -14,14 +15,6 @@ namespace Gantry.Core;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class ModEx
 {
-    // NB:  My thinking here, is that if this dll is loaded once by the game,
-    //      then only one static value will be held here. Last in, first out.
-    //      However, if the game creates aliases, and loads each unpack directory
-    //      separately, then there will be no issues. The VMods Core seemed to
-    //      work as intended, so this might not be an issues. However, it is
-    //      something to perform integration testing on, once we get to a
-    //      stable, and testable state.
-
     /// <summary>
     ///     Gets the side designated within the mod information.
     /// </summary>
@@ -31,9 +24,7 @@ public static class ModEx
     /// <summary>
     ///     The main assembly for the mod that initialised the Gantry MDK.
     /// </summary>
-    /// HACK: Potential Integration Bug: Is this global, static object shared among disparate mods?
     public static Assembly ModAssembly { get; private set; }
-
 
     /// <summary>
     ///     Gets or sets a value indicating whether to run Gantry in debug mode. This enables detailed logging, within the game log files.
@@ -55,9 +46,16 @@ public static class ModEx
 
     internal static void Initialise(Mod mod, Assembly modAssembly)
     {
+        mod.Logger.GantryDebug($"[Gantry] Setting Mod details for: {mod.FileName}");
         Mod = Ensure.PopulatedWith(Mod, mod);
+
+        mod.Logger.GantryDebug($"[Gantry] Setting Mod assembly as: {modAssembly.FullName}");
         ModAssembly = Ensure.PopulatedWith(ModAssembly, modAssembly);
+
+        mod.Logger.GantryDebug($"[Gantry] Setting Mod Info for: {mod.Info.ModID}");
         ModInfo = Ensure.PopulatedWith(ModInfo, mod.Info);
+
+        mod.Logger.GantryDebug("[Gantry] Creating Initial ModData Directory");
         CreateInitialDirectory();
 
         if (ModInfo is null)
@@ -65,6 +63,7 @@ public static class ModEx
                 $"Could not find mod information for assembly: {ModAssembly.FullName}. " +
                 "Are you missing a modinfo.json file, or `ModInfoAttribute` declaration?");
 
+        mod.Logger.GantryDebug($"[Gantry] Setting ModAppSide as {ModInfo.Side}");
         ModAppSide = ModInfo.Side;
     }
 

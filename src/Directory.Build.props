@@ -103,6 +103,10 @@
 			<Private>false</Private>
 		</Reference>
 		<!-- Vintage Story Game Libraries -->
+		<Reference Include="xplatforminterface">
+			<HintPath>$(VINTAGE_STORY)\Lib\xplatforminterface.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 		<Reference Include="0Harmony">
 			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
 			<Private>false</Private>

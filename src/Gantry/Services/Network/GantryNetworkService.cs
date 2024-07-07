@@ -1,4 +1,5 @@
-﻿using Gantry.Core;
+﻿using ApacheTech.Common.DependencyInjection.Abstractions;
+using Gantry.Core;
 using Gantry.Core.Extensions.Api;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -31,6 +32,7 @@ public class GantryNetworkService : IUniversalNetworkService
     /// </summary>
     /// <param name="api">The universal Core API.</param>
     /// <param name="options">The options to pass to the service.</param>
+    [InjectableConstructor]
     public GantryNetworkService(ICoreAPI api, NetworkServiceOptions options)
     {
         _defaultChannelName = options.DefaultChannelName;

@@ -12,7 +12,7 @@ namespace Gantry.Core.ModSystems;
 public abstract class ServerModSystem : ModSystemBase
 {
     /// <summary>
-    ///     The core API implemented by the server. The main interface for accessing the server. Contains all sub-components, and some miscellaneous methods.
+    ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
     protected ICoreServerAPI Sapi => UApi as ICoreServerAPI;
 

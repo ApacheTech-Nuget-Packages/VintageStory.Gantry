@@ -23,7 +23,7 @@ public static class ElementBoundsEx
             throw new FileLoadException("Can only determine the dimensions of a PNG file. Use https://jpg2png.com/ to quickly converts images to PNG.");
         }
 
-        using var png = ApiEx.Client.Assets.Get(imageAsset).ToBitmap(ApiEx.Client);
+        using var png = ApiEx.Client!.Assets.Get(imageAsset).ToBitmap(ApiEx.Client);
         return ElementBounds.FixedSize(png.Width * scale, png.Height * scale);
     }
 }

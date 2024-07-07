@@ -1,11 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using ApacheTech.Common.Extensions.System;
-using Gantry.Core;
-using Gantry.Services.FileSystem.Configuration.Consumers;
-using HarmonyLib;
 using JetBrains.Annotations;
-using Vintagestory.API.Common;
 
 namespace Gantry.Services.FileSystem.Extensions;
 

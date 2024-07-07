@@ -12,7 +12,7 @@ namespace Gantry.Core.ModSystems;
 public abstract class ClientModSystem : ModSystemBase
 {
     /// <summary>
-    ///     The core API implemented by the client. The main interface for accessing the client. Contains all sub-components, and some miscellaneous methods.
+    ///     The core API implemented by the client. The main interface for accessing the client. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
     protected ICoreClientAPI Capi => UApi as ICoreClientAPI;
 

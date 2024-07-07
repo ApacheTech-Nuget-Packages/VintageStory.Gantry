@@ -62,6 +62,15 @@ public static class ModSettings
     }
 
     /// <summary>
+    ///     Copies the settings from one scope to another.
+    /// </summary>
+    /// <param name="scope">The scope to copy the settings to.</param>
+    public static void CopyTo(FileScope scope)
+    {
+        For(scope).File.SaveFrom(For((FileScope)((int)scope ^ 1)).File);
+    }
+
+    /// <summary>
     ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
     /// </summary>
     public static void Dispose()
@@ -88,5 +97,5 @@ public static class ModSettings
         ServerWorld = null;
     }
 
-    internal static Harmony FeaturePatcher { get; } = new ($"{ModEx.ModInfo.ModID}_ObservableFeatures");
+    internal static Harmony FeaturePatcher { get; } = new($"{ModEx.ModInfo.ModID}_ObservableFeatures");
 }

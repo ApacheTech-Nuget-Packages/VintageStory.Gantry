@@ -20,7 +20,8 @@ public static class WorldMapManagerExtensions
     /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
     public static WaypointMapLayer WaypointMapLayer(this WorldMapManager mapManager)
     {
-        return mapManager.MapLayers.OfType<WaypointMapLayer>().First();
+        var layers = mapManager.MapLayers;
+        return layers.OfType<WaypointMapLayer>().FirstOrDefault();
     }
 
     /// <summary>
@@ -39,7 +40,7 @@ public static class WorldMapManagerExtensions
     /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
     public static void ForceSendWaypoints(this WorldMapManager mapManager)
     {
-        ApiEx.Client.Event.EnqueueMainThreadTask(() =>
+        ApiEx.Client!.Event.EnqueueMainThreadTask(() =>
             ApiEx.Client.Event.RegisterCallback(_ =>
                 ApiEx.Client.Network.GetChannel("worldmap")
                     .SendPacket(new OnViewChangedPacket()), 500), "");
@@ -63,8 +64,8 @@ public static class WorldMapManagerExtensions
         }
         catch (Exception ex)
         {
-            ApiEx.Current.Logger.Error(ex.Message);
-            ApiEx.Current.Logger.Error(ex.StackTrace);
+            ModEx.Mod.Logger.Error(ex.Message);
+            ModEx.Mod.Logger.Error(ex.StackTrace);
         }
     }
 
