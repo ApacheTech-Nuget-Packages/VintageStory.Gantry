@@ -52,7 +52,8 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     private void Patch()
     {
         var postfix = new HarmonyMethod(this.GetMethod(nameof(Patch_Property_SetMethod_Postfix)));
-        foreach (var propertyInfo in typeof(T).GetProperties())
+        var properties = typeof(T).GetProperties();
+        foreach (var propertyInfo in properties)
         {
             var original = propertyInfo.SetMethod;
             if (Harmony.GetPatchInfo(original)?.Postfixes.Any() ?? false) continue;
@@ -65,7 +66,8 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     /// </summary>
     public void UnPatch()
     {
-        foreach (var propertyInfo in typeof(T).GetProperties())
+        var properties = typeof(T).GetProperties();
+        foreach (var propertyInfo in properties)
         {
             var original = propertyInfo.SetMethod;
             _harmony.Unpatch(original, HarmonyPatchType.Postfix);

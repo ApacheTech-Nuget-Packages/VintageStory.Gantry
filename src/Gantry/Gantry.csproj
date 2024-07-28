@@ -15,14 +15,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="Core\_EmbeddedResources\**" />
-		<None Remove="Core\_EmbeddedResources\**" />
+		<EmbeddedResource Include="**\_EmbeddedResources\**" />
+		<None Remove="**\_EmbeddedResources\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <PackageReference Include="ApacheTech.Common.BrighterSlim" />
 	  <PackageReference Include="ApacheTech.Common.DependencyInjection" />
 	  <PackageReference Include="ApacheTech.Common.DependencyInjection.Abstractions" />
+	  <PackageReference Include="Humanizer.Core" />
 	  <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" />
 	</ItemGroup>
 

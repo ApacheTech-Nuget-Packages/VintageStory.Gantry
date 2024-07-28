@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Invalid scope. Valid options are: {0}",
+  "Features.EasyX.Scope.Description": "Change whether the mod should use global settings, or per world settings.",
+  "Features.EasyX.Scope": "Settings Scope: {0}",
+  "Features.EasyX.SetScope": "Settings scope now set to: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Allows the server admin to change the settings for the mod on the server.",
+
+  "Features.EasyX.Mode": "{0} Mode: {1}",
+  "Features.EasyX.SetMode": "{0} mode now set to: {1}",
+  "Features.EasyX.InvalidMode": "Invalid access mode. Valid options are: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "The search for '{0}' yielded no results. Please try again.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "The search for '{0}' yielded multiple results. Please refine your search terms.",
+
+  "Features.EasyX.AccessMode.Description": "Change the access mode for the current feature.",
+
+  "Features.EasyX.Whitelist.Description": "Add/Remove players from the whitelist for this feature.",
+  "Features.EasyX.Whitelist.Results": "The following players are currently on the {0} whitelist:",
+  "Features.EasyX.Whitelist.NoResults": "There are currently no players on the {0} whitelist.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} has been removed from the {1} whitelist.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} has been added to the {1} whitelist.",
+
+  "Features.EasyX.Blacklist.Description": "Add/Remove players from the blacklist for this feature.",
+  "Features.EasyX.Blacklist.Results": "The following players are currently on the {0} blacklist:",
+  "Features.EasyX.Blacklist.NoResults": "There are currently no players on the {0} blacklist.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} has been removed from the {1} blacklist.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} has been added to the {1} blacklist."
+}
