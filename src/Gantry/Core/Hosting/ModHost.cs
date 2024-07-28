@@ -236,10 +236,7 @@ public abstract class ModHost : UniversalModSystem
     ///     - Block and Item Loader: 0.2
     ///     - Recipes (Smithing, Knapping, ClayForming, Grid recipes, Alloys) Loader: 1
     /// </summary>
-    public override double ExecuteOrder()
-    {
-        return -1;
-    }
+    public override double ExecuteOrder() => double.MinValue;
 
     /// <summary>
     ///     If this mod allows runtime reloading, you must implement this method to unregister any listeners / handlers

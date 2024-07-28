@@ -23,8 +23,8 @@ public abstract class ModSystemBase : ModSystem
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
-    protected ICoreAPI UApi { get; private set; }
-    
+    public ICoreAPI UApi => ApiEx.Current;
+
     /// <summary>
     ///     Called during initial mod loading, called before any mod receives the call to Start().
     /// </summary>
@@ -34,9 +34,8 @@ public abstract class ModSystemBase : ModSystem
     /// </param>
     public sealed override void StartPre(ICoreAPI api)
     {
-        UApi = api;
-        StartPreUniversal(UApi);
-        switch (UApi)
+        StartPreUniversal(api);
+        switch (api)
         {
             case ICoreClientAPI capi:
                 StartPreClientSide(capi);
@@ -63,8 +62,8 @@ public abstract class ModSystemBase : ModSystem
     protected virtual void StartPreClientSide(ICoreClientAPI capi) { }
 
     /// <summary>
-    ///     If you need mods to be executed in a certain order, adjust this methods return value.<br/>
-    ///     The server will call each Mods Start() method the ascending order of each mods execute order value.<br/>
+    ///     If you need mods to be executed in a certain order, adjust these methods return value.<br/>
+    ///     The server will call each Mods Start() method the ascending order of each mod's execute order value.<br/>
     ///     And thus, as long as every mod registers it's event handlers in the Start() method, all event handlers<br/>
     ///     will be called in the same execution order.<br/>
     ///     Default execute order of some survival mod parts.<br/><br/>

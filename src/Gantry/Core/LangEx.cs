@@ -1,4 +1,5 @@
-﻿using Gantry.Core.Extensions.DotNet;
+﻿using ApacheTech.Common.Extensions.System;
+using Gantry.Core.Extensions.DotNet;
 using JetBrains.Annotations;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
@@ -11,22 +12,15 @@ namespace Gantry.Core;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class LangEx
 {
-    private static readonly JsonObject Translations;
+    private static readonly Dictionary<string, JsonObject> Translations = [];
 
-    /// <summary>
-    ///     Initialises the <see cref="LangEx"/> class.
-    /// </summary>
-    static LangEx()
+    private static JsonObject GetTranslationsFile(string category)
     {
-        var json = typeof(LangEx).Assembly.GetResourceContent("en.json");
-        try
-        {
-            json = typeof(LangEx).Assembly.GetResourceContent($"{Lang.CurrentLocale}.json");
-        }
-        finally
-        {
-            Translations = JsonObject.FromJson(json);
-        }
+        if (Translations.TryGetValue(category, out var translations)) return translations;
+        var json = typeof(LangEx).Assembly.GetResourceContent($"lang.{category}.{Lang.CurrentLocale}.json");
+        translations = JsonObject.FromJson(json);
+        Translations.AddIfNotPresent(category, translations);
+        return translations;
     }
 
     /// <summary>
@@ -36,7 +30,8 @@ public static class LangEx
     /// <returns>A localised string representation of the boolean value.</returns>
     public static string BooleanString(bool state)
     {
-        return Translations[$"boolean-{state}"].AsString();
+        var translations = GetTranslationsFile("Gantry");
+        return translations[$"boolean-{state}"].AsString();
     }
 
     /// <summary>
@@ -46,7 +41,8 @@ public static class LangEx
     /// <returns>A localised string representation of the boolean value.</returns>
     public static string ConfirmationString(string value)
     {
-        return Translations[$"confirmation-{value}"].AsString();
+        var translations = GetTranslationsFile("Gantry");
+        return translations[$"confirmation-{value}"].AsString();
     }
 
     /// <summary>
@@ -56,7 +52,8 @@ public static class LangEx
     /// <returns>A localised string representation of the full name of the month of the year.</returns>
     public static string FullMonthString(DateTime dateTime)
     {
-        return Translations[$"datetime-months-full-{dateTime.Month}"].AsString();
+        var translations = GetTranslationsFile("Gantry");
+        return translations[$"datetime-months-full-{dateTime.Month}"].AsString();
     }
 
     /// <summary>
@@ -66,7 +63,8 @@ public static class LangEx
     /// <returns>A localised string representation of the abbreviated name of the month of the year.</returns>
     public static string AbbreviatedMonthString(DateTime dateTime)
     {
-        return Translations[$"datetime-months-abbr-{dateTime.Month}"].AsString();
+        var translations = GetTranslationsFile("Gantry");
+        return translations[$"datetime-months-abbr-{dateTime.Month}"].AsString();
     }
 
     /// <summary>
@@ -76,7 +74,8 @@ public static class LangEx
     /// <returns>A localised string representation of the full name of the day of the week.</returns>
     public static string FullDayString(DateTime dateTime)
     {
-        return Translations[$"datetime-days-full-{dateTime.Month}"].AsString();
+        var translations = GetTranslationsFile("Gantry");
+        return translations[$"datetime-days-full-{dateTime.Month}"].AsString();
     }
 
     /// <summary>
@@ -86,7 +85,8 @@ public static class LangEx
     /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
     public static string AbbreviatedDayString(DateTime dateTime)
     {
-        return Translations[$"datetime-days-abbr-{dateTime.Month}"].AsString();
+        var translations = GetTranslationsFile("Gantry");
+        return translations[$"datetime-days-abbr-{dateTime.Month}"].AsString();
     }
 
     /// <summary>
@@ -110,6 +110,31 @@ public static class LangEx
     public static string FeatureCode(string featureName, string path)
     {
         return $"{ModEx.ModInfo.ModID}:Features.{featureName}.{path}";
+    }
+
+    /// <summary>
+    ///     Returns a localised string.
+    /// </summary>
+    /// <param name="featureName">The name of the feature.</param>
+    /// <param name="path">The path to the feature based string to translate.</param>
+    /// <param name="args">The arguments to pass to the lang file.</param>
+    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
+    public static string EmbeddedFeatureString(string featureName, string path, params object[] args)
+    {
+        return GetGantryEmbedded(featureName, $"Features.{featureName}.{path}", args);
+    }
+
+    /// <summary>
+    ///     Returns a localised string.
+    /// </summary>
+    /// <param name="category">The category determines the embedded file to use for translations.</param>
+    /// <param name="path">The path to the feature based string to translate.</param>
+    /// <param name="args">The arguments to pass to the lang file.</param>
+    /// <returns>A localised string from the current mod's language files.</returns>
+    public static string GetGantryEmbedded(string category, string path, params object[] args)
+    {
+        var translations = GetTranslationsFile(category);
+        return string.Format(translations[path].AsString(), args);
     }
 
     /// <summary>

@@ -40,4 +40,12 @@ public static class CollectionExtensions
         }
         return list;
     }
+
+    /// <summary>
+    ///     Determines whether a single item is within an arbitrary array of items of the same type.
+    /// </summary>
+    /// <typeparam name="T">The type of item.</typeparam>
+    /// <param name="item">The items to find.</param>
+    /// <param name="options">The array of items to test against.</param>
+    public static bool IsOneOf<T>(this T item, params T[] options) => options.Contains(item);
 }

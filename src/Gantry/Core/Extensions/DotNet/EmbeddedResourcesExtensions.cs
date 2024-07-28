@@ -19,7 +19,8 @@ public static class EmbeddedResourcesExtensions
     /// <returns><c>true</c> if the embedded resource is found, <c>false</c> otherwise.</returns>
     public static bool ResourceExists(this Assembly assembly, string fileName)
     {
-        return assembly.GetManifestResourceNames().Any(p => p.EndsWith(fileName));
+        var resources = assembly.GetManifestResourceNames();
+        return resources.Any(p => p.EndsWith(fileName));
     }
 
     /// <summary>

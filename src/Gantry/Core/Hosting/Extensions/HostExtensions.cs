@@ -66,7 +66,21 @@ public static class HostExtensions
     /// <param name="side">The app side to load systems from.</param>
     public static void AddModSystems(this IServiceCollection services, EnumAppSide side)
     {
-        var modSystems = ApiEx.Current.ModLoader.Systems.Where(p => p.ShouldLoad(side));
+        var modSystems = ApiEx.Current.ModLoader.Systems.Where(p =>
+        {
+            try
+            {
+                return p.ShouldLoad(side);
+            }
+            catch(Exception ex)
+            {
+                ApiEx.Current.Logger.Error($"[Gantry] Could not add mod `{p.GetType().FullName}` to the service collection.");
+                ApiEx.Current.Logger.Error(ex);
+                return false;
+            }
+
+        });
+
         foreach (var system in modSystems)
         {
             services.AddSingleton(system.GetType(), system);

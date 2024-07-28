@@ -29,6 +29,8 @@ public static class ApiEx
 {
     private static readonly AsyncLocal<ClientMain?> _clientMain = new();
     private static readonly AsyncLocal<ServerMain?> _serverMain = new();
+    private static Thread? _serverThread;
+    private static Thread? _clientThread;
 
     #region Initialisation
 
@@ -38,10 +40,12 @@ public static class ApiEx
         {
             case EnumAppSide.Server:
                 _serverMain.Value = api.World as ServerMain;
+                _serverThread = Thread.CurrentThread;
                 api.Logger.GantryDebug("[Gantry] ApiEx: Added ServerMain.");
                 break;
             case EnumAppSide.Client:
                 _clientMain.Value = api.World as ClientMain;
+                _clientThread = Thread.CurrentThread;
                 api.Logger.GantryDebug("[Gantry] ApiEx: Added ClientMain.");
                 break;
             case EnumAppSide.Universal:
@@ -53,6 +57,11 @@ public static class ApiEx
     #endregion
 
     #region API Instances
+
+    /// <summary>
+    ///     The main thread for the current app side.
+    /// </summary>
+    public static Thread MainThread => OneOf(_clientThread, _serverThread);
 
     /// <summary>
     ///     The core API implemented by the client.<br/>
@@ -73,7 +82,7 @@ public static class ApiEx
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
-    public static ICoreAPI Current => OneOf<ICoreAPI>(Client!, Server!);
+    public static ICoreAPI Current => OneOf<ICoreAPI>(Client, Server);
 
     /// <summary>
     ///     The concrete implementation of the <see cref="IClientWorldAccessor"/> interface.<br/>

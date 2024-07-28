@@ -7,6 +7,10 @@ using JetBrains.Annotations;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 
+// ReSharper disable ConstantNullCoalescingCondition
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
+// ReSharper disable ConstantConditionalAccessQualifier
+
 namespace Gantry.Core;
 
 /// <summary>
@@ -98,10 +102,13 @@ public static class ModEx
     ///     Determines whether a given mod is installed, and enabled, on the current app-side.
     /// </summary>
     /// <param name="modId">The mod identifier.</param>
+    /// <param name="api">The api.</param>
     /// <returns><c>true</c> if the mod is enabled; otherwise, <c>false</c>.</returns>
-    public static bool IsModEnabled(string modId)
+    public static bool IsModEnabled(string modId, ICoreAPI api = null)
     {
-        return ApiEx.Current.ModLoader.IsModEnabled(modId);
+        api ??= ApiEx.Current;
+        var modEnabled = api.ModLoader.IsModEnabled(modId);
+        return modEnabled;
     }
 
     /// <summary>
@@ -115,9 +122,12 @@ public static class ModEx
     public static bool IsCurrentlyOnMainThread()
     {
         var thread = Thread.CurrentThread;
-        return thread.GetApartmentState() == ApartmentState.STA
-               && !thread.IsBackground
-               && !thread.IsThreadPoolThread
-               && thread.IsAlive;
+        var mainThread = ApiEx.MainThread;
+        return mainThread is not null
+            ? mainThread.ManagedThreadId == thread.ManagedThreadId
+            : thread.GetApartmentState() == ApartmentState.STA
+              && !thread.IsBackground
+              && !thread.IsThreadPoolThread
+              && thread.IsAlive;
     }
 }
