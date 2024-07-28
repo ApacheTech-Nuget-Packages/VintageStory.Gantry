@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Неважећи опсег. Важеће опције су: {0}",
+  "Features.EasyX.Scope.Description": "Промените да ли мод треба да користи глобална подешавања или подешавања по свету.",
+  "Features.EasyX.Scope": "Опсег подешавања: {0}",
+  "Features.EasyX.SetScope": "Опсег подешавања сада постављен на: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Дозвољава администратору сервера да промени подешавања мода на серверу.",
+
+  "Features.EasyX.Mode": "Режим {0}: {1}",
+  "Features.EasyX.SetMode": "Режим {0} сада постављен на: {1}",
+  "Features.EasyX.InvalidMode": "Неважећи приступни режим. Важеће опције су: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "Претрага за '{0}' није дала резултате. Покушајте поново.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "Претрага за '{0}' дала је више резултата. Молимо прецизирајте своје критеријуме претраге.",
+
+  "Features.EasyX.AccessMode.Description": "Промените приступни режим за тренутну функцију.",
+
+  "Features.EasyX.Whitelist.Description": "Додај/Уклони играче са беле листе за ову функцију.",
+  "Features.EasyX.Whitelist.Results": "Следећи играчи су тренутно на белој листи за {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Тренутно нема играча на белој листи за {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} је уклоњен са беле листе за {1}.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} је додат на белу листу за {1}.",
+
+  "Features.EasyX.Blacklist.Description": "Додај/Уклони играче са црне листе за ову функцију.",
+  "Features.EasyX.Blacklist.Results": "Следећи играчи су тренутно на црној листи за {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Тренутно нема играча на црној листи за {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} је уклоњен са црне листе за {1}.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} је додат на црну листу за {1}."
+}

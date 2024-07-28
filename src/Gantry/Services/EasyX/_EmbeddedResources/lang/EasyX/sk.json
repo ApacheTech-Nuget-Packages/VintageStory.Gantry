@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Neplatný rozsah. Platné možnosti sú: {0}",
+  "Features.EasyX.Scope.Description": "Zmeňte, či má mod používať globálne nastavenia alebo nastavenia pre každý svet zvlášť.",
+  "Features.EasyX.Scope": "Rozsah nastavení: {0}",
+  "Features.EasyX.SetScope": "Rozsah nastavení je teraz nastavený na: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Umožňuje administrátorovi servera meniť nastavenia modu na serveri.",
+
+  "Features.EasyX.Mode": "Režim {0}: {1}",
+  "Features.EasyX.SetMode": "Režim {0} je teraz nastavený na: {1}",
+  "Features.EasyX.InvalidMode": "Neplatný prístupový režim. Platné možnosti sú: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "Vyhľadávanie pre '{0}' neprinieslo žiadne výsledky. Skúste to prosím znova.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "Vyhľadávanie pre '{0}' prinieslo viacero výsledkov. Prosím, upresnite vyhľadávacie kritériá.",
+
+  "Features.EasyX.AccessMode.Description": "Zmeňte prístupový režim pre aktuálnu funkciu.",
+
+  "Features.EasyX.Whitelist.Description": "Pridať/Odstrániť hráčov z bieleho zoznamu pre túto funkciu.",
+  "Features.EasyX.Whitelist.Results": "Nasledujúci hráči sú momentálne na bielom zozname pre {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Momentálne nie sú žiadni hráči na bielom zozname pre {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} bol odstránený z bieleho zoznamu pre {1}.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} bol pridaný do bieleho zoznamu pre {1}.",
+
+  "Features.EasyX.Blacklist.Description": "Pridať/Odstrániť hráčov z čierneho zoznamu pre túto funkciu.",
+  "Features.EasyX.Blacklist.Results": "Nasledujúci hráči sú momentálne na čiernom zozname pre {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Momentálne nie sú žiadni hráči na čiernom zozname pre {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} bol odstránený z čierneho zoznamu pre {1}.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} bol pridaný do čierneho zoznamu pre {1}."
+}

@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Ambito non valido. Le opzioni valide sono: {0}",
+  "Features.EasyX.Scope.Description": "Modifica se il mod dovrebbe utilizzare impostazioni globali o impostazioni per mondo.",
+  "Features.EasyX.Scope": "Ambito delle impostazioni: {0}",
+  "Features.EasyX.SetScope": "Ambito delle impostazioni ora impostato su: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Consente all'amministratore del server di modificare le impostazioni del mod sul server.",
+
+  "Features.EasyX.Mode": "Modalità {0}: {1}",
+  "Features.EasyX.SetMode": "La modalità {0} ora è impostata su: {1}",
+  "Features.EasyX.InvalidMode": "Modalità di accesso non valida. Le opzioni valide sono: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "La ricerca per '{0}' non ha prodotto risultati. Si prega di riprovare.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "La ricerca per '{0}' ha prodotto più risultati. Si prega di affinare i termini di ricerca.",
+
+  "Features.EasyX.AccessMode.Description": "Modifica la modalità di accesso per la funzionalità corrente.",
+
+  "Features.EasyX.Whitelist.Description": "Aggiungi/Rimuovi giocatori dalla whitelist per questa funzionalità.",
+  "Features.EasyX.Whitelist.Results": "I seguenti giocatori sono attualmente nella whitelist per {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Attualmente non ci sono giocatori nella whitelist per {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} è stato rimosso dalla whitelist per {1}.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} è stato aggiunto alla whitelist per {1}.",
+
+  "Features.EasyX.Blacklist.Description": "Aggiungi/Rimuovi giocatori dalla blacklist per questa funzionalità.",
+  "Features.EasyX.Blacklist.Results": "I seguenti giocatori sono attualmente nella blacklist per {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Attualmente non ci sono giocatori nella blacklist per {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} è stato rimosso dalla blacklist per {1}.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} è stato aggiunto alla blacklist per {1}."
+}

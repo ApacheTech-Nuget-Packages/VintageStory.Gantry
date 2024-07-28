@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "유효하지 않은 범위입니다. 유효한 옵션은: {0}",
+  "Features.EasyX.Scope.Description": "모드가 전역 설정을 사용할지, 월드별 설정을 사용할지 변경합니다.",
+  "Features.EasyX.Scope": "설정 범위: {0}",
+  "Features.EasyX.SetScope": "설정 범위가 이제 {0}로 설정되었습니다.",
+
+  "Features.EasyX.ServerCommandDescription": "서버 관리자가 서버의 모드 설정을 변경할 수 있도록 합니다.",
+
+  "Features.EasyX.Mode": "{0} 모드: {1}",
+  "Features.EasyX.SetMode": "{0} 모드가 이제 {1}로 설정되었습니다.",
+  "Features.EasyX.InvalidMode": "유효하지 않은 액세스 모드입니다. 유효한 옵션은: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "'{0}'에 대한 검색 결과가 없습니다. 다시 시도해 주세요.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "'{0}'에 대한 검색 결과가 여러 개 있습니다. 검색 조건을 구체화해 주세요.",
+
+  "Features.EasyX.AccessMode.Description": "현재 기능에 대한 액세스 모드를 변경합니다.",
+
+  "Features.EasyX.Whitelist.Description": "이 기능에 대한 화이트리스트에 플레이어를 추가/제거합니다.",
+  "Features.EasyX.Whitelist.Results": "현재 {0}의 화이트리스트에 있는 플레이어는 다음과 같습니다:",
+  "Features.EasyX.Whitelist.NoResults": "현재 {0}의 화이트리스트에 플레이어가 없습니다.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0}이(가) {1}의 화이트리스트에서 제거되었습니다.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0}이(가) {1}의 화이트리스트에 추가되었습니다.",
+
+  "Features.EasyX.Blacklist.Description": "이 기능에 대한 블랙리스트에 플레이어를 추가/제거합니다.",
+  "Features.EasyX.Blacklist.Results": "현재 {0}의 블랙리스트에 있는 플레이어는 다음과 같습니다:",
+  "Features.EasyX.Blacklist.NoResults": "현재 {0}의 블랙리스트에 플레이어가 없습니다.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0}이(가) {1}의 블랙리스트에서 제거되었습니다.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0}이(가) {1}의 블랙리스트에 추가되었습니다."
+}

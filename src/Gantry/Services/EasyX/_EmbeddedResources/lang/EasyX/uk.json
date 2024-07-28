@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Недійсна область. Допустимі варіанти: {0}",
+  "Features.EasyX.Scope.Description": "Змініть, чи повинен мод використовувати глобальні налаштування або налаштування для кожного світу.",
+  "Features.EasyX.Scope": "Область налаштувань: {0}",
+  "Features.EasyX.SetScope": "Область налаштувань тепер встановлена на: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Дозволяє адміністратору сервера змінювати налаштування моду на сервері.",
+
+  "Features.EasyX.Mode": "Режим {0}: {1}",
+  "Features.EasyX.SetMode": "Режим {0} тепер встановлений на: {1}",
+  "Features.EasyX.InvalidMode": "Недійсний режим доступу. Допустимі варіанти: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "Пошук за '{0}' не дав результатів. Спробуйте ще раз.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "Пошук за '{0}' дав кілька результатів. Уточніть свої пошукові терміни.",
+
+  "Features.EasyX.AccessMode.Description": "Змініть режим доступу для поточної функції.",
+
+  "Features.EasyX.Whitelist.Description": "Додати/Видалити гравців із білого списку для цієї функції.",
+  "Features.EasyX.Whitelist.Results": "Наступні гравці зараз у білому списку для {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Зараз немає гравців у білому списку для {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} був видалений із білого списку для {1}.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} був доданий до білого списку для {1}.",
+
+  "Features.EasyX.Blacklist.Description": "Додати/Видалити гравців із чорного списку для цієї функції.",
+  "Features.EasyX.Blacklist.Results": "Наступні гравці зараз у чорному списку для {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Зараз немає гравців у чорному списку для {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} був видалений із чорного списку для {1}.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} був доданий до чорного списку для {1}."
+}

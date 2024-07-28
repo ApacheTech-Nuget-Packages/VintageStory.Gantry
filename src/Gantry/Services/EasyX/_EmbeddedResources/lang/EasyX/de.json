@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Ungültiger Bereich. Gültige Optionen sind: {0}",
+  "Features.EasyX.Scope.Description": "Ändern, ob das Mod globale Einstellungen oder weltspezifische Einstellungen verwenden soll.",
+  "Features.EasyX.Scope": "Einstellungsbereich: {0}",
+  "Features.EasyX.SetScope": "Einstellungsbereich jetzt auf {0} gesetzt.",
+
+  "Features.EasyX.ServerCommandDescription": "Ermöglicht dem Serveradministrator, die Einstellungen des Mods auf dem Server zu ändern.",
+
+  "Features.EasyX.Mode": "{0} Modus: {1}",
+  "Features.EasyX.SetMode": "Modus {0} jetzt auf {1} gesetzt.",
+  "Features.EasyX.InvalidMode": "Ungültiger Zugriffsmodus. Gültige Optionen sind: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "Die Suche nach '{0}' ergab keine Ergebnisse. Bitte versuchen Sie es erneut.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "Die Suche nach '{0}' ergab mehrere Ergebnisse. Bitte verfeinern Sie Ihre Suchbegriffe.",
+
+  "Features.EasyX.AccessMode.Description": "Ändern Sie den Zugriffsmodus für die aktuelle Funktion.",
+
+  "Features.EasyX.Whitelist.Description": "Spieler zur Whitelist dieser Funktion hinzufügen/entfernen.",
+  "Features.EasyX.Whitelist.Results": "Die folgenden Spieler befinden sich derzeit auf der Whitelist für {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Derzeit befinden sich keine Spieler auf der Whitelist für {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} wurde von der Whitelist für {1} entfernt.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} wurde zur Whitelist für {1} hinzugefügt.",
+
+  "Features.EasyX.Blacklist.Description": "Spieler zur Blacklist dieser Funktion hinzufügen/entfernen.",
+  "Features.EasyX.Blacklist.Results": "Die folgenden Spieler befinden sich derzeit auf der Blacklist für {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Derzeit befinden sich keine Spieler auf der Blacklist für {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} wurde von der Blacklist für {1} entfernt.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} wurde zur Blacklist für {1} hinzugefügt."
+}

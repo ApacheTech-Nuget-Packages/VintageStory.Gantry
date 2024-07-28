@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Ámbito inválido. Las opciones válidas son: {0}",
+  "Features.EasyX.Scope.Description": "Cambiar si el mod debe usar configuraciones globales o configuraciones por mundo.",
+  "Features.EasyX.Scope": "Ámbito de configuración: {0}",
+  "Features.EasyX.SetScope": "El ámbito de configuración ahora está establecido en: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Permite al administrador del servidor cambiar las configuraciones del mod en el servidor.",
+
+  "Features.EasyX.Mode": "Modo {0}: {1}",
+  "Features.EasyX.SetMode": "El modo {0} ahora está establecido en: {1}",
+  "Features.EasyX.InvalidMode": "Modo de acceso inválido. Las opciones válidas son: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "La búsqueda de '{0}' no arrojó resultados. Por favor, inténtelo de nuevo.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "La búsqueda de '{0}' arrojó múltiples resultados. Por favor, refine sus términos de búsqueda.",
+
+  "Features.EasyX.AccessMode.Description": "Cambiar el modo de acceso para la función actual.",
+
+  "Features.EasyX.Whitelist.Description": "Agregar/Eliminar jugadores de la lista blanca para esta función.",
+  "Features.EasyX.Whitelist.Results": "Los siguientes jugadores están actualmente en la lista blanca para {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Actualmente no hay jugadores en la lista blanca para {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} ha sido eliminado de la lista blanca para {1}.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} ha sido agregado a la lista blanca para {1}.",
+
+  "Features.EasyX.Blacklist.Description": "Agregar/Eliminar jugadores de la lista negra para esta función.",
+  "Features.EasyX.Blacklist.Results": "Los siguientes jugadores están actualmente en la lista negra para {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Actualmente no hay jugadores en la lista negra para {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} ha sido eliminado de la lista negra para {1}.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} ha sido agregado a la lista negra para {1}."
+}

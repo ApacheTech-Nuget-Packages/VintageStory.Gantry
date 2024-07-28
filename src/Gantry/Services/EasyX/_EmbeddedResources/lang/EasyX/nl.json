@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Ongeldige reikwijdte. Geldige opties zijn: {0}",
+  "Features.EasyX.Scope.Description": "Verander of de mod globale instellingen moet gebruiken, of per wereldinstellingen.",
+  "Features.EasyX.Scope": "Instellingen reikwijdte: {0}",
+  "Features.EasyX.SetScope": "Instellingen reikwijdte nu ingesteld op: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Stelt de serverbeheerder in staat om de instellingen van de mod op de server te wijzigen.",
+
+  "Features.EasyX.Mode": "{0} Modus: {1}",
+  "Features.EasyX.SetMode": "{0} modus nu ingesteld op: {1}",
+  "Features.EasyX.InvalidMode": "Ongeldige toegangsmodus. Geldige opties zijn: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "De zoekopdracht naar '{0}' leverde geen resultaten op. Probeer het opnieuw.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "De zoekopdracht naar '{0}' leverde meerdere resultaten op. Verfijn uw zoektermen.",
+
+  "Features.EasyX.AccessMode.Description": "Verander de toegangsmodus voor de huidige functie.",
+
+  "Features.EasyX.Whitelist.Description": "Spelers toevoegen/verwijderen van de whitelist voor deze functie.",
+  "Features.EasyX.Whitelist.Results": "De volgende spelers staan momenteel op de whitelist voor {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Er staan momenteel geen spelers op de whitelist voor {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} is verwijderd van de whitelist voor {1}.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} is toegevoegd aan de whitelist voor {1}.",
+
+  "Features.EasyX.Blacklist.Description": "Spelers toevoegen/verwijderen van de blacklist voor deze functie.",
+  "Features.EasyX.Blacklist.Results": "De volgende spelers staan momenteel op de blacklist voor {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Er staan momenteel geen spelers op de blacklist voor {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} is verwijderd van de blacklist voor {1}.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} is toegevoegd aan de blacklist voor {1}."
+}

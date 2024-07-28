@@ -1,0 +1,29 @@
+{
+  "Features.EasyX.InvalidScope": "Neplatný rozsah. Platné možnosti jsou: {0}",
+  "Features.EasyX.Scope.Description": "Změňte, zda by mod měl používat globální nastavení nebo nastavení pro jednotlivé světy.",
+  "Features.EasyX.Scope": "Rozsah nastavení: {0}",
+  "Features.EasyX.SetScope": "Rozsah nastavení nyní nastaven na: {0}",
+
+  "Features.EasyX.ServerCommandDescription": "Umožňuje správci serveru změnit nastavení modu na serveru.",
+
+  "Features.EasyX.Mode": "{0} Režim: {1}",
+  "Features.EasyX.SetMode": "Režim {0} nyní nastaven na: {1}",
+  "Features.EasyX.InvalidMode": "Neplatný přístupový režim. Platné možnosti jsou: {0}",
+
+  "Features.EasyX.PlayerSearch.NoResults": "Hledání '{0}' nepřineslo žádné výsledky. Zkuste to prosím znovu.",
+  "Features.EasyX.PlayerSearch.MultipleResults": "Hledání '{0}' přineslo více výsledků. Upřesněte prosím své vyhledávací podmínky.",
+
+  "Features.EasyX.AccessMode.Description": "Změňte přístupový režim pro aktuální funkci.",
+
+  "Features.EasyX.Whitelist.Description": "Přidat/Odebrat hráče z whitelistu pro tuto funkci.",
+  "Features.EasyX.Whitelist.Results": "Následující hráči jsou aktuálně na whitelistu pro {0}:",
+  "Features.EasyX.Whitelist.NoResults": "Aktuálně nejsou na whitelistu žádní hráči pro {0}.",
+  "Features.EasyX.Whitelist.PlayerRemoved": "{0} byl odebrán z whitelistu pro {1}.",
+  "Features.EasyX.Whitelist.PlayerAdded": "{0} byl přidán na whitelist pro {1}.",
+
+  "Features.EasyX.Blacklist.Description": "Přidat/Odebrat hráče z blacklistu pro tuto funkci.",
+  "Features.EasyX.Blacklist.Results": "Následující hráči jsou aktuálně na blacklistu pro {0}:",
+  "Features.EasyX.Blacklist.NoResults": "Aktuálně nejsou na blacklistu žádní hráči pro {0}.",
+  "Features.EasyX.Blacklist.PlayerRemoved": "{0} byl odebrán z blacklistu pro {1}.",
+  "Features.EasyX.Blacklist.PlayerAdded": "{0} byl přidán na blacklist pro {1}."
+}
