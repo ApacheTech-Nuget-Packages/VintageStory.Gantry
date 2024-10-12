@@ -1,5 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.Text;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace Gantry.Core.Extensions.DotNet;
 
@@ -40,5 +42,23 @@ public static class StringExtensions
             if (char.IsUpper(value[i])) initials.Append(value[i]);
         }
         return initials.ToString().ToLower();
+    }
+
+    /// <summary>
+    ///     Serialises an object to an XML string with indentation.
+    /// </summary>
+    /// <param name="this">The object to serialise.</param>
+    /// <returns>The XML string representation of the object.</returns>
+    public static string ToXml(this object @this)
+    {
+        var xmlSerializer = new XmlSerializer(@this.GetType());
+        var stringBuilder = new StringBuilder();
+
+        using (var writer = XmlWriter.Create(stringBuilder, new XmlWriterSettings { Indent = true }))
+        {
+            xmlSerializer.Serialize(writer, @this);
+        }
+
+        return stringBuilder.ToString();
     }
 }

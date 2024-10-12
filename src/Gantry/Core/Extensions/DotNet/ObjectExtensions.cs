@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿#nullable enable
+
+using System.Reflection;
 
 namespace Gantry.Core.Extensions.DotNet;
 
@@ -29,7 +31,7 @@ public static class ObjectExtensions
             if (property.CanRead && property.CanWrite)
             {
                 // Get the value from the source object
-                object value = property.GetValue(source);
+                var value = property.GetValue(source);
 
                 // Set the value to the target object
                 property.SetValue(target, value);
@@ -58,7 +60,7 @@ public static class ObjectExtensions
             if (property.CanRead && property.CanWrite)
             {
                 // Get the value from the source object
-                object value = property.GetValue(source);
+                var value = property.GetValue(source);
 
                 // Set the value to the target object
                 property.SetValue(target, value);
@@ -86,7 +88,7 @@ public static class ObjectExtensions
             if (property.CanRead && property.CanWrite)
             {
                 // Get the value from the source object
-                object value = property.GetValue(source);
+                var value = property.GetValue(source);
 
                 // Set the value to the target object
                 property.SetValue(target, value);
@@ -94,5 +96,21 @@ public static class ObjectExtensions
         }
         
         return target;
+    }
+
+
+
+    /// <summary>
+    ///     Dynamically safe-casts the object instance to a specified type.
+    /// </summary>
+    /// <typeparam name="T">The type of object to safe-cast to.</typeparam>
+    /// <param name="obj">The instance to safe-cast.</param>
+    /// <returns>An instance of Type <typeparamref name="T" />.</returns>
+    public static T As<T>(this object obj)
+    {
+        return Type.GetTypeCode(typeof(T)) is TypeCode.DateTime or TypeCode.DBNull or TypeCode.Empty
+            ? throw new ArgumentOutOfRangeException(nameof(T),
+                "Objects of this TypeCode cannot be cast to, dynamically.")
+            : obj is T t ? t : default!;
     }
 }

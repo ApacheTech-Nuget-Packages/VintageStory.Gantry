@@ -13,7 +13,7 @@ namespace Gantry.Core.Brighter.Hosting;
 /// </summary>
 /// <seealso cref="IBrighterBuilder" />
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public class ServiceCollectionBrighterBuilder : IBrighterBuilder
+internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
 {
     private readonly ServiceCollectionSubscriberRegistry _serviceCollectionSubscriberRegistry;
     private readonly ServiceCollectionMessageMapperRegistry _mapperRegistry;
@@ -190,13 +190,32 @@ public class ServiceCollectionBrighterBuilder : IBrighterBuilder
     {
         assemblies = assemblies.Concat([assembly]).ToArray();
 
-        var subscribers =
-            from ti in assemblies.SelectMany(a => a.DefinedTypes).Distinct()
-            where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
-            from i in ti.ImplementedInterfaces
-            where i.IsGenericType && i.GetGenericTypeDefinition() == interfaceType
-            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
-            select new { RequestType = i.GenericTypeArguments.First(), HandlerType = ti.AsType() };
+        // Step 1: Get all defined types from all assemblies and flatten them into a single collection.
+        var definedTypes = assemblies.SelectMany(a => a.DefinedTypes).ToList();
+
+        // Step 2: Remove duplicate types to ensure distinct defined types.
+        var distinctTypes = definedTypes.Distinct().ToList();
+
+        // Step 3: Filter the types to include only classes that are not abstract and not interfaces.
+        var classTypes = distinctTypes.Where(ti => ti.IsClass && !ti.IsAbstract && !ti.IsInterface).ToList();
+
+        // Step 4: Select the implemented interfaces of each class.
+        var implementedInterfaces = classTypes.SelectMany(ti => ti.ImplementedInterfaces, (ti, i) => new { TypeInfo = ti, Interface = i }).ToList();
+
+        // Step 5: Filter the implemented interfaces to include only those that are generic and match the specified generic interface type.
+        var matchingInterfaces = implementedInterfaces.Where(x => x.Interface.IsGenericType && x.Interface.GetGenericTypeDefinition() == interfaceType).ToList();
+
+        // Step 6: Further filter to only include types that have the `RunsOnAttribute` and where `ShouldRun(side)` returns true.
+        var filteredTypes = matchingInterfaces.Where(x => 
+        {
+            var attribute = x.TypeInfo.GetCustomAttribute<RunsOnAttribute>();
+            if (attribute is null) return true;
+            var shouldRun = attribute.ShouldRun(side);
+            return shouldRun;
+        }).ToList();
+
+        // Step 7: Select the desired result, which includes the request type and the handler type.
+        var subscribers = filteredTypes.Select(x => new { RequestType = x.Interface.GenericTypeArguments.First(), HandlerType = x.TypeInfo.AsType() }).ToList();
 
         foreach (var subscriber in subscribers)
         {

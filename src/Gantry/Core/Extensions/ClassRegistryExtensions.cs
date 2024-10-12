@@ -23,6 +23,20 @@ public static class ClassRegistryExtensions
     }
 
     /// <summary>
+    ///     Registers a new Item class. <br/>
+    ///     Must happen before any blocks are loaded. <br/>
+    ///     Must be registered on both the client, and server.
+    /// </summary>
+    /// <typeparam name="T">The type of the Item to register.</typeparam>
+    /// <param name="api">The game's internal API.</param>
+    /// <param name="name">The name to give to the item.</param>
+    public static void RegisterItem<T>(this ICoreAPI api, string name = null)
+    {
+        name ??= nameof(T);
+        api.RegisterItemClass(name, typeof(T));
+    }
+
+    /// <summary>
     ///     Registers a new Block class. <br/>
     ///     Must happen before any blocks are loaded. <br/>
     ///     Must be registered on both the client, and server.
@@ -121,5 +135,19 @@ public static class ClassRegistryExtensions
     {
         var type = typeof(T);
         api.RegisterCollectibleBehaviorClass(type.Name, type);
+    }
+
+
+    /// <summary>
+    ///     Registers a new Collectible Behaviour. <br/>
+    ///     Must be registered on both the client, and server.
+    /// </summary>
+    /// <typeparam name="T">The type of the Collectible Behaviour to register.</typeparam>
+    /// <param name="api">The game's internal API.</param>
+    /// <param name="name">The name to give to the behaviour.</param>
+    public static void RegisterCollectibleBehaviour<T>(this ICoreAPI api, string name = null)
+    {
+        name ??= nameof(T);
+        api.RegisterCollectibleBehaviorClass(name, typeof(T));
     }
 }

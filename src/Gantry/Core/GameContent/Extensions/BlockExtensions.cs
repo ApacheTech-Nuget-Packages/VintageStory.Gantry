@@ -1,0 +1,44 @@
+using Vintagestory.API.Common;
+
+using Vintagestory.GameContent;
+
+namespace Gantry.Core.GameContent.Extensions;
+
+/// <summary>
+///     Extends the functionality of blocks within the game.
+/// </summary>
+public static class BlockExtensions
+{
+    /// <summary>
+    ///     Determines whether the block is an air block.
+    /// </summary>
+    /// <param name="block">The block to check.</param>
+    public static bool IsAirBlock(this Block block)
+    {
+        block ??= ApiEx.Current.World.GetBlock(0);
+        return block.Id == 0;
+    }
+
+    /// <summary>
+    ///     Determines whether the block not culled.
+    /// </summary>
+    /// <param name="block">The block to check.</param>
+    public static bool IsNonCulled(this Block block)
+    {
+        return IsTypeNonCulled(block) || block.BlockBehaviors.Any(IsTypeNonCulled);
+    }
+
+    private static bool IsTypeNonCulled(object obj)
+    {
+        return NonCulledTypes.Contains(obj.GetType()) || NonCulledTypes.Contains(obj.GetType().BaseType);
+    }
+
+    private static readonly List<Type> NonCulledTypes =
+    [
+        typeof(BlockFernTree),
+        typeof(BlockPlant),
+        typeof(BlockVines),
+        typeof(BlockLeaves),
+        typeof(BlockSeaweed)
+    ];
+}

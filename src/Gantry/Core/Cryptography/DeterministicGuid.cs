@@ -19,9 +19,8 @@ public static class DeterministicGuid
     {
         // use MD5 hash to get a 16-byte hash of the string.
         Guard.AgainstNullAndEmpty(nameof(data), data);
-        using var provider = MD5.Create();
         var inputBytes = Encoding.Default.GetBytes(string.Concat(data));
-        var hashBytes = provider.ComputeHash(inputBytes);
+        var hashBytes = MD5.HashData(inputBytes);
         return new Guid(hashBytes);
     }
 }

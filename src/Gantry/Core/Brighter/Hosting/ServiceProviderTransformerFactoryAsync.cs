@@ -7,7 +7,7 @@ namespace Gantry.Core.Brighter.Hosting;
 /// <summary>
 /// A factory for creating transformers, backed by the .NET Service Collection
 /// </summary>
-public class ServiceProviderTransformerFactoryAsync : IAmAMessageTransformerFactoryAsync
+internal class ServiceProviderTransformerFactoryAsync : IAmAMessageTransformerFactoryAsync
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly bool _isTransient;

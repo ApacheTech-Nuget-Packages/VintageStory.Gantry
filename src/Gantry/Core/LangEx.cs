@@ -1,6 +1,8 @@
-﻿using ApacheTech.Common.Extensions.System;
+﻿#nullable enable
+using ApacheTech.Common.Extensions.System;
 using Gantry.Core.Extensions.DotNet;
 using JetBrains.Annotations;
+using Newtonsoft.Json;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 
@@ -14,13 +16,21 @@ public static class LangEx
 {
     private static readonly Dictionary<string, JsonObject> Translations = [];
 
-    private static JsonObject GetTranslationsFile(string category)
+    private static JsonObject GetTranslationsFile(string category = "Gantry", string? locale = null)
     {
-        if (Translations.TryGetValue(category, out var translations)) return translations;
-        var json = typeof(LangEx).Assembly.GetResourceContent($"lang.{category}.{Lang.CurrentLocale}.json");
-        translations = JsonObject.FromJson(json);
-        Translations.AddIfNotPresent(category, translations);
-        return translations;
+        locale ??= Lang.CurrentLocale;
+        try
+        {
+            if (Translations.TryGetValue(category, out var translations)) return translations;
+            var json = typeof(LangEx).Assembly.GetResourceContent($"lang.{category}.{locale}.json");
+            translations = JsonObject.FromJson(json);
+            Translations.AddIfNotPresent(category, translations);
+            return translations;
+        }
+        catch (JsonReaderException)
+        {
+            return GetTranslationsFile(locale: "en");
+        }
     }
 
     /// <summary>

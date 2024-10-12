@@ -5,7 +5,7 @@ namespace Gantry.Core.Brighter.Hosting;
 /// <summary>
 /// Creates a message mapper from the underlying .NET IoC container
 /// </summary>
-public class ServiceProviderMapperFactoryAsync : IAmAMessageMapperFactoryAsync
+internal class ServiceProviderMapperFactoryAsync : IAmAMessageMapperFactoryAsync
 {
     private readonly IServiceProvider _serviceProvider;
 

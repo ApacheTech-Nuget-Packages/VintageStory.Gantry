@@ -1,4 +1,7 @@
 ﻿using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+using Gantry.Core;
+using Gantry.Core.Extensions.Api;
+using Gantry.Core.Extensions.DotNet;
 using Gantry.Core.Hosting;
 using Gantry.Core.ModSystems;
 using Gantry.Services.Network;
@@ -9,8 +12,8 @@ namespace Gantry.Services.EasyX.Abstractions;
 /// <summary>
 ///     
 /// </summary>
-public abstract class EasyXClientSystemBase<TClientSettings, TSettings> : ClientModSystem
-    where TClientSettings : class, IEasyXClientSettings<TSettings>, new()
+public abstract class EasyXClientSystemBase<TClientSettings> : ClientModSystem
+    where TClientSettings : class, IEasyXClientSettings, new()
 {
     /// <summary>
     ///     The settings used to configure the mod.
@@ -23,6 +26,11 @@ public abstract class EasyXClientSystemBase<TClientSettings, TSettings> : Client
         IOC.Services.Resolve<IClientNetworkService>()
             .DefaultClientChannel
             .RegisterMessageType<TClientSettings>()
-            .SetMessageHandler<TClientSettings>(p => Settings = p);
+            .SetMessageHandler<TClientSettings>(packet =>
+            {
+                api.Logger.GantryDebug($"Settings for {GetType().Name}:");
+                api.Logger.GantryDebug(packet.ToXml());
+                Settings = packet;
+            });
     }
 }

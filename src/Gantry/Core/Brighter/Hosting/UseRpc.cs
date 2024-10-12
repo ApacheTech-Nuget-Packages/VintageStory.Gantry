@@ -8,7 +8,7 @@ namespace Gantry.Core.Brighter.Hosting;
 /// Requires blocking for a response on a queue identified by producer to consumer
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public class UseRpc : IUseRpc
+internal class UseRpc : IUseRpc
 {
     /// <summary>
     ///  	Initialises a new instance of the <see cref="UseRpc"/> class.

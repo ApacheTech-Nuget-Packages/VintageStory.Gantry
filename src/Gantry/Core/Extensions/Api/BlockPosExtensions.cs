@@ -1,4 +1,4 @@
-﻿using Gantry.Core.Abstractions;
+﻿using Gantry.Core.GameContent.Abstractions;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;

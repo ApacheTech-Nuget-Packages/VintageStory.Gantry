@@ -8,7 +8,7 @@ namespace Gantry.Core.Brighter.Hosting;
 /// <summary>
 ///     Provides options for the BrighterSlim command processor.
 /// </summary>
-public class BrighterOptions : IBrighterOptions
+internal class BrighterOptions : IBrighterOptions
 {
     /// <summary>
     ///     Configures the lifetime of the Command Processor. Defaults to Transient.

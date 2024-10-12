@@ -7,7 +7,7 @@ namespace Gantry.Core.Annotation;
 ///     Indicates that the decorated member or object is only meant for use on a specified app side. It is up to the developer to enforce this rule.
 /// </summary>
 /// <seealso cref="Attribute" />
-[AttributeUsage(AttributeTargets.All, Inherited = false)]
+[AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
 [UsedImplicitly(ImplicitUseTargetFlags.All)]
 public class RunsOnAttribute : Attribute
 {
@@ -30,5 +30,5 @@ public class RunsOnAttribute : Attribute
     /// </summary>
     /// <param name="side">The side.</param>
     public bool ShouldRun(EnumAppSide side)
-        => side == EnumAppSide.Universal || side == Side;
+        => Side == EnumAppSide.Universal || side == Side;
 }

@@ -39,6 +39,9 @@ public abstract class ModHost : UniversalModSystem
     /// </summary>
     protected ModHost(bool debugMode = false)
     {
+#if DEBUG
+        debugMode = true;
+#endif
         RuntimeEnv.DebugOutOfRangeBlockAccess = debugMode;
         ModEx.DebugMode = debugMode;
         Harmony.DEBUG = debugMode;

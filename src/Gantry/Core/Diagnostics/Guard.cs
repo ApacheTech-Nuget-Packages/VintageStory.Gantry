@@ -32,7 +32,7 @@ public static class Guard
     {
         if (type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
             .Any(ctor => ctor.GetParameters().Length == 0)) return;
-        var error = $"Type '{type.FullName}' must have a default constructor.";
+        var error = $"Type '{type.FullName}' must have a parameterless constructor.";
         throw new ArgumentException(error, argumentName);
     }
 
@@ -44,7 +44,7 @@ public static class Guard
     /// <exception cref="ArgumentNullException"></exception>
     public static void AgainstNullAndEmpty(string argumentName, string value)
     {
-        if (!string.IsNullOrWhiteSpace(value)) return;
+        if (!string.IsNullOrEmpty(value)) return;
         throw new ArgumentNullException(argumentName);
     }
 

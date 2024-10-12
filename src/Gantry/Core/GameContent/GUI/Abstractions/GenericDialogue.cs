@@ -1,4 +1,4 @@
-﻿using Gantry.Core.Extensions.GameContent.Gui;
+﻿using Gantry.Core.GameContent.Extensions.Gui;
 using Gantry.Core.GameContent.GUI.Helpers;
 using JetBrains.Annotations;
 using Vintagestory.API.Client;

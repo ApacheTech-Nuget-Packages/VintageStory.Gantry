@@ -6,7 +6,7 @@ namespace Gantry.Core.Brighter.Hosting;
 ///     The Transformer Registry is used to help us register with the Service Collection when using Brighter .NET Core Support
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public interface ITransformerRegistry
+internal interface ITransformerRegistry
 {
     /// <summary>
     ///     Register a transform with the IServiceCollection using the ServiceLifetime

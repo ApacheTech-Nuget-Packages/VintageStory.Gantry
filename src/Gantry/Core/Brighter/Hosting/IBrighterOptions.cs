@@ -10,7 +10,7 @@ namespace Gantry.Core.Brighter.Hosting;
 ///     Provides options for the BrighterSlim command processor.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public interface IBrighterOptions
+internal interface IBrighterOptions
 {
     /// <summary>
     ///     Configures the lifetime of the Command Processor.

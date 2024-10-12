@@ -10,7 +10,7 @@ namespace Gantry.Services.EasyX.ChatCommands.Parsers;
 ///     Parses a string as a <see cref="AccessMode"/> value, allowing partial matches.
 /// </summary>
 /// <seealso cref="ArgumentParserBase" />
-internal class AccessModeParser(string argName, bool isMandatoryArg) : ArgumentParserBase(argName, isMandatoryArg)
+public class AccessModeParser(string argName, bool isMandatoryArg) : ArgumentParserBase(argName, isMandatoryArg)
 {
     /// <summary />
     public AccessMode? Mode { get; private set; }

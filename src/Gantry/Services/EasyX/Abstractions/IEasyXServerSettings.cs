@@ -1,5 +1,4 @@
 ﻿using Gantry.Services.EasyX.ChatCommands.DataStructures;
-using Gantry.Services.FileSystem.Configuration.Abstractions;
 using JetBrains.Annotations;
 
 namespace Gantry.Services.EasyX.Abstractions;
@@ -8,7 +7,7 @@ namespace Gantry.Services.EasyX.Abstractions;
 ///     Represents the base settings for each EasyX feature within this mod.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.All)]
-public interface IEasyXServerSettings<TSettings>
+public interface IEasyXServerSettings
 {
     /// <summary>
     ///     Determines whether the feature should be used.

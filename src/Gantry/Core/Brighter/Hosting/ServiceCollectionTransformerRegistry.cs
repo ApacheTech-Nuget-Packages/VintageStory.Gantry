@@ -8,7 +8,7 @@ namespace Gantry.Core.Brighter.Hosting;
 ///     We don't have a separate registry for transformers, but we do need to understand
 ///     the service lifetime options for the transformers which we want to register
 /// </summary>
-public class ServiceCollectionTransformerRegistry : ITransformerRegistry
+internal class ServiceCollectionTransformerRegistry : ITransformerRegistry
 {
     private readonly IServiceCollection _services;
     private readonly ServiceLifetime _serviceLifetime;

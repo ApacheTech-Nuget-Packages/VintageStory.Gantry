@@ -11,7 +11,7 @@ namespace Gantry.Core.Brighter.Hosting;
 ///     Constructs Brighter message mappers and handlers
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public interface IBrighterBuilder
+internal interface IBrighterBuilder
 {
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests, IHandleRequestsAsync, IAmAMessageMapper and register them with ServiceCollection.

@@ -15,7 +15,7 @@ namespace Gantry.Core.Brighter.Hosting;
 ///     Service Collection Extensions.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public static class ServiceCollectionExtensions
+internal static class ServiceCollectionExtensions
 {
     /// <summary>
     /// Will add Brighter into the .NET IoC Container - ServiceCollection

@@ -10,7 +10,7 @@ namespace Gantry.Core.Brighter.Hosting;
 /// Not used directly
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public class ServiceCollectionMessageMapperRegistry
+internal class ServiceCollectionMessageMapperRegistry
 {
     private readonly IServiceCollection _serviceCollection;
     private readonly ServiceLifetime _lifetime;

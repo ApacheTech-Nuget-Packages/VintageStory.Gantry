@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Gantry.Core;
 using Gantry.Services.FileSystem.Enums;
 using HarmonyLib;
 
@@ -42,7 +43,18 @@ public class ObservableFeatureSettings<T> : ObservableObject<T> where T : class,
 
     private void OnPropertyChanged(object instance, string propertyName)
     {
-        if (!Active) return;
-        ModSettings.For(_scope).Save(Object, _featureName);
+        try
+        {
+            if (!Active) return;
+            if (Object is null) return;
+            if (string.IsNullOrEmpty(_featureName)) return;
+            var settings = ModSettings.For(_scope);
+            if (settings is null) return;
+            settings.Save(Object, _featureName);
+        }
+        catch (Exception ex)
+        {
+            ApiEx.Current.Logger.Error(ex);
+        }
     }
 }

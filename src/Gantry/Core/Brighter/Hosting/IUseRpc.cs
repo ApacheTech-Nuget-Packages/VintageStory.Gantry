@@ -11,7 +11,7 @@ namespace Gantry.Core.Brighter.Hosting;
 ///     This approach blocks waiting for a response
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public interface IUseRpc
+internal interface IUseRpc
 {
     /// <summary>
     ///     Gets or sets a value indicating whether this <see cref="IUseRpc"/> is RPC.

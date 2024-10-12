@@ -1,4 +1,7 @@
-﻿using Vintagestory.API.Common;
+﻿using System.Text;
+using System.Xml.Serialization;
+using System.Xml;
+using Vintagestory.API.Common;
 
 namespace Gantry.Core.Extensions.Api;
 

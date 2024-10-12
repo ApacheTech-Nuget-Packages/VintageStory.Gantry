@@ -2,8 +2,10 @@
 using System.Text;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.Common.Extensions.System;
 using Gantry.Core;
+using Gantry.Core.Extensions.Api;
 using Gantry.Core.Extensions.DotNet;
 using Gantry.Core.Hosting;
 using Gantry.Core.Hosting.Registration;
@@ -21,7 +23,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
-using Vintagestory.Client.NoObf;
+using Vintagestory.Server;
 
 // ReSharper disable StringLiteralTypo
 
@@ -34,8 +36,9 @@ namespace Gantry.Services.EasyX.Abstractions;
 /// <typeparam name="TServerSettings">The type of the server settings.</typeparam>
 /// <typeparam name="TClientSettings">The type of the client settings.</typeparam>
 public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TSettings> : ServerModSystem, IServerServiceRegistrar
-    where TServerSettings : FeatureSettings, IEasyXServerSettings<TSettings>, new()
-    where TClientSettings : IEasyXClientSettings<TSettings>, new()
+    where TServerSettings : TSettings, IEasyXServerSettings, new()
+    where TClientSettings : TSettings, IEasyXClientSettings, new()
+    where TSettings : FeatureSettings
 {
     /// <summary>
     ///     
@@ -134,39 +137,24 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
 
         api.Event.PlayerJoin += player =>
         {
-            ServerChannel.SendPacket(GeneratePacket(player), player);
+            var packet = GeneratePacket(player);
+            api.Logger.GantryDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
+            api.Logger.GantryDebug(packet.ToXml());
+            ServerChannel.SendPacket(packet, player);
         };
     }
 
     /// <summary>
     ///     Generates a packet, to send to the specified player.
     /// </summary>
-    protected TClientSettings GeneratePacket(IPlayer player)
-    {
-        return GeneratePacketPerPlayer(player, IsEnabledFor(player));
-    }
+    protected TClientSettings GeneratePacket(IPlayer player) 
+        => GeneratePacketPerPlayer(player, IsEnabledFor(player));
 
     /// <summary>
     ///     Generates a packet, to send to the specified player.
     /// </summary>
-    protected virtual TClientSettings GeneratePacketPerPlayer(IPlayer player, bool isEnabled)
-    {
-        var clientSettings = new TClientSettings
-        {
-            Enabled = isEnabled
-        };
-
-        var properties = typeof(TSettings).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        foreach (var property in properties)
-        {
-            if (!property.CanRead || !property.CanWrite) continue;
-            var value = property.GetValue(Settings);
-            property.SetValue(clientSettings, value);
-        }
-
-        return clientSettings;
-    }
+    protected virtual TClientSettings GeneratePacketPerPlayer(IPlayer player, bool isEnabled) 
+        => Settings.CreateFrom<TSettings, TClientSettings>().With(p => p.Enabled = isEnabled);
 
     /// <summary>
     ///     Determines whether this feature is enabled, for all the specified players.
@@ -279,6 +267,18 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
             sb.AppendLine($" - {p.Name} (PID: {p.Id})");
         }
         return TextCommandResult.Success(sb.ToString());
+    }
+
+    /// <summary>
+    ///     Base Call Handler
+    /// </summary>
+    protected TextCommandResult OnChange<T>(TextCommandCallingArgs args, string propertyName, Action<T> validate = null)
+    {
+        var value = (args.Parsers[0].GetValue().To<T>() ?? default).With(validate);
+        Settings.SetProperty(propertyName, value);
+        var message = LangEx.FeatureString(SubCommandName, propertyName, value);
+        ServerChannel?.BroadcastUniquePacket(GeneratePacket);
+        return TextCommandResult.Success(message);
     }
 
     private string AddRemovePlayerFromList(FuzzyPlayerParser parser, ICollection<Player> list, string listType)

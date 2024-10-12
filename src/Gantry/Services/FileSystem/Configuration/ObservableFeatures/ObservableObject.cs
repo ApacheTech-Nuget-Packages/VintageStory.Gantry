@@ -55,9 +55,12 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
         var properties = typeof(T).GetProperties();
         foreach (var propertyInfo in properties)
         {
-            var original = propertyInfo.SetMethod;
-            if (Harmony.GetPatchInfo(original)?.Postfixes.Any() ?? false) continue;
-            _harmony.Patch(original, postfix: postfix);
+            var declaringType = propertyInfo.DeclaringType;
+            var declaringProperty = declaringType.GetProperty(propertyInfo.Name);
+            var originalSetMethod = declaringProperty.SetMethod;
+
+            if (Harmony.GetPatchInfo(originalSetMethod)?.Postfixes.Any() ?? false) continue;
+            _harmony.Patch(originalSetMethod, postfix: postfix);
         }
     }
 
