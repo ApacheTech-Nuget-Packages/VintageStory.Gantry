@@ -1,4 +1,4 @@
-﻿using Gantry.Core.ModSystems.Generic;
+﻿using Gantry.Core.ModSystems.Abstractions;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
@@ -14,7 +14,7 @@ public abstract class ServerModSystem : ModSystemBase
     /// <summary>
     ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreServerAPI Sapi => UApi as ICoreServerAPI;
+    protected static ICoreServerAPI Sapi => UApi as ICoreServerAPI;
 
     /// <summary>
     ///     Returns if this mod should be loaded for the given app side.

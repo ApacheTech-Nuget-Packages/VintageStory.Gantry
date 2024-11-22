@@ -58,6 +58,22 @@ public interface IModFile : IModFileBase
     /// </summary>
     /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
     /// <param name="instance">The instance of the object to serialise.</param>
+    public void SaveFromList<TModel>(IEnumerable<TModel> instance)
+        where TModel : class, new();
+
+    /// <summary>
+    ///     Serialises the specified instance, and saves the resulting data to file.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+    /// <param name="instance">The instance of the object to serialise.</param>
+    public Task SaveFromListAsync<TModel>(IEnumerable<TModel> instance)
+        where TModel : class, new();
+
+    /// <summary>
+    ///     Serialises the specified instance, and saves the resulting data to file.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+    /// <param name="instance">The instance of the object to serialise.</param>
     public Task SaveFromAsync<TModel>(TModel instance)
         where TModel : class, new();
 

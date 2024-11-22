@@ -1,7 +1,10 @@
-﻿using Gantry.Core.Extensions.Api;
+﻿using ApacheTech.Common.Extensions.System;
+using Gantry.Core.Annotation;
+using Gantry.Core.Extensions.Api;
 using JetBrains.Annotations;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
@@ -14,6 +17,14 @@ namespace Gantry.Core.Extensions;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class PlayerExtensions
 {
+    /// <summary>
+    ///     Determines if the entity is a player, in Spectator Mode.
+    /// </summary>
+    public static bool IsSpectator(this Entity entity) => entity is EntityPlayer
+    {
+        Player.WorldData.CurrentGameMode: EnumGameMode.Spectator
+    };
+
     /// <summary>
     ///     Sends a chat message to the player, using the current chat channel.
     /// </summary>
@@ -54,4 +65,59 @@ public static class PlayerExtensions
         game?.EnqueueMainThreadTask(() => game.ShowChatMessage(message), "");
     }
 
+    /// <summary>
+    ///     Sets the movement speed for the player. Default is 1.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="speed"></param>
+    [ServerSide]
+    public static void SetMovementSpeed(this IPlayer player, float speed = 1f)
+    {
+        player.WorldData.MoveSpeedMultiplier = speed;
+        player.WorldData.EntityControls.MovespeedMultiplier = speed;
+    }
+
+    /// <summary>
+    ///     Sets the movement speed for the player. Default is 1.
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="axisLock"></param>
+    [ServerSide]
+    public static void SetMovementPlaneLock(this IPlayer player, EnumFreeMovAxisLock axisLock = EnumFreeMovAxisLock.None)
+    {
+        player.WorldData.FreeMovePlaneLock = axisLock;
+        player.WorldData.EntityControls.FlyPlaneLock = axisLock;
+    }
+
+    /// <summary>
+    ///     Deactivate Creative Flight.
+    /// </summary>
+    /// <param name="player"></param>
+    [ServerSide]
+    public static void DeactivateFlightMode(this IPlayer player)
+    {
+        var playerPos = player.Entity.Pos.XYZ.AsBlockPos;
+        var y = ApiEx.Server.WorldManager.GetSurfacePosY(playerPos.X, playerPos.Z);
+        player.Entity.PositionBeforeFalling = playerPos.With(p => p.Y = y ?? p.Y).ToVec3d();
+
+        player.WorldData.FreeMove = false;
+        player.Entity.Properties.FallDamage = true;
+        player.SetMovementPlaneLock(EnumFreeMovAxisLock.None);
+        player.SetMovementSpeed(1f);
+        ((IServerPlayer)player).BroadcastPlayerData(false);
+    }
+
+    /// <summary>
+    ///     Activate Creative Flight.
+    /// </summary>
+    [ServerSide]
+    public static void ActivateFlightMode(this IPlayer player, 
+        float moveSpeed = 1, EnumFreeMovAxisLock axisLock = EnumFreeMovAxisLock.None)
+    {
+        player.WorldData.FreeMove = true;
+        player.Entity.Properties.FallDamage = false;
+        player.SetMovementPlaneLock(axisLock);
+        player.SetMovementSpeed(moveSpeed);
+        ((IServerPlayer)player).BroadcastPlayerData(false);
+    }
 }

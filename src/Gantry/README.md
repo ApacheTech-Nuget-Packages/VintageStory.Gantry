@@ -6,7 +6,7 @@ The MDK provides a framework that can be used to develop mods with Clean Code as
 
 ## Prerequisites:
 
- - Vintage Story 1.19.3
+ - Vintage Story 1.19.8
  - Visual Studio 2022, with support for .NET 7.0 development.
  - `VINTAGE_STORY` Environment Variable that point to the game install directory.
  - `VINTAGE_STORY_DATA` Environment Variable that point to the game data directory.
@@ -15,16 +15,12 @@ The MDK provides a framework that can be used to develop mods with Clean Code as
  
  - **[dnSpy](https://github.com/dnSpy/dnSpy)**: Debugger and .NET assembly editor. Traverse the game's API, analyse code, convert C# to IL, and back.
  - **[RedGate Smart Assembly](https://www.red-gate.com/products/dotnet-development/smartassembly/)**: Merge Gantry MDK into your mod, resulting in a single DLL file for release. 
- - **[JetBrains ReSharper](https://www.jetbrains.com/resharper/)**: Essential plugin for Visual Studio 2022. Hugely increases your productivity, and actively helps you become a better developer.
+ - **[JetBrains ReSharper](https://www.jetbrains.com/resharper/)**: Hugely increases your productivity, and actively helps you become a better developer.
  - **[SubMain GhostDoc](https://submain.com/ghostdoc/)**: Create XML documentation within your code, with just a keyboard shortcut.
 
-## Libraries:
+## Core:
 
-The MDK is split into a number of libraries, all available for installation through Nuget. This will allow you to customise your Gantry installation, and minimise the overall size of the resulting Mod, without packing a lot of bloat into the mod archive that isn't being used.
-
-### Core:
-
-This library is required, and contains the core functionality of the MDK. A lot of the core features are designed to streamline mod development, and allow for rapid prototyping of new mod features.
+Contains the core functionality of the MDK. A lot of the core features are designed to streamline mod development, and allow for rapid prototyping of new mod features.
 
 The Core comes with a fully-featured array of tools, such as:
 
@@ -107,7 +103,7 @@ The service also comes with a Dependency Injection satellite library that makes 
 
 ## Quick Start
 
- 1. Start a new Class Library project in Visual Studio 2022, targetting .NET Standard 2.0.
+ 1. Start a new Class Library project in Visual Studio 2022, targetting `net7.0`.
  2. Open the `.csproj` file, and add the following:  
   
 ```xml  
@@ -115,7 +111,7 @@ The service also comes with a Dependency Injection satellite library that makes 
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
-		<LangVersion>12</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
@@ -124,10 +120,11 @@ The service also comes with a Dependency Injection satellite library that makes 
 			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+        <!-- Add more base game libraries as needed -->
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="VintageStory.Gantry" Version="0.7.0" />
+		<PackageReference Include="VintageStory.Gantry" Version="0.9.0" />
 	</ItemGroup>
 
 </Project>  

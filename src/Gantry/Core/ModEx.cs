@@ -31,6 +31,11 @@ public static class ModEx
     public static Assembly ModAssembly { get; private set; }
 
     /// <summary>
+    ///     The main assemblies for the mod, including the Gantry MDK.
+    /// </summary>
+    public static IEnumerable<Assembly> ModAssemblies => new[] { typeof(ModEx).Assembly, ModAssembly }.Distinct();
+
+    /// <summary>
     ///     Gets or sets a value indicating whether to run Gantry in debug mode. This enables detailed logging, within the game log files.
     /// </summary>
     /// <value>

@@ -9,7 +9,7 @@ namespace Gantry.Services.FileSystem.Extensions;
 /// </summary>
 public static class FileTypeExtensions
 {
-    private static readonly Dictionary<string, FileType> Types = new()
+    private static readonly Dictionary<string, FileType> _types = new()
     {
         { ".json", FileType.Json },
         { ".data", FileType.Json },
@@ -27,7 +27,7 @@ public static class FileTypeExtensions
     /// <returns></returns>
     public static FileType ParseFileType(this FileSystemInfo file)
     {
-        return Types.TryGetValue(file.Extension, out var extension) 
+        return _types.TryGetValue(file.Extension, out var extension) 
             ? extension
             : FileType.Binary;
     }
@@ -45,7 +45,7 @@ public static class FileTypeExtensions
             FileType.Json => new JsonModFile(file),
             FileType.Binary => new BinaryModFile(file),
             FileType.Text => new TextModFile(file),
-            _ => throw new ArgumentOutOfRangeException(nameof(fileType))
+            _ => throw new ArgumentOutOfRangeException(nameof(file))
         };
     }
 }

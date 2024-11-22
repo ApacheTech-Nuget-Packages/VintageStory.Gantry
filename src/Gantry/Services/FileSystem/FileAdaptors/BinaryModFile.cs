@@ -91,7 +91,27 @@ public sealed class BinaryModFile : ModFile, IBinaryModFile
     /// <param name="instance">The instance of the object to serialise.</param>
     public override void SaveFrom<TModel>(TModel instance)
     {
-        File.WriteAllBytes(ModFileInfo.FullName, SerializerUtil.Serialize(instance).ToArray());
+        File.WriteAllBytes(ModFileInfo.FullName, [.. SerializerUtil.Serialize(instance)]);
+    }
+
+    /// <summary>
+    ///     Serialises the specified instance, and saves the resulting data to file.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+    /// <param name="instance">The instance of the object to serialise.</param>
+    public override void SaveFromList<TModel>(IEnumerable<TModel> instance)
+    {
+        File.WriteAllBytes(ModFileInfo.FullName, [.. SerializerUtil.Serialize(instance)]);
+    }
+
+    /// <summary>
+    ///     Serialises the specified instance, and saves the resulting data to file.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+    /// <param name="instance">The instance of the object to serialise.</param>
+    public override async Task SaveFromListAsync<TModel>(IEnumerable<TModel> instance)
+    {
+        await Task.Factory.StartNew(() => SaveFromList(instance));
     }
 
     /// <summary>
@@ -100,9 +120,9 @@ public sealed class BinaryModFile : ModFile, IBinaryModFile
     /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
     /// <param name="instance">The instance of the object to serialise.</param>
     /// <returns>Task.</returns>
-    public override Task SaveFromAsync<TModel>(TModel instance)
+    public override async Task SaveFromAsync<TModel>(TModel instance)
     {
-        return ModFileInfo.WriteAllBytesAsync(SerializerUtil.Serialize(instance).ToArray());
+        await ModFileInfo.WriteAllBytesAsync([.. SerializerUtil.Serialize(instance)]);
     }
 
     /// <summary>
@@ -111,9 +131,9 @@ public sealed class BinaryModFile : ModFile, IBinaryModFile
     /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
     /// <param name="collection">The collection of the objects to save to a single file.</param>
     /// <returns>Task.</returns>
-    public override Task SaveFromAsync<TModel>(IEnumerable<TModel> collection)
+    public override async Task SaveFromAsync<TModel>(IEnumerable<TModel> collection)
     {
-        return ModFileInfo.WriteAllBytesAsync(SerializerUtil.Serialize(collection).ToArray());
+        await ModFileInfo.WriteAllBytesAsync([.. SerializerUtil.Serialize(collection)]);
     }
 
     /// <summary>
@@ -123,7 +143,7 @@ public sealed class BinaryModFile : ModFile, IBinaryModFile
     /// <param name="collection">The collection of the objects to save to a single file.</param>
     public override void SaveFrom<TModel>(IEnumerable<TModel> collection)
     {
-        File.WriteAllBytes(ModFileInfo.FullName, SerializerUtil.Serialize(collection).ToArray());
+        File.WriteAllBytes(ModFileInfo.FullName, [.. SerializerUtil.Serialize(collection)]);
     }
 
     /// <summary>
@@ -139,9 +159,9 @@ public sealed class BinaryModFile : ModFile, IBinaryModFile
     ///     Parses the file into a primitive byte array.
     /// </summary>
     /// <returns>An array of type <see cref="byte" />, populated with data from this file.</returns>
-    public Task<byte[]> ParseAsByteArrayAsync()
+    public async Task<byte[]> ParseAsByteArrayAsync()
     {
-        return ModFileInfo.ReadAllBytesAsync();
+        return await ModFileInfo.ReadAllBytesAsync();
     }
 
     /// <summary>
@@ -157,8 +177,8 @@ public sealed class BinaryModFile : ModFile, IBinaryModFile
     ///     Parses the file into a memory stream.
     /// </summary>
     /// <returns>An instance of type <see cref="MemoryStream" />, populated with data from this file.</returns>
-    public Task<MemoryStream> ParseAsMemoryStreamAsync()
+    public async Task<MemoryStream> ParseAsMemoryStreamAsync()
     {
-        return Task.Factory.StartNew(ParseAsMemoryStream);
+        return await Task.Factory.StartNew(ParseAsMemoryStream);
     }
 }

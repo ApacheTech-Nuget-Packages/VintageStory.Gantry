@@ -118,6 +118,27 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     }
 
     /// <summary>
+    ///     Serialises the specified instance, and saves the resulting data to file.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+    /// <param name="instance">The instance of the object to serialise.</param>
+    public override void SaveFromList<TModel>(IEnumerable<TModel> instance)
+    {
+        var json = JsonConvert.SerializeObject(instance, JsonSerialiserSettings);
+        SaveFrom(json);
+    }
+
+    /// <summary>
+    ///     Serialises the specified instance, and saves the resulting data to file.
+    /// </summary>
+    /// <typeparam name="TModel">The type of the object to serialise.</typeparam>
+    /// <param name="instance">The instance of the object to serialise.</param>
+    public override Task SaveFromListAsync<TModel>(IEnumerable<TModel> instance)
+    {
+        return Task.Factory.StartNew(() => SaveFromList(instance));
+    }
+
+    /// <summary>
     ///     Serialises the specified collection of objects, and saves the resulting data to file.
     /// </summary>
     /// <param name="file">The file to save.</param>

@@ -58,7 +58,10 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// </summary>
     public void PatchModAssembly()
     {
-        PatchAssembly(ModEx.ModAssembly);
+        foreach (var assembly in ModEx.ModAssemblies)
+        {
+            PatchAssembly(assembly);
+        }
     }
 
     /// <summary>

@@ -3,19 +3,19 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
-namespace Gantry.Core.ModSystems.Generic;
+namespace Gantry.Core.ModSystems.Abstractions;
 
 /// <summary>
 ///     Base representation of a ModSystem used to extend Vintage Story.
 /// </summary>
-/// <seealso cref="ModSystem" />
+/// <seealso cref="GantrySubsystem" />
 [UsedImplicitly(ImplicitUseTargetFlags.All)]
-public abstract class ModSystemBase : ModSystem
+public abstract class SubsystemBase : GantrySubsystem
 {
     /// <summary>
     ///     Initialises a new instance of the <see cref="ModSystemBase"/> class.
     /// </summary>
-    protected ModSystemBase()
+    protected SubsystemBase()
     {
     }
 
@@ -23,7 +23,7 @@ public abstract class ModSystemBase : ModSystem
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
-    public ICoreAPI UApi => ApiEx.Current;
+    public static ICoreAPI UApi => ApiEx.Current;
 
     /// <summary>
     ///     Called during initial mod loading, called before any mod receives the call to Start().

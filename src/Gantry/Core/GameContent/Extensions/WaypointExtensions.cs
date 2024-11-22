@@ -1,4 +1,5 @@
-﻿using Gantry.Core.Extensions;
+﻿using System.Drawing;
+using Gantry.Core.Extensions;
 using Gantry.Core.Extensions.Api;
 using JetBrains.Annotations;
 using Vintagestory.API.Common;
@@ -196,4 +197,14 @@ public static class WaypointExtensions
         var displayName = block.GetPlacedBlockName(ApiEx.ClientMain, blockPos);
         world.AddWaypointAtPos(blockPos, icon, colour, $"{displayName}, Y = {blockPos.Y}", true);
     }
+
+    /// <summary>
+    ///     Converts a colour to a format recognised by waypoints.
+    /// </summary>
+    public static int ToWaypointColour(this string strColour) => Color.FromName(strColour).ToArgb() | -16777216;
+
+    /// <summary>
+    ///     Converts the colour of the waypoint into a <see cref="Color"/>.
+    /// </summary>
+    public static Color ColourAsColor(this Waypoint waypoint) => Color.FromArgb(waypoint.Color | -16777216);
 }

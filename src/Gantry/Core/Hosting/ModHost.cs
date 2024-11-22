@@ -1,4 +1,5 @@
-﻿using ApacheTech.Common.DependencyInjection;
+﻿using System.Reflection.PortableExecutable;
+using ApacheTech.Common.DependencyInjection;
 using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.DependencyInjection.Extensions;
 using ApacheTech.Common.Extensions.System;
@@ -8,6 +9,10 @@ using Gantry.Core.Hosting.Extensions;
 using Gantry.Core.Hosting.Registration;
 using Gantry.Core.Hosting.Registration.Api;
 using Gantry.Core.ModSystems;
+using Gantry.Core.ModSystems.Abstractions;
+using Gantry.Services.FileSystem.Hosting;
+using Gantry.Services.HarmonyPatches.Hosting;
+using Gantry.Services.Network.Hosting;
 using HarmonyLib;
 using JetBrains.Annotations;
 using Vintagestory.API.Client;
@@ -27,7 +32,7 @@ namespace Gantry.Core.Hosting;
 /// </summary>
 /// <seealso cref="ModSystem" />
 [UsedImplicitly(ImplicitUseTargetFlags.All)]
-public abstract class ModHost : UniversalModSystem
+public abstract class ModHost : GantrySubsytemHost
 {
     private readonly IServiceCollection _services;
     private List<IUniversalServiceRegistrar> _universalServiceRegistrars;
@@ -57,6 +62,9 @@ public abstract class ModHost : UniversalModSystem
     /// <param name="api">Access to the universal API.</param>
     protected virtual void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
     {
+        services.AddFileSystemService(api, o => o.RegisterSettingsFiles = true);
+        services.AddHarmonyPatchingService(api, o => o.AutoPatchModAssembly = true);
+        services.AddNetworkService(api);
     }
 
     private static void ConfigureBrighter(IServiceCollection services, ICoreAPI api)
@@ -185,6 +193,7 @@ public abstract class ModHost : UniversalModSystem
                 break;
         }
         StartPreUniversalSide(api);
+        base.StartPreUniversal(api);
     }
 
     /// <summary>
@@ -198,6 +207,7 @@ public abstract class ModHost : UniversalModSystem
     public sealed override void Start(ICoreAPI api)
     {
         StartUniversal(api);
+        base.Start(api);
         if (api is not ICoreClientAPI capi) return;
         capi.Event.LeftWorld += Dispose;
     }

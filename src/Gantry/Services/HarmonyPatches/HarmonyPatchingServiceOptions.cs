@@ -10,7 +10,7 @@ namespace Gantry.Services.HarmonyPatches;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public class HarmonyPatchingServiceOptions
 {
-    internal static HarmonyPatchingServiceOptions Default = new();
+    internal static HarmonyPatchingServiceOptions Default { get; } = new();
 
     /// <summary>
     ///     Should patches from the mod assembly be automatically applied to the game? Default: True.

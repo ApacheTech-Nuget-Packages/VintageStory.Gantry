@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Newtonsoft.Json;
 
 // ReSharper disable UnusedMember.Global
@@ -10,6 +11,7 @@ namespace Gantry.Services.FileSystem.Extensions;
 ///
 ///     .NET 6.0 will introduce File.WriteAllTextAsync, and similar IO static async methods.
 /// </summary>
+[SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Constants")]
 public static class FileInfoExtensions
 {
     private const int DefaultBufferSize = 4096;
@@ -103,5 +105,17 @@ public static class FileInfoExtensions
         {
             return default;
         }
+    }
+
+    /// <summary>
+    ///     Renames a file.
+    /// </summary>
+    /// <param name="file">The file to rename.</param>
+    /// <param name="newName">The new name.</param>
+    public static FileInfo Rename(this FileInfo file, string newName)
+    {
+        var newPath = Path.Combine(file.DirectoryName!, newName);
+        file.MoveTo(newPath);
+        return file;
     }
 }

@@ -123,6 +123,19 @@
 			<HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+		<!-- OpenTK Game Libraries -->
+		<Reference Include="OpenTK.Windowing.Common">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Windowing.Common.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="OpenTK.Windowing.Desktop">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Windowing.Desktop.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		<Reference Include="OpenTK.Mathematics">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Mathematics.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 
 	<!-- Generic Package Imports -->

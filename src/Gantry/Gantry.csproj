@@ -5,40 +5,22 @@
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.9.0</Version>
+		<Version>0.9.1</Version>
 		<Configurations>Debug;Release;Package</Configurations>
 		<PackageReleaseNotes>
-			Gantry MDK v0.9.0:
-			
-			This release has focused heavily on the new bespoke slim implementation of Paramore.Brighter into the MDK. This allows
-			usage of the visitor command pattern to create re-usable snippets of code that can be run from anywhere.
-			
-			Another major change is the proper implementation of app-side determination. ApiEx.Side is now reliable, and works instantly,
-			with no caching of threads. This means that use of ApiEx.Current can be safely, and reliably used across all mods, as intended.
-
-			Changelog:
-				
-			- Added: Bespoke implementation of Paramore.Brighter as a mediator.
-			- Added: EasyX Service to make mods like Knapster much easier to create. See Knapster, or MinimalMapping for examples.
-			- Added: ExtendedEnums are now expanded to be a standalone service.
-			- Added: BrighterChat Service allows for mediated chat command handlers, using BrighterSlim.
-			- Added: Humanizer Core as a dependency.
-			
-			- Fixed: ApiEx.Side now works with `AsyncLocal` to be foolproof.
-			- Fixed: Harmony patches degrade gracefully on mod unload.
-			- Fixed: 3rd party mod systems are only added to the DI if they load properly.
-			- Fixed: Gantry embedded languages are now much more robust, and fallback to `en` if files are not found.
-			- Fixed: JOAAT hash method now returns a hex string to reduce redundant code at the point of use.
-			- Fixed: Lots of minor bug fixes, code cleans, and refactors throughout the codebase.
+			Gantry MDK v0.9.1:
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="**\_EmbeddedResources\**" />
 		<Compile Remove="Features\**" />
+		<Compile Remove="Services\MefLab\**" />
 		<EmbeddedResource Remove="Features\**" />
+		<EmbeddedResource Remove="Services\MefLab\**" />
 		<None Remove="**\_EmbeddedResources\**" />
 		<None Remove="Features\**" />
+		<None Remove="Services\MefLab\**" />
 	</ItemGroup>
 
 	<ItemGroup>

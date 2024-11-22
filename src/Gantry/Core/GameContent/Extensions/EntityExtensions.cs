@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using OpenTK.Mathematics;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -53,6 +54,21 @@ public static class EntityExtensions
         entityPos.Pitch = GameMath.PI - targetDirection.X;
         entityPos.Yaw = targetDirection.Y % GameMath.TWOPI;
         return entityPos;
+    }
+
+    /// <summary>
+    ///     Determines the relative rotational direction as a quaternion between two locations.
+    /// </summary>
+    /// <param name="sourcePos">The source position.</param>
+    /// <param name="targetPos">The target position.</param>
+    /// <returns>A <see cref="Quaternion"/> containing the rotational values around all three axes, as if the target position was facing directly towards the source.</returns>
+    public static Quaternion RelativeRotationalDirectionQuaternion(this Vec3d sourcePos, Vec3d targetPos)
+    {
+        var direction = targetPos - sourcePos;
+        direction.Normalize();
+        var yaw = (float)Math.Atan2(direction.Z, direction.X);
+        var pitch = (float)Math.Asin(direction.Y);
+        return Quaternion.FromEulerAngles(0, yaw, pitch);
     }
 
     /// <summary>

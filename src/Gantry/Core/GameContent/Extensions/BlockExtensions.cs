@@ -20,7 +20,7 @@ public static class BlockExtensions
     }
 
     /// <summary>
-    ///     Determines whether the block not culled.
+    ///     Determines whether the block should not be culled.
     /// </summary>
     /// <param name="block">The block to check.</param>
     public static bool IsNonCulled(this Block block)
@@ -28,12 +28,16 @@ public static class BlockExtensions
         return IsTypeNonCulled(block) || block.BlockBehaviors.Any(IsTypeNonCulled);
     }
 
+    /// <summary>
+    ///     Determines whether the object should not be culled.
+    /// </summary>
+    /// <param name="obj">The object to check.</param>
     private static bool IsTypeNonCulled(object obj)
     {
-        return NonCulledTypes.Contains(obj.GetType()) || NonCulledTypes.Contains(obj.GetType().BaseType);
+        return _nonCulledTypes.Contains(obj.GetType()) || _nonCulledTypes.Contains(obj.GetType().BaseType);
     }
 
-    private static readonly List<Type> NonCulledTypes =
+    private static readonly List<Type> _nonCulledTypes =
     [
         typeof(BlockFernTree),
         typeof(BlockPlant),

@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using System.Diagnostics.CodeAnalysis;
 using ApacheTech.Common.Extensions.System;
 using Gantry.Core.Extensions.DotNet;
 using JetBrains.Annotations;
@@ -14,6 +15,7 @@ namespace Gantry.Core;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class LangEx
 {
+    [SuppressMessage("Style", "IDE1006:Naming Styles")]
     private static readonly Dictionary<string, JsonObject> Translations = [];
 
     private static JsonObject GetTranslationsFile(string category = "Gantry", string? locale = null)
