@@ -1,0 +1,132 @@
+[
+  {
+    "name": "area:accessibility",
+    "color": "F23BE6",
+    "description": "This issue or feature involves accessibility and quality of life."
+  },
+  {
+    "name": "area:chat-commands",
+    "color": "F23BE6",
+    "description": "This issue or feature involves chat commands."
+  },
+  {
+    "name": "area:compatibility",
+    "color": "F23BE6",
+    "description": "This issue or feature involves compatibility between different mods."
+  },
+  {
+    "name": "area:documentation",
+    "color": "F23BE6",
+    "description": "Improvements or additions to documentation, or translations."
+  },
+  {
+    "name": "area:game-content",
+    "color": "F23BE6",
+    "description": "This issue or feature involves blocks, items, or other aspects of game content."
+  },
+  {
+    "name": "area:game-mechanics",
+    "color": "F23BE6",
+    "description": "This issue or feature involves altering the core mechanics of the game."
+  },
+  {
+    "name": "area:gantry",
+    "color": "F23BE6",
+    "description": "This issue or feature involves the Gantry MDK."
+  },
+  {
+    "name": "area:harmony",
+    "color": "F23BE6",
+    "description": "This issue or feature involves Harmony patches."
+  },
+  {
+    "name": "closed:done",
+    "color": "030303",
+    "description": "This issue or feature has been completed."
+  },
+  {
+    "name": "closed:duplicate",
+    "color": "030303",
+    "description": "This issue or feature is a duplicate of another work item."
+  },
+  {
+    "name": "closed:inactive",
+    "color": "030303",
+    "description": "This issue or feature has been left dormant, with no feedback from the poster."
+  },
+  {
+    "name": "closed:not-actionable",
+    "color": "000000",
+    "description": "No actions can be taken regarding this issue or feature."
+  },
+  {
+    "name": "needs:user-feedback",
+    "color": "0075CA",
+    "description": "This work item has been passed back to the user to add more feedback."
+  },
+  {
+    "name": "needs:log-files",
+    "color": "0075CA",
+    "description": "This work item requires a zip file full of log files before any actions can be taken."
+  },
+  {
+    "name": "status:blocked",
+    "color": "FEF2C0",
+    "description": "Other issues or features need to be completed before work on this work item can continue."
+  },
+  {
+    "name": "status:pending-release",
+    "color": "FEF2C0",
+    "description": "Work on this work item is complete, and is awaiting release."
+  },
+  {
+    "name": "status:in-progress",
+    "color": "FEF2C0",
+    "description": "Work is currently being done on this work item."
+  },
+  {
+    "name": "status:needs-investigation",
+    "color": "FEF2C0",
+    "description": "This work item has been triaged, and requires further investigation."
+  },
+  {
+    "name": "status:triage",
+    "color": "FEF2C0",
+    "description": "This is a new work item, and needs some initial triage."
+  },
+  {
+    "name": "vNext",
+    "color": "E2196F",
+    "description": "Planned for release in the next version."
+  },
+  {
+    "name": "feature",
+    "color": "0E7A1B",
+    "description": "A new feature."
+  },
+  {
+    "name": "improvement",
+    "color": "0E7A1B",
+    "description": "An enhancement to an existing feature."
+  },
+  {
+    "name": "chore",
+    "color": "0E7A1B",
+    "description": "Maintenance or non-code work."
+  },
+  {
+    "name": "bug",
+    "color": "7A0E1B",
+    "description": "A bug."
+  },
+  {
+    "name": "priority:critical",
+    "color": "7A0E1B",
+    "description": "Critical priority! Fix and release immediately."
+  },
+  {
+    "name": "priority:low",
+    "color": "0E7A1B",
+    "description": "Low priority. Can be left to a later release."
+  }
+]

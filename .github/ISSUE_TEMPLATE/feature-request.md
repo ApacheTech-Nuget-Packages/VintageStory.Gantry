@@ -1,26 +1,40 @@
 ---
-name: Feature Request
-about: Suggest an idea for this project.
-title: "[FEATURE]"
-labels: enhancement
-assignees: ''
-
+name: 🙋 Feature Request
+about: Want us to add something?
+title: "feat: add [what] to/in [where]"
+labels: 'status: triage'
 ---
 
-***Summary:** A user story is an informal, general explanation of a software feature written from the perspective of the end user. Its purpose is to articulate how a software feature will provide value to the customer.*
+<!---
+Thanks for filing an issue 😄 ! Before you submit, please read the following:
 
-**Is your feature request related to a problem? If not, why is your feature needed?**
+Search open/closed issues before submitting. Someone may have requested the same feature before.
+-->
 
-A clear description of what the problem is. Ex. As a Mod Developer, I sometimes find that [...]
+# 🙋 Feature Request
 
-**Describe the solution you'd like**
+<!--- Provide a general summary of the feature here -->
 
-Please take your time, and give as much detail as possible.
+## 🤔 Expected Behaviour
 
-**Describe alternatives you've considered**
+<!--- Tell us how the feature should work -->
 
-A clear description of any alternative solutions or features you've considered.
+## 😯 Current Behaviour
 
-**Additional context**
+<!--- Explain how the feature would alter/enhance current behavior -->
 
-Add any other context or screenshots about the feature request here.
+## 💁 Possible Solution
+
+<!--- Ideas how to implement this feature -->
+<!--- What implementation solution would be ideal for you? -->
+
+## 🔦 Context
+
+<!--- What are you trying to accomplish? -->
+<!--- How has not having this feature affected you? -->
+<!--- What alternatives have you considered? -->
+
+## 💻 Examples
+
+<!-- Examples help us understand the requested feature better -->
+<!-- Attach screenshots or images if they would add detail to your request -->
