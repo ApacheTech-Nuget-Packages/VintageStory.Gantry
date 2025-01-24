@@ -1,12 +1,13 @@
 ﻿// ReSharper disable CheckNamespace
 
-#pragma warning disable CA1069
-
+#pragma warning disable CA1069 // Enum values should not be duplicated
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace JetBrains.Annotations;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 /// <summary>
-/// Specifies what is considered to be used implicitly when marked
-/// with <see cref="MeansImplicitUseAttribute"/> or <see cref="UsedImplicitlyAttribute"/>.
+///     Specifies what is considered to be used implicitly when marked
+///     with <see cref="MeansImplicitUseAttribute"/> or <see cref="UsedImplicitlyAttribute"/>.
 /// </summary>
 [Flags]
 [UsedImplicitly(WithMembers)]

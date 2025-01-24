@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.GameContent.Blocks;
+﻿namespace Gantry.Core.GameContent.Blocks;
 
 /// <summary>
 ///     Basic class for block entities - a data structures to hold custom

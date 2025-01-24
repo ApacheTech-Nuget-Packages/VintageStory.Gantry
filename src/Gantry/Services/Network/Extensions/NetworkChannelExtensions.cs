@@ -1,9 +1,6 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
-using Vintagestory.Client.NoObf;
 
 namespace Gantry.Services.Network.Extensions;
 
@@ -35,7 +32,7 @@ public static class NetworkChannelExtensions
             throw new ArgumentException("Please do not use array messages, they seem to cause serialisation problems in rare cases. Pack that array into its own class.");
         }
         var handlers = concrete.GetField<Action<object>[]>("handlers");
-        handlers.RemoveEntry(index);
+        handlers.RemoveAt(index);
         return channel;
     }
 
@@ -61,7 +58,27 @@ public static class NetworkChannelExtensions
             throw new ArgumentException("Please do not use array messages, they seem to cause serialisation problems in rare cases. Pack that array into its own class.");
         }
         var handlers = concrete.GetField<Action<object>[]>("handlers");
-        handlers.RemoveEntry(index);
+        handlers.RemoveAt(index);
         return channel;
     }
+
+    /// <summary>
+    ///     Registers a message handler for the specified message type on a client network channel.
+    /// </summary>
+    /// <typeparam name="T">The type of the message to handle.</typeparam>
+    /// <param name="channel">The client network channel to register the handler with.</param>
+    /// <param name="handler">The handler to invoke when the message is received.</param>
+    /// <returns>The client network channel with the registered handler.</returns>
+    public static IClientNetworkChannel RegisterMessageHandler<T>(this IClientNetworkChannel channel, NetworkServerMessageHandler<T> handler)
+        => channel.RegisterMessageType<T>().SetMessageHandler(handler);
+
+    /// <summary>
+    ///     Registers a message handler for the specified message type on a server network channel.
+    /// </summary>
+    /// <typeparam name="T">The type of the message to handle.</typeparam>
+    /// <param name="channel">The server network channel to register the handler with.</param>
+    /// <param name="handler">The handler to invoke when the message is received.</param>
+    /// <returns>The server network channel with the registered handler.</returns>
+    public static IServerNetworkChannel RegisterMessageHandler<T>(this IServerNetworkChannel channel, NetworkClientMessageHandler<T> handler)
+        => channel.RegisterMessageType<T>().SetMessageHandler(handler);
 }

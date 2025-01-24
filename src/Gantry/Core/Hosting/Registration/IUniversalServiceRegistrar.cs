@@ -1,8 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.Hosting.Registration;
+﻿namespace Gantry.Core.Hosting.Registration;
 
 /// <summary>
 ///     Represents a class that can add services to both the Client, and Server IOC containers.

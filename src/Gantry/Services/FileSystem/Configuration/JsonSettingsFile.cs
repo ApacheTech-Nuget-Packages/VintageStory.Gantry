@@ -1,12 +1,7 @@
 ﻿using System.ComponentModel;
-using ApacheTech.Common.Extensions.System;
-using Gantry.Core;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
-using Gantry.Services.FileSystem.Configuration.Abstractions;
 using Gantry.Services.FileSystem.Configuration.ObservableFeatures;
 using Gantry.Services.FileSystem.Enums;
-using HarmonyLib;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Gantry.Services.FileSystem.Configuration;
@@ -28,6 +23,8 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     /// The file underlying JSON file from the file system.
     /// </value>
     public IJsonModFile File { get; }
+
+    internal bool IsGantryFile => File.AsFileInfo().FullName.StartsWith(ModPaths.ModDataGantryRootPath);
 
     /// <summary>
     /// 	Initialises a new instance of the <see cref="JsonSettingsFile"/> class.
@@ -56,35 +53,35 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     ///     NOTE: Over-enthusiastic use of property setting within the POCO class, may result in excessive writes to the JSON file.
     ///           Sliders, in particular should be set to only fire on mouse up.
     /// </remarks>
-    /// <typeparam name="T">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
+    /// <typeparam name="TSettings">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
     /// <param name="featureName">The name of the feature.</param>
     /// <returns>An object, that represents the settings for a given mod feature.</returns>
-    public T Feature<T>(string featureName = null) where T: class, new()
+    public TSettings Feature<TSettings>(string featureName = null) where TSettings : FeatureSettings<TSettings>, new()
     {
-        featureName ??= typeof(T).Name.Replace("Settings", "");
+        featureName ??= typeof(TSettings).Name.Replace("Settings", "");
         if (_observers.TryGetValue(featureName, out var cachedObserver))
         {
-            return (T)cachedObserver.Object;
+            return (TSettings)cachedObserver.Object;
         }
         try
         {
             var json = File.ParseAs<JObject>();
-            if (json is null) Save(json = JObject.FromObject(new T()), featureName);
+            if (json is null) Save(json = JObject.FromObject(new TSettings()), featureName);
                 
             var obj = json.SelectToken($"$.Features.{featureName}");
-            if (obj is null) Save(new T());
-            var featureObj = obj?.ToObject<T>() ?? new T();
+            if (obj is null) Save(new TSettings());
+            var featureObj = obj?.ToObject<TSettings>() ?? new TSettings();
                 
-            var observer = ObservableFeatureSettings<T>.Bind(featureObj, featureName, _scope, _harmony);
+            var observer = ObservableFeatureSettings<TSettings>.Bind(featureObj, featureName, _scope, _harmony, IsGantryFile);
             _observers.AddIfNotPresent(featureName, observer);
 
             observer.Active = true;
-            return (T)observer.Object;
+            return (TSettings)observer.Object;
         }
         catch (Exception exception)
         {
-            ModEx.Mod.Logger.Error($"[Gantry] Error loading feature `{featureName}` from file `{File.AsFileInfo().Name}`: {exception.Message}");
-            ModEx.Mod.Logger.Error(exception.StackTrace);
+            ApiEx.Logger.Error($"Error loading feature `{featureName}` from file `{File.AsFileInfo().Name}`: {exception.Message}");
+            ApiEx.Logger.Error(exception.StackTrace);
             throw;
         }
     }
@@ -92,14 +89,27 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     /// <summary>
     ///     Saves the specified settings to file.
     /// </summary>
-    /// <typeparam name="T">The <see cref="Type" /> of object to parse the settings for the feature into.</typeparam>
+    /// <typeparam name="TSettings">The <see cref="Type" /> of object to parse the settings for the feature into.</typeparam>
     /// <param name="settings">The settings.</param>
     /// <param name="featureName">The name of the feature.</param>
-    public void Save<T>(T settings, string featureName = null)
+    public void Save<TSettings>(TSettings settings, string featureName = null)
     {
-        featureName ??= typeof(T).Name.Replace("Settings", "");
-        var json = File.ParseAs<JObject>() ?? JObject.Parse("{ Features: {  } }");
-        json.SelectToken("$.Features")![featureName] = JToken.FromObject(settings);
+        featureName ??= typeof(TSettings).Name.Replace("Settings", "");
+
+        // Parse the JSON file or initialise a new JObject if the file is empty
+        var json = File.ParseAs<JObject>() ?? [];
+
+        // Ensure the "Features" token exists and is an object.
+        if (json["Features"] is not JObject features)
+        {
+            features = [];
+            json["Features"] = features;
+        }
+
+        // Add or update the settings under the specified feature name.
+        features[featureName] = JToken.FromObject(settings);
+
+        // Save the updated JSON to the file.
         File.SaveFrom(json.ToString(Formatting.Indented));
     }
 

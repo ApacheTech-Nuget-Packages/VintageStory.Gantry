@@ -2,7 +2,6 @@
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.Extensions;
-using JetBrains.Annotations;
 using Vintagestory.API.Util;
 
 namespace Gantry.Services.FileSystem.FileAdaptors;

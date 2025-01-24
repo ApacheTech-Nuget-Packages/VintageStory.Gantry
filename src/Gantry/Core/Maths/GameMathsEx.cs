@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿using System.Numerics;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Maths;
@@ -82,10 +82,42 @@ public static class GameMathsEx
     public static float ClampWrap(float val, float min, float max)
     {
         val -= (float)Math.Round((val - min) / (max - min)) * (max - min);
-        if (val < 0)
-            val = val + max - min;
+        if (val < 0) val = val + max - min;
         return val;
     }
+
+    /// <summary>
+    ///    Attempts to clamp a value between the specified minimum and maximum bounds.
+    /// </summary>
+    /// <param name="value">The value to clamp.</param>
+    /// <param name="min">The minimum value the input can be clamped to.</param>
+    /// <param name="max">The maximum value the input can be clamped to.</param>
+    /// <param name="isClamped">Indicates whether the value was clamped (true) or not (false).</param>
+    /// <returns>The clamped value, which will be within the specified bounds.</returns>
+    public static TValue TryClamp<TValue>(TValue value, TValue min, TValue max, out bool isClamped) where TValue : INumber<TValue>
+    {
+        isClamped = value < min || value > max;
+        return value < min ? min : value > max ? max : value;
+    }
+
+
+    /// <summary>
+    ///     Rotates an angle by a specified number of degrees, ensuring the result stays within the range of 0 to 360 degrees.
+    /// </summary>
+    /// <param name="angle">The initial angle in degrees.</param>
+    /// <param name="degrees">The number of degrees to rotate.</param>
+    /// <returns>The resulting angle in degrees, normalised to the range of 0 to 360.</returns>
+    public static float RotateDeg(float angle, float degrees)
+        => (360 + (angle + degrees) % 360) % 360;
+
+    /// <summary>
+    ///     Rotates an angle by a specified number of radians, ensuring the result stays within the range of 0 to 2π radians.
+    /// </summary>
+    /// <param name="angle">The initial angle in radians.</param>
+    /// <param name="radians">The number of radians to rotate.</param>
+    /// <returns>The resulting angle in radians, normalised to the range of 0 to 2π.</returns>
+    public static float RotateRad(float angle, float radians)
+        => (GameMath.TWOPI + (angle + radians) % GameMath.TWOPI) % GameMath.TWOPI;
 
     /// <summary>
     ///     Increments the array by a specified amount, for each individual index.
@@ -98,7 +130,7 @@ public static class GameMathsEx
         var r = (byte)GameMath.Clamp(source[0] + factor.R, 0, 255);
         var g = (byte)GameMath.Clamp(source[1] + factor.G, 0, 255);
         var b = (byte)GameMath.Clamp(source[2] + factor.B, 0, 255);
-        return new[] { r, g, b };
+        return [r, g, b];
     }
 
     /// <summary>
@@ -111,7 +143,7 @@ public static class GameMathsEx
         var r = (byte)GameMath.Clamp(source[0] + factor, 0, 255);
         var g = (byte)GameMath.Clamp(source[1] + factor, 0, 255);
         var b = (byte)GameMath.Clamp(source[2] + factor, 0, 255);
-        return new[] { r, g, b };
+        return [r, g, b];
     }
 
     /// <summary>
@@ -180,7 +212,7 @@ public static class GameMathsEx
         var r = (byte)GameMath.Clamp(source[0] * factor.R, 0, 255);
         var g = (byte)GameMath.Clamp(source[1] * factor.G, 0, 255);
         var b = (byte)GameMath.Clamp(source[2] * factor.B, 0, 255);
-        return new[] { r, g, b };
+        return [r, g, b];
     }
 
     /// <summary>
@@ -193,6 +225,6 @@ public static class GameMathsEx
         var r = (byte)GameMath.Clamp(source[0] * factor, 0, 255);
         var g = (byte)GameMath.Clamp(source[1] * factor, 0, 255);
         var b = (byte)GameMath.Clamp(source[2] * factor, 0, 255);
-        return new[] { r, g, b };
+        return [r, g, b];
     }
 }

@@ -1,4 +1,4 @@
-﻿using Gantry.Core;
+﻿
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedType.Global

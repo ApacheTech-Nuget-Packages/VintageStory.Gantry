@@ -2,9 +2,6 @@
 using ApacheTech.Common.Extensions.Harmony;
 using Cairo;
 using Gantry.Core.GameContent.GUI.Elements;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using GuiElementImage = Gantry.Core.GameContent.GUI.Elements.GuiElementImage;
 
 namespace Gantry.Core.GameContent.GUI.Helpers;

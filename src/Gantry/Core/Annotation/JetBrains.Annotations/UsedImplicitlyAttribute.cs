@@ -1,14 +1,16 @@
-﻿using System.Diagnostics;
+﻿
 
 // ReSharper disable CheckNamespace
 
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace JetBrains.Annotations;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 /// <summary>
-/// Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
-/// so this symbol will be ignored by usage-checking inspections. <br/>
-/// You can use <see cref="ImplicitUseKindFlags"/> and <see cref="ImplicitUseTargetFlags"/>
-/// to configure how this attribute is applied.
+///     Indicates that the marked symbol is used implicitly (e.g. via reflection, in external library),
+///     so this symbol will be ignored by usage-checking inspections. <br/>
+///     You can use <see cref="ImplicitUseKindFlags"/> and <see cref="ImplicitUseTargetFlags"/>
+///     to configure how this attribute is applied.
 /// </summary>
 /// <example><code>
 /// [UsedImplicitly]
@@ -32,7 +34,7 @@ public class UsedImplicitlyAttribute : Attribute
     ///     Initialises a new instance of the <see cref="UsedImplicitlyAttribute"/> class.
     /// </summary>
     public UsedImplicitlyAttribute()
-        : this(ImplicitUseKindFlags.Default) { }
+        : this(ImplicitUseKindFlags.Default, ImplicitUseTargetFlags.WithMembers) { }
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="UsedImplicitlyAttribute"/> class.

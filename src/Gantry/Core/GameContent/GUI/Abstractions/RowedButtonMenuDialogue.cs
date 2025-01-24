@@ -1,7 +1,4 @@
-﻿using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.GameContent.GUI.Abstractions;
+﻿namespace Gantry.Core.GameContent.GUI.Abstractions;
 
 /// <summary>
 ///     A simple GUI that contains a single column of buttons, or other elements.

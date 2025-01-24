@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-
+﻿// ReSharper disable TailRecursiveCall
 namespace Gantry.Core.Extensions.DotNet;
 
 /// <summary>
@@ -16,6 +15,6 @@ public static class FunctionalExtensions
     /// <param name="createNext">A function that changes the state of the operation, between iterations.</param>
     /// <param name="finishCondition">A predicate that determines whether the criteria for stopping the iteration has been met.</param>
     /// <returns></returns>
-    public static T IterateUntil<T>(this T @this, Func<T, T> createNext, Func<T, bool> finishCondition) =>
+    public static T IterateUntil<T>(this T @this, System.Func<T, T> createNext, System.Func<T, bool> finishCondition) =>
         finishCondition(@this) ? @this : createNext(@this).IterateUntil(createNext, finishCondition);
 }

@@ -1,6 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-
-namespace Gantry.Core.Hosting;
+﻿namespace Gantry.Core.Hosting;
 
 /// <summary>
 ///        Creates instances of type <typeparamref name="T"/>, resolved via dependency injection.

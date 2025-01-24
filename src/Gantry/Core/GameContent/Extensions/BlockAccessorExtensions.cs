@@ -1,6 +1,4 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.Common;
 

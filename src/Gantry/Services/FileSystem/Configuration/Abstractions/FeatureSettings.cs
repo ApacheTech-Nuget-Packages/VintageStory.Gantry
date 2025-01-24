@@ -1,12 +1,10 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Services.FileSystem.Configuration.Abstractions;
+﻿namespace Gantry.Services.FileSystem.Configuration.Abstractions;
 
 /// <summary>
 ///     Acts as a base class for all settings POCO Classes for a given feature.
 /// </summary>
 /// <seealso cref="IDisposable" />
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+[UsedImplicitly(ImplicitUseTargetFlags.All)]
 public abstract class FeatureSettings : IDisposable
 {
     /// <summary>

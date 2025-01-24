@@ -1,8 +1,5 @@
-﻿using Gantry.Core;
-using Gantry.Services.FileSystem.Abstractions.Contracts;
-using Gantry.Services.FileSystem.Configuration.Abstractions;
+﻿using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
-using HarmonyLib;
 
 namespace Gantry.Services.FileSystem.Configuration;
 
@@ -27,6 +24,30 @@ public static class ModSettings
     ///     The global mod settings; these settings will persist through each gameworld.
     /// </summary>
     /// <value>The global settings.</value>
+    internal static IJsonSettingsFile GantryServerGlobal { get; set; }
+
+    /// <summary>
+    ///     The per-world mod settings; these settings can change within each gameworld.
+    /// </summary>
+    /// <value>The per-world settings.</value>
+    internal static IJsonSettingsFile GantryServerWorld { get; set; }
+
+    /// <summary>
+    ///     The global mod settings; these settings will persist through each gameworld.
+    /// </summary>
+    /// <value>The global settings.</value>
+    internal static IJsonSettingsFile GantryClientGlobal { get; set; }
+
+    /// <summary>
+    ///     The per-world mod settings; these settings can change within each gameworld.
+    /// </summary>
+    /// <value>The per-world settings.</value>
+    internal static IJsonSettingsFile GantryClientWorld { get; set; }
+
+    /// <summary>
+    ///     The global mod settings; these settings will persist through each gameworld.
+    /// </summary>
+    /// <value>The global settings.</value>
     internal static IJsonSettingsFile ServerGlobal { get; set; }
 
     /// <summary>
@@ -34,6 +55,18 @@ public static class ModSettings
     /// </summary>
     /// <value>The per-world settings.</value>
     internal static IJsonSettingsFile ServerWorld { get; set; }
+
+    /// <summary>
+    ///     The per-world mod settings; these settings can change within each gameworld.
+    /// </summary>
+    /// <value>The per-world settings.</value>
+    internal static IJsonSettingsFile GantryWorld => ApiEx.OneOf(GantryClientWorld, GantryServerWorld);
+
+    /// <summary>
+    ///     The global mod settings; these settings will persist through each gameworld.
+    /// </summary>
+    /// <value>The global settings.</value>
+    internal static IJsonSettingsFile GantryGlobal => ApiEx.OneOf(GantryClientGlobal, GantryServerGlobal);
 
     /// <summary>
     ///     The global mod settings; these settings will persist through each gameworld.
@@ -51,7 +84,7 @@ public static class ModSettings
     ///     The mod settings for a specific <see cref="FileScope"/>.
     /// </summary>
     /// <value>The global settings.</value>
-    public static IJsonSettingsFile For(FileScope scope)
+    public static IJsonSettingsFile For(FileScope scope, bool gantrySettings = false)
     {
         return scope switch
         {
@@ -65,9 +98,10 @@ public static class ModSettings
     ///     Copies the settings from one scope to another.
     /// </summary>
     /// <param name="scope">The scope to copy the settings to.</param>
-    public static void CopyTo(FileScope scope)
+    /// <param name="gantrySettings"></param>
+    public static void CopyTo(FileScope scope, bool gantrySettings = false)
     {
-        For(scope).File.SaveFrom(For((FileScope)((int)scope ^ 1)).File);
+        For(scope, gantrySettings).File.SaveFrom(For((FileScope)((int)scope ^ 1), gantrySettings).File);
     }
 
     /// <summary>
@@ -86,6 +120,12 @@ public static class ModSettings
 
         ClientGlobal?.Dispose();
         ClientWorld = null;
+
+        GantryClientWorld?.Dispose();
+        GantryClientWorld = null;
+
+        GantryClientGlobal?.Dispose();
+        GantryClientGlobal = null;
     }
 
     private static void ServerDispose()
@@ -95,6 +135,12 @@ public static class ModSettings
 
         ServerWorld?.Dispose();
         ServerWorld = null;
+
+        GantryServerWorld?.Dispose();
+        GantryServerWorld = null;
+
+        GantryServerGlobal?.Dispose();
+        GantryServerGlobal = null;
     }
 
     internal static Harmony FeaturePatcher { get; } = new($"{ModEx.ModInfo.ModID}_ObservableFeatures");

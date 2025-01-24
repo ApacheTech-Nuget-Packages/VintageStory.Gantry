@@ -1,6 +1,6 @@
 ﻿using ApacheTech.Common.BrighterSlim;
 using Gantry.Core.Annotation;
-using Gantry.Core.Brighter.Filters;
+using Gantry.Services.Brighter.Filters;
 using Gantry.Services.BrighterChat;
 
 namespace Gantry.Features.GantryChatCommands.ServerCommands;

@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Serialization;
 using System.Xml;
 

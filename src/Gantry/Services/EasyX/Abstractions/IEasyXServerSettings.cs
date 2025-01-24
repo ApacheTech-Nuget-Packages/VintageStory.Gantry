@@ -1,5 +1,4 @@
-﻿using Gantry.Services.EasyX.ChatCommands.DataStructures;
-using JetBrains.Annotations;
+﻿using Gantry.Core.GameContent.ChatCommands.DataStructures;
 
 namespace Gantry.Services.EasyX.Abstractions;
 

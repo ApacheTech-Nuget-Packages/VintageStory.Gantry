@@ -1,11 +1,9 @@
-﻿using Gantry.Core.ModSystems;
-using Gantry.Features.GantryChatCommands.ClientCommands;
+﻿using Gantry.Features.GantryChatCommands.ClientCommands;
 using Gantry.Services.BrighterChat;
-using Vintagestory.API.Client;
 
 namespace Gantry.Features.GantryChatCommands.Systems;
 
-internal class GantryChatClientSystem : ClientModSystem
+internal class GantryChatClientSystem : ClientSubsystem
 {
     public override void StartClientSide(ICoreClientAPI api)
     {

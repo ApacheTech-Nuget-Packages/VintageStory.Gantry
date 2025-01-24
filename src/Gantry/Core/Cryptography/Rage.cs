@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿
 
 // ReSharper disable InconsistentNaming
 
@@ -52,8 +52,17 @@ public static class Rage
     /// <param name="str">The string used to generate a hash key.</param>
     /// <param name="initialHash">The initial hash key value used to generate the result.</param>
     /// <returns>A hash key compatible with GTA 5.</returns>
+    public static uint UIntJOAAT(string str, uint initialHash = 0)
+        => GetHashKeyFinalize(str, initialHash);
+
+    /// <summary>
+    ///     Gets the hash key of the specified string, using an initial hash key value.
+    /// </summary>
+    /// <param name="str">The string used to generate a hash key.</param>
+    /// <param name="initialHash">The initial hash key value used to generate the result.</param>
+    /// <returns>A hash key compatible with GTA 5.</returns>
     public static string JOAAT(string str, uint initialHash = 0) 
-        => GetHashKeyFinalize(str, initialHash).ToString("X2");
+        => UIntJOAAT(str, initialHash).ToString("X2");
 
     /// <summary>
     ///     Gets the hash key of the specified string concatenated with an additional string, using an initial hash key value.

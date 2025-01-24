@@ -1,9 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
-using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.Extensions.Reflection;
-using JetBrains.Annotations;
 
 namespace Gantry.Core.Hosting.Extensions;
 
@@ -14,7 +12,7 @@ namespace Gantry.Core.Hosting.Extensions;
 internal static class ActivatorEx
 {
     private static readonly MethodInfo GetServiceInfo =
-        GetMethodInfo<Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
+        GetMethodInfo<System.Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
 
     /// <summary>
     ///     Creates an instance of a specified type.
@@ -100,7 +98,7 @@ internal static class ActivatorEx
         var argumentArray = Expression.Parameter(typeof(object[]), "argumentArray");
         var factoryExpressionBody = BuildFactoryExpression(constructor, parameterMap, provider, argumentArray);
 
-        var factoryLambda = Expression.Lambda<Func<IServiceProvider, object[], object>>(
+        var factoryLambda = Expression.Lambda<System.Func<IServiceProvider, object[], object>>(
             factoryExpressionBody, provider, argumentArray);
 
         var result = factoryLambda.Compile();
@@ -151,12 +149,8 @@ internal static class ActivatorEx
     private static object GetService(IServiceProvider sp, Type type, Type requiredBy, bool isDefaultParameterRequired)
     {
         var service = sp.GetService(type);
-        if (service == null && !isDefaultParameterRequired)
-        {
-            var message = $"Unable to resolve service for type '{type}' while attempting to activate '{requiredBy}'.";
-            throw new InvalidOperationException(message);
-        }
-        return service;
+        if (service is not null || isDefaultParameterRequired) return service;
+        throw new InvalidOperationException($"Unable to resolve service for type '{type}' while attempting to activate '{requiredBy}'.");
     }
 
     private static Expression BuildFactoryExpression(

@@ -1,16 +1,13 @@
-﻿using Gantry.Services.FileSystem.Configuration.Abstractions;
-using JetBrains.Annotations;
-
-namespace Gantry.Services.FileSystem.Configuration.Consumers;
+﻿namespace Gantry.Services.FileSystem.Configuration.Consumers;
 
 /// <summary>
 ///     Represents a class that affects, or is affected by specific feature settings.
 /// </summary>
-/// <typeparam name="T">The settings file to use within the patches in this class.</typeparam>
+/// <typeparam name="TSettings">The settings file to use within the patches in this class.</typeparam>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public abstract class WorldSettingsConsumer<T> : ISettingsConsumer where T : FeatureSettings, new()
+public abstract class WorldSettingsConsumer<TSettings> : ISettingsConsumer where TSettings : FeatureSettings<TSettings>, new()
 {
-    private static T _settings;
+    private static TSettings _settings;
 
     /// <summary>
     ///     Gets or sets the settings.
@@ -18,7 +15,7 @@ public abstract class WorldSettingsConsumer<T> : ISettingsConsumer where T : Fea
     /// <value>
     ///     The settings.
     /// </value>
-    protected static T Settings => _settings ??= ModSettings.World?.Feature<T>();
+    protected static TSettings Settings => _settings ??= ModSettings.World?.Feature<TSettings>();
 
     /// <summary>
     ///     Gets or sets the name of the feature.
@@ -26,7 +23,7 @@ public abstract class WorldSettingsConsumer<T> : ISettingsConsumer where T : Fea
     /// <value>
     ///     The name of the feature.
     /// </value>
-    protected static string FeatureName => typeof(T).Name.Replace("Settings", "");
+    protected static string FeatureName => typeof(TSettings).Name.Replace("Settings", "");
 
     /// <summary>
     ///     Saves any changes to the mod settings file.

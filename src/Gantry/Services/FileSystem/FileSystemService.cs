@@ -1,7 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.Extensions.System;
-using Gantry.Core;
-using Gantry.Core.Diagnostics;
+﻿using Gantry.Core.Diagnostics;
 using Gantry.Core.Extensions.DotNet;
 using Gantry.Services.FileSystem.Abstractions;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
@@ -9,10 +6,6 @@ using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Configuration.Extensions;
 using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.Extensions;
-using Newtonsoft.Json;
-using Vintagestory.API.Common;
-using Vintagestory.API.Config;
-
 using static Gantry.Services.FileSystem.ModPaths;
 
 namespace Gantry.Services.FileSystem;
@@ -27,7 +20,7 @@ public sealed class FileSystemService : IFileSystemService
     /// <summary>
     ///     Initialises a new instance of the <see cref="FileSystemService"/> class.
     /// </summary>
-    [InjectableConstructor]
+    [ActivatorUtilitiesConstructor]
     public FileSystemService(ICoreAPI api, FileSystemServiceOptions options)
     {
         _registeredFiles = new Dictionary<string, ModFileBase>();
@@ -36,28 +29,40 @@ public sealed class FileSystemService : IFileSystemService
 
         var worldIdentifier = api.World.SavegameIdentifier;
         WorldGuid = Ensure.PopulatedWith(WorldGuid, worldIdentifier);
-        api.Logger.VerboseDebug($"[Gantry] {modId} WorldGuid: {WorldGuid}");
+        ApiEx.Logger.VerboseDebug($"Initialising FileSystem Service Settings");
+        ApiEx.Logger.VerboseDebug($" - World Identifier: {WorldGuid}");
+        ApiEx.Logger.VerboseDebug($" - World Seed: {api.World.Seed}");
 
         var rootPath = ModInfo.ToModID(ModEx.ModInfo.Authors[0].IfNullOrWhitespace("Gantry"));
         VintageModsRootPath = CreateDirectory(Path.Combine(GamePaths.DataPath, "ModData", rootPath));
-        api.Logger.VerboseDebug($"[Gantry] {modId} VintageModsRootPath: {VintageModsRootPath}");
+        ApiEx.Logger.VerboseDebug($" - VintageModsRootPath: {VintageModsRootPath}");
 
         var rootFolderName = options.RootFolderName.IfNullOrWhitespace(modId);
         ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, rootFolderName));
-        api.Logger.VerboseDebug($"[Gantry] {modId} ModDataRootPath: {ModDataRootPath}");
+        ApiEx.Logger.VerboseDebug($" - ModDataRootPath: {ModDataRootPath}");
+
+        ModDataGantryRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, "gantry"));
+        ApiEx.Logger.VerboseDebug($" - ModDataGantryRootPath: {ModDataGantryRootPath}");
+
+        ModDataGantryGlobalPath = CreateDirectory(Path.Combine(ModDataGantryRootPath, "Global"));
+        ApiEx.Logger.VerboseDebug($" - ModDataGantryGlobalPath: {ModDataGantryGlobalPath}");
+
+        ModDataGantryWorldPath = CreateDirectory(Path.Combine(ModDataGantryRootPath, worldIdentifier));
+        ApiEx.Logger.VerboseDebug($" - ModDataGantryWorldPath: {ModDataGantryWorldPath}");
 
         ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
-        api.Logger.VerboseDebug($"[Gantry] {modId} ModDataGlobalPath: {ModDataGlobalPath}");
+        ApiEx.Logger.VerboseDebug($" - ModDataGlobalPath: {ModDataGlobalPath}");
 
         ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, worldIdentifier));
-        api.Logger.VerboseDebug($"[Gantry] {modId} ModDataWorldPath: {ModDataWorldPath}");
+        ApiEx.Logger.VerboseDebug($" - ModDataWorldPath: {ModDataWorldPath}");
 
         ModRootPath = Path.GetDirectoryName(ModEx.ModAssembly.Location)!;
-        api.Logger.VerboseDebug($"[Gantry] {modId} ModRootPath: {ModRootPath}");
+        ApiEx.Logger.VerboseDebug($" - ModRootPath: {ModRootPath}");
 
         ModAssetsPath = Path.Combine(ModRootPath, "assets");
-        api.Logger.VerboseDebug($"[Gantry] {modId} ModAssetsPath: {ModAssetsPath}");
+        ApiEx.Logger.VerboseDebug($" - ModAssetsPath: {ModAssetsPath}");
 
+        this.RegisterGantrySettingsFiles(api);
         if (options.RegisterSettingsFiles) this.RegisterSettingsFiles(api);
     }
 
@@ -70,9 +75,10 @@ public sealed class FileSystemService : IFileSystemService
     /// </summary>
     /// <param name="fileName">The name of the file, including file extension.</param>
     /// <param name="scope">The scope of the file, be it global, or per-world.</param>
-    public IFileSystemService RegisterFile(string fileName, FileScope scope)
+    /// <param name="gantryFile">Inter-mod gantry settings.</param>
+    public IFileSystemService RegisterFile(string fileName, FileScope scope, bool gantryFile = false)
     {
-        var file = new FileInfo(GetScopedPath(fileName, scope));
+        var file = new FileInfo(GetScopedPath(fileName, scope, gantryFile));
         _registeredFiles.Add(fileName, file.CreateModFileWrapper());
         if (!file.Exists)
         {
@@ -93,12 +99,7 @@ public sealed class FileSystemService : IFileSystemService
             $"File `{fileName}` either does not exist, or has not yet been registered with the FileSystem Service.");
     }
 
-    /// <summary>
-    ///     Retrieves a file that has previously been registered with the FileSystem Service.
-    /// </summary>
-    /// <typeparam name="TFileType">The type of the file type to return as.</typeparam>
-    /// <param name="fileName">The name of the file, including file extension.</param>
-    /// <returns>Return a <typeparamref name="TFileType" /> representation of the file, on disk.</returns>
+    /// <inheritdoc />
     public TFileType GetRegisteredFile<TFileType>(string fileName) where TFileType : IModFileBase
     {
         return (TFileType)GetRegisteredFile(fileName);
@@ -199,7 +200,7 @@ public sealed class FileSystemService : IFileSystemService
         {
             await using var writer = File.CreateText(file.FullName);
             if (file.ParseFileType() != FileType.Json) return;
-            await writer.WriteLineAsync("[]");
+            await writer.WriteLineAsync("{}");
         });
     }
 
@@ -208,6 +209,7 @@ public sealed class FileSystemService : IFileSystemService
     /// </summary>
     public void Dispose()
     {
+        ApiEx.Logger.VerboseDebug("Disposing FileSystem Service");
         ModDataRootPath = null;
         ModDataGlobalPath = null;
         ModDataWorldPath = null;

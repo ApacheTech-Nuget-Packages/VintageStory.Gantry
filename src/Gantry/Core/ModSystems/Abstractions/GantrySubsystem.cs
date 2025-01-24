@@ -1,102 +1,70 @@
-﻿using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Core.ModSystems.Abstractions;
 
 /// <summary>
-///     Represents a base subsystem for the Gantry, providing methods for lifecycle events
-///     such as loading, starting, and asset finalisation on both client and server sides.
+///     Base representation of a ModSystem used to extend Vintage Story.
 /// </summary>
-public abstract class GantrySubsystem
+/// <seealso cref="GantrySubsystem" />
+[UsedImplicitly(ImplicitUseTargetFlags.All)]
+public abstract class GantrySubsystem : GantrySubsystemBase
 {
     /// <summary>
-    ///     Gets the mod this mod system is part of.
+    ///     Initialises a new instance of the <see cref="ModSystemBase"/> class.
     /// </summary>
-    public static Mod Mod => ModEx.Mod;
-
-    /// <summary>
-    ///     Determines whether this mod should be loaded for the specified application side.
-    /// </summary>
-    /// <param name="forSide">The side (client or server) to check.</param>
-    /// <returns>
-    ///     <c>true</c> if the mod should load; otherwise, <c>false</c>.
-    /// </returns>
-    public virtual bool ShouldLoad(EnumAppSide forSide)
-    {
-        return true;
-    }
-
-    /// <summary>
-    ///     Provides the execution order for this mod. Lower values are executed earlier.
-    /// </summary>
-    /// <returns>
-    ///     A double value representing the execution order. Default is <c>0.1</c>.
-    /// </returns>
-    public virtual double ExecuteOrder()
-    {
-        return 0.1;
-    }
-
-    /// <summary>
-    ///     Called during the initial mod loading phase, before any mod receives the <see cref="Start" /> call.
-    /// </summary>
-    /// <param name="api">The API interface for the core game.</param>
-    public virtual void StartPre(ICoreAPI api)
+    protected GantrySubsystem()
     {
     }
 
     /// <summary>
-    ///     Called on both client and server after <see cref="StartPre" /> but before assets are loaded.
-    ///     Typically used to register events, network packets, or initialise core mod components.
+    ///     Common API Components that are available on the server and the client.<br/>
+    ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
-    /// <param name="api">The API interface for the core game.</param>
-    public virtual void Start(ICoreAPI api)
+    public static ICoreAPI UApi => ApiEx.Current;
+
+    /// <summary>
+    ///     Called during initial mod loading, called before any mod receives the call to Start().
+    /// </summary>
+    /// <param name="api">
+    ///     Common API Components that are available on the server and the client.<br/>
+    ///     Cast to ICoreServerAPI or ICoreClientAPI to access side specific features.
+    /// </param>
+    public sealed override void StartPre(ICoreAPI api)
     {
+        StartPreUniversal(api);
+        switch (api)
+        {
+            case ICoreClientAPI capi:
+                StartPreClientSide(capi);
+                break;
+            case ICoreServerAPI sapi:
+                StartPreServerSide(sapi);
+                break;
+        }
     }
 
     /// <summary>
-    ///     Called after assets have been read from disk and patched. Use this to load assets or perform
-    ///     early setup operations. Blocks and items may not yet be fully registered, depending on the
-    ///     execute order.
+    ///     If you need mods to be executed in a certain order, adjust these methods return value.<br/>
+    ///     The server will call each Mods Start() method the ascending order of each mod's execute order value.<br/>
+    ///     And thus, as long as every mod registers it's event handlers in the Start() method, all event handlers<br/>
+    ///     will be called in the same execution order.<br/>
+    ///     Default execute order of some survival mod parts.<br/><br/>
+    /// 
+    ///     World Gen:<br/>
+    ///     - GenTerra: 0<br/>
+    ///     - RockStrata: 0.1<br/>
+    ///     - Deposits: 0.2<br/>
+    ///     - Caves: 0.3<br/>
+    ///     - BlockLayers: 0.4<br/><br/>
+    /// 
+    ///     Asset Loading:<br/>
+    ///     - Json Overrides loader: 0.05<br/>
+    ///     - Load hardcoded mantle block: 0.1<br/>
+    ///     - Block and Item Loader: 0.2<br/>
+    ///     - Recipes (Smithing, Knapping, ClayForming, Grid recipes, Alloys) Loader: 1
     /// </summary>
-    /// <param name="api">The API interface for the core game.</param>
-    public virtual void AssetsLoaded(ICoreAPI api)
+    public override double ExecuteOrder()
     {
-    }
-
-    /// <summary>
-    ///     Finalises asset-related operations after all blocks, items, and other mod elements
-    ///     have been registered.
-    /// </summary>
-    /// <param name="api">The API interface for the core game.</param>
-    public virtual void AssetsFinalize(ICoreAPI api)
-    {
-    }
-
-    /// <summary>
-    ///     Full start method for the client side. At this stage, assets from the server
-    ///     (e.g., blocks, items, and recipes) may not yet be registered in multiplayer games.
-    /// </summary>
-    /// <param name="api">The client-specific API interface.</param>
-    public virtual void StartClientSide(ICoreClientAPI api)
-    {
-    }
-
-    /// <summary>
-    ///     Full start method for the server side. Use this to initialise server-specific
-    ///     logic and behaviours.
-    /// </summary>
-    /// <param name="api">The server-specific API interface.</param>
-    public virtual void StartServerSide(ICoreServerAPI api)
-    {
-    }
-
-    /// <summary>
-    ///     Disposes of the mod. If runtime reloading is supported, implement this method
-    ///     to unregister listeners or handlers.
-    /// </summary>
-    public virtual void Dispose()
-    {
+        return 0.05;
     }
 }

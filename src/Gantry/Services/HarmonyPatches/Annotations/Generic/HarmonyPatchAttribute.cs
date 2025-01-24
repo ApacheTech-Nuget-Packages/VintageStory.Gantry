@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using HarmonyLib;
-
-namespace Gantry.Services.HarmonyPatches.Annotations.Generic;
+﻿namespace Gantry.Services.HarmonyPatches.Annotations.Generic;
 
 /// <summary>
 ///     Annotation to define your Harmony patch methods.

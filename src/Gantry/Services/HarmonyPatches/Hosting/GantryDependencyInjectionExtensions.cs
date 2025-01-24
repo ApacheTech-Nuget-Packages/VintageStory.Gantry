@@ -1,8 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using ApacheTech.Common.Extensions.System;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
+﻿
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global

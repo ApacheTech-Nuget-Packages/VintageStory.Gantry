@@ -1,8 +1,5 @@
 ﻿using Gantry.Core.Extensions.Helpers;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
-using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Extensions;
@@ -17,12 +14,18 @@ public static class PositionExtensions
     ///     Gets the position relative to spawn, given an absolute position within the game world.
     /// </summary>
     /// <param name="pos">The absolute position of the block being queried.</param>
-    /// <param name="world">The world being played.</param>
-    public static BlockPos RelativeToSpawn(this BlockPos pos, IWorldAccessor world)
+    public static BlockPos RelativeToSpawn(this BlockPos pos)
     {
-        var worldSpawn = world.DefaultSpawnPosition.XYZ.AsBlockPos;
-        var blockPos = pos.SubCopy(worldSpawn);
-        return new BlockPos(blockPos.X, pos.Y, blockPos.Z, Dimensions.NormalWorld);
+        return pos.SubCopy(ApiEx.Current.World.DefaultSpawnPosition.XYZ.AsBlockPos).With(p => p.Y = pos.Y);
+    }
+
+    /// <summary>
+    ///     Gets the position relative to spawn, given an absolute position within the game world.
+    /// </summary>
+    /// <param name="pos">The absolute position of the block being queried.</param>
+    public static Vec3d RelativeToSpawn(this Vec3d pos)
+    {
+        return pos.SubCopy(ApiEx.Current.World.DefaultSpawnPosition.XYZ).With(p => p.Y = pos.Y);
     }
 
     /// <summary>
@@ -83,4 +86,24 @@ public static class PositionExtensions
             .CollisionTester
             .GetCollidingCollisionBox(entity.World.BlockAccessor, entity.CollisionBox, position, false) == null;
     }
+
+    /// <summary>
+    ///    Calculates the Euclidean distance between the current position and the specified position.
+    /// </summary>
+    /// <param name="aPos">The current position to calculate the distance from.</param>
+    /// <param name="bPos">The position to calculate the distance to.</param>
+    /// <returns>The Euclidean distance between the two positions.</returns>
+    public static double DistanceTo(this EntityPos aPos, Vec3d bPos)
+        => Math.Sqrt(aPos.SquareDistanceTo(bPos));
+
+    /// <summary>
+    ///    Calculates the Euclidean distance between the current position and the specified position,
+    ///    rounded to the specified precision.
+    /// </summary>
+    /// <param name="aPos">The current position to calculate the distance from.</param>
+    /// <param name="bPos">The position to calculate the distance to.</param>
+    /// <param name="precision">The number of decimal places to round the result to.</param>
+    /// <returns>The Euclidean distance between the two positions, rounded to the specified precision.</returns>
+    public static double RoundedDistanceTo(this EntityPos aPos, Vec3d bPos, int precision)
+        => Math.Round(aPos.DistanceTo(bPos), precision);
 }

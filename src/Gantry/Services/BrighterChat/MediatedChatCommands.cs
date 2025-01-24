@@ -1,7 +1,4 @@
-﻿using Gantry.Core.Hosting;
-using Vintagestory.API.Common;
-
-namespace Gantry.Services.BrighterChat;
+﻿namespace Gantry.Services.BrighterChat;
 
 /// <summary>
 ///     Provides methods for handling chat commands using mediation.

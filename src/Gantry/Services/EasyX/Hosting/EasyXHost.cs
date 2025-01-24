@@ -1,16 +1,8 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.Extensions.System;
-using Gantry.Core;
-using Gantry.Core.Extensions.Api;
-using Gantry.Core.Hosting;
-using Gantry.Services.EasyX.ChatCommands.Parsers;
-using Gantry.Services.EasyX.ChatCommands.Parsers.Extensions;
+﻿using Gantry.Core.Extensions.Api;
+using Gantry.Core.GameContent.ChatCommands.Parsers;
+using Gantry.Core.GameContent.ChatCommands.Parsers.Extensions;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Hosting;
-using Gantry.Services.HarmonyPatches.Hosting;
-using Gantry.Services.Network.Hosting;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 // ReSharper disable InconsistentNaming
@@ -23,46 +15,23 @@ namespace Gantry.Services.EasyX.Hosting;
 ///     
 ///     Registrations performed within this class should be global scope; by convention, features should aim to be as stand-alone as they can be.
 /// </summary>
-/// <remarks>
-///     Only one derived instance of this class should be added to any single mod within
-///     the VintageMods domain. This class will enable Dependency Injection, and add all
-///     the domain services. Derived instances should only have minimal functionality, 
-///     instantiating, and adding Application specific services to the IOC Container.
-/// </remarks>
 /// <seealso cref="ModHost" />
 [UsedImplicitly]
-public abstract class EasyXHost(string _commandName) : ModHost(debugMode:
-#if DEBUG
-    true
-#else
-    false
-#endif
-)
+public abstract class EasyXHost(string _commandName) : ModHost
 {
     private ConfigurationSettings _globalSettings;
 
     ///<inheritdoc />
     protected override void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi)
     {
-        sapi.Logger.GantryDebug($"[{ModEx.ModInfo.Name}] Adding FileSystem Service");
-        services.AddFileSystemService(sapi, o => o.RegisterSettingsFiles = true);
         services.AddFeatureGlobalSettings<ConfigurationSettings>();
-    }
-
-    ///<inheritdoc />
-    protected override void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
-    {
-        api.Logger.GantryDebug($"[{ModEx.ModInfo.Name}] Adding Harmony Service");
-        services.AddHarmonyPatchingService(api, o => o.AutoPatchModAssembly = true);
-
-        api.Logger.GantryDebug($"[{ModEx.ModInfo.Name}] Adding Network Service");
-        services.AddNetworkService(api);
+        base.ConfigureServerModServices(services, sapi);
     }
 
     ///<inheritdoc />
     public override void StartServerSide(ICoreServerAPI api)
     {
-        api.Logger.GantryDebug($"[{ModEx.ModInfo.Name}] Create Chat Command: {_commandName}");
+        ApiEx.Logger.Trace($"Create Chat Command: {_commandName}");
 
         _globalSettings = ModSettings.Global.Feature<ConfigurationSettings>();
         _globalSettings.CommandName = _commandName;

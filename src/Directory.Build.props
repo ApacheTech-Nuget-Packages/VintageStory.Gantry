@@ -6,9 +6,10 @@
 	<!-- Language Specifics -->
 
 	<PropertyGroup>
-		<LangVersion>12</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 		<EnablePackageValidation>true</EnablePackageValidation>
 	</PropertyGroup>
 
@@ -21,7 +22,7 @@
 
 		<Company>ApacheTech Solutions</Company>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<Copyright>Copyright © ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
+		<Copyright>Copyright Ãƒâ€šÃ‚Â© ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
 
 		<DebugSymbols>True</DebugSymbols>
 		<DebugType>embedded</DebugType>
@@ -78,62 +79,256 @@
 		</None>
 	</ItemGroup>
 
-	<!-- Game Library Imports -->
+	<!-- Core Game Library Imports -->
 
 	<ItemGroup>
-		<!-- Vintage Story Game Engine -->
+
+		<!--
+			Library 1: VintagestoryAPI
+			Description: Core API library for interacting with the Vintage Story game engine
+		-->
 		<Reference Include="VintagestoryAPI">
 			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+
+		<!--
+			Library 2: VintagestoryLib
+			Description: Library containing the core functionality and utilities for the Vintage Story game
+		-->
 		<Reference Include="VintagestoryLib">
 			<HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+
+		<!--
+			Library 3: VSEssentials
+			Description: A mod providing essential features and utilities for the Vintage Story game
+		-->
 		<Reference Include="VSEssentials">
 			<HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+
+		<!--
+			Library 4: VSSurvivalMod
+			Description: A mod for enhancing and extending the survival gameplay experience in Vintage Story
+		-->
 		<Reference Include="VSSurvivalMod">
 			<HintPath>$(VINTAGE_STORY)\Mods\VSSurvivalMod.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+
+		<!--
+			Library 5: VSCreativeMod
+			Description: A mod for enhancing and adding creative mode features to the Vintage Story game
+		-->
 		<Reference Include="VSCreativeMod">
 			<HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<!-- Vintage Story Game Libraries -->
-		<Reference Include="xplatforminterface">
-			<HintPath>$(VINTAGE_STORY)\Lib\xplatforminterface.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
+	</ItemGroup>
+
+
+	<!-- Auxhilary Game Library Imports -->
+
+	<ItemGroup>
+
+		<!--
+	        Library 1: 0Harmony
+	        Description: A library for modifying .NET assemblies
+	    -->
 		<Reference Include="0Harmony">
 			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="Newtonsoft.Json">
-			<HintPath>$(VINTAGE_STORY)\Lib\Newtonsoft.Json.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		<Reference Include="protobuf-net">
-			<HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
+
+		<!--
+	        Library 3: cairo-sharp
+	        Description: A .NET binding for the Cairo graphics library
+	    -->
 		<Reference Include="cairo-sharp">
 			<HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<!-- OpenTK Game Libraries -->
+
+		<!--
+	        Library 4: CommandLine
+	        Description: A library for command-line argument parsing
+	    -->
+		<Reference Include="CommandLine">
+			<HintPath>$(VINTAGE_STORY)\Lib\CommandLine.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 12: JsonDiffPatch
+	        Description: A .NET library for performing JSON diff and patch operations
+	    -->
+		<Reference Include="JsonDiffPatch">
+			<HintPath>$(VINTAGE_STORY)\Lib\JsonDiffPatch.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 33: Newtonsoft.Json
+	        Description: A popular .NET library for JSON handling
+	    -->
+		<Reference Include="Newtonsoft.Json">
+			<HintPath>$(VINTAGE_STORY)\Lib\Newtonsoft.Json.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 34: Open.Nat
+	        Description: A library for NAT traversal and UPnP
+	    -->
+		<Reference Include="Open.Nat">
+			<HintPath>$(VINTAGE_STORY)\Lib\Open.Nat.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 36: OpenTK.Audio.OpenAL
+	        Description: OpenTK bindings for the OpenAL audio API
+	    -->
+		<Reference Include="OpenTK.Audio.OpenAL">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Audio.OpenAL.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 37: OpenTK.Compute
+	        Description: OpenTK bindings for compute shaders and OpenCL
+	    -->
+		<Reference Include="OpenTK.Compute">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Compute.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 38: OpenTK.Core
+	        Description: Core library for OpenTK, a .NET wrapper for OpenGL
+	    -->
+		<Reference Include="OpenTK.Core">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Core.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 39: OpenTK.Graphics
+	        Description: OpenTK bindings for OpenGL and graphical APIs
+	    -->
+		<Reference Include="OpenTK.Graphics">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Graphics.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 40: OpenTK.Input
+	        Description: OpenTK bindings for keyboard, mouse, and other input devices
+	    -->
+		<Reference Include="OpenTK.Input">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Input.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 41: OpenTK.Mathematics
+	        Description: Mathematical utilities for OpenTK, including vectors and matrices
+	    -->
+		<Reference Include="OpenTK.Mathematics">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Mathematics.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 42: OpenTK.Windowing.Common
+	        Description: Common types for OpenTK windowing systems
+	    -->
 		<Reference Include="OpenTK.Windowing.Common">
 			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Windowing.Common.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
+
+		<!--
+	        Library 43: OpenTK.Windowing.Desktop
+	        Description: Desktop-specific windowing functionality for OpenTK
+	    -->
 		<Reference Include="OpenTK.Windowing.Desktop">
 			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Windowing.Desktop.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
-		<Reference Include="OpenTK.Mathematics">
-			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Mathematics.dll</HintPath>
+
+		<!--
+	        Library 44: OpenTK.Windowing.GraphicsLibraryFramework
+	        Description: Bindings for GLFW, a library for creating windows with OpenGL
+	    -->
+		<Reference Include="OpenTK.Windowing.GraphicsLibraryFramework">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Windowing.GraphicsLibraryFramework.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 45: protobuf-net
+	        Description: A .NET library for protocol buffers serialization and deserialization
+	    -->
+		<Reference Include="protobuf-net">
+			<HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 46: SharpAvi
+	        Description: A library for creating and manipulating AVI video files in .NET
+	    -->
+		<Reference Include="SharpAvi">
+			<HintPath>$(VINTAGE_STORY)\Lib\SharpAvi.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 47: SharpAvi.SkiaSharp
+	        Description: Integration of SkiaSharp with SharpAvi for video manipulation
+	    -->
+		<Reference Include="SharpAvi.SkiaSharp">
+			<HintPath>$(VINTAGE_STORY)\Lib\SharpAvi.SkiaSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 48: SkiaSharp
+	        Description: A cross-platform graphics library for 2D drawing and text rendering
+	    -->
+		<Reference Include="SkiaSharp">
+			<HintPath>$(VINTAGE_STORY)\Lib\SkiaSharp.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 49: System.Collections.Immutable
+	        Description: A library for creating immutable collections in .NET
+	    -->
+		<Reference Include="System.Collections.Immutable">
+			<HintPath>$(VINTAGE_STORY)\Lib\System.Collections.Immutable.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 58: Tavis.JsonPatch
+	        Description: A .NET library for working with JSON Patch format
+	    -->
+		<Reference Include="Tavis.JsonPatch">
+			<HintPath>$(VINTAGE_STORY)\Lib\Tavis.JsonPatch.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+			Library 64: xplatforminterface
+			Description: A cross-platform interface library
+		 -->
+		<Reference Include="xplatforminterface">
+			<HintPath>$(VINTAGE_STORY)\Lib\xplatforminterface.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 	</ItemGroup>

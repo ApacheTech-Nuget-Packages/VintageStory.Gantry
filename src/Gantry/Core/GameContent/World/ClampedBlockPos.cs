@@ -1,5 +1,3 @@
-using Gantry.Core.Extensions;
-using JetBrains.Annotations;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 

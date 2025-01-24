@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedMember.Local

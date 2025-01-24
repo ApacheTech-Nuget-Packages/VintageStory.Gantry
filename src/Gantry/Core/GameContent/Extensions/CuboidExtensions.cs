@@ -13,7 +13,7 @@ public static class CuboidExtensions
     /// <typeparam name="T">The type expected as an output from all the blocks within the area.</typeparam>
     /// <param name="this">The area to perform the action on.</param>
     /// <param name="f">The action to perform.</param>
-    public static IEnumerable<T> MapAll<T>(this Cuboidi @this, Func<BlockPos, T> f)
+    public static IEnumerable<T> MapAll<T>(this Cuboidi @this, System.Func<BlockPos, T> f)
     {
         for (var y = @this.MinY; y <= @this.MaxY; y++)
             for (var x = @this.MinX; x <= @this.MaxX; x++)

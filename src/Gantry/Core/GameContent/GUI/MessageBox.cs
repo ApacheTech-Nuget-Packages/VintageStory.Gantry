@@ -1,8 +1,5 @@
-﻿using ApacheTech.Common.Extensions.System;
-using Gantry.Core.GameContent.GUI.Abstractions;
+﻿using Gantry.Core.GameContent.GUI.Abstractions;
 using Gantry.Core.GameContent.GUI.Models;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
 
 namespace Gantry.Core.GameContent.GUI;
 
@@ -19,6 +16,21 @@ public sealed class MessageBox : GenericDialogue
     private Action OnOkAction { get; set; }
     private Action OnCancelAction { get; set; }
 
+    /// <inheritdoc />
+    public override double DrawOrder => 1;
+
+    /// <inheritdoc />
+    public override bool CaptureAllInputs() => true;
+
+    /// <inheritdoc />
+    public override double InputOrder => 0;
+
+    /// <inheritdoc />
+    public override EnumDialogType DialogType => EnumDialogType.Dialog;
+
+    /// <inheritdoc />
+    public override bool CaptureRawMouse() => true;
+     
     /// <summary>
     ///     Displays a message box that has a message, title bar caption, and button; and that runs option callback options for positive and negative responses.
     /// </summary>

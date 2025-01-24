@@ -1,17 +1,16 @@
 ﻿using System.ComponentModel;
-using Gantry.Core;
 using Gantry.Services.FileSystem.Enums;
-using HarmonyLib;
 
 namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures;
 
 /// <summary>
 ///     Notifies observers that a property value has changed within a wrapped POCO class.
 /// </summary>
-/// <typeparam name="T">The <see cref="Type"/> of object to watch.</typeparam>
+/// <typeparam name="TSettings">The <see cref="Type"/> of object to watch.</typeparam>
 /// <seealso cref="IDisposable" />
-public class ObservableFeatureSettings<T> : ObservableObject<T> where T : class, new()
+public class ObservableFeatureSettings<TSettings> : ObservableObject<TSettings> where TSettings : FeatureSettings<TSettings>, new()
 {
+    private readonly bool _isGantryFile;
     private readonly string _featureName;
     private readonly FileScope _scope;
 
@@ -22,8 +21,10 @@ public class ObservableFeatureSettings<T> : ObservableObject<T> where T : class,
     /// <param name="featureName">Name of the feature.</param>
     /// <param name="scope">Scope of the feature.</param>
     /// <param name="harmony">The harmony instance to use to patch the files.</param>
-    public ObservableFeatureSettings(T instance, string featureName, FileScope scope, Harmony harmony) : base(instance, harmony)
+    /// <param name="isGantry"></param>
+    public ObservableFeatureSettings(TSettings instance, string featureName, FileScope scope, Harmony harmony, bool isGantry) : base(instance, harmony)
     {
+        _isGantryFile = isGantry;
         _featureName = featureName;
         _scope = scope;
         OnObjectPropertyChanged = OnPropertyChanged;
@@ -37,9 +38,10 @@ public class ObservableFeatureSettings<T> : ObservableObject<T> where T : class,
     /// <param name="instance">The instance of the POCO class that manages the feature settings.</param>
     /// <param name="scope">Scope of the feature.</param>
     /// <param name="harmony">The harmony instance to use to patch the files.</param>
+    /// <param name="isGantry"></param>
     /// <returns>An instance of <see cref="ObservableFeatureSettings{T}"/>, which exposes the <c>PropertyChanged</c> event.</returns>
-    public static ObservableFeatureSettings<T> Bind(T instance, string featureName, FileScope scope, Harmony harmony) => 
-        new(instance, featureName, scope, harmony);
+    public static ObservableFeatureSettings<TSettings> Bind(TSettings instance, string featureName, FileScope scope, Harmony harmony, bool isGantry) => 
+        new(instance, featureName, scope, harmony, isGantry);
 
     private void OnPropertyChanged(object instance, string propertyName)
     {
@@ -48,13 +50,17 @@ public class ObservableFeatureSettings<T> : ObservableObject<T> where T : class,
             if (!Active) return;
             if (Object is null) return;
             if (string.IsNullOrEmpty(_featureName)) return;
-            var settings = ModSettings.For(_scope);
+            var settings = ModSettings.For(_scope, _isGantryFile);
             if (settings is null) return;
             settings.Save(Object, _featureName);
+
+            if (!((TSettings)instance).PropertyChangedDictionary.TryGetValue(propertyName, out var actions)) return;
+            var value = instance.GetType().GetProperty(propertyName)?.GetValue(instance);
+            actions.ForEach(action => action.Action(value));
         }
         catch (Exception ex)
         {
-            ApiEx.Current.Logger.Error(ex);
+            ApiEx.Logger.Error(ex);
         }
     }
 }

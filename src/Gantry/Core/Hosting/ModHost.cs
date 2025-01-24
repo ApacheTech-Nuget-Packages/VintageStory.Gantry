@@ -1,23 +1,17 @@
-﻿using System.Reflection.PortableExecutable;
-using ApacheTech.Common.DependencyInjection;
-using ApacheTech.Common.DependencyInjection.Abstractions;
+﻿using ApacheTech.Common.DependencyInjection;
 using ApacheTech.Common.DependencyInjection.Extensions;
-using ApacheTech.Common.Extensions.System;
-using Gantry.Core.Brighter.Hosting;
-using Gantry.Core.Extensions.Api;
 using Gantry.Core.Hosting.Extensions;
 using Gantry.Core.Hosting.Registration;
 using Gantry.Core.Hosting.Registration.Api;
-using Gantry.Core.ModSystems;
 using Gantry.Core.ModSystems.Abstractions;
+using Gantry.Services.Brighter.Hosting;
+using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Hosting;
+using Gantry.Services.HarmonyPatches;
 using Gantry.Services.HarmonyPatches.Hosting;
 using Gantry.Services.Network.Hosting;
-using HarmonyLib;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-using Vintagestory.API.Config;
+using Humanizer;
+using Humanizer.Localisation;
 using Vintagestory.API.Server;
 
 // ReSharper disable SuspiciousTypeConversion.Global
@@ -38,40 +32,43 @@ public abstract class ModHost : GantrySubsytemHost
     private List<IUniversalServiceRegistrar> _universalServiceRegistrars;
     private List<IServerServiceRegistrar> _serverServiceRegistrars;
     private List<IClientServiceRegistrar> _clientServiceRegistrars;
+    private ILogger _logger;
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="ModHost" /> class.
     /// </summary>
-    protected ModHost(bool debugMode = false)
+    protected ModHost()
     {
 #if DEBUG
-        debugMode = true;
+        Harmony.DEBUG = true;
+        RuntimeEnv.DebugOutOfRangeBlockAccess = true;
+        ModEx.DebugMode = true;
 #endif
-        RuntimeEnv.DebugOutOfRangeBlockAccess = debugMode;
-        ModEx.DebugMode = debugMode;
-        Harmony.DEBUG = debugMode;
         _services = new ServiceCollection();
     }
 
     #region Universal Configuration
 
-    /// <summary>
-    ///     Configures any services that need to be added to the IO Container, on the both app sides, equally.
-    /// </summary>
-    /// <param name="services">The as-of-yet un-built services container.</param>
-    /// <param name="api">Access to the universal API.</param>
-    protected virtual void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
+    /// <inheritdoc />
+    protected override void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
     {
+        _logger.VerboseDebug("Adding FileSystem Service");
         services.AddFileSystemService(api, o => o.RegisterSettingsFiles = true);
+
+        _logger.VerboseDebug("Adding Harmony Service");
         services.AddHarmonyPatchingService(api, o => o.AutoPatchModAssembly = true);
+
+        _logger.VerboseDebug("Adding Network Service");
         services.AddNetworkService(api);
+        
+        base.ConfigureUniversalModServices(services, api);
     }
 
-    private static void ConfigureBrighter(IServiceCollection services, ICoreAPI api)
+    private void ConfigureBrighter(IServiceCollection services, ICoreAPI api)
     {
         var brighterBuilder = services.AddBrighter();
         brighterBuilder.AutoFromAssemblies(api);
-        api.Logger.GantryDebug("[Gantry] ModHost: Registered Brighter Mediator Engine.");
+        _logger.VerboseDebug("ModHost: Registered Brighter Mediator Engine.");
     }
 
     #endregion
@@ -82,42 +79,37 @@ public abstract class ModHost : GantrySubsytemHost
     {
         //  1. Configure game API services.
         _services.With(ioc => ServerApiRegistrar.RegisterServerApiEndpoints(ioc, sapi));
-        sapi.Logger.GantryDebug("[Gantry] ModHost: Registered Server API Endpoints.");
+        _logger.VerboseDebug("ModHost: Registered Server API Endpoints.");
 
         //  2. Register all ModSystems within the mod. Will also self-reference this ModHost. 
         _services.AddModSystems(EnumAppSide.Server);
-        sapi.Logger.GantryDebug("[Gantry] ModHost: Registered Server ModSystems.");
+        _services.AddServerSystems();
+        _logger.VerboseDebug("ModHost: Registered Server ModSystems.");
 
         //  3. Delegate mod service configuration to derived class.
         _services
             .With(ioc => ConfigureBrighter(ioc, sapi))
             .With(ioc => ConfigureUniversalModServices(ioc, sapi))
             .With(ioc => ConfigureServerModServices(ioc, sapi));
-        sapi.Logger.GantryDebug("[Gantry] ModHost: Registered ModHost Services.");
+        _logger.VerboseDebug("ModHost: Registered ModHost Services.");
 
         //  4. Register all features that need registering. 
         _universalServiceRegistrars.ForEach(x => x.ConfigureUniversalModServices(_services, sapi));
-        sapi.Logger.GantryDebug("[Gantry] ModHost: Registered Universal Services.");
+        _logger.VerboseDebug("ModHost: Registered Universal Services.");
 
         _serverServiceRegistrars.ForEach(x => x.ConfigureServerModServices(_services, sapi));
-        sapi.Logger.GantryDebug("[Gantry] ModHost: Registered Server Services.");
+        _logger.VerboseDebug("ModHost: Registered Server Services.");
 
         //  5. Build IOC Container.
         IOC.ServerIOC = _services.BuildServiceProvider();
-        sapi.Logger.GantryDebug("[Gantry] ModHost: IOC.ServerIOC now populated.");
+        _logger.VerboseDebug("ModHost: IOC.ServerIOC now populated.");
 
         // ONLY NOW ARE SERVICES AVAILABLE
 
         //  6. Delegate mod PreStart to derived class.
         StartPreServerSide(sapi);
+        base.StartPreServerSide(sapi);
     }
-
-    /// <summary>
-    ///     Configures any services that need to be added to the IO Container, on the server side.
-    /// </summary>
-    /// <param name="services">The as-of-yet un-built services container.</param>
-    /// <param name="sapi">Access to the server-side API.</param>
-    protected virtual void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi) { }
 
     #endregion
 
@@ -130,6 +122,7 @@ public abstract class ModHost : GantrySubsytemHost
 
         //  2. Register all ModSystems within the mod. Will also self-reference this ModHost. 
         _services.AddModSystems(EnumAppSide.Client);
+        _services.AddClientSystems();
 
         //  3. Delegate mod service configuration to derived class.
         _services
@@ -148,14 +141,8 @@ public abstract class ModHost : GantrySubsytemHost
 
         //  6. Delegate mod PreStart to derived class.
         StartPreClientSide(capi);
+        base.StartPreClientSide(capi);
     }
-
-    /// <summary>
-    ///     Configures any services that need to be added to the IO Container, on the client side.
-    /// </summary>
-    /// <param name="services">The as-of-yet un-built services container.</param>
-    /// <param name="capi">Access to the client-side API.</param>
-    protected virtual void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi) { }
 
     #endregion
 
@@ -171,29 +158,34 @@ public abstract class ModHost : GantrySubsytemHost
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     protected sealed override void StartPreUniversal(ICoreAPI api)
     {
-        ModEx.Initialise(Mod, GetType().Assembly);
-        api.Logger.GantryDebug("[Gantry] ModHost: Initialised ModEx.");
+        var stopwatch = Stopwatch.StartNew();
+        ModEx.Initialise(api, Mod, GetType().Assembly);
+        api.Logger.Event($"Gantry - Loading {Mod.Info.Name}, by {Mod.Info.Authors[0]}");
+        _logger = api.GetGantryLogger();
+        _logger.VerboseDebug("ModHost: Initialised ModEx.");
 
         ApiEx.Initialise(api);
-        api.Logger.GantryDebug("[Gantry] ModHost: Initialised ApiEx.");
+        _logger.VerboseDebug("ModHost: Initialised ApiEx.");
 
         _universalServiceRegistrars = Mod.Systems.OfType<IUniversalServiceRegistrar>().ToList();
-        api.Logger.GantryDebug("[Gantry] ModHost: Populated Universal Mod Service Registrars.");
+        _logger.VerboseDebug("ModHost: Populated Universal Mod Service Registrars.");
         switch (api)
         {
             case ICoreClientAPI capi:
                 _clientServiceRegistrars = Mod.Systems.OfType<IClientServiceRegistrar>().ToList();
-                api.Logger.GantryDebug("[Gantry] ModHost: Populated Client Mod Service Registrars.");
+                _logger.VerboseDebug("ModHost: Populated Client Mod Service Registrars.");
                 BuildClientHost(capi);
                 break;
             case ICoreServerAPI sapi:
                 _serverServiceRegistrars = Mod.Systems.OfType<IServerServiceRegistrar>().ToList();
-                api.Logger.GantryDebug("[Gantry] ModHost: Populated Server Mod Service Registrars.");
+                _logger.VerboseDebug("ModHost: Populated Server Mod Service Registrars.");
                 BuildServerHost(sapi);
                 break;
         }
         StartPreUniversalSide(api);
         base.StartPreUniversal(api);
+        stopwatch.Stop();
+        _logger.VerboseDebug($"Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}");
     }
 
     /// <summary>
@@ -206,10 +198,9 @@ public abstract class ModHost : GantrySubsytemHost
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public sealed override void Start(ICoreAPI api)
     {
-        StartUniversal(api);
         base.Start(api);
-        if (api is not ICoreClientAPI capi) return;
-        capi.Event.LeftWorld += Dispose;
+        StartUniversal(api);
+        if (api is ICoreClientAPI capi) capi.Event.LeftWorld += Dispose;
     }
 
     /// <summary>
@@ -249,21 +240,17 @@ public abstract class ModHost : GantrySubsytemHost
     ///     - Block and Item Loader: 0.2
     ///     - Recipes (Smithing, Knapping, ClayForming, Grid recipes, Alloys) Loader: 1
     /// </summary>
-    public override double ExecuteOrder() => double.MinValue;
+    public sealed override double ExecuteOrder() => double.NegativeInfinity;
 
     /// <summary>
     ///     If this mod allows runtime reloading, you must implement this method to unregister any listeners / handlers
     /// </summary>
     public override void Dispose()
     {
-        DisposeOnLeaveWorld();
-        base.Dispose();
-    }
-
-    private static void DisposeOnLeaveWorld()
-    {
-        (IOC.Services as IDisposable)?.Dispose();
+        IOC.Services.Resolve<IHarmonyPatchingService>().Dispose();
+        IOC.Services.Resolve<IFileSystemService>().Dispose();
         ModEx.ModAssembly.NullifyOrphanedStaticMembers();
+        base.Dispose();
     }
 
     #endregion

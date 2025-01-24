@@ -1,12 +1,12 @@
-﻿
+﻿// ReSharper disable CheckNamespace
 
-// ReSharper disable CheckNamespace
-
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace JetBrains.Annotations;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 /// <summary>
-/// Specifies the details of implicitly used symbol when it is marked
-/// with <see cref="MeansImplicitUseAttribute"/> or <see cref="UsedImplicitlyAttribute"/>.
+///     Specifies the details of implicitly used symbol when it is marked
+///     with <see cref="MeansImplicitUseAttribute"/> or <see cref="UsedImplicitlyAttribute"/>.
 /// </summary>
 [Flags]
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]

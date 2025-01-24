@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
-
-namespace Gantry.Services.Network;
+﻿namespace Gantry.Services.Network;
 
 /// <summary>
 ///     Provides narrowed scope access to network channels within the game.

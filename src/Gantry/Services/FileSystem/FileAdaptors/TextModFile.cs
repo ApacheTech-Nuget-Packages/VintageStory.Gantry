@@ -1,7 +1,6 @@
 ﻿using Gantry.Services.FileSystem.Abstractions;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
-using JetBrains.Annotations;
 
 namespace Gantry.Services.FileSystem.FileAdaptors;
 

@@ -1,14 +1,16 @@
-﻿using System.Diagnostics;
+﻿
 
 // ReSharper disable CheckNamespace
 
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace JetBrains.Annotations;
+#pragma warning restore IDE0130 // Namespace does not match folder structure
 
 /// <summary>
-/// Can be applied to attributes, type parameters, and parameters of a type assignable from <see cref="Type"/> .
-/// When applied to an attribute, the decorated attribute behaves the same as <see cref="UsedImplicitlyAttribute"/>.
-/// When applied to a type parameter or to a parameter of type <see cref="Type"/>,
-/// indicates that the corresponding type is used implicitly.
+///     Can be applied to attributes, type parameters, and parameters of a type assignable from <see cref="Type"/> .
+///     When applied to an attribute, the decorated attribute behaves the same as <see cref="UsedImplicitlyAttribute"/>.
+///     When applied to a type parameter or to a parameter of type <see cref="Type"/>,
+///     indicates that the corresponding type is used implicitly.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.GenericParameter | AttributeTargets.Parameter)]
 [Conditional("JETBRAINS_ANNOTATIONS")]

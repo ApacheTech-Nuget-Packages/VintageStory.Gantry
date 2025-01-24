@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Services.EasyX.Abstractions;
+﻿namespace Gantry.Services.EasyX.Abstractions;
 
 /// <summary>
 ///     Represents the base settings for each EasyX feature within this mod.

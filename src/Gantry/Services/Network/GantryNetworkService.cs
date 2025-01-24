@@ -1,8 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using Gantry.Core;
-using Gantry.Core.Extensions.Api;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
+﻿using Gantry.Core.Extensions.Api;
 using Vintagestory.API.Server;
 
 namespace Gantry.Services.Network;
@@ -32,7 +28,7 @@ public class GantryNetworkService : IUniversalNetworkService
     /// </summary>
     /// <param name="api">The universal Core API.</param>
     /// <param name="options">The options to pass to the service.</param>
-    [InjectableConstructor]
+    [ActivatorUtilitiesConstructor]
     public GantryNetworkService(ICoreAPI api, NetworkServiceOptions options)
     {
         _defaultChannelName = options.DefaultChannelName;
@@ -80,6 +76,7 @@ public class GantryNetworkService : IUniversalNetworkService
     public void RegisterServerChannel(string channelName)
     {
         if (_sapi is null || _sapi.Network.GetChannel(channelName) is not null) return;
+        ApiEx.Logger.Debug($"Registering server network channel: {channelName}");
         _sapi.Network.RegisterChannel(channelName);
     }
 
@@ -90,6 +87,7 @@ public class GantryNetworkService : IUniversalNetworkService
     public void RegisterClientChannel(string channelName)
     {
         if (_capi.Network.GetChannel(channelName) is not null) return;
+        ApiEx.Logger.Debug($"Registering client network channel: {channelName}");
         _capi.Network.RegisterChannel(channelName);
     }
 

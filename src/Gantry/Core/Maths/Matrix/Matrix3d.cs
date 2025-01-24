@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.MathTools;
+﻿using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Maths.Matrix;
 

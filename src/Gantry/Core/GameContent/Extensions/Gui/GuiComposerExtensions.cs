@@ -1,7 +1,4 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.Client.NoObf;
 
 namespace Gantry.Core.GameContent.Extensions.Gui;
 
@@ -19,6 +16,20 @@ public static class GuiComposerExtensions
     public static ElementBounds DefaultButtonBounds()
     {
         return ElementBounds.Fixed(0.0, 0.0, 0.0, 40.0).WithFixedPadding(0.0, 3.0);
+    }
+
+    /// <summary>
+    ///     Hides the GUI from view.
+    /// </summary>
+    public static GuiComposer ComposeHidden(this GuiComposer composer)
+    {
+        composer.Compose();
+        composer.Bounds.Alignment = EnumDialogArea.None;
+        composer.Bounds.fixedOffsetX = 0;
+        composer.Bounds.fixedOffsetY = 0;
+        composer.Bounds.absMarginX = 0;
+        composer.Bounds.absMarginY = 0;
+        return composer;
     }
 
     /// <summary>
@@ -60,5 +71,28 @@ public static class GuiComposerExtensions
         return ApiEx.Client!.OpenedGuis.Contains(dialogue.ToggleKeyCombinationCode)
             ? dialogue.TryClose()
             : dialogue.TryOpen();
+    }
+
+    /// <summary>
+    ///    Adds a lazy slider to the GUI composer, which triggers its action only on mouse release.
+    /// </summary>
+    /// <param name="composer">The GUI composer to which the slider is added.</param>
+    /// <param name="onNewSliderValue">
+    ///    A callback invoked with the slider's value when the slider is adjusted and the mouse is released.
+    /// </param>
+    /// <param name="bounds">The layout bounds of the slider element.</param>
+    /// <param name="key">
+    ///    An optional key to uniquely identify the slider element in the composer. Default is <c>null</c>.
+    /// </param>
+    /// <returns>
+    ///    The updated <see cref="GuiComposer"/> instance to allow for method chaining.
+    /// </returns>
+    public static GuiComposer AddLazySlider(this GuiComposer composer, ActionConsumable<int> onNewSliderValue, ElementBounds bounds, string key = null)
+    {
+        if (composer.Composed) return composer;
+        var slider = new GuiElementSlider(composer.Api, onNewSliderValue, bounds);
+        slider.CallMethod("TriggerOnlyOnMouseUp", true);
+        composer.AddInteractiveElement(slider, key);
+        return composer;
     }
 }

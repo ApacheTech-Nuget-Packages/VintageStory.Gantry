@@ -1,6 +1,4 @@
 ﻿using Cairo;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 
 namespace Gantry.Core.GameContent.GUI.Elements;
 
@@ -38,7 +36,7 @@ public class GuiElementImage : GuiElementTextBase
         context.Save();
         var originalBlendMode = context.Operator;
         context.Operator = _blendMode;
-
+        
         using var imageSurface = getImageSurfaceFromAsset(api, _imageAsset);
         var scaleX = Bounds.OuterWidth / imageSurface.Width;
         var scaleY = Bounds.OuterHeight / imageSurface.Height;

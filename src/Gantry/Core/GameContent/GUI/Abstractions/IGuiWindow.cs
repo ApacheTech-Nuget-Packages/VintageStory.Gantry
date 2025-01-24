@@ -1,5 +1,3 @@
-using Vintagestory.API.Client;
-
 namespace Gantry.Core.GameContent.GUI.Abstractions;
 
 /// <summary>

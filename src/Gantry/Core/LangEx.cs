@@ -1,10 +1,5 @@
 ﻿#nullable enable
-using System.Diagnostics.CodeAnalysis;
-using ApacheTech.Common.Extensions.System;
 using Gantry.Core.Extensions.DotNet;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
-using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 
 namespace Gantry.Core;
@@ -108,10 +103,19 @@ public static class LangEx
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <param name="args">The arguments to pass to the lang file.</param>
     /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string FeatureString(string featureName, string path, params object[] args)
-    {
-        return Lang.Get(FeatureCode(featureName, path), args);
-    }
+    public static string FeatureString(string featureName, string path, params object[] args) 
+        => Lang.Get(FeatureCode(featureName, path), args);
+
+    /// <summary>
+    ///     Returns a localised string.
+    /// </summary>
+    /// <param name="domain">The mod domain the string belongs to.</param>
+    /// <param name="featureName">The name of the feature.</param>
+    /// <param name="path">The path to the feature based string to translate.</param>
+    /// <param name="args">The arguments to pass to the lang file.</param>
+    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
+    public static string FeatureStringFromDomain(string domain, string featureName, string path, params object[] args) 
+        => Lang.Get(FeatureCode(domain, featureName, path), args);
 
     /// <summary>
     ///     Returns a localised string.
@@ -119,10 +123,18 @@ public static class LangEx
     /// <param name="featureName">The name of the feature.</param>
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string FeatureCode(string featureName, string path)
-    {
-        return $"{ModEx.ModInfo.ModID}:Features.{featureName}.{path}";
-    }
+    public static string FeatureCode(string featureName, string path) 
+        => FeatureCode(ModEx.ModInfo.ModID, featureName, path);
+
+    /// <summary>
+    ///     Returns a localised string.
+    /// </summary>
+    /// <param name="domain">The mod domain the code belongs to.</param>
+    /// <param name="featureName">The name of the feature.</param>
+    /// <param name="path">The path to the feature based string to translate.</param>
+    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
+    public static string FeatureCode(string domain, string featureName, string path) 
+        => $"{domain}:Features.{featureName}.{path}";
 
     /// <summary>
     ///     Returns a localised string.
@@ -131,10 +143,8 @@ public static class LangEx
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <param name="args">The arguments to pass to the lang file.</param>
     /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string EmbeddedFeatureString(string featureName, string path, params object[] args)
-    {
-        return GetGantryEmbedded(featureName, $"Features.{featureName}.{path}", args);
-    }
+    public static string EmbeddedFeatureString(string featureName, string path, params object[] args) 
+        => GetGantryEmbedded(featureName, $"Features.{featureName}.{path}", args);
 
     /// <summary>
     ///     Returns a localised string.
@@ -154,10 +164,8 @@ public static class LangEx
     /// </summary>
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <returns>A localised string from the current mod's language files.</returns>
-    public static string Get(string path)
-    {
-        return Lang.Get($"{ModEx.ModInfo.ModID}:{path}");
-    }
+    public static string Get(string path) 
+        => Lang.Get($"{ModEx.ModInfo.ModID}:{path}");
 
     /// <summary>
     ///     Returns a localised string.
@@ -165,10 +173,8 @@ public static class LangEx
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <param name="args">The arguments to pass to the lang file.</param>
     /// <returns>A localised string from the current mod's language files.</returns>
-    public static string Get(string path, params object[] args)
-    {
-        return Lang.Get($"{ModEx.ModInfo.ModID}:{path}", args);
-    }
+    public static string Get(string path, params object[] args) 
+        => Lang.Get($"{ModEx.ModInfo.ModID}:{path}", args);
 
     /// <summary>
     ///     Returns a string, based on whether the specified value if greater than one (1).
@@ -186,8 +192,6 @@ public static class LangEx
     ///     Returns the title of the mod.
     /// </summary>
     /// <returns>A localised string from the mod's language files.</returns>
-    public static string ModTitle()
-    {
-        return Get("ModTitle");
-    }
+    public static string ModTitle() 
+        => Get("ModTitle");
 }

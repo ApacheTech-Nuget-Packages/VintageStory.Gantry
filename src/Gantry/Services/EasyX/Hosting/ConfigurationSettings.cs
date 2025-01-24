@@ -1,7 +1,4 @@
-﻿using Gantry.Core;
-using Gantry.Services.FileSystem.Configuration.Abstractions;
-using Gantry.Services.FileSystem.Enums;
-using Newtonsoft.Json;
+﻿using Gantry.Services.FileSystem.Enums;
 using Newtonsoft.Json.Converters;
 
 namespace Gantry.Services.EasyX.Hosting;
@@ -10,7 +7,7 @@ namespace Gantry.Services.EasyX.Hosting;
 ///     The settings used to configure the mod.
 /// </summary>
 [JsonObject]
-public class ConfigurationSettings : FeatureSettings
+public class ConfigurationSettings : FeatureSettings<ConfigurationSettings>
 {
     internal static ConfigurationSettings Instance { get; set; } = new();
 

@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.MathTools;
+﻿using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Maths.Extensions;
 
@@ -21,5 +20,28 @@ public static class Vec3dExtensions
             vec.X * scaleFactor,
             vec.Y * scaleFactor,
             vec.Z * scaleFactor);
+    }
+
+    /// <summary>
+    ///     Converts an absolute position to a relative coordinate string based on the spawn location.
+    /// </summary>
+    /// <param name="absolutePosition">The absolute position in world coordinates.</param>
+    /// <returns>
+    ///     A string representing the relative coordinates in the format "X: {x}, Y: {y}, Z: {z}".
+    /// </returns>
+    public static string ToRelativeCoordinateString(this Vec3d absolutePosition)
+        => absolutePosition.AsBlockPos.ToRelativeCoordinateString();
+
+    /// <summary>
+    ///     Converts an absolute position to a relative coordinate string based on the spawn location.
+    /// </summary>
+    /// <param name="absolutePosition">The absolute position in world coordinates.</param>
+    /// <returns>
+    ///     A string representing the relative coordinates in the format "X: {x}, Y: {y}, Z: {z}".
+    /// </returns>
+    public static string ToRelativeCoordinateString(this BlockPos absolutePosition)
+    {
+        var relativePosition = absolutePosition.RelativeToSpawn();
+        return $"X: {relativePosition.X}, Y: {relativePosition.Y}, Z: {relativePosition.Z}";
     }
 }

@@ -11,13 +11,6 @@ namespace Gantry.Core.Diagnostics;
 [Serializable]
 public class GantryException : Exception
 {
-    //
-    // For guidelines regarding the creation of new exception types, see
-    //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpconerrorraisinghandlingguidelines.asp
-    // and
-    //    http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dncscol/html/csharp07192001.asp
-    //
-
     /// <summary>
     ///     Initialises a new instance of the <see cref="GantryException"/> class.
     /// </summary>

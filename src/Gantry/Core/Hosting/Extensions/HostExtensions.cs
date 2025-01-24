@@ -1,10 +1,8 @@
 ﻿#nullable enable
 using System.Reflection;
-using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+using ApacheTech.Common.Extensions.Harmony;
 using Gantry.Core.Hosting.Annotation;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
+using Vintagestory.Server;
 
 namespace Gantry.Core.Hosting.Extensions;
 
@@ -74,14 +72,40 @@ public static class HostExtensions
             }
             catch(Exception ex)
             {
-                ApiEx.Current.Logger.Error($"[Gantry] Could not add mod `{p.GetType().FullName}` to the service collection.");
-                ApiEx.Current.Logger.Error(ex);
+                ApiEx.Logger.Error($"Could not add mod `{p.GetType().FullName}` to the service collection.");
+                ApiEx.Logger.Error(ex);
                 return false;
             }
 
         });
 
         foreach (var system in modSystems)
+        {
+            services.AddSingleton(system.GetType(), system);
+        }
+    }
+
+    /// <summary>
+    ///     Registers all <see cref="ClientSystem"/>s into the service collection.
+    /// </summary>
+    /// <param name="services">The service collection to add the <see cref="ClientSystem"/>s to.</param>
+    public static void AddClientSystems(this IServiceCollection services)
+    {
+        var clientSystems = ApiEx.ClientMain.GetField<ClientSystem[]>("clientSystems");
+        foreach (var system in clientSystems)
+        {
+            services.AddSingleton(system.GetType(), system);
+        }
+    }
+
+    /// <summary>
+    ///     Registers all <see cref="ServerSystem"/>s into the service collection.
+    /// </summary>
+    /// <param name="services">The service collection to add the <see cref="ServerSystem"/>s to.</param>
+    public static void AddServerSystems(this IServiceCollection services)
+    {
+        var serverSystems = ApiEx.ServerMain.GetField<ServerSystem[]>("Systems");
+        foreach (var system in serverSystems)
         {
             services.AddSingleton(system.GetType(), system);
         }

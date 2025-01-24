@@ -1,6 +1,4 @@
-﻿using Vintagestory.API.Common;
-
-namespace Gantry.Services.EasyX.Extensions;
+﻿namespace Gantry.Services.EasyX.Extensions;
 
 /// <summary>
 ///     Extension methods to aid building sub-commands for EasyX features.

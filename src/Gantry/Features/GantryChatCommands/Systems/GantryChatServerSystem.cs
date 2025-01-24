@@ -1,9 +1,8 @@
-﻿using Gantry.Core.ModSystems;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Features.GantryChatCommands.Systems;
 
-internal class GantryChatServerSystem : ServerModSystem
+internal class GantryChatServerSystem : ServerSubsystem
 {
     public override void StartServerSide(ICoreServerAPI api)
     {

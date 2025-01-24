@@ -1,8 +1,6 @@
-﻿using Gantry.Core.Extensions;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
-using Vintagestory.API.Datastructures;
+﻿using Vintagestory.API.Datastructures;
 using Vintagestory.ServerMods.NoObf;
+using JsonPatchAlias = Vintagestory.ServerMods.NoObf.JsonPatch;
 
 namespace Gantry.Core.GameContent.Extensions;
 
@@ -27,7 +25,7 @@ public static class TavisExtensions
     /// </summary>
     /// <param name="api">The core API used by the game, on both the client, and the server.</param>
     /// <param name="patch">The patch to apply.</param>
-    public static void ApplyJsonPatch(this ICoreAPI api, JsonPatch patch)
+    public static void ApplyJsonPatchAlias(this ICoreAPI api, JsonPatchAlias patch)
     {
         // Still using these awkward pass by reference dummy values.
         // Ideally, the part of the method that actually adds the patch should be extracted.
@@ -41,7 +39,7 @@ public static class TavisExtensions
     /// </summary>
     /// <param name="api">The core API used by the game, on both the client, and the server.</param>
     /// <param name="patches">The patches to apply.</param>
-    public static void ApplyJsonPatches(this ICoreAPI api, List<JsonPatch> patches)
+    public static void ApplyJsonPatchAliases(this ICoreAPI api, List<JsonPatchAlias> patches)
     {
         var jsonPatcher = api.ModLoader.GetModSystem<ModJsonPatchLoader>();
         foreach (var patch in patches)
@@ -55,7 +53,7 @@ public static class TavisExtensions
     /// </summary>
     /// <param name="jsonPatcher">The <see cref="ModJsonPatchLoader"/> ModSystem used to patch JSON files in the game.</param>
     /// <param name="patch">The patch to apply.</param>
-    public static void ApplyPatch(this ModJsonPatchLoader jsonPatcher, JsonPatch patch)
+    public static void ApplyPatch(this ModJsonPatchLoader jsonPatcher, JsonPatchAlias patch)
     {
         // Still using these awkward pass by reference dummy values.
         // Ideally, the part of the method that actually adds the patch should be extracted.
@@ -67,7 +65,7 @@ public static class TavisExtensions
     /// </summary>
     /// <param name="jsonPatcher">The <see cref="ModJsonPatchLoader"/> ModSystem used to patch JSON files in the game.</param>
     /// <param name="patches">The patches to apply.</param>
-    public static void ApplyPatches(this ModJsonPatchLoader jsonPatcher, List<JsonPatch> patches)
+    public static void ApplyPatches(this ModJsonPatchLoader jsonPatcher, List<JsonPatchAlias> patches)
     {
         foreach (var patch in patches)
         {
@@ -85,7 +83,7 @@ public static class TavisExtensions
         where TBlockBehaviour : BlockBehavior
     {
         api.RegisterBlockBehaviour<TBlockBehaviour>();
-        api.ApplyJsonPatch(new JsonPatch
+        api.ApplyJsonPatchAlias(new JsonPatchAlias
         {
             Op = EnumJsonPatchOp.AddEach,
             File = fileAsset,
@@ -104,7 +102,7 @@ public static class TavisExtensions
         where TBehaviour : BlockEntityBehavior
     {
         api.RegisterBlockEntityBehaviour<TBehaviour>();
-        api.ApplyJsonPatch(new JsonPatch
+        api.ApplyJsonPatchAlias(new JsonPatchAlias
         {
             Op = EnumJsonPatchOp.AddEach,
             File = fileAsset,

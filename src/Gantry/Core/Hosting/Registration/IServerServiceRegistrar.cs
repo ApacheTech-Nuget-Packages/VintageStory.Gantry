@@ -1,6 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using JetBrains.Annotations;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Core.Hosting.Registration;
 
@@ -15,5 +13,5 @@ public interface IServerServiceRegistrar
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="sapi">Access to the server-side API.</param>
-    void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi);
+    virtual void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi) { }
 }

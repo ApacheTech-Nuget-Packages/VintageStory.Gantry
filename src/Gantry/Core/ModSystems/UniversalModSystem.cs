@@ -1,6 +1,4 @@
 ﻿using Gantry.Core.ModSystems.Abstractions;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 namespace Gantry.Core.ModSystems;

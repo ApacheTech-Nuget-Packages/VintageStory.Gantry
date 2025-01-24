@@ -1,5 +1,4 @@
 ﻿using Gantry.Services.FileSystem.Enums;
-using JetBrains.Annotations;
 
 namespace Gantry.Services.FileSystem.Abstractions.Contracts;
 
@@ -72,5 +71,6 @@ public interface IFileSystemService : IDisposable
     /// </summary>
     /// <param name="fileName">The name of the file, including file extension.</param>
     /// <param name="scope">The scope of the file, be it global, or per-world.</param>
-    public IFileSystemService RegisterFile(string fileName, FileScope scope);
+    /// <param name="gantryFile">Inter-mod gantry settings.</param>
+    public IFileSystemService RegisterFile(string fileName, FileScope scope, bool gantryFile = false);
 }

@@ -1,7 +1,5 @@
 ﻿using Gantry.Services.FileSystem.v2.Abstractions;
 using Gantry.Services.FileSystem.v2.DataStructures;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
 
 namespace Gantry.Services.FileSystem.v2.FileTypes.JsonSettings;
 

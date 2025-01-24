@@ -1,11 +1,6 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using ApacheTech.Common.Extensions.System;
-using Gantry.Services.FileSystem.Abstractions.Contracts;
+﻿using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Enums;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
 
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedMember.Global
@@ -44,10 +39,10 @@ public static class GantryDependencyInjectionExtensions
     /// <param name="scope">The settings file to add the feature to.</param>
     /// <param name="featureName">The name of the feature.</param>
     /// <returns>A reference to this instance, after this operation has completed.</returns>
-    public static IServiceCollection AddFeatureSettings<TSettings>(this IServiceCollection services, FileScope scope, string featureName = null) where TSettings : class, new()
+    public static IServiceCollection AddFeatureSettings<TSettings>(this IServiceCollection services, FileScope scope, string featureName = null) where TSettings : FeatureSettings<TSettings>, new()
     {
         if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
-        services.AddSingleton(_ => ModSettings.For(scope).Feature<TSettings>(featureName));
+        services.AddSingleton(_ => ModSettings.For(scope, gantrySettings: false).Feature<TSettings>(featureName));
         return services;
     }
 
@@ -58,7 +53,7 @@ public static class GantryDependencyInjectionExtensions
     /// <param name="services">The services collection to add the service to.</param>
     /// <param name="featureName">The name of the feature.</param>
     /// <returns>A reference to this instance, after this operation has completed.</returns>
-    public static IServiceCollection AddFeatureWorldSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+    public static IServiceCollection AddFeatureWorldSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : FeatureSettings<TSettings>, new()
     {
         if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
         services.AddSingleton(_ => ModSettings.World.Feature<TSettings>(featureName));
@@ -72,10 +67,39 @@ public static class GantryDependencyInjectionExtensions
     /// <param name="services">The services collection to add the service to.</param>
     /// <param name="featureName">The name of the feature.</param>
     /// <returns>A reference to this instance, after this operation has completed.</returns>
-    public static IServiceCollection AddFeatureGlobalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : class, new()
+    public static IServiceCollection AddFeatureGlobalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : FeatureSettings<TSettings>, new()
     {
         if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
         services.AddSingleton(_ => ModSettings.Global.Feature<TSettings>(featureName));
+        return services;
+    }
+
+    /// <summary>
+    ///     Adds a per-world settings service for a specific feature.
+    /// </summary>
+    /// <typeparam name="TSettings">The type of the settings.</typeparam>
+    /// <param name="services">The services collection to add the service to.</param>
+    /// <param name="featureName">The name of the feature.</param>
+    /// <returns>A reference to this instance, after this operation has completed.</returns>
+    internal static IServiceCollection AddGantryWorldSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : FeatureSettings<TSettings>, new()
+    {
+        if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
+        var settings = ModSettings.GantryWorld.Feature<TSettings>(featureName);
+        services.AddSingleton(settings);
+        return services;
+    }
+
+    /// <summary>
+    ///     Adds a global settings service for a specific feature.
+    /// </summary>
+    /// <typeparam name="TSettings">The type of the settings.</typeparam>
+    /// <param name="services">The services collection to add the service to.</param>
+    /// <param name="featureName">The name of the feature.</param>
+    /// <returns>A reference to this instance, after this operation has completed.</returns>
+    internal static IServiceCollection AddGantryGlobalSettings<TSettings>(this IServiceCollection services, string featureName = null) where TSettings : FeatureSettings<TSettings>, new()
+    {
+        if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
+        services.AddSingleton(_ => ModSettings.GantryGlobal.Feature<TSettings>(featureName));
         return services;
     }
 }

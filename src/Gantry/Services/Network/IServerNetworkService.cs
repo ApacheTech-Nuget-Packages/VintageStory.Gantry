@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Services.Network;
 

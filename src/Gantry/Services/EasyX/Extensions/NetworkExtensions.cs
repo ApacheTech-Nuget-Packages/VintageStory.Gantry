@@ -1,6 +1,4 @@
-﻿using Gantry.Core;
-using Vintagestory.API.Common;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Services.EasyX.Extensions;
 

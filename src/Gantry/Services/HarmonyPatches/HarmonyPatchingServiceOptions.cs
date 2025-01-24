@@ -1,8 +1,4 @@
-﻿using Gantry.Core;
-using HarmonyLib;
-using JetBrains.Annotations;
-
-namespace Gantry.Services.HarmonyPatches;
+﻿namespace Gantry.Services.HarmonyPatches;
 
 /// <summary>
 ///     Options for creating the Harmony Patching Service.

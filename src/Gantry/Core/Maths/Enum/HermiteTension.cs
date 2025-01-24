@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Core.Maths.Enum;
+﻿namespace Gantry.Core.Maths.Enum;
 
 /// <summary>
 ///     How sharply does the curve bend?

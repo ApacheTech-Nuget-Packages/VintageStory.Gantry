@@ -1,11 +1,4 @@
-﻿using Gantry.Core.Maths.Extensions;
-using JetBrains.Annotations;
-using OpenTK.Mathematics;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
-using Vintagestory.API.MathTools;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Core.GameContent.Extensions;
 
@@ -30,21 +23,6 @@ public static class PlayerExtensions
             return;
         }
         ((IServerPlayer)player).SendMessage(groupId, message, chatType);
-    }
-
-    /// <summary>
-    ///     Changes the facing of a given agent, to face directly towards a target gameworld location, using quaternions to avoid gimbal lock.
-    /// </summary>
-    /// <param name="agentPos">The agent's position.</param>
-    /// <param name="targetPos">The target position.</param>
-    /// <returns>An <see cref="EntityPos"/>, containing the agent's current XYZ position, and the new YPR rotations.</returns>
-    public static EntityPos LookDirectlyAt(this EntityPos agentPos, Vec3d targetPos)
-    {
-        var targetDirection = agentPos.XYZ.RelativeRotationalDirectionQuaternion(targetPos).ToVec3f();
-        var entityPos = agentPos.Copy();
-        entityPos.HeadYaw = targetDirection.Y % GameMath.TWOPI;
-        entityPos.HeadPitch = GameMath.PI - targetDirection.X;
-        return entityPos;
     }
 
     /// <summary>

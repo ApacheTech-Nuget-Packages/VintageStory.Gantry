@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.Extensions;
+﻿namespace Gantry.Core.Extensions;
 
 /// <summary>
 ///     Extension methods to aid working with the current player's game mode.

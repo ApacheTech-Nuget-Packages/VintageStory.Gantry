@@ -1,7 +1,4 @@
 ﻿using ApacheTech.Common.BrighterSlim;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
 
 namespace Gantry.Core.Hosting;
 
@@ -25,13 +22,13 @@ public static class IOC
     ///     Gets the IOC Resolver for the Server.
     /// </summary>
     /// <value>The IOC Resolver for the Server.</value>
-    public static IServiceProvider ServerIOC { get; set; }
+    internal static IServiceProvider ServerIOC { get; set; }
 
     /// <summary>
     ///     Gets the IOC Resolver for the Client.
     /// </summary>
     /// <value>The IOC Resolver for the Client.</value>
-    public static IServiceProvider ClientIOC { get; set; }
+    internal static IServiceProvider ClientIOC { get; set; }
 
     /// <summary>
     ///     Gets the IOC Resolver for the current app-side.

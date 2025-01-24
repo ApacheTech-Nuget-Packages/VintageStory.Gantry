@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
-using HarmonyLib;
-using JetBrains.Annotations;
 
 namespace Gantry.Core;
 

@@ -1,6 +1,4 @@
 ﻿using Gantry.Core.ModSystems.Abstractions;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 namespace Gantry.Core.ModSystems;
@@ -9,7 +7,7 @@ namespace Gantry.Core.ModSystems;
 ///     Acts as a base class for Server-Side Only ModSystems. Derived classes will only be loaded on the Server.
 /// </summary>
 /// <seealso cref="ModSystemBase" />
-public abstract class ServerSubsystem : SubsystemBase
+public abstract class ServerSubsystem : GantrySubsystem
 {
     /// <summary>
     ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
@@ -27,11 +25,22 @@ public abstract class ServerSubsystem : SubsystemBase
     }
 
     /// <inheritdoc />
-    public sealed override void StartClientSide(ICoreClientAPI api) { }
+    public sealed override void StartPreUniversal(ICoreAPI api)
+        => base.StartPreUniversal(api);
 
     /// <inheritdoc />
-    protected sealed override void StartPreClientSide(ICoreClientAPI capi) { }
+    public sealed override void StartPreClientSide(ICoreClientAPI capi)
+        => base.StartPreClientSide(capi);
 
     /// <inheritdoc />
-    protected sealed override void StartPreUniversal(ICoreAPI api) { }
+    public sealed override void StartClientSide(ICoreClientAPI capi)
+        => base.StartClientSide(capi);
+
+    /// <inheritdoc />
+    public sealed override void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api) 
+        => base.ConfigureUniversalModServices(services, api);
+
+    /// <inheritdoc />
+    public sealed override void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi) 
+        => base.ConfigureClientModServices(services, capi);
 }

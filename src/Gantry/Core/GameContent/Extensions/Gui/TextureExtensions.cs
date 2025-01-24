@@ -1,8 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.GameContent.Extensions.Gui;
+﻿namespace Gantry.Core.GameContent.Extensions.Gui;
 
 /// <summary>
 ///     Extension methods to aid when working with textures.

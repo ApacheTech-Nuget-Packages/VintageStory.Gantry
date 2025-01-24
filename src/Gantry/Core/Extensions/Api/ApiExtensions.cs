@@ -1,13 +1,8 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using ApacheTech.Common.Extensions.Harmony;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
+﻿using ApacheTech.Common.Extensions.Harmony;
+using CommandLine;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.Client;
-using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
 namespace Gantry.Core.Extensions.Api;
@@ -136,6 +131,21 @@ public static class ApiExtensions
     }
 
     /// <summary>
+    ///     Returns the <see cref="ServerMain"/> from the current <see cref="ICoreServerAPI"/> instance.
+    /// </summary>
+    public static ServerProgramArgs CommandLineArguments(this ICoreServerAPI api)
+    {
+        var rawArgs = api.CmdlArguments;
+        var progArgsRaw = new Parser(delegate (ParserSettings config)
+        {
+            config.HelpWriter = null;
+            config.AutoHelp = false;
+            config.AutoVersion = false;
+        }).ParseArguments<ServerProgramArgs>(rawArgs);
+        return progArgsRaw.Value;
+    }
+
+    /// <summary>
     ///     Returns the <see cref="ICoreServerAPI"/> from the current <see cref="ServerMain"/> instance.
     /// </summary>
     public static ICoreServerAPI AsApi(this ServerMain game)
@@ -205,7 +215,7 @@ public static class ApiExtensions
         return ApiEx.Return(
             capi => capi.IsSinglePlayer,
             sapi => !sapi.IsDedicatedServerProcess()
-                    || ApiEx.ServerMain.MainSockets.Any(x => x is not DummyNetServer));
+                    || ApiEx.ServerMain.MainSockets.Any(x => x is not DummyTcpNetServer));
     }
 
     /// <summary>
@@ -218,7 +228,7 @@ public static class ApiExtensions
     {
         api.Event.EnqueueMainThreadTask(() =>
         {
-            api.Event.RegisterCallback(onDelayedCallbackTick, millisecondInterval);
+            api.Event.RegisterCallback(onDelayedCallbackTick, millisecondInterval, permittedWhilePaused: true);
         }, "");
     }
 

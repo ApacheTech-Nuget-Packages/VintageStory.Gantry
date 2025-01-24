@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Core.Extensions.Api;
 
@@ -40,6 +37,29 @@ public static class AppSideExtensions
     /// <summary>
     ///     Invokes an action, based on whether it's being called by the client, or the server.
     /// </summary>
+    /// <param name="api">The app side in question.</param>
+    /// <param name="clientAction">The client action.</param>
+    /// <param name="serverAction">The server action.</param>
+    public static void RunOneOf(this ICoreAPI api, Action<ICoreClientAPI> clientAction, Action<ICoreServerAPI> serverAction)
+    {
+        switch (api.Side)
+        {
+            case EnumAppSide.Server:
+                serverAction(api as ICoreServerAPI);
+                break;
+            case EnumAppSide.Client:
+                clientAction(api as ICoreClientAPI);
+                break;
+            case EnumAppSide.Universal:
+                throw new InvalidOperationException("Cannot determine app-side. Enum evaluated to 'Universal'.");
+            default:
+                throw new ArgumentOutOfRangeException(nameof(clientAction));
+        }
+    }
+
+    /// <summary>
+    ///     Invokes an action, based on whether it's being called by the client, or the server.
+    /// </summary>
     /// <remarks>
     ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
     /// </remarks>
@@ -61,7 +81,7 @@ public static class AppSideExtensions
     /// <param name="side">The app side in question.</param>
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
-    public static T ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction)
+    public static T ReturnOneOf<T>(this EnumAppSide side, System.Func<T> clientAction, System.Func<T> serverAction)
     {
         return (T)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke();
     }
@@ -76,7 +96,7 @@ public static class AppSideExtensions
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
     /// <param name="parameter">The parameter to pass to the invoked action.</param>
-    public static T ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction, T parameter)
+    public static T ReturnOneOf<T>(this EnumAppSide side, System.Func<T> clientAction, System.Func<T> serverAction, T parameter)
     {
         return (T)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke(parameter);
     }

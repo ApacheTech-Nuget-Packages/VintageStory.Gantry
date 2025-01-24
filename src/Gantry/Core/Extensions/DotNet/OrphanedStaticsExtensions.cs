@@ -1,6 +1,4 @@
 ﻿using System.Reflection;
-using HarmonyLib;
-using JetBrains.Annotations;
 
 // ReSharper disable SuspiciousTypeConversion.Global
 

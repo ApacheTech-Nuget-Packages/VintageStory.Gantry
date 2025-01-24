@@ -3,7 +3,5 @@
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
 
-using System.Diagnostics.CodeAnalysis;
-
 [assembly: SuppressMessage("Style", "IDE0290:Use primary constructor", Scope = "module"
     , Justification = "Primary constructors should not be used as a first call.")]

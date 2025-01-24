@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
 
 namespace Gantry.Services.ExtendedEnums;
 

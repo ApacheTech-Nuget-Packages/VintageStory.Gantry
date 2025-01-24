@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Core.Extensions.Helpers;
+﻿namespace Gantry.Core.Extensions.Helpers;
 
 /// <summary>
 ///     Static Helper class for Random Number Generation.

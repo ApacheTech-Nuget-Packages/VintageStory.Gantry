@@ -1,7 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using Vintagestory.API.Common;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 using Vintagestory.Server;
 
 namespace Gantry.Core.Hosting.Registration.Api;

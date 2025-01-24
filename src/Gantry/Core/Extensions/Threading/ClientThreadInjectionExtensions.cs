@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using ApacheTech.Common.Extensions.Harmony;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.Client.NoObf;
+﻿using ApacheTech.Common.Extensions.Harmony;
 
 // ReSharper disable StringLiteralTypo
 
@@ -29,7 +25,7 @@ public static class ClientThreadInjectionExtensions
     /// </summary>
     /// <param name="api">
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all
-    ///     sub-components, and some miscellaneous methods.
+    ///     subcomponents, and some miscellaneous methods.
     /// </param>
     /// <param name="name">The name of the ClientSystem to find.</param>
     /// <returns><c>true</c> if the ClientSystem is loaded; otherwise, <c>false</c>.</returns>
@@ -43,7 +39,7 @@ public static class ClientThreadInjectionExtensions
     /// </summary>
     /// <param name="api">
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all
-    ///     sub-components, and some miscellaneous methods.
+    ///     subcomponents, and some miscellaneous methods.
     /// </param>
     /// <typeparam name="TClientSystem">The type of the ClientSystem to find.</typeparam>
     /// <returns><c>true</c> if the ClientSystem is loaded; otherwise, <c>false</c>.</returns>
@@ -108,13 +104,12 @@ public static class ClientThreadInjectionExtensions
         clientThreads.Add(thread);
     }
 
-    private static object CreateClientThread(IClientWorldAccessor world, string name,
-        IEnumerable<ClientSystem> systems)
+    private static object CreateClientThread(IClientWorldAccessor world, string name, ClientSystem[] systems)
     {
-        var instance = ClientThread.CreateInstance();
+        var instance = HarmonyReflectionExtensions.CreateInstance(ClientThread);
         instance.SetField("game", world as ClientMain);
         instance.SetField("threadName", name);
-        instance.SetField("clientsystems", systems.ToArray());
+        instance.SetField("clientsystems", systems);
         instance.SetField("lastFramePassedTime", new Stopwatch());
         instance.SetField("totalPassedTime", new Stopwatch());
         instance.SetField("paused", false);

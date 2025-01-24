@@ -1,10 +1,7 @@
 ﻿using System.Drawing;
-using Gantry.Core.Extensions;
+using Gantry.Core.Annotation;
 using Gantry.Core.Extensions.Api;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable StringLiteralTypo
@@ -66,7 +63,7 @@ public static class WaypointExtensions
         {
             if (pos.WaypointExistsAtPos(p => p.Icon == icon)) return;
         }
-        pos = pos.RelativeToSpawn(world);
+        pos = pos.RelativeToSpawn();
         ApiEx.Client!.SendChatMessage($"/waypoint addati {icon} {pos.X} {pos.Y} {pos.Z} {(pinned ? "true" : "false")} {colour} {title}");
     }
 
@@ -207,4 +204,37 @@ public static class WaypointExtensions
     ///     Converts the colour of the waypoint into a <see cref="Color"/>.
     /// </summary>
     public static Color ColourAsColor(this Waypoint waypoint) => Color.FromArgb(waypoint.Color | -16777216);
+
+    /// <summary>
+    ///     Finds the current index of the specified waypoint.
+    /// </summary>
+    /// <param name="waypoint">The waypoint to find the index of.</param>
+    /// <param name="capi">The world in which to find the waypoint.</param>
+    /// <returns>The index of the specified waypoint, or -1 if not found.</returns>
+    public static int GetIndex(this Waypoint waypoint, ICoreClientAPI capi = null)
+    {
+        var worldMapManager = (capi ?? ApiEx.Client).ModLoader.GetModSystem<WorldMapManager>();
+        var waypointMapLayer = worldMapManager.WaypointMapLayer();
+        return waypoint.GetIndex(waypointMapLayer);
+    }
+
+    /// <summary>
+    ///     Finds the current index of the specified waypoint.
+    /// </summary>
+    /// <param name="waypoint">The waypoint to find the index of.</param>
+    /// <param name="waypointMapLayer">The world in which to find the waypoint.</param>
+    /// <returns>The index of the specified waypoint, or -1 if not found.</returns>
+    public static int GetIndex(this Waypoint waypoint, WaypointMapLayer waypointMapLayer) 
+        => waypointMapLayer.ownWaypoints.FindIndex(p => p.Guid == waypoint.Guid);
+
+    /// <summary>
+    ///     Calculates the distance between the given waypoint and the player's position.
+    /// </summary>
+    /// <param name="waypoint">The waypoint to calculate the distance from.</param>
+    /// <param name="player">The player whose position will be used for the distance calculation.</param>
+    /// <returns>The distance between the player and the waypoint.</returns>
+    [ClientSide]
+    public static double DistanceFromPlayer(this Waypoint waypoint, IPlayer player = null)
+        => (player ?? ApiEx.Client.World.Player).Entity.Pos.DistanceTo(waypoint.Position);
+
 }

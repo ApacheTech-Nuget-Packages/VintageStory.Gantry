@@ -1,6 +1,4 @@
 ﻿using Gantry.Core.ModSystems.Abstractions;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 namespace Gantry.Core.ModSystems;
@@ -9,7 +7,7 @@ namespace Gantry.Core.ModSystems;
 ///     Acts as a base class for Universal Mod Systems, that work on both the Client, and Server.
 /// </summary>
 /// <seealso cref="ModSystemBase" />
-public abstract class UniversalSubsystem : SubsystemBase
+public abstract class UniversalSubsystem : GantrySubsystem
 {
     /// <summary>
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all subcomponents, and some miscellaneous methods.

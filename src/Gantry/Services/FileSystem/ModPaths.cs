@@ -1,5 +1,4 @@
-﻿using Gantry.Core;
-using Gantry.Services.FileSystem.Enums;
+﻿using Gantry.Services.FileSystem.Enums;
 
 namespace Gantry.Services.FileSystem;
 
@@ -24,6 +23,24 @@ public static class ModPaths
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
     public static string ModDataRootPath { get; internal set; }
+
+    /// <summary>
+    ///     Gets the path used for storing gantry data files.
+    /// </summary>
+    /// <value>A path on the filesystem, used to store gantry files.</value>
+    public static string ModDataGantryRootPath { get; internal set; }
+
+    /// <summary>
+    ///     Gets the path used for storing gantry data files.
+    /// </summary>
+    /// <value>A path on the filesystem, used to store gantry files.</value>
+    public static string ModDataGantryGlobalPath { get; internal set; }
+
+    /// <summary>
+    ///     Gets the path used for storing gantry data files.
+    /// </summary>
+    /// <value>A path on the filesystem, used to store gantry files.</value>
+    public static string ModDataGantryWorldPath { get; internal set; }
 
     /// <summary>
     ///     Gets the path used for storing global data files.
@@ -58,17 +75,17 @@ public static class ModPaths
     {
         var dir = new DirectoryInfo(path);
         if (dir.Exists) return dir.FullName;
-        ModEx.Mod.Logger.VerboseDebug($"[Gantry] Creating folder: {dir}");
+        ApiEx.Logger.VerboseDebug($"Creating folder: {dir}");
         dir.Create();
         return dir.FullName;
     }
 
-    internal static string GetScopedPath(string fileName, FileScope scope)
+    internal static string GetScopedPath(string fileName, FileScope scope, bool gantryFile = false)
     {
         var directory = scope switch
         {
-            FileScope.Global => ModDataGlobalPath,
-            FileScope.World => ModDataWorldPath,
+            FileScope.Global => gantryFile ? ModDataGantryGlobalPath : ModDataGlobalPath,
+            FileScope.World => gantryFile ? ModDataGantryWorldPath : ModDataWorldPath,
             _ => throw new ArgumentOutOfRangeException(nameof(scope), scope, null)
         };
         return Path.Combine(directory, fileName);

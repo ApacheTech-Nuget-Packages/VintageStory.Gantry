@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using ApacheTech.Common.Extensions.Harmony;
-using JetBrains.Annotations;
+﻿using ApacheTech.Common.Extensions.Harmony;
 using Vintagestory.API.Server;
 using Vintagestory.Server;
 
@@ -14,22 +12,12 @@ namespace Gantry.Core.Extensions.Threading;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class ServerThreadInjectionExtensions
 {
-    private static readonly Type ServerThread;
-
-    /// <summary>
-    ///     Initialises static members of the <see cref="ServerThreadInjectionExtensions" /> class.
-    /// </summary>
-    static ServerThreadInjectionExtensions()
-    {
-        ServerThread = typeof(ServerMain).Assembly.GetClassType("ServerThread");
-    }
-
     /// <summary>
     ///     Determines whether a given ServerSystem is present within the game's registry.
     /// </summary>
     /// <param name="api">
     ///     The core API implemented by the server. The main interface for accessing the server.
-    ///     Contains all sub-components, and some miscellaneous methods.
+    ///     Contains all subcomponents, and some miscellaneous methods.
     /// </param>
     /// <typeparam name="TServerSystem">The type of the ServerSystem to find.</typeparam>
     /// <returns><c>true</c> if the ServerSystem is loaded; otherwise, <c>false</c>.</returns>
@@ -78,31 +66,18 @@ public static class ServerThreadInjectionExtensions
     /// <param name="world">The world accessor API for the server.</param>
     /// <param name="name">The name of the thread to inject.</param>
     /// <param name="systems">One or more custom <see cref="ServerSystem" /> implementations to run on the thread.</param>
-    public static void InjectServerThread(this IServerWorldAccessor world, string name,
-        params ServerSystem[] systems)
+    public static void InjectServerThread(this IServerWorldAccessor world, string name, params ServerSystem[] systems)
     {
-        var instance = CreateServerThread(world, name, systems);
+        var game = (ServerMain)world;
+        var serverThread = new ServerThread(game, name, game.ServerThreadsCts.Token)
+        {
+            serversystems = systems
+        };
         var serverThreads = world.GetServerThreads();
         var vanillaSystems = world.GetServerSystems();
-
         foreach (var system in systems) vanillaSystems.Push(system);
-
-        (world as ServerMain).SetField("Systems", vanillaSystems.ToArray());
-
-        var thread = new Thread(() => instance.CallMethod("Process")) { IsBackground = true, Name = name };
+        game.SetField("Systems", vanillaSystems.ToArray());
+        var thread = new Thread(serverThread.Process) { IsBackground = true, Name = name };
         serverThreads.Add(thread);
-    }
-
-    private static object CreateServerThread(IServerWorldAccessor world, string name, IEnumerable<ServerSystem> systems)
-    {
-        var instance = ServerThread.CreateInstance();
-        instance.SetField("server", world as ServerMain);
-        instance.SetField("threadName", name);
-        instance.SetField("serversystems", systems.ToArray());
-        instance.SetField("lastFramePassedTime", new Stopwatch());
-        instance.SetField("totalPassedTime", new Stopwatch());
-        instance.SetField("paused", false);
-        instance.SetField("alive", true);
-        return instance;
     }
 }

@@ -1,11 +1,7 @@
 ﻿using System.Reflection;
-using ApacheTech.Common.DependencyInjection.Abstractions;
 using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.Common.Extensions.Reflection;
-using Gantry.Core;
-using Gantry.Services.HarmonyPatches.Annotations;
-using HarmonyLib;
-using Vintagestory.API.Common;
+using Gantry.Services.HarmonyPatches.Extensions;
 
 namespace Gantry.Services.HarmonyPatches;
 
@@ -27,7 +23,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// </summary>
     /// <param name="api">The api to use for game related calls.</param>
     /// <param name="options">The options.</param>
-    [InjectableConstructor]
+    [ActivatorUtilitiesConstructor]
     public HarmonyPatchingService(ICoreAPI api, HarmonyPatchingServiceOptions options)
     {
         _api = api;
@@ -53,8 +49,8 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     }
 
     /// <summary>
-    /// By default, all annotated [HarmonyPatch] classes in the executing assembly will
-    /// be processed at launch. Manual patches can be processed later on at runtime.
+    ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
+    ///     be processed at launch. Manual patches can be processed later on at runtime.
     /// </summary>
     public void PatchModAssembly()
     {
@@ -65,8 +61,8 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     }
 
     /// <summary>
-    /// By default, all annotated [HarmonyPatch] classes in the executing assembly will
-    /// be processed at launch. Manual patches can be processed later on at runtime.
+    ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
+    ///     be processed at launch. Manual patches can be processed later on at runtime.
     /// </summary>
     public void PatchAssembly(Assembly assembly)
     {
@@ -76,15 +72,15 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             PatchAll(harmony, assembly);
             var patches = harmony.GetPatchedMethods().ToList();
             if (!patches.Any()) return;
-            _api.Logger.VerboseDebug($"\t[Gantry] {assembly.GetName()} - Patched Methods:"); // _api is null???
+            ApiEx.Logger.VerboseDebug("\tPatched Methods:");
             foreach (var method in patches)
             {
-                _api.Logger.VerboseDebug($"\t\t{method.FullDescription()}");
+                ApiEx.Logger.VerboseDebug($"\t\t{method.FullDescription()}");
             }
         }
         catch (Exception ex)
         {
-            _api.Logger.Error($"[Gantry] {ex}");
+            ApiEx.Logger.Error(ex);
         }
     }
 
@@ -117,28 +113,126 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
         foreach (var (type, attribute) in sidedPatches)
         {
-            if (!RequiresModPredicate(type)) continue;
+            if (!HasRequiredDependencies(type)) continue;
             if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
-            _api.Logger.VerboseDebug($"[Gantry] Patching {type}");
-            var processor = instance.CreateClassProcessor(type);
-            processor.Patch();
+            ApiEx.Logger.VerboseDebug($"Patching {type}");
+
+            var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+
+            foreach (var method in methods)
+            {
+                var harmonyPatch = method.GetCustomAttribute<HarmonyPatch>();
+                if (harmonyPatch is not null)
+                {
+                    var originalMethod = GetTargetMethod(harmonyPatch);
+                    if (originalMethod is null)
+                    {
+                        ApiEx.Logger.VerboseDebug($" - Failed to resolve target method for patch: {method.Name}");
+                        ApiEx.Logger.Error($"Failed to resolve target method for patch: {method.Name}. Method may have been removed, or renamed.");
+                        continue;
+                    }
+
+                    var patchedMethod = new HarmonyMethod(method) { before = [method.Name] };
+                    if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
+                    {
+                        if (originalMethod.HasPatch(HarmonyPatchType.Prefix, method.Name)) continue;
+                        ApiEx.Logger.VerboseDebug($" - Applying prefix patch: {method.Name}");
+                        instance.Patch(originalMethod, prefix: patchedMethod);
+                    }
+                    else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
+                    {
+                        if (originalMethod.HasPatch(HarmonyPatchType.Postfix, method.Name)) continue;
+                        ApiEx.Logger.VerboseDebug($" - Applying postfix patch: {method.Name}");
+                        instance.Patch(originalMethod, postfix: patchedMethod);
+                    }
+                    else if(method.GetCustomAttribute<HarmonyTranspiler>() is not null)
+                    {
+                        if (originalMethod.HasPatch(HarmonyPatchType.Transpiler, method.Name)) continue;
+                        ApiEx.Logger.VerboseDebug($" - Applying transpiler patch: {method.Name}");
+                        instance.Patch(originalMethod, transpiler: patchedMethod);
+                    }
+                    else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
+                    {
+                        if (originalMethod.HasPatch(HarmonyPatchType.Finalizer, method.Name)) continue;
+                        ApiEx.Logger.VerboseDebug($" - Applying finaliser patch: {method.Name}");
+                        instance.Patch(originalMethod, finalizer: patchedMethod);
+                    }
+                    else if (method.GetCustomAttribute<HarmonyReversePatch>() is not null)
+                    {
+                        ApiEx.Logger.VerboseDebug($" - Applying reverse patch: {method.Name}");
+                        instance.CreateReversePatcher(originalMethod, patchedMethod).Patch();
+                    }
+
+                    if (method.GetCustomAttribute<HarmonyTelemetryPatchAttribute>() is not null)
+                    {
+                        ApiEx.Logger.VerboseDebug($" - Applying telemetry patch: {method.Name}");
+                        instance.ApplyTelemetryPatch(method, originalMethod);
+                    }
+
+                }
+            }
         }
     }
 
-    private bool RequiresModPredicate(Type type)
+    /// <summary>
+    ///     Resolves the target method specified by the HarmonyPatch attribute, including support for constructors.
+    /// </summary>
+    /// <param name="patchAttribute">The HarmonyPatch attribute.</param>
+    /// <returns>The target MethodBase.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when the target method cannot be resolved.</exception>
+    private static MethodBase GetTargetMethod(HarmonyPatch patchAttribute)
+    {
+        if (patchAttribute.info.declaringType is null)
+        {
+            throw new InvalidOperationException("Invalid HarmonyPatch attribute; declaring type is not specified. Are internals visible to Gantry?");
+        }
+
+        return patchAttribute.info.methodType switch
+        {
+            MethodType.Getter => AccessTools.PropertyGetter(patchAttribute.info.declaringType, patchAttribute.info.methodName),
+            MethodType.Setter => AccessTools.PropertySetter(patchAttribute.info.declaringType, patchAttribute.info.methodName),
+            MethodType.Constructor => AccessTools.Constructor(patchAttribute.info.declaringType, patchAttribute.info.argumentTypes),
+            MethodType.StaticConstructor => AccessTools.Constructor( patchAttribute.info.declaringType, patchAttribute.info.argumentTypes, searchForStatic: true ),
+            _ => AccessTools.Method(patchAttribute.info.declaringType, patchAttribute.info.methodName, patchAttribute.info.argumentTypes)
+        };
+    }
+
+    /// <summary>
+    ///     Checks if the specified type has all required dependencies enabled.
+    /// </summary>
+    /// <param name="type">The type to check for dependencies.</param>
+    /// <returns>
+    ///     <c>true</c> if the type either has no <see cref="RequiresModAttribute"/> attributes 
+    ///     or all required mods are enabled; otherwise, <c>false</c>.
+    /// </returns>
+    /// <remarks>
+    ///     This method retrieves all <see cref="RequiresModAttribute"/> attributes applied to the specified type.
+    ///     If there are no such attributes, the type is considered to have no dependencies and the method returns <c>true</c>.
+    ///     If the type has dependencies, the method verifies that all required mods are enabled using the mod loader.
+    /// </remarks>
+    private bool HasRequiredDependencies(Type type)
     {
         var attributes = type.GetCustomAttributes<RequiresModAttribute>().ToArray();
         return attributes.Length == 0 || attributes.All(attribute => _api.ModLoader.IsModEnabled(attribute.ModId));
     }
+
 
     /// <summary>
     ///     Un-patches all methods, within all patch host instances being handled by this service.
     /// </summary>
     public void UnpatchAll()
     {
-        foreach (var harmony in _instances)
+        try
         {
-            harmony.Value.UnpatchAll(harmony.Key);
+            foreach (var harmony in _instances)
+            {
+                ApiEx.Logger.VerboseDebug($"Unpatching Harmony instance: {harmony.Key}");
+                harmony.Value.UnpatchAll(harmony.Key);
+            }
+        }
+        catch (Exception ex)
+        {
+            ApiEx.Logger.Error(ex);
         }
     }
 

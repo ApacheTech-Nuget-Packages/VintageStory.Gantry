@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using JetBrains.Annotations;
-using Vintagestory.API.Config;
-
-namespace Gantry.Core.Extensions.Helpers;
+﻿namespace Gantry.Core.Extensions.Helpers;
 
 /// <summary>
 ///     Extension methods to aid with cross-platform operations. 

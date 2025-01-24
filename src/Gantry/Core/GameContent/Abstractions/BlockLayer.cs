@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Core.GameContent.Abstractions;
+﻿namespace Gantry.Core.GameContent.Abstractions;
 
 /// <summary>
 ///     Constants used for GetBlock or GetBlockId calls throughout the engine, to guide whether the block should be read from the solid blocks layer, the fluids layer, or perhaps both.

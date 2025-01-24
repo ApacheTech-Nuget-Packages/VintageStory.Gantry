@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
-
-namespace Gantry.Core.GameContent.Shaders;
+﻿namespace Gantry.Core.GameContent.Shaders;
 
 /// <summary>
 ///     Represents a generic shader program, that allows values to be passed to the shader, every frame.

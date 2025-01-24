@@ -1,6 +1,4 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using HarmonyLib;
-using JetBrains.Annotations;
 
 namespace Gantry.Core.Extensions.Harmony;
 
@@ -23,5 +21,39 @@ public static class HarmonyReflectionExtensions
             .Where(t => t.PropertyType == typeof(T))
             .Select(x => instance.GetProperty<T>(x.Name))
             .ToArray();
+    }
+
+    /// <summary>
+    ///     Calls a base class method on an instance of an object via reflection.
+    ///     This can be used to invoke protected or private base class methods within another assembly.
+    /// </summary>
+    /// <param name="instance">The instance to call the base method from.</param>
+    /// <param name="method">The name of the base method to call.</param>
+    /// <param name="args">The arguments to pass to the method.</param>
+    /// <returns>The return value of the reflected base method call.</returns>
+    /// <exception cref="MissingMethodException">Thrown if the base method cannot be found.</exception>
+    public static void CallBaseMethod<TBaseClass>(this object instance, string method, params object[] args)
+    {
+        var baseType = instance.GetType().BaseType;
+        if (baseType?.FullName != typeof(TBaseClass).FullName) return;
+        AccessTools.Method(baseType, method)?.Invoke(instance, args);
+    }
+
+    /// <summary>
+    ///     Calls a base class method on an instance of an object via reflection.
+    ///     This can be used to invoke protected or private base class methods within another assembly.
+    /// </summary>
+    /// <typeparam name="TBaseClass">The type of the base class.</typeparam>
+    /// <typeparam name="TValue">The return type expected from the base method.</typeparam>
+    /// <param name="instance">The instance to call the base method from.</param>
+    /// <param name="method">The name of the base method to call.</param>
+    /// <param name="args">The arguments to pass to the method.</param>
+    /// <returns>The return value of the reflected base method call.</returns>
+    /// <exception cref="MissingMethodException">Thrown if the base method cannot be found.</exception>
+    public static TValue CallBaseMethod<TBaseClass, TValue>(this object instance, string method, params object[] args)
+    {
+        var baseType = instance.GetType().BaseType;
+        if (baseType is not TBaseClass) return default;
+        return (TValue)AccessTools.Method(baseType, method)?.Invoke(instance, args);
     }
 }

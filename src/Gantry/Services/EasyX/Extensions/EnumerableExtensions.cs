@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Services.EasyX.Extensions;
+﻿namespace Gantry.Services.EasyX.Extensions;
 
 /// <summary>
 ///     

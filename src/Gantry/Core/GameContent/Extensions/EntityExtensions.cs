@@ -1,7 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Gantry.Core.Maths.Extensions;
 using OpenTK.Mathematics;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 
@@ -57,6 +55,38 @@ public static class EntityExtensions
     }
 
     /// <summary>
+    ///     Changes the facing of a given agent, to face directly towards a target gameworld location, using quaternions to avoid gimbal lock.
+    /// </summary>
+    /// <param name="agentPos">The agent's position.</param>
+    /// <param name="targetPos">The target position.</param>
+    /// <returns>An <see cref="EntityPos"/>, containing the agent's current XYZ position, and the new YPR rotations.</returns>
+    public static EntityPos DirectlyFace(this EntityPos agentPos, Vec3d targetPos)
+    {
+        var targetDirection = agentPos.XYZ.RelativeRotationalDirection(targetPos);
+        var entityPos = agentPos.Copy();
+        entityPos.Pitch = GameMath.PI - targetDirection.X;
+        entityPos.Yaw = targetDirection.Y % GameMath.TWOPI;
+        entityPos.HeadPitch = GameMath.PI - targetDirection.X;
+        entityPos.HeadYaw = targetDirection.Y % GameMath.TWOPI;
+        return entityPos;
+    }
+
+    /// <summary>
+    ///     Changes the facing of a given agent, to face directly towards a target gameworld location, using quaternions to avoid gimbal lock.
+    /// </summary>
+    /// <param name="agentPos">The agent's position.</param>
+    /// <param name="targetPos">The target position.</param>
+    /// <returns>An <see cref="EntityPos"/>, containing the agent's current XYZ position, and the new YPR rotations.</returns>
+    public static EntityPos LookDirectlyAt(this EntityPos agentPos, Vec3d targetPos)
+    {
+        var targetDirection = agentPos.XYZ.RelativeRotationalDirectionQuaternion(targetPos).ToVec3f();
+        var entityPos = agentPos.Copy();
+        entityPos.HeadPitch = GameMath.PI - targetDirection.X;
+        entityPos.HeadYaw = targetDirection.Y % GameMath.TWOPI;
+        return entityPos;
+    }
+
+    /// <summary>
     ///     Determines the relative rotational direction as a quaternion between two locations.
     /// </summary>
     /// <param name="sourcePos">The source position.</param>
@@ -68,7 +98,7 @@ public static class EntityExtensions
         direction.Normalize();
         var yaw = (float)Math.Atan2(direction.Z, direction.X);
         var pitch = (float)Math.Asin(direction.Y);
-        return Quaternion.FromEulerAngles(0, yaw, pitch);
+        return Quaternion.FromEulerAngles(pitch, yaw, 0);
     }
 
     /// <summary>
@@ -80,7 +110,7 @@ public static class EntityExtensions
     public static Vec2f RelativeRotationalDirection(this Vec3d sourcePos, Vec3d targetPos)
     {
         var cartesianCoordinates = targetPos.SubCopy(sourcePos).Normalize();
-        var yaw = GameMath.TWOPI - (float)Math.Atan2(cartesianCoordinates.Z, cartesianCoordinates.X);
+        var yaw = GameMath.PIHALF - (float)Math.Atan2(cartesianCoordinates.Z, cartesianCoordinates.X);
         var pitch = (float)Math.Asin(cartesianCoordinates.Y);
         return new Vec2f(pitch, yaw);
     }

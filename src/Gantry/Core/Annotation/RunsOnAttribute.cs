@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.Annotation;
+﻿namespace Gantry.Core.Annotation;
 
 /// <summary>
 ///     Indicates that the decorated member or object is only meant for use on a specified app side. It is up to the developer to enforce this rule.

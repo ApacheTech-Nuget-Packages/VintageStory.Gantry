@@ -1,8 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.GameContent.GUI.Helpers;
+﻿namespace Gantry.Core.GameContent.GUI.Helpers;
 
 /// <summary>
 ///     Extension methods to aid adding elements to GUI forms.

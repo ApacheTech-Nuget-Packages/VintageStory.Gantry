@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core;
 using Gantry.Core.GameContent.GUI.Abstractions;
-using Vintagestory.API.Client;
 
 namespace Gantry.Services.FileSystem.Dialogue;
 
@@ -58,13 +56,17 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
 
     private void ToggleProperty(string propertyName, bool state)
     {
-        // HACK: Be aware that this can cause the dynamic save to be called BEFORE the value is changed. Changes must be saved to file MANUALLY!.
+        // HACK: Be aware that this can cause the dynamic save to be called BEFORE the value is changed.
+        //
+        // Changes must be saved to file MANUALLY!.
         //
         // A more robust idea would be to have a FeatureSettings class that holds Global, World, and Local accessors, as well as a Save function
         // that can be used to manually save each type. However, ideally, Local settings should be read only.
         //
         // Further to this, more testing is needed, because the main issues with the dialogue were caused by ModSettings not being disposed between
         // worlds, when logging in and out of a server. With that issue now fixed, it's possible this class will work as intended, once again.
+        //
+        // Check again in 1.20 to see if this has been resolved with the new changes to the ModHost.
 
         Settings.SetProperty(propertyName, state);
         RefreshValues();

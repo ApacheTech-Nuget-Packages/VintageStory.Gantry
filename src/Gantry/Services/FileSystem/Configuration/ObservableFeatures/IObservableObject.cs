@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures;
+﻿namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures;
 
 /// <summary>
 ///     Represents a class that notifies observers that a property value has changed within a wrapped POCO class.

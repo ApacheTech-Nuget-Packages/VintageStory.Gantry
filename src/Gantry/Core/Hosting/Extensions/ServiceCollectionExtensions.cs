@@ -1,7 +1,4 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-
-namespace Gantry.Core.Hosting.Extensions;
+﻿namespace Gantry.Core.Hosting.Extensions;
 
 /// <summary>
 ///		Extension methods that extend the functionality of the dependency injection engine.

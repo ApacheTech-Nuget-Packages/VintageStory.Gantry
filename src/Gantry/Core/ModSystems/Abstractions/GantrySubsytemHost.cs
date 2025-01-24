@@ -1,9 +1,6 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+﻿using Gantry.Core.Extensions.DotNet;
 using Gantry.Core.Hosting.Registration;
 using Gantry.Core.ModSystems.Extensions;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 // ReSharper disable SuspiciousTypeConversion.Global
@@ -13,64 +10,96 @@ namespace Gantry.Core.ModSystems.Abstractions;
 /// <summary>
 ///     Controls the loading of all <see cref="GantrySubsystem"/> instance within a mod.
 /// </summary>
-public abstract class GantrySubsytemHost : UniversalModSystem, IClientServiceRegistrar, IServerServiceRegistrar
+public abstract class GantrySubsytemHost : UniversalModSystem
 {
-    private IEnumerable<GantrySubsystem> _clientSubsystems;
-    private IEnumerable<GantrySubsystem> _serverSubsystems;
+    private IEnumerable<GantrySubsystem> _subsystems;
 
     /// <inheritdoc />
     protected override void StartPreUniversal(ICoreAPI api)
     {
-        ApiEx.OneOf(_clientSubsystems, _serverSubsystems).InvokeForAll(p => p.StartPre(api));
+        Invoke(p => p.StartPre(api));
         base.StartPreUniversal(api);
+    }
+
+    /// <inheritdoc />
+    protected override void StartPreClientSide(ICoreClientAPI capi)
+    {
+        Invoke(p => p.StartPreClientSide(capi));
+        base.StartPreClientSide(capi);
+    }
+
+    /// <inheritdoc />
+    protected override void StartPreServerSide(ICoreServerAPI sapi)
+    {
+        Invoke(p => p.StartPreServerSide(sapi));
+        base.StartPreServerSide(sapi);
     }
 
     /// <inheritdoc />
     public override void Start(ICoreAPI api)
     {
-        ApiEx.OneOf(_clientSubsystems, _serverSubsystems).InvokeForAll(p => p.Start(api));
+        Invoke(p => p.Start(api));
         base.Start(api);
     }
 
     /// <inheritdoc />
     public override void StartClientSide(ICoreClientAPI api)
     {
-        _clientSubsystems.InvokeForAll(p => p.StartClientSide(api));
+        Invoke(p => p.StartClientSide(api));
         base.StartClientSide(api);
     }
 
     /// <inheritdoc />
     public override void StartServerSide(ICoreServerAPI api)
     {
-        _serverSubsystems.InvokeForAll(p => p.StartServerSide(api));
+        Invoke(p => p.StartServerSide(api));
         base.StartServerSide(api);
     }
 
     /// <inheritdoc />
     public override void AssetsLoaded(ICoreAPI api)
     {
-        ApiEx.OneOf(_clientSubsystems, _serverSubsystems).InvokeForAll(p => p.AssetsLoaded(api));
+        Invoke(p => p.AssetsLoaded(api));
         base.AssetsLoaded(api);
     }
 
     /// <inheritdoc />
     public override void AssetsFinalize(ICoreAPI api)
     {
-        ApiEx.OneOf(_clientSubsystems, _serverSubsystems).InvokeForAll(p => p.AssetsFinalize(api));
+        Invoke(p => p.AssetsFinalize(api));
         base.AssetsFinalize(api);
     }
 
-    /// <inheritdoc />
-    void IServerServiceRegistrar.ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi)
+    /// <inheritdoc cref="IUniversalServiceRegistrar.ConfigureUniversalModServices(IServiceCollection, ICoreAPI)" />
+    protected virtual void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
     {
-        _serverSubsystems = ModEx.ModAssemblies.LoadGantrySubsystems(EnumAppSide.Server);
-        _serverSubsystems.InvokeForAll(p => services.TryAddSingleton(p));
+        var subsystems = ModEx.ModAssemblies.LoadGantrySubsystems();
+        subsystems.For(api.Side).InvokeForAll(instance =>
+        {
+            instance.ConfigureUniversalModServices(services, api);
+            ApiEx.Run(
+                capi => instance.ConfigureClientModServices(services, capi),
+                sapi => instance.ConfigureServerModServices(services, sapi));
+            var serviceType = instance.GetType();
+            var descriptor = ServiceDescriptor.Singleton(serviceType, instance);
+            services.AddSingleton(instance);
+            services.TryAdd(descriptor);
+        });
     }
 
-    /// <inheritdoc />
-    void IClientServiceRegistrar.ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi)
+    /// <inheritdoc cref="IServerServiceRegistrar.ConfigureServerModServices(IServiceCollection, ICoreServerAPI)" />
+    protected virtual void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi)
     {
-        _clientSubsystems = ModEx.ModAssemblies.LoadGantrySubsystems(EnumAppSide.Client);
-        _clientSubsystems.InvokeForAll(p => services.TryAddSingleton(p));
+    }
+
+    /// <inheritdoc cref="IClientServiceRegistrar.ConfigureClientModServices(IServiceCollection, ICoreClientAPI)" />
+    protected virtual void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi)
+    {
+    }
+
+    private void Invoke(Action<GantrySubsystem> action)
+    {
+        _subsystems ??= IOC.Services.GetServices<GantrySubsystem>();
+        _subsystems.InvokeForAll(action);
     }
 }

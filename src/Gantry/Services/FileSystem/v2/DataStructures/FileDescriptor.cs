@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Services.FileSystem.v2.DataStructures;
+﻿namespace Gantry.Services.FileSystem.v2.DataStructures;
 
 /// <summary>
 ///     Describes a file with its scope, and <see cref="FileInfo"/> representation.
@@ -32,8 +30,6 @@ public class FileDescriptor
     {
         FileName = fileName;
         Scope = scope;
-        // TODO: Needs lots of work.
-
         File = new FileInfo(Path);
     }
 }

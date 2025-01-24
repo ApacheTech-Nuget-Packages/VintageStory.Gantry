@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Core.Maths.Interpolation;
+﻿namespace Gantry.Core.Maths.Interpolation;
 
 /// <summary>
 ///     Represents a specific form of interpolation between two nodes within a path.

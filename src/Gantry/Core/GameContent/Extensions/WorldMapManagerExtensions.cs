@@ -1,8 +1,5 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
 
 // ReSharper disable StringLiteralTypo
 
@@ -23,6 +20,12 @@ public static class WorldMapManagerExtensions
         var layers = mapManager.MapLayers;
         return layers.OfType<WaypointMapLayer>().FirstOrDefault();
     }
+
+    /// <summary>
+    ///     Returns the specified map layer.
+    /// </summary>
+    public static TMapLayer GetMapLayer<TMapLayer>(this ICoreClientAPI capi) 
+        => capi.ModLoader.GetModSystem<WorldMapManager>().MapLayers.OfType<TMapLayer>().FirstOrDefault();
 
     /// <summary>
     ///     Returns the map layer used for rendering player pins.
@@ -64,8 +67,8 @@ public static class WorldMapManagerExtensions
         }
         catch (Exception ex)
         {
-            ModEx.Mod.Logger.Error(ex.Message);
-            ModEx.Mod.Logger.Error(ex.StackTrace);
+            ApiEx.Logger.Error(ex.Message);
+            ApiEx.Logger.Error(ex.StackTrace);
         }
     }
 

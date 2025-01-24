@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Core.Extensions.Helpers;
+﻿namespace Gantry.Core.Extensions.Helpers;
 
 /// <summary>
 ///     Helper class that extends the normal functionality of enums.

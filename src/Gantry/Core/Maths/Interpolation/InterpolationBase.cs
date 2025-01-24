@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Core.Maths.Interpolation;
+﻿namespace Gantry.Core.Maths.Interpolation;
 
 /// <summary>
 ///     Acts as a base class for each type of interpolation.

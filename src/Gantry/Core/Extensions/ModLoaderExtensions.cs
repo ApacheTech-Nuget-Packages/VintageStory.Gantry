@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
-using Vintagestory.Common;
+﻿using Vintagestory.Common;
 
 namespace Gantry.Core.Extensions;
 

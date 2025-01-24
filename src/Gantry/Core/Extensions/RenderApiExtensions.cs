@@ -1,12 +1,5 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using ApacheTech.Common.Extensions.System;
-using Gantry.Core.GameContent.AssetEnum;
-using Gantry.Core.Hosting;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
+﻿using Gantry.Core.GameContent.AssetEnum;
 using Vintagestory.API.MathTools;
-using Vintagestory.Client.NoObf;
-using Vintagestory.GameContent;
 
 namespace Gantry.Core.Extensions;
 

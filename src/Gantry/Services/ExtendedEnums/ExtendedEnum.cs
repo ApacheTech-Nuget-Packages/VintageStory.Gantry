@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Services.ExtendedEnums;
+﻿namespace Gantry.Services.ExtendedEnums;
 
 /// <summary>
 ///     Simple implementation of a Type-based enumeration, allowing

@@ -1,8 +1,6 @@
-﻿using Gantry.Core;
-using Gantry.Core.GameContent.GUI.Abstractions;
+﻿using Gantry.Core.GameContent.GUI.Abstractions;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Enums;
-using Vintagestory.API.Client;
 
 namespace Gantry.Services.FileSystem.Dialogue;
 
@@ -37,18 +35,17 @@ public abstract class FeatureSettingsDialogue<TFeatureSettings> : GenericDialogu
     {
         Settings = settings;
         FeatureName = featureName ?? typeof(TFeatureSettings).Name.Replace("Settings", "");
-        Title = LangEntry("Title");
+        Title = T("Title");
     }
 
     /// <summary>
     ///     Gets an entry from the language files, for the feature this instance is representing.
     /// </summary>
-    /// <param name="code">The entry to return.</param>
+    /// <param name="path">The entry to return.</param>
+    /// <param name="args">The entry to return.</param>
     /// <returns>A localised <see cref="string"/>, for the specified language file code.</returns>
-    protected string LangEntry(string code)
-    {
-        return LangEx.FeatureString($"{FeatureName}.Dialogue", code);
-    }
+    protected string T(string path, params object[] args)
+        => LangEx.FeatureString($"{FeatureName}.Dialogue", path, args);
 
     /// <summary>
     ///     Saves the feature changes.

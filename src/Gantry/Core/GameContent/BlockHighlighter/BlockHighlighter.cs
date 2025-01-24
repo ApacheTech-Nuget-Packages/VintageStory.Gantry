@@ -1,9 +1,5 @@
 using Cairo;
-using Gantry.Core.GameContent.Extensions;
 using Gantry.Core.Hosting.Annotation;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.GameContent.BlockHighlighter;

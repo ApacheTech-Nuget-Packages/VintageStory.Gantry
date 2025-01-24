@@ -2,8 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ApacheTech.Common.Extensions.Harmony;
-using HarmonyLib;
-using JetBrains.Annotations;
+using SmartAssembly.Attributes;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable SuspiciousTypeConversion.Global
@@ -55,8 +54,8 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
         var properties = typeof(T).GetProperties();
         foreach (var propertyInfo in properties)
         {
-            var declaringType = propertyInfo.DeclaringType;
-            var declaringProperty = declaringType.GetProperty(propertyInfo.Name);
+            var declaringType = propertyInfo.DeclaringType!;
+            var declaringProperty = declaringType.GetProperty(propertyInfo.Name)!;
             var originalSetMethod = declaringProperty.SetMethod;
 
             if (Harmony.GetPatchInfo(originalSetMethod)?.Postfixes.Any() ?? false) continue;
@@ -110,7 +109,8 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
         get => _onObjectPropertyChanged;
         set => _onObjectPropertyChanged = value;
     }
-        
+
+    [DoNotPrune]
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static void Patch_Property_SetMethod_Postfix(MemberInfo __originalMethod)
     {

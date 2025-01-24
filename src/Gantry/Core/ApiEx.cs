@@ -1,10 +1,5 @@
 ﻿#nullable enable
-using Gantry.Core.Extensions.Api;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Server;
-using Vintagestory.Client.NoObf;
 using Vintagestory.Server;
 
 // ReSharper disable RedundantSuppressNullableWarningExpression
@@ -36,17 +31,18 @@ public static class ApiEx
 
     internal static void Initialise(ICoreAPI api)
     {
+        var logger = api.GetGantryLogger();
         switch (api.Side)
         {
             case EnumAppSide.Server:
                 _serverMain.Value = api.World as ServerMain;
                 _serverThread = Thread.CurrentThread;
-                api.Logger.GantryDebug("[Gantry] ApiEx: Added ServerMain.");
+                logger.VerboseDebug("ApiEx: Added ServerMain.");
                 break;
             case EnumAppSide.Client:
                 _clientMain.Value = api.World as ClientMain;
                 _clientThread = Thread.CurrentThread;
-                api.Logger.GantryDebug("[Gantry] ApiEx: Added ClientMain.");
+                logger.VerboseDebug("ApiEx: Added ClientMain.");
                 break;
             case EnumAppSide.Universal:
             default:
@@ -85,6 +81,11 @@ public static class ApiEx
     public static ICoreAPI Current => OneOf<ICoreAPI>(Client, Server);
 
     /// <summary>
+    ///     Interface to the client's and server's event, debug and error logging utilty.
+    /// </summary>
+    public static ILogger Logger => Current.GetGantryLogger();
+
+    /// <summary>
     ///     The concrete implementation of the <see cref="IClientWorldAccessor"/> interface.<br/>
     ///     Contains access to lots of world manipulation and management features.
     /// </summary>
@@ -106,7 +107,21 @@ public static class ApiEx
     ///     Gets the current app-side.
     /// </summary>
     /// <value>A <see cref="EnumAppSide"/> value, representing current app-side; Client, or Server.</value>
-    public static EnumAppSide Side => ServerMain is not null ? EnumAppSide.Server : EnumAppSide.Client;
+    public static EnumAppSide Side
+    {
+        get
+        {
+            try
+            {
+                return ServerMain is not null ? EnumAppSide.Server : EnumAppSide.Client;
+            }
+            catch (StackOverflowException exception)
+            {
+                ModEx.Mod.Logger.Error(exception);
+                return EnumAppSide.Universal;
+            }
+        }
+    }
 
     #endregion
 
@@ -134,6 +149,31 @@ public static class ApiEx
     public static void Run<T>(Action<T> clientAction, Action<T> serverAction, T parameter)
     {
         OneOf(clientAction, serverAction).Invoke(parameter);
+    }
+
+    /// <summary>
+    ///     Invokes an action, based on whether it's being called by the client, or the server.
+    /// </summary>
+    /// <remarks>
+    ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
+    /// </remarks>
+    /// <param name="clientAction">The client action.</param>
+    /// <param name="serverAction">The server action.</param>
+    public static void Run(Action<ICoreClientAPI> clientAction, Action<ICoreServerAPI> serverAction)
+    {
+        switch (Side)
+        {
+            case EnumAppSide.Server:
+                serverAction(Server!);
+                break;
+            case EnumAppSide.Client:
+                clientAction(Client!);
+                break;
+            case EnumAppSide.Universal:
+                throw new InvalidOperationException("Cannot determine app-side. Enum evaluated to 'Universal'.");
+            default:
+                throw new ArgumentOutOfRangeException(nameof(clientAction));
+        }
     }
 
     /// <summary>
@@ -193,7 +233,7 @@ public static class ApiEx
     /// </remarks>
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
-    public static T? Return<T>(Func<T> clientAction, Func<T> serverAction)
+    public static T? Return<T>(System.Func<T> clientAction, System.Func<T> serverAction)
     {
         return (T?)OneOf(clientAction, serverAction).DynamicInvoke();
     }

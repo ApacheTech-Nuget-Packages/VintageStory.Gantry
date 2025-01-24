@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Server;
-using Vintagestory.GameContent;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Core.GameContent.Extensions;
 

@@ -1,11 +1,9 @@
-﻿using Gantry.Core;
-using Gantry.Services.FileSystem.Abstractions;
+﻿using Gantry.Services.FileSystem.Abstractions;
 using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.Extensions;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using Vintagestory.API.Datastructures;
 
 namespace Gantry.Services.FileSystem.FileAdaptors;
@@ -58,9 +56,10 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     {
         try
         {
-            return JsonConvert.DeserializeObject<TModel>(File.ReadAllText(ModFileInfo.FullName), JsonSerialiserSettings);
+            var json = File.ReadAllText(ModFileInfo.FullName);
+            return JsonConvert.DeserializeObject<TModel>(json, JsonSerialiserSettings);
         }
-        catch (Exception )
+        catch (Exception)
         {
             return default;
         }
@@ -87,11 +86,31 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     {
         try
         {
-            return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(ModFileInfo.FullName), JsonSerialiserSettings);
+            // Read file content
+            var fileContent = File.ReadAllText(ModFileInfo.FullName);
+
+            // Parse content as JToken
+            var token = JToken.Parse(fileContent);
+
+            // Check if the token is an object (i.e., "{}") and treat it as an empty array
+            if (token.Type == JTokenType.Object)
+            {
+                return [];
+            }
+
+            // If the token is an array, deserialise it into IEnumerable<TModel>
+            if (token.Type == JTokenType.Array)
+            {
+                return token.ToObject<IEnumerable<TModel>>() ?? [];
+            }
+
+            // If the token is neither an object nor an array, return an empty collection
+            return [];
         }
         catch (Exception)
         {
-            return default;
+            // Return an empty collection on error
+            return [];
         }
     }
 
@@ -219,8 +238,8 @@ public sealed class JsonModFile : ModFile, IJsonModFile
         }
         catch (IOException e)
         {
-            ModEx.Mod.Logger.Warning($"[Gantry] Failed to save JSON file: {ModFileInfo.FullName}");
-            ModEx.Mod.Logger.Warning(e.Message);
+            ApiEx.Logger.Warning($"[Gantry] Failed to save JSON file: {ModFileInfo.FullName}");
+            ApiEx.Logger.Warning(e.Message);
         }
     }
 

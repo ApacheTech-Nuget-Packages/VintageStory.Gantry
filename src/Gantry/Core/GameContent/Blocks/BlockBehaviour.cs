@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.GameContent.Blocks;
+﻿namespace Gantry.Core.GameContent.Blocks;
 
 /// <summary>
 ///     A behaviour that can be added to a block, to allow it to interact, or react, to external stimuli; or maintain an internal state.

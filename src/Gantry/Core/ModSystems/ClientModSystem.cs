@@ -1,6 +1,4 @@
 ﻿using Gantry.Core.ModSystems.Abstractions;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
 namespace Gantry.Core.ModSystems;
@@ -34,4 +32,28 @@ public abstract class ClientModSystem : ModSystemBase
 
     /// <inheritdoc />
     protected sealed override void StartPreUniversal(ICoreAPI api) { }
+
+    /// <inheritdoc />
+    public sealed override void AssetsFinalize(ICoreAPI api) 
+    { 
+        AssetsFinalise(api as ICoreClientAPI);
+    }
+
+    /// <inheritdoc cref="ModSystem.AssetsFinalize" />
+    public virtual void AssetsFinalise(ICoreClientAPI api)
+    {
+        base.AssetsFinalize(api);
+    }
+
+    /// <inheritdoc />
+    public sealed override void AssetsLoaded(ICoreAPI api)
+    {
+        AssetsLoaded(api as ICoreClientAPI);
+    }
+
+    /// <inheritdoc cref="ModSystem.AssetsLoaded" />
+    public virtual void AssetsLoaded(ICoreClientAPI api)
+    {
+        base.AssetsLoaded(api);
+    }
 }

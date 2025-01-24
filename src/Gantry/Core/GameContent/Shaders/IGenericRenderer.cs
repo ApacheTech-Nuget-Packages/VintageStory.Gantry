@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Client;
-
-namespace Gantry.Core.GameContent.Shaders;
+﻿namespace Gantry.Core.GameContent.Shaders;
 
 /// <summary>
 ///     Represents a renderer, used to render something on to the client's screen.

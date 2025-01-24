@@ -1,6 +1,6 @@
-﻿using Gantry.Core.GameContent.Abstractions;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
+﻿using ApacheTech.Common.Extensions.Harmony;
+using Gantry.Core.GameContent.Abstractions;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Extensions.Api;
@@ -34,5 +34,22 @@ public static class BlockPosExtensions
         where TBlockEntity : BlockEntity
     {
         return api.World.BlockAccessor.GetBlockEntity(@this) as TBlockEntity;
+    }
+
+    /// <summary>
+    ///     Converts a camera position to an entity position.
+    /// </summary>
+    /// <param name="cameraPoint">The camera position to convert.</param>
+    public static EntityPos ToEntityPos(this CameraPoint cameraPoint)
+    {
+        return new()
+        {
+            X = cameraPoint.GetField<double>("x"),
+            Y = cameraPoint.GetField<double>("y"),
+            Z = cameraPoint.GetField<double>("z"),
+            Pitch = cameraPoint.GetField<float>("pitch"),
+            Yaw = cameraPoint.GetField<float>("yaw"),
+            Roll = cameraPoint.GetField<float>("roll"),
+        };
     }
 }

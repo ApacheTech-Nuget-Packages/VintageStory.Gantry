@@ -1,6 +1,4 @@
-﻿using JetBrains.Annotations;
-
-namespace Gantry.Services.HarmonyPatches.Annotations;
+﻿namespace Gantry.Services.HarmonyPatches.Annotations;
 
 /// <summary>
 ///     Denotes that the decorated object requires a specific mod to be enabled within the gameworld.

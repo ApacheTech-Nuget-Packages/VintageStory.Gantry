@@ -90,7 +90,7 @@ public static class BooleanExtensions
     /// <param name="trueFunction">The function to invoke, if the condition is true.</param>
     /// <param name="falseFunction">The function to invoke, if the condition is false.</param>
     /// <param name="args">The arguments to pass to the action.</param>
-    public static TOut IfElse<TIn, TOut>(this bool condition, Func<TIn, TOut> trueFunction, Func<TIn, TOut> falseFunction, TIn args)
+    public static TOut IfElse<TIn, TOut>(this bool condition, System.Func<TIn, TOut> trueFunction, System.Func<TIn, TOut> falseFunction, TIn args)
     {
         return condition ? trueFunction(args) : falseFunction(args);
     }

@@ -1,5 +1,4 @@
 ﻿using Gantry.Services.ExtendedEnums;
-using JetBrains.Annotations;
 
 // ReSharper disable StringLiteralTypo
 

@@ -1,15 +1,11 @@
-﻿using ApacheTech.Common.DependencyInjection.Abstractions;
-using JetBrains.Annotations;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.Hosting.Annotation;
+﻿namespace Gantry.Core.Hosting.Annotation;
 
 /// <summary>
 /// Marks the constructor to be used when activating type using <see cref="ActivatorUtilities" />.
 /// </summary>
 [AttributeUsage(AttributeTargets.Constructor)]
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
-public class SidedConstructorAttribute : InjectableConstructorAttribute
+public class SidedConstructorAttribute : ActivatorUtilitiesConstructor
 {
     /// <summary>
     ///     The app-side that this instance was instantiated on.

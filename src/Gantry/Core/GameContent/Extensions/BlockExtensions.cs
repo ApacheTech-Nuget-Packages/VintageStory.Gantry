@@ -1,7 +1,3 @@
-using Vintagestory.API.Common;
-
-using Vintagestory.GameContent;
-
 namespace Gantry.Core.GameContent.Extensions;
 
 /// <summary>

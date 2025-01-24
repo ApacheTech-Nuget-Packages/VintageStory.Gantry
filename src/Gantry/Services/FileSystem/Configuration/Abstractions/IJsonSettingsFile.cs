@@ -20,18 +20,18 @@ public interface IJsonSettingsFile
     ///     Retrieves the settings for a specific feature, parsed as a strongly-typed POCO class instance.
     ///     Changes made to the settings will automatically be written to the file, as they are set.
     /// </summary>
-    /// <typeparam name="T">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
+    /// <typeparam name="TSettings">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
     /// <param name="featureName">The name of the feature.</param>
     /// <returns>An object, that represents the settings for a given mod feature.</returns>
-    T Feature<T>(string featureName = null) where T : class, new();
+    TSettings Feature<TSettings>(string featureName = null) where TSettings : FeatureSettings<TSettings>, new();
 
     /// <summary>
     ///     Saves the specified settings to file.
     /// </summary>
-    /// <typeparam name="T">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
+    /// <typeparam name="TSettings">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
     /// <param name="featureName">The name of the feature.</param>
     /// <param name="settings">The settings.</param>
-    void Save<T>(T settings, string featureName = null);
+    void Save<TSettings>(TSettings settings, string featureName = null);
 
     /// <summary>
     ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

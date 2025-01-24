@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Brighter.Abstractions;
-using Vintagestory.API.Common;
+﻿using Gantry.Services.Brighter.Abstractions;
 
 namespace Gantry.Services.BrighterChat;
 

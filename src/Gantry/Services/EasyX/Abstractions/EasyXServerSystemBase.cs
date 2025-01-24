@@ -1,29 +1,18 @@
-﻿using System.Reflection;
-using System.Text;
-using ApacheTech.Common.DependencyInjection.Abstractions;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+﻿using System.Text;
 using ApacheTech.Common.Extensions.Harmony;
-using ApacheTech.Common.Extensions.System;
-using Gantry.Core;
 using Gantry.Core.Extensions.Api;
 using Gantry.Core.Extensions.DotNet;
-using Gantry.Core.Hosting;
+using Gantry.Core.GameContent.ChatCommands.DataStructures;
+using Gantry.Core.GameContent.ChatCommands.Parsers;
+using Gantry.Core.GameContent.ChatCommands.Parsers.Extensions;
 using Gantry.Core.Hosting.Registration;
-using Gantry.Core.ModSystems;
-using Gantry.Services.EasyX.ChatCommands.DataStructures;
-using Gantry.Services.EasyX.ChatCommands.Parsers;
-using Gantry.Services.EasyX.ChatCommands.Parsers.Extensions;
 using Gantry.Services.EasyX.Extensions;
 using Gantry.Services.EasyX.Hosting;
 using Gantry.Services.FileSystem.Configuration;
-using Gantry.Services.FileSystem.Configuration.Abstractions;
 using Gantry.Services.FileSystem.Hosting;
 using Gantry.Services.Network;
-using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
-using Vintagestory.Server;
 
 // ReSharper disable StringLiteralTypo
 
@@ -38,7 +27,7 @@ namespace Gantry.Services.EasyX.Abstractions;
 public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TSettings> : ServerModSystem, IServerServiceRegistrar
     where TServerSettings : TSettings, IEasyXServerSettings, new()
     where TClientSettings : TSettings, IEasyXClientSettings, new()
-    where TSettings : FeatureSettings
+    where TSettings : FeatureSettings<TServerSettings>, new()
 {
     /// <summary>
     ///     
@@ -138,8 +127,8 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         api.Event.PlayerJoin += player =>
         {
             var packet = GeneratePacket(player);
-            api.Logger.GantryDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
-            api.Logger.GantryDebug(packet.ToXml());
+            ApiEx.Logger.VerboseDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
+            ApiEx.Logger.Trace(packet.ToXml());
             ServerChannel.SendPacket(packet, player);
         };
     }

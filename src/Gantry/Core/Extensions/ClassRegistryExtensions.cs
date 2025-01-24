@@ -1,7 +1,4 @@
-﻿using JetBrains.Annotations;
-using Vintagestory.API.Common;
-
-namespace Gantry.Core.Extensions;
+﻿namespace Gantry.Core.Extensions;
 
 /// <summary>
 ///     Extension methods to help register classes with the game engine.
@@ -69,10 +66,11 @@ public static class ClassRegistryExtensions
     /// </summary>
     /// <typeparam name="T">The type of the Block Behaviour to register.</typeparam>
     /// <param name="api">The game's internal API.</param>
-    public static void RegisterBlockBehaviour<T>(this ICoreAPICommon api)
+    /// <param name="friendlyName">A friendly name to give to the behaviour.</param>
+    public static void RegisterBlockBehaviour<T>(this ICoreAPICommon api, string friendlyName = null)
     {
         var type = typeof(T);
-        api.RegisterBlockBehaviorClass(type.Name, type);
+        api.RegisterBlockBehaviorClass(friendlyName?.IfNullOrEmpty(type.Name), type);
     }
 
     /// <summary>
@@ -149,5 +147,25 @@ public static class ClassRegistryExtensions
     {
         name ??= nameof(T);
         api.RegisterCollectibleBehaviorClass(name, typeof(T));
+    }
+
+    /// <summary>
+    ///     Adds a specific block behaviour to all blocks of a given type in the block list.
+    /// </summary>
+    /// <typeparam name="TBlock">The type of the block to which the behaviour should be added.</typeparam>
+    /// <typeparam name="TBehaviour">The type of the behaviour to add.</typeparam>
+    /// <param name="blocks">The list of blocks to process.</param>
+    /// <param name="behaviourFactory">A factory function to create the behaviour for each block.</param>
+    public static void AddBehaviourToBlocks<TBlock, TBehaviour>(
+        this IList<Block> blocks,
+        System.Func<Block, TBehaviour> behaviourFactory)
+        where TBlock : Block
+        where TBehaviour : BlockBehavior
+    {
+        foreach (var block in blocks.OfType<TBlock>())
+        {
+            var behaviour = behaviourFactory(block);
+            block.BlockBehaviors = block.BlockBehaviors.Append(behaviour).ToArray();
+        }
     }
 }

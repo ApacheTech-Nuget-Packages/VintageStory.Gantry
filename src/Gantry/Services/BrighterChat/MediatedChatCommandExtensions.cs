@@ -1,20 +1,17 @@
-﻿using Vintagestory.API.Common;
+﻿namespace Gantry.Services.BrighterChat;
 
-namespace Gantry.Services.BrighterChat
+/// <summary>
+///     Extension methods to aid the use of mediated chat commands.
+/// </summary>
+public static class MediatedChatCommandExtensions
 {
     /// <summary>
-    ///     Extension methods to aid the use of mediated chat commands.
+    ///     Define the mediator pipeline to be called when the command is executed.
     /// </summary>
-    public static class MediatedChatCommandExtensions
-    {
-        /// <summary>
-        ///     Define the mediator pipeline to be called when the command is executed.
-        /// </summary>
-        /// <typeparam name="TCommand"></typeparam>
-        /// <param name="chatCommand"></param>
-        /// <returns></returns>
-        public static IChatCommand WithMediatedHandler<TCommand>(this IChatCommand chatCommand)
-            where TCommand : MediatedChatCommand, new()
-            => chatCommand.HandleWith(MediatedChatCommands.Handle<TCommand>);
-    }
+    /// <typeparam name="TCommand"></typeparam>
+    /// <param name="chatCommand"></param>
+    /// <returns></returns>
+    public static IChatCommand WithMediatedHandler<TCommand>(this IChatCommand chatCommand)
+        where TCommand : MediatedChatCommand, new()
+        => chatCommand.HandleWith(MediatedChatCommands.Handle<TCommand>);
 }

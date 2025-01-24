@@ -1,7 +1,4 @@
-﻿using Gantry.Core.GameContent.Extensions.Gui;
-using Gantry.Core.GameContent.GUI.Helpers;
-using JetBrains.Annotations;
-using Vintagestory.API.Client;
+﻿using Gantry.Core.GameContent.GUI.Helpers;
 using Vintagestory.Client;
 
 namespace Gantry.Core.GameContent.GUI.Abstractions;
@@ -92,7 +89,7 @@ public abstract class GenericDialogue : GuiDialog
     protected ElementBounds DialogueBounds { get; private set; }
 
     /// <summary>
-    ///     Determines whether or not to allow the user to be able to move the form, within the bounds of the screen.
+    ///     Determines whether to allow the user to be able to move the form, within the bounds of the screen.
     /// </summary>
     protected bool Movable { get; set; }
 
