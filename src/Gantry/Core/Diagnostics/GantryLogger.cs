@@ -43,14 +43,13 @@ public class GantryLogger : Logger
 
     /// <summary>
     ///     Gets the file path for a specific log type.
+    ///     
+    ///     LINUX: CASE SENSITIVE FILE SYSTEM
     /// </summary>
     /// <param name="logType">The type of log.</param>
     /// <returns>The file path for the specified log type.</returns>
     public override string getLogFile(EnumLogType logType)
-    {
-        var path = Path.Combine(LogDirectory.FullName, $"{_api.Side}-{logType}.txt");
-        return path.ToLowerInvariant();
-    }
+        => Path.Combine(LogDirectory.FullName, $"{_api.Side}-{logType}.txt".ToLowerInvariant());
 
     /// <summary>
     ///     Logs a message with the specified log type, applying custom formatting.
