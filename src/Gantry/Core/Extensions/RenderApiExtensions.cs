@@ -12,17 +12,19 @@ public static class RenderApiExtensions
     /// <summary>
     ///     Discards all currently compiled shaders and re-compiles them.
     /// </summary>
-    public static void ReloadShadersThreadSafe(this IShaderAPI api, ICoreClientAPI capi)
+    public static void ReloadShadersThreadSafe(this ICoreClientAPI capi)
     {
-        capi.Event.EnqueueMainThreadTask(() => api.ReloadShaders(), "");
-    }
-
-    /// <summary>
-    ///     Discards all currently compiled shaders and re-compiles them.
-    /// </summary>
-    public static void ReloadShadersThreadSafe(this IShaderAPI api)
-    {
-        api.ReloadShadersThreadSafe(ApiEx.Client);
+        capi.Event.EnqueueMainThreadTask(() => 
+        {
+            try
+            {
+                capi.Shader.ReloadShaders();
+            }
+            catch (InvalidOperationException ex)
+            {
+                ApiEx.Logger.Error(ex);
+            }
+        }, "");
     }
 
     /// <summary>
