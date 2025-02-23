@@ -113,9 +113,9 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
         foreach (var (type, attribute) in sidedPatches)
         {
-            if (!HasRequiredDependencies(type)) continue;
-            if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
             ApiEx.Logger.VerboseDebug($"Patching {type}");
+            if (HasMissingDependencies(type)) continue;
+            if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
 
             var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -198,24 +198,29 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     }
 
     /// <summary>
-    ///     Checks if the specified type has all required dependencies enabled.
+    ///     Checks if the specified type is missing any required dependencies.
     /// </summary>
-    /// <param name="type">The type to check for dependencies.</param>
+    /// <param name="type">The type to check for missing dependencies.</param>
     /// <returns>
-    ///     <c>true</c> if the type either has no <see cref="RequiresModAttribute"/> attributes 
-    ///     or all required mods are enabled; otherwise, <c>false</c>.
+    ///     <c>true</c> if the type has at least one missing dependency; otherwise, <c>false</c>.
     /// </returns>
     /// <remarks>
     ///     This method retrieves all <see cref="RequiresModAttribute"/> attributes applied to the specified type.
-    ///     If there are no such attributes, the type is considered to have no dependencies and the method returns <c>true</c>.
-    ///     If the type has dependencies, the method verifies that all required mods are enabled using the mod loader.
+    ///     If there are no such attributes, the type is considered to have no missing dependencies.
+    ///     If the type has dependencies, the method verifies whether any required mods are missing using the mod loader.
     /// </remarks>
-    private bool HasRequiredDependencies(Type type)
+    private bool HasMissingDependencies(Type type)
     {
         var attributes = type.GetCustomAttributes<RequiresModAttribute>().ToArray();
-        return attributes.Length == 0 || attributes.All(attribute => _api.ModLoader.IsModEnabled(attribute.ModId));
+        if (attributes.Length <= 0) return false;
+        foreach (var attribute in attributes)
+        {
+            if (_api.ModLoader.IsModEnabled(attribute.ModId)) continue;
+            ApiEx.Logger.VerboseDebug($"Skipping patches for {type.Name} due to missing dependency: {attribute.ModId}");
+            return true;
+        }
+        return false;
     }
-
 
     /// <summary>
     ///     Un-patches all methods, within all patch host instances being handled by this service.

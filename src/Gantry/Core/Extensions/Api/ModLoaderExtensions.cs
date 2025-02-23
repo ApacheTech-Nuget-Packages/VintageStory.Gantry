@@ -21,4 +21,21 @@ public static class ModLoaderExtensions
         }
         return false;
     }
+
+    /// <summary>
+    ///     Determines whether all of the specified mods are loaded.
+    /// </summary>
+    /// <param name="modLoader">The game's mod loader.</param>
+    /// <param name="modIds">An array of mod identifiers to check.</param>
+    /// <returns>
+    ///     <c>true</c> if all of the specified mods are loaded; otherwise, <c>false</c>.
+    /// </returns>
+    public static bool AreAllModsLoaded(this IModLoader modLoader, params string[] modIds)
+    {
+        foreach (var modId in modIds)
+        {
+            if (!modLoader.IsModEnabled(modId)) return false;
+        }
+        return true;
+    }
 }
