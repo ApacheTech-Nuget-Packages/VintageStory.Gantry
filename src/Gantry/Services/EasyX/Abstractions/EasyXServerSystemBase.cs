@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Linq.Expressions;
 using System.Text;
-using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.Extensions.Harmony;
 using Gantry.Core.Extensions.Api;
 using Gantry.Core.Extensions.DotNet;
-using Gantry.Core.GameContent.ChatCommands;
 using Gantry.Core.GameContent.ChatCommands.DataStructures;
 using Gantry.Core.GameContent.ChatCommands.Parsers;
 using Gantry.Core.GameContent.ChatCommands.Parsers.Extensions;
@@ -16,7 +12,6 @@ using Gantry.Services.EasyX.Hosting;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Hosting;
 using Gantry.Services.Network;
-using Newtonsoft.Json.Linq;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 using Vintagestory.Server;
@@ -135,7 +130,6 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         {
             var packet = GeneratePacket(player);
             ApiEx.Logger.VerboseDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
-            ApiEx.Logger.Trace(packet.ToXml());
             ServerChannel.SendPacket(packet, player);
         };
     }
