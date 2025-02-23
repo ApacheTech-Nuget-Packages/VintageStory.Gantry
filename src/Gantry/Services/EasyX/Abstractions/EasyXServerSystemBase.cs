@@ -246,8 +246,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         {
             var searchTerm = parser.SearchTerm;
             var players = parser.GetValue().To<PlayerUidName[]>();
-            var message = AddRemovePlayerFromList(searchTerm, players, list, propertyName);
-            return TextCommandResult.Success(message);
+            return ProcessParserResults(searchTerm, players, list, propertyName);
         }
 
         var sb = new StringBuilder();
@@ -272,7 +271,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         return TextCommandResult.Success(message);
     }
 
-    private string AddRemovePlayerFromList(string searchTerm, PlayerUidName[] players, ICollection<Player> list, string listType)
+    private TextCommandResult ProcessParserResults(string searchTerm, PlayerUidName[] players, ICollection<Player> list, string listType)
     {
         var message = players.Length switch
         {
@@ -293,7 +292,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
     /// <returns>
     ///     A string message indicating whether a player was added or removed.
     /// </returns>
-    private string FoundSinglePlayer(ICollection<Player> list, string listType, PlayerUidName[] players)
+    private TextCommandResult FoundSinglePlayer(ICollection<Player> list, string listType, PlayerUidName[] players)
     {
         var result = players.First();
         var existingPlayer = list.SingleOrDefault(p => p.Id == result.Uid);
@@ -301,13 +300,14 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         if (!isRemoved) list.Add(result);
         ModSettings.World.Save(Settings);
         ServerChannel?.BroadcastUniquePacket(GeneratePacket);
-        return LangEx.EmbeddedFeatureString("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
+        var message = LangEx.EmbeddedFeatureString("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
+        return TextCommandResult.Success(message);
     }
 
-    private static string FoundNoResults(string searchTerm)
-        => LangEx.EmbeddedFeatureString("EasyX", "PlayerSearch.NoResults", searchTerm);
+    private static TextCommandResult FoundNoResults(string searchTerm)
+        => TextCommandResult.Error(LangEx.EmbeddedFeatureString("EasyX", "PlayerSearch.NoResults", searchTerm));
 
-    private static string FoundMultiplePlayers(string searchTerm, PlayerUidName[] players)
+    private static TextCommandResult FoundMultiplePlayers(string searchTerm, PlayerUidName[] players)
     {
         var sb = new StringBuilder();
         sb.Append(LangEx.EmbeddedFeatureString("EasyX", "PlayerSearch.MultipleResults", searchTerm));
@@ -315,6 +315,6 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         {
             sb.Append($" - {p.Name} (PID: {p.Uid})");
         }
-        return sb.ToString();
+        return TextCommandResult.Error(sb.ToString());
     }
 }
