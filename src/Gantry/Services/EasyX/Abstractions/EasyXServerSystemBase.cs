@@ -66,6 +66,14 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
     protected abstract string SubCommandName { get; }
 
     /// <summary>
+    ///     Translates a key into a string using the language system.
+    /// </summary>
+    /// <param name="path">The path to the feature based string to translate.</param>
+    /// <param name="args">The arguments to pass to the lang file.</param>
+    protected string T(string path, params object[] args)
+        => LangEx.FeatureString($"Easy{SubCommandName}", path, args);
+
+    /// <summary>
     ///     
     /// </summary>
     protected virtual string CommandName => ConfigurationSettings.Instance.CommandName;
