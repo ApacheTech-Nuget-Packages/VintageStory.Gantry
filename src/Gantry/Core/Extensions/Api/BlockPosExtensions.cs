@@ -52,4 +52,17 @@ public static class BlockPosExtensions
             Roll = cameraPoint.GetField<float>("roll"),
         };
     }
+
+    /// <summary>
+    ///     Calculates the chunk position corresponding to the given block position.
+    /// </summary>
+    /// <param name="blockPos">The block position to convert to a chunk position.</param>
+    /// <returns>The chunk position containing the specified block.</returns>
+    /// <remarks>
+    ///     This method divides the block position by <see cref="GlobalConstants.ChunkSize"/> 
+    ///     to determine the chunk in which the block is located.
+    /// </remarks>
+    public static BlockPos ChunkPos(this BlockPos blockPos)
+        => blockPos / GlobalConstants.ChunkSize;
+
 }

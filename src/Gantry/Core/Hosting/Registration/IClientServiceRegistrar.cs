@@ -12,5 +12,5 @@ public interface IClientServiceRegistrar : IDisposable
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="capi">Access to the client-side API.</param>
-    virtual void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi) { }
+    void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi);
 }

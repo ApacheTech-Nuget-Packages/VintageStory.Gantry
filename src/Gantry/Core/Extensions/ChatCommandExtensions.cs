@@ -1,4 +1,8 @@
-﻿namespace Gantry.Core.Extensions;
+﻿using ApacheTech.Common.Extensions.System;
+using Gantry.Core.Annotation;
+using Newtonsoft.Json.Linq;
+
+namespace Gantry.Core.Extensions;
 
 /// <summary>
 ///     Extension methods to aid working with chat commands.
@@ -15,6 +19,17 @@ public static class ChatCommandExtensions
     {
         var retVal = args.PopAll();
         return string.IsNullOrWhiteSpace(retVal) ? defaultValue : retVal;
+    }
+
+    /// <summary>
+    ///     Returns all remaining arguments as single merged string, concatenated with spaces.
+    /// </summary>
+    /// <param name="args">The CmdArgs instance that called this extension method.</param>
+    public static string PeekAll(this CmdArgs args)
+    {
+        var retVal = args.PopAll();
+        args.Push(retVal);
+        return retVal;
     }
 
     /// <summary>
@@ -75,4 +90,26 @@ public static class ChatCommandExtensions
     /// </remarks>
     public static bool TryAddSubCommand(this IChatCommand command, string subCommandName, Action<IChatCommand> subCommandBuilder)
         => command.TryAddSubCommand(subCommandName, subCommandBuilder, out _);
+
+    /// <summary>
+    ///     Attempts to parse the next argument from the provided text command calling arguments using the specified parser type.
+    /// </summary>
+    /// <typeparam name="TParser">The type of the parser, which must derive from <see cref="ArgumentParserBase"/> and implement <see cref="ICommandArgumentParser"/>.</typeparam>
+    /// <typeparam name="TValue">The type of the value that is expected to be parsed.</typeparam>
+    /// <param name="args">The text command calling arguments.</param>
+    /// <param name="value">When this method returns, contains the parsed value if the parse was successful; otherwise, the default value for <typeparamref name="TValue"/>.</param>
+    /// <returns><c>true</c> if parsing succeeded; otherwise, <c>false</c>.</returns>
+    public static bool TryParseNext<TParser, TValue>(this TextCommandCallingArgs args, out TValue value)
+        where TParser : ArgumentParserBase, ICommandArgumentParser
+    {
+        var parser = (TParser)Activator.CreateInstance(typeof(TParser), [nameof(TParser), ApiEx.Current, true]);
+        parser.PreProcess(args);
+        if (parser.TryProcess(args) == EnumParseResult.Good)
+        {
+            value = (TValue)parser.GetValue();
+            return true;
+        }
+        value = default;
+        return false;
+    }
 }

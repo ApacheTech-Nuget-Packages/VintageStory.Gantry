@@ -1,4 +1,5 @@
-﻿namespace Gantry.Core.Extensions.DotNet;
+﻿#nullable enable
+namespace Gantry.Core.Extensions.DotNet;
 
 /// <summary>
 ///     Extension methods to aid when working with collections.
@@ -140,8 +141,83 @@ public static class CollectionExtensions
     /// <param name="item">The item to add to the list.</param>
     public static void AddToList<TKey, T>(this IDictionary<TKey, List<T>> dictionary, TKey key, T item) where TKey : notnull
     {
-        if (dictionary == null) throw new ArgumentNullException(nameof(dictionary));
+        if (dictionary is null) throw new ArgumentNullException(nameof(dictionary));
         if (!dictionary.TryGetValue(key, out var value)) dictionary[key] = value = [];
-        value.Add(item);
+        value.AddIfNotPresent(item);
+    }
+
+    /// <summary>
+    ///     Removes an item from the list associated with the specified key.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+    /// <typeparam name="T">The type of the item to add to the list.</typeparam>
+    /// <param name="dictionary">The dictionary to modify.</param>
+    /// <param name="key">The key of the list to modify or create.</param>
+    /// <param name="item">The item to add to the list.</param>
+    public static void RemoveFromList<TKey, T>(this IDictionary<TKey, List<T>> dictionary, TKey key, T item) where TKey : notnull
+    {
+        if (dictionary is null) throw new ArgumentNullException(nameof(dictionary));
+        if (!dictionary.TryGetValue(key, out var value)) dictionary[key] = value = [];
+        value.RemoveIfPresent(item);
+    }
+
+    /// <summary>
+    ///     Gets all items from the list associated with the specified key.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+    /// <typeparam name="T">The type of the item to add to the list.</typeparam>
+    /// <param name="dictionary">The dictionary to modify.</param>
+    /// <param name="key">The key of the list to modify or create.</param>
+    public static IEnumerable<T> All<TKey, T>(this IDictionary<TKey, List<T>> dictionary, TKey key) where TKey : notnull
+    {
+        if (dictionary is null) throw new ArgumentNullException(nameof(dictionary));
+        if (!dictionary.TryGetValue(key, out var value)) dictionary[key] = value = [];
+        return value;
+    }
+
+    /// <summary>
+    ///     Gets all items from the list associated with the specified key.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+    /// <typeparam name="T">The type of the item to add to the list.</typeparam>
+    /// <param name="dictionary">The dictionary to modify.</param>
+    /// <param name="key">The key of the list to modify or create.</param>
+    public static int CountList<TKey, T>(this IDictionary<TKey, List<T>> dictionary, TKey key) where TKey : notnull
+    {
+        if (dictionary is null) throw new ArgumentNullException(nameof(dictionary));
+        if (!dictionary.TryGetValue(key, out var value)) dictionary[key] = value = [];
+        return value.Count;
+    }
+
+    /// <summary>
+    ///     Gets all items from the list associated with the specified key.
+    /// </summary>
+    /// <typeparam name="TKey">The type of the dictionary key.</typeparam>
+    /// <typeparam name="T">The type of the item to add to the list.</typeparam>
+    /// <param name="dictionary">The dictionary to modify.</param>
+    /// <param name="key">The key of the list to modify or create.</param>
+    /// <param name="item">The item to add to the list.</param>
+    public static bool ListContains<TKey, T>(this IDictionary<TKey, List<T>> dictionary, TKey key, T item) where TKey : notnull
+    {
+        if (dictionary is null) throw new ArgumentNullException(nameof(dictionary));
+        if (!dictionary.TryGetValue(key, out var list)) dictionary[key] = list = [];
+        return list.Contains(item);
+    }
+
+
+
+    /// <summary>
+    ///     A close approximation to Visual Basic's "With" keyword, that allows batch setting of Properties, without needing to initialise the object.
+    /// </summary>
+    /// <typeparam name="T">The type of object to work with.</typeparam>
+    /// <param name="list">The list to work with.</param>
+    /// <param name="work">The work to be done.</param>
+    public static IEnumerable<T> EachWith<T>(this IEnumerable<T> list, Action<T>? work)
+    {
+        foreach (var item in list)
+        {
+            work?.Invoke(item);
+            yield return item;
+        }
     }
 }

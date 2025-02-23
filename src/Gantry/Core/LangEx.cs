@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using Gantry.Core.Extensions.DotNet;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.Server;
 
 namespace Gantry.Core;
 
@@ -109,6 +110,17 @@ public static class LangEx
     /// <summary>
     ///     Returns a localised string.
     /// </summary>
+    /// <param name="culture">The language to get the string in.</param>
+    /// <param name="featureName">The name of the feature.</param>
+    /// <param name="path">The path to the feature based string to translate.</param>
+    /// <param name="args">The arguments to pass to the lang file.</param>
+    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
+    public static string CultureString(string culture, string featureName, string path, params object[] args)
+        => Lang.GetL(culture, FeatureCode(featureName, path), args);
+
+    /// <summary>
+    ///     Returns a localised string.
+    /// </summary>
     /// <param name="domain">The mod domain the string belongs to.</param>
     /// <param name="featureName">The name of the feature.</param>
     /// <param name="path">The path to the feature based string to translate.</param>
@@ -194,4 +206,10 @@ public static class LangEx
     /// <returns>A localised string from the mod's language files.</returns>
     public static string ModTitle() 
         => Get("ModTitle");
+
+    /// <summary>
+    ///     Returns the language code of the specified player.
+    /// </summary>
+    public static string GetPlayerLanguageCode(IPlayer serverPlayer) 
+        => (serverPlayer as IServerPlayer)?.LanguageCode ?? Lang.CurrentLocale;
 }

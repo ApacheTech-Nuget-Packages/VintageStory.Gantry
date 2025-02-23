@@ -1,9 +1,14 @@
-﻿namespace Gantry.Core.GameContent.ChatCommands.Parsers;
+﻿using Gantry.Core.Annotation;
+using Gantry.Core.Maths.FuzzyLogic;
+
+namespace Gantry.Core.GameContent.ChatCommands.Parsers;
 
 /// <summary>
 ///     Allows the user to search for an online player, based on a partial match of their username.
+///     Only works server-side.
 /// </summary>
 /// <seealso cref="ArgumentParserBase" />
+[ServerSide]
 public class FuzzyPlayerParser(string argName, bool isMandatoryArg) : ArgumentParserBase(argName, isMandatoryArg)
 {
     /// <summary>
@@ -26,9 +31,9 @@ public class FuzzyPlayerParser(string argName, bool isMandatoryArg) : ArgumentPa
     /// <inheritdoc />
     public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults> onReady = null)
     {
-        Value = args.RawArgs.PopWord();
-        if (string.IsNullOrEmpty(Value)) return EnumParseResult.Bad;
-        Results = FuzzyPlayerSearch(Value).ToList();
+        var value = args.RawArgs.PopWord();
+        if (string.IsNullOrEmpty(value)) return EnumParseResult.Bad;
+        SetValue(value);
         return EnumParseResult.Good;
     }
 
@@ -40,20 +45,27 @@ public class FuzzyPlayerParser(string argName, bool isMandatoryArg) : ArgumentPa
     {
         Value = data.ToString();
         if (string.IsNullOrEmpty(Value)) return;
-        Results = FuzzyPlayerSearch(Value).ToList();
+        Results = FuzzyPlayerSearch(Value);
     }
 
-    private static IEnumerable<IPlayer> FuzzyPlayerSearch(string searchTerm)
+    private static List<IPlayer> FuzzyPlayerSearch(string searchTerm)
     {
         if (string.IsNullOrEmpty(searchTerm)) return [];
+
+        var dictionary = ApiEx.ServerMain.PlayersByUid;
+
         var players = ApiEx.ServerMain.AllPlayers;
-        //if (players is null) return [];
-        var results = new List<IPlayer>();
+        if (players is null) return [];
+
+        var results = new List<(IPlayer player, int distance)>();
+
         foreach (var player in players)
         {
-            if (player.PlayerName.Equals(searchTerm, StringComparison.OrdinalIgnoreCase)) return [player];
-            if (player.PlayerName.StartsWith(searchTerm, StringComparison.OrdinalIgnoreCase)) results.Add(player);
+            var distance = player.PlayerName.LevenshteinDistance(searchTerm);
+            if (distance == 0) return [player];
+            results.Add((player, distance));
         }
-        return results;
+
+        return [.. results.OrderBy(r => r.distance).Select(r => r.player)];
     }
 }

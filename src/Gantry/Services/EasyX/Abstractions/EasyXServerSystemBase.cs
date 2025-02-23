@@ -1,7 +1,12 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Text;
+using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.Extensions.Harmony;
 using Gantry.Core.Extensions.Api;
 using Gantry.Core.Extensions.DotNet;
+using Gantry.Core.GameContent.ChatCommands;
 using Gantry.Core.GameContent.ChatCommands.DataStructures;
 using Gantry.Core.GameContent.ChatCommands.Parsers;
 using Gantry.Core.GameContent.ChatCommands.Parsers.Extensions;
@@ -11,8 +16,10 @@ using Gantry.Services.EasyX.Hosting;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Hosting;
 using Gantry.Services.Network;
+using Newtonsoft.Json.Linq;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
+using Vintagestory.Server;
 
 // ReSharper disable StringLiteralTypo
 
@@ -105,7 +112,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         command
             .BeginSubCommand("whitelist")
             .WithAlias("wl")
-            .WithArgs(parsers.FuzzyPlayerSearch())
+            .WithArgs(parsers.OptionalServerPlayers())
             .WithDescription(LangEx.EmbeddedFeatureString("EasyX", "Whitelist.Description"))
             .HandleWith(HandleWhitelist)
             .EndSubCommand();
@@ -113,7 +120,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         command
             .BeginSubCommand("blacklist")
             .WithAlias("bl")
-            .WithArgs(parsers.FuzzyPlayerSearch())
+            .WithArgs(parsers.OptionalServerPlayers())
             .WithDescription(LangEx.EmbeddedFeatureString("EasyX", "Blacklist.Description"))
             .HandleWith(HandleBlacklist)
             .EndSubCommand();
@@ -136,13 +143,13 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
     /// <summary>
     ///     Generates a packet, to send to the specified player.
     /// </summary>
-    protected TClientSettings GeneratePacket(IPlayer player) 
+    protected TClientSettings GeneratePacket(IPlayer player)
         => GeneratePacketPerPlayer(player, IsEnabledFor(player));
 
     /// <summary>
     ///     Generates a packet, to send to the specified player.
     /// </summary>
-    protected virtual TClientSettings GeneratePacketPerPlayer(IPlayer player, bool isEnabled) 
+    protected virtual TClientSettings GeneratePacketPerPlayer(IPlayer player, bool isEnabled)
         => Settings.CreateFrom<TSettings, TClientSettings>().With(p => p.Enabled = isEnabled);
 
     /// <summary>
@@ -218,40 +225,35 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
     ///     Call Handler: /ChatCommandName (X) whitelist
     /// </summary>
     protected virtual TextCommandResult HandleWhitelist(TextCommandCallingArgs args)
-    {
-        var parser = args.Parsers[0].To<FuzzyPlayerParser>();
-        if (parser.Value is not null)
-        {
-            var message = AddRemovePlayerFromList(parser, Settings.Whitelist, "Whitelist");
-            return TextCommandResult.Success(message);
-        }
-
-        var sb = new StringBuilder();
-        var resultCount = Settings.Whitelist.Count > 0 ? "Results" : "NoResults";
-        sb.AppendLine(LangEx.EmbeddedFeatureString("EasyX", $"Whitelist.{resultCount}", SubCommandName));
-        foreach (var p in Settings.Whitelist)
-        {
-            sb.AppendLine($" - {p.Name} (PID: {p.Id})");
-        }
-        return TextCommandResult.Success(sb.ToString());
-    }
+        => HandleListChange(args, s => s.Whitelist);
 
     /// <summary>
     ///     Call Handler: /ChatCommandName (X) blacklist
     /// </summary>
     protected virtual TextCommandResult HandleBlacklist(TextCommandCallingArgs args)
+        => HandleListChange(args, s => s.Blacklist);
+
+    private TextCommandResult HandleListChange<TProperty>(TextCommandCallingArgs args, Expression<System.Func<TServerSettings, TProperty>> property)
+        where TProperty : ICollection<Player>
     {
-        var parser = args.Parsers[0].To<FuzzyPlayerParser>();
-        if (parser.Value is not null)
+        if (property.Body is not MemberExpression memberExpression)
+            throw new ArgumentException("The provided expression does not represent a property.");
+        var propertyName = memberExpression.Member.Name;
+        var list = Settings.GetProperty<TProperty>(propertyName);
+
+        var parser = args.Parsers[0].To<GantryPlayersArgParser>();
+        if (!parser.IsMissing)
         {
-            var message = AddRemovePlayerFromList(parser, Settings.Blacklist, "Blacklist");
+            var searchTerm = parser.SearchTerm;
+            var players = parser.GetValue().To<PlayerUidName[]>();
+            var message = AddRemovePlayerFromList(searchTerm, players, list, propertyName);
             return TextCommandResult.Success(message);
         }
 
         var sb = new StringBuilder();
-        var resultCount = Settings.Blacklist.Count > 0 ? "Results" : "NoResults";
-        sb.AppendLine(LangEx.EmbeddedFeatureString("EasyX", $"Blacklist.{resultCount}", SubCommandName));
-        foreach (var p in Settings.Blacklist)
+        var resultCount = list.Count > 0 ? "Results" : "NoResults";
+        sb.AppendLine(LangEx.EmbeddedFeatureString("EasyX", $"{propertyName}.{resultCount}", SubCommandName));
+        foreach (var p in list)
         {
             sb.AppendLine($" - {p.Name} (PID: {p.Id})");
         }
@@ -270,47 +272,48 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         return TextCommandResult.Success(message);
     }
 
-    private string AddRemovePlayerFromList(FuzzyPlayerParser parser, ICollection<Player> list, string listType)
+    private string AddRemovePlayerFromList(string searchTerm, PlayerUidName[] players, ICollection<Player> list, string listType)
     {
-        var players = parser.Results;
-        var searchTerm = parser.Value;
-
-        var message = players.Count switch
+        var message = players.Length switch
         {
             1 => FoundSinglePlayer(list, listType, players),
             > 1 => FoundMultiplePlayers(searchTerm, players),
             _ => FoundNoResults(searchTerm)
         };
-        ServerChannel?.BroadcastUniquePacket(GeneratePacket);
         return message;
     }
 
-    private string FoundSinglePlayer(ICollection<Player> list, string listType, List<IPlayer> players)
+    /// <summary>
+    ///     Processes a single server player by either removing an existing player from the list or adding a new one,
+    ///     then returns a message indicating the action performed.
+    /// </summary>
+    /// <param name="list">The collection of players to update.</param>
+    /// <param name="listType">The type of list, used for localisation of the message.</param>
+    /// <param name="players">The list of server players; the first entry is used for processing.</param>
+    /// <returns>
+    ///     A string message indicating whether a player was added or removed.
+    /// </returns>
+    private string FoundSinglePlayer(ICollection<Player> list, string listType, PlayerUidName[] players)
     {
         var result = players.First();
-        var plr = list.SingleOrDefault(p => p.Id == result.PlayerUID);
-        if (plr is not null)
-        {
-            list.Remove(plr);
-            return LangEx.EmbeddedFeatureString("EasyX", $"{listType}.PlayerRemoved", result.PlayerName, SubCommandName);
-        }
-
-        list.Add(new Player(result.PlayerUID, result.PlayerName));
+        var existingPlayer = list.SingleOrDefault(p => p.Id == result.Uid);
+        var isRemoved = existingPlayer is not null && list.Remove(existingPlayer);
+        if (!isRemoved) list.Add(result);
         ModSettings.World.Save(Settings);
-
-        return LangEx.EmbeddedFeatureString("EasyX", $"{listType}.PlayerAdded", result.PlayerName, SubCommandName);
+        ServerChannel?.BroadcastUniquePacket(GeneratePacket);
+        return LangEx.EmbeddedFeatureString("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
     }
 
     private static string FoundNoResults(string searchTerm)
         => LangEx.EmbeddedFeatureString("EasyX", "PlayerSearch.NoResults", searchTerm);
 
-    private static string FoundMultiplePlayers(string searchTerm, List<IPlayer> players)
+    private static string FoundMultiplePlayers(string searchTerm, PlayerUidName[] players)
     {
         var sb = new StringBuilder();
         sb.Append(LangEx.EmbeddedFeatureString("EasyX", "PlayerSearch.MultipleResults", searchTerm));
         foreach (var p in players)
         {
-            sb.Append($" - {p.PlayerName} (PID: {p.PlayerUID})");
+            sb.Append($" - {p.Name} (PID: {p.Uid})");
         }
         return sb.ToString();
     }

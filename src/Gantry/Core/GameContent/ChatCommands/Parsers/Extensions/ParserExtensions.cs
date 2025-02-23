@@ -28,4 +28,16 @@ public static class ParserExtensions
     /// </summary>
     public static FloatArgParser FloatRange(this CommandArgumentParsers _, string argName, float min, float max)
         => new(argName, min, max, isMandatoryArg: true);
+
+    /// <summary>
+    ///     All selected players.
+    /// </summary>
+    public static GantryPlayersArgParser ServerPlayers(this CommandArgumentParsers _)
+        => new("players", ApiEx.Server, true);
+
+    /// <summary>
+    ///     All selected players.
+    /// </summary>
+    public static GantryPlayersArgParser OptionalServerPlayers(this CommandArgumentParsers _)
+        => new("players", ApiEx.Server, false);
 }

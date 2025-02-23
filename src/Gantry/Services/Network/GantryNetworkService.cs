@@ -76,7 +76,7 @@ public class GantryNetworkService : IUniversalNetworkService
     public void RegisterServerChannel(string channelName)
     {
         if (_sapi is null || _sapi.Network.GetChannel(channelName) is not null) return;
-        ApiEx.Logger.Debug($"Registering server network channel: {channelName}");
+        ApiEx.Logger.VerboseDebug($"Registering server network channel: {channelName}");
         _sapi.Network.RegisterChannel(channelName);
     }
 
@@ -87,7 +87,7 @@ public class GantryNetworkService : IUniversalNetworkService
     public void RegisterClientChannel(string channelName)
     {
         if (_capi.Network.GetChannel(channelName) is not null) return;
-        ApiEx.Logger.Debug($"Registering client network channel: {channelName}");
+        ApiEx.Logger.VerboseDebug($"Registering client network channel: {channelName}");
         _capi.Network.RegisterChannel(channelName);
     }
 

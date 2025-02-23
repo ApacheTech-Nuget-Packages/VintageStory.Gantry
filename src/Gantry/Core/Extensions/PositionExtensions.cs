@@ -1,4 +1,5 @@
-﻿using Gantry.Core.Extensions.Helpers;
+﻿#nullable enable
+using Gantry.Core.Extensions.Helpers;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 
@@ -20,12 +21,34 @@ public static class PositionExtensions
     }
 
     /// <summary>
+    ///     Gets the absolute position, given an relative position within the game world.
+    /// </summary>
+    /// <param name="pos">The relative position of the block being queried.</param>
+    /// <param name="spawnPosition">The spawn position to use as the relative origin.</param>
+    public static BlockPos ToAbsolute(this BlockPos pos, BlockPos? spawnPosition = null)
+    {
+        spawnPosition ??= ApiEx.Current.World.DefaultSpawnPosition.XYZ.AsBlockPos;
+        return spawnPosition.AddCopy(pos.AsVec3i).With(p => p.Y = pos.Y);
+    }
+
+    /// <summary>
     ///     Gets the position relative to spawn, given an absolute position within the game world.
     /// </summary>
     /// <param name="pos">The absolute position of the block being queried.</param>
     public static Vec3d RelativeToSpawn(this Vec3d pos)
     {
         return pos.SubCopy(ApiEx.Current.World.DefaultSpawnPosition.XYZ).With(p => p.Y = pos.Y);
+    }
+
+    /// <summary>
+    ///     Gets the absolute position, given an relative position within the game world.
+    /// </summary>
+    /// <param name="pos">The relative position of the block being queried.</param>
+    /// <param name="spawnPosition">The spawn position to use as the relative origin.</param>
+    public static Vec3d ToAbsolute(this Vec3d pos, Vec3d? spawnPosition = null)
+    {
+        spawnPosition ??= ApiEx.Current.World.DefaultSpawnPosition.XYZ;
+        return spawnPosition.AddCopy(pos).With(p => p.Y = pos.Y);
     }
 
     /// <summary>

@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Gantry.Core.Diagnostics;
 using Gantry.Core.Extensions.Api;
-using Gantry.Services.FileSystem.Extensions;
 
 // ReSharper disable ConstantNullCoalescingCondition
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -81,24 +80,10 @@ public static class ModEx
     private static string CreateInitialDirectory()
     {
         var baseDir = Path.Combine(GamePaths.DataPath, "ModData");
-
-        var legacyFolderName = ModInfo.Authors[0].IfNullOrWhitespace("Gantry");
-        var legacyFolderName2 = legacyFolderName.Replace(" ", "");
-        var newFolderName = ModInfo.ToModID(legacyFolderName);
-
-        var legacyDir = new DirectoryInfo(Path.Combine(baseDir, legacyFolderName));
-        var legacyDir2 = new DirectoryInfo(Path.Combine(baseDir, legacyFolderName2));
-        var newDir = new DirectoryInfo(Path.Combine(baseDir, newFolderName));
-
-        // Fix my failed fix.
-        if (legacyDir2.Exists) legacyDir2.Rename(newFolderName);
-
-        // Fix the original issue.
-        if (legacyDir.Exists) legacyDir.Rename(newFolderName);
-
-        // New players caught in the crossfire.
+        var authorName = ModInfo.Authors[0].IfNullOrWhitespace("Gantry").Replace(" ", "");
+        var folderName = ModInfo.ToModID(authorName);
+        var newDir = new DirectoryInfo(Path.Combine(baseDir, folderName));
         if (!newDir.Exists) newDir.Create();
-
         return newDir.FullName;
     }
 }
