@@ -6,7 +6,7 @@ namespace Gantry.Core.Extensions.Functional;
 /// <summary>
 ///     Extension methods for monadic functions.
 /// </summary>
-internal static class FunctionalExtensions
+internal static class MonadicFunctionalExtensions
 {
     /// <summary>
     ///     Invokes an action on a monad of type <see cref="Identity{TFromType}"/>.
