@@ -35,4 +35,28 @@ public static class EnumEx
     {
         return (TEnum)Enum.Parse(typeof(TEnum), value, ignoreCase);
     }
+
+    /// <summary>
+    ///     Invokes an action corresponding to the enumeration value, similar to a switch expression.
+    /// </summary>
+    /// <typeparam name="TEnum">The type of the enumeration. Must be an enumeration type.</typeparam>
+    /// <param name="value">The enumeration value for which an action should be invoked.</param>
+    /// <param name="cases">A parameter array of tuples, where each tuple consists of an enumeration case and the associated action to invoke.</param>
+    /// <remarks>
+    ///     The method iterates over the provided cases and compares the current enumeration value with each case.
+    ///     If a match is found, the corresponding action is invoked and the method returns immediately.
+    ///     If no matching case is found, no action is performed.
+    /// </remarks>
+    public static void Switch<TEnum>(this TEnum value, params (TEnum Case, Action Action)[] cases)
+        where TEnum : Enum
+    {
+        foreach (var (enumCase, action) in cases)
+        {
+            if (EqualityComparer<TEnum>.Default.Equals(value, enumCase))
+            {
+                action?.Invoke();
+                return;
+            }
+        }
+    }
 }
