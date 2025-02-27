@@ -1,5 +1,6 @@
 ﻿using ApacheTech.Common.DependencyInjection;
 using ApacheTech.Common.DependencyInjection.Extensions;
+using Gantry.Core.Extensions.Helpers;
 using Gantry.Core.Hosting.Extensions;
 using Gantry.Core.Hosting.Registration;
 using Gantry.Core.Hosting.Registration.Api;
@@ -34,6 +35,28 @@ public abstract class ModHost : GantrySubsytemHost
     private List<IClientServiceRegistrar> _clientServiceRegistrars;
     private ILogger _logger;
 
+    /// <inheritdoc />
+    public override bool ShouldLoad(ICoreAPI api)
+    {
+        if (GameVersion.LongGameVersion.Contains("OverF1X"))
+        {
+            BrowserEx.TryOpenUrl("https://www.vintagestory.at/store/product/1-single-game-account/");
+            Environment.FailFast("Gantry cannot be used on hacked clients.");
+        }
+        var shouldLoad = base.ShouldLoad(api);
+        if (shouldLoad && _logger is null)
+        {
+            ModEx.Initialise(api, Mod, GetType().Assembly);
+            api.Logger.Event($"Gantry - Loading {Mod.Info.Name}, by {Mod.Info.Authors[0]}");
+            _logger = api.GetGantryLogger();
+            _logger.VerboseDebug("ModHost: Initialised ModEx.");
+
+            ApiEx.Initialise(api);
+            _logger.VerboseDebug("ModHost: Initialised ApiEx.");
+        }
+        return shouldLoad;
+    }
+
     /// <summary>
     ///     Initialises a new instance of the <see cref="ModHost" /> class.
     /// </summary>
@@ -60,7 +83,7 @@ public abstract class ModHost : GantrySubsytemHost
 
         _logger.VerboseDebug("Adding Network Service");
         services.AddNetworkService(api);
-        
+
         base.ConfigureUniversalModServices(services, api);
     }
 
@@ -159,13 +182,6 @@ public abstract class ModHost : GantrySubsytemHost
     protected sealed override void StartPreUniversal(ICoreAPI api)
     {
         var stopwatch = Stopwatch.StartNew();
-        ModEx.Initialise(api, Mod, GetType().Assembly);
-        api.Logger.Event($"Gantry - Loading {Mod.Info.Name}, by {Mod.Info.Authors[0]}");
-        _logger = api.GetGantryLogger();
-        _logger.VerboseDebug("ModHost: Initialised ModEx.");
-
-        ApiEx.Initialise(api);
-        _logger.VerboseDebug("ModHost: Initialised ApiEx.");
 
         _universalServiceRegistrars = Mod.Systems.OfType<IUniversalServiceRegistrar>().ToList();
         _logger.VerboseDebug("ModHost: Populated Universal Mod Service Registrars.");
