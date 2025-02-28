@@ -22,7 +22,7 @@
 
 		<Company>ApacheTech Solutions</Company>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<Copyright>Copyright Ãƒâ€šÃ‚Â© ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
+		<Copyright>Copyright ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â© ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
 
 		<DebugSymbols>True</DebugSymbols>
 		<DebugType>embedded</DebugType>
@@ -176,15 +176,6 @@
 	    -->
 		<Reference Include="Newtonsoft.Json">
 			<HintPath>$(VINTAGE_STORY)\Lib\Newtonsoft.Json.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-
-		<!--
-	        Library 34: Open.Nat
-	        Description: A library for NAT traversal and UPnP
-	    -->
-		<Reference Include="Open.Nat">
-			<HintPath>$(VINTAGE_STORY)\Lib\Open.Nat.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 

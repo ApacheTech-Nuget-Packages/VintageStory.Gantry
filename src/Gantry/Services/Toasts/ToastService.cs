@@ -1,13 +1,15 @@
 ﻿using System.Drawing;
-using Gantry.Core.GameContent.ChatCommands;
 using Gantry.Services.Network.Extensions;
+using Vintagestory.API.Server;
+
+#pragma warning disable IDE1006 // Naming Styles
 
 namespace Gantry.Services.Toasts;
 
 /// <summary>
 ///     Provides a service for displaying toast notifications in the client UI.
 /// </summary>
-public class ToastService : ClientSubsystem, IToastService
+public class ToastService : UniversalSubsystem, IToastService
 {
     private long _listenerId;
     private const int MaxActive = 5;
@@ -16,6 +18,16 @@ public class ToastService : ClientSubsystem, IToastService
     public override void ConfigureClientModServices(IServiceCollection services, ICoreClientAPI capi)
     {
         services.AddSingleton<IToastService>(this);
+    }
+
+    /// <inheritdoc />
+    public override void StartServerSide(ICoreServerAPI sapi)
+    {
+        // Networking
+        sapi.Network
+            .RegisterChannel(IToastService.ChannelName)
+            .RegisterMessageType<AssetLocation>()
+            .RegisterMessageType<Toast>();
     }
 
     /// <inheritdoc />
