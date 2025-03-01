@@ -1,6 +1,8 @@
-﻿using System.Reflection;
+﻿using System.IO.Compression;
+using System.Reflection;
 using Gantry.Core.Diagnostics;
 using Gantry.Core.Extensions.Api;
+using Vintagestory.API.Config;
 
 // ReSharper disable ConstantNullCoalescingCondition
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -85,5 +87,15 @@ public static class ModEx
         var newDir = new DirectoryInfo(Path.Combine(baseDir, folderName));
         if (!newDir.Exists) newDir.Create();
         return newDir.FullName;
+    }
+
+    /// <summary>
+    ///     Creates a zip archive from the folder specified by GathPaths.Logs.
+    /// </summary>
+    public static void CreateLogsZipArchive()
+    {
+        var sourceFolder = GamePaths.Logs;
+        var zipFileName = Path.Combine(Path.GetDirectoryName(sourceFolder), $"{Path.GetFileName(sourceFolder)}.zip");
+        ZipFile.CreateFromDirectory(sourceFolder, zipFileName, CompressionLevel.Optimal, includeBaseDirectory: false);
     }
 }

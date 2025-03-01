@@ -37,12 +37,12 @@ public static class ApiEx
             case EnumAppSide.Server:
                 _serverMain.Value = api.World as ServerMain;
                 _serverThread = Thread.CurrentThread;
-                logger.VerboseDebug("ApiEx: Added ServerMain.");
+                logger.VerboseDebug("ApiEx: Added ServerMain (Thread ID: {0}).", _serverThread.ManagedThreadId);
                 break;
             case EnumAppSide.Client:
                 _clientMain.Value = api.World as ClientMain;
                 _clientThread = Thread.CurrentThread;
-                logger.VerboseDebug("ApiEx: Added ClientMain.");
+                logger.VerboseDebug("ApiEx: Added ClientMain (Thread ID: {0}).", _clientThread.ManagedThreadId);
                 break;
             case EnumAppSide.Universal:
             default:
