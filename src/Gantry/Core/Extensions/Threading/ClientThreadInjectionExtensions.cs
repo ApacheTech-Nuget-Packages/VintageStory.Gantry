@@ -1,4 +1,5 @@
-﻿using ApacheTech.Common.Extensions.Harmony;
+﻿using System.Runtime.CompilerServices;
+using ApacheTech.Common.Extensions.Harmony;
 
 // ReSharper disable StringLiteralTypo
 
@@ -10,16 +11,6 @@ namespace Gantry.Core.Extensions.Threading;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class ClientThreadInjectionExtensions
 {
-    private static readonly Type ClientThread;
-
-    /// <summary>
-    /// 	Initialises static members of the <see cref="ClientThreadInjectionExtensions"/> class.
-    /// </summary>
-    static ClientThreadInjectionExtensions()
-    {
-        ClientThread = typeof(ClientMain).Assembly.GetClassType("ClientThread");
-    }
-
     /// <summary>
     ///     Determines whether a given ClientSystem is present within the game's registry.
     /// </summary>
@@ -66,7 +57,7 @@ public static class ClientThreadInjectionExtensions
     /// <returns>A <see cref="Stack{T}" />, containing all the currently registered systems, on the client.</returns>
     public static Stack<ClientSystem> GetClientSystems(this IClientWorldAccessor world)
     {
-        return new Stack<ClientSystem>((world as ClientMain).GetField<ClientSystem[]>("clientSystems"));
+        return new((world as ClientMain).GetField<ClientSystem[]>("clientSystems"));
     }
 
     /// <summary>
@@ -88,31 +79,46 @@ public static class ClientThreadInjectionExtensions
     /// <param name="world">The world accessor API for the client.</param>
     /// <param name="name">The name of the thread to inject.</param>
     /// <param name="systems">One or more custom <see cref="ClientSystem" /> implementations to run on the thread.</param>
-    public static void InjectClientThread(this IClientWorldAccessor world, string name,  params ClientSystem[] systems)
+    public static void InjectClientThread(this IClientWorldAccessor world, string name, params ClientSystem[] systems)
     {
-        var instance = CreateClientThread(world, name, systems);
         var clientThreads = world.GetClientThreads();
-        var vanillaSystems = world.GetClientSystems();
-
-        foreach (var system in systems) vanillaSystems.Push(system);
-
-        (world as ClientMain).SetField("clientSystems", vanillaSystems.ToArray());
-
-        var thread = new Thread(() => instance.CallMethod("Process")) { IsBackground = true };
+        var thread = new Thread(() =>
+        {
+            var instance = CreateClientThreadInstance(name, systems);
+            instance.CallMethod("Process");
+        })
+        { 
+            IsBackground = true 
+        };
         thread.Start();
         thread.Name = name;
         clientThreads.Add(thread);
     }
 
-    private static object CreateClientThread(IClientWorldAccessor world, string name, ClientSystem[] systems)
+    /// <summary>
+    ///     Instantiates an internal <c>ClientThread</c> object from the third-party library using Harmony's AccessTools.
+    /// </summary>
+    /// <param name="threadName">A <c>string</c> representing the name of the thread.</param>
+    /// <param name="clientSystems">An array of <c>ClientSystem</c> objects.</param>
+    /// <returns>
+    ///     An instance of the internal <c>ClientThread</c> object as an <c>object</c>.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the <c>ClientThread</c> type or its constructor cannot be found.
+    /// </exception>
+    public static object CreateClientThreadInstance(string threadName, object[] clientSystems)
     {
-        var instance = HarmonyReflectionExtensions.CreateInstance(ClientThread);
-        instance.SetField("game", world as ClientMain);
-        instance.SetField("threadName", name);
-        instance.SetField("clientsystems", systems);
-        instance.SetField("lastFramePassedTime", new Stopwatch());
-        instance.SetField("totalPassedTime", new Stopwatch());
-        instance.SetField("paused", false);
+        // Retrieve the internal ClientThread type by its full name.
+        var clientThreadType = AccessTools.TypeByName("Vintagestory.Client.NoObf.ClientThread") 
+            ?? throw new InvalidOperationException("The ClientThread type could not be found.");
+
+        // Retrieve the constructor information for the internal class.
+        var constructor = AccessTools.Constructor(clientThreadType, [typeof(ClientMain), typeof(string), typeof(ClientSystem[]), typeof(CancellationToken)]) 
+            ?? throw new InvalidOperationException("The constructor for ClientThread with the specified signature could not be found.");
+
+        // Instantiate the internal class using the obtained constructor.
+        var cts = ApiEx.ClientMain.GetField<CancellationTokenSource>("_clientThreadsCts");
+        var instance = constructor.Invoke([ApiEx.ClientMain, threadName, clientSystems, cts.Token]);
         return instance;
     }
 }
