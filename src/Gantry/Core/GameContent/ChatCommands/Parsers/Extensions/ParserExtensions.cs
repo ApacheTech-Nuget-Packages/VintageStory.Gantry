@@ -18,12 +18,6 @@ public static class ParserExtensions
         => new("scope", isMandatoryArg: false);
 
     /// <summary>
-    ///     Allows the user to search for an online player, based on a partial match of their username.
-    /// </summary>
-    public static FuzzyPlayerParser FuzzyPlayerSearch(this CommandArgumentParsers _)
-        => new("player", false);
-
-    /// <summary>
     ///     Parses a float value that is only allowed within a specific inclusive range.
     /// </summary>
     public static FloatArgParser FloatRange(this CommandArgumentParsers _, string argName, float min, float max)
