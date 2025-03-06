@@ -27,11 +27,23 @@ public static class ParserExtensions
     ///     Parses a string as an online player, returning an array of <see cref="PlayerUidName"/>, allowing partial matches. (Server-side only)
     /// </summary>
     public static GantryPlayersArgParser ServerPlayers(this CommandArgumentParsers _)
-        => new("players", ApiEx.Server, true);
+        => new("players", ApiEx.Current, true);
 
     /// <summary>
     ///     Optionally parses a string as an online player, returning an array of <see cref="PlayerUidName"/>, allowing partial matches. (Server-side only)
     /// </summary>
     public static GantryPlayersArgParser OptionalServerPlayers(this CommandArgumentParsers _)
-        => new("players", ApiEx.Server, false);
+        => new("players", ApiEx.Current, false);
+
+    /// <summary>
+    ///     Parses a string as an online player, returning an array of <see cref="PlayerUidName"/>, allowing partial matches. (Universal)
+    /// </summary>
+    public static GantryOnlinePlayersArgParser ClientPlayer(this CommandArgumentParsers _)
+        => new("players", ApiEx.Current, true);
+
+    /// <summary>
+    ///     Optionally parses a string as an online player, returning an array of <see cref="PlayerUidName"/>, allowing partial matches. (Universal)
+    /// </summary>
+    public static GantryOnlinePlayersArgParser OptionalClientPlayer(this CommandArgumentParsers _)
+        => new("players", ApiEx.Current, false);
 }
