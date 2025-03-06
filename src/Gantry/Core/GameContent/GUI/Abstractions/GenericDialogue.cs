@@ -17,6 +17,13 @@ public abstract class GenericDialogue : GuiDialog
     protected GenericDialogue(ICoreClientAPI capi) : base(capi)
     {
         ToggleKeyCombinationCode = GetType().Name;
+
+        ClientSettings.Inst.AddWatcher<float>("guiScale", _ =>
+        {
+            PreCompose();
+            Compose();
+            RefreshValues();
+        });
     }
 
     /// <summary>
@@ -43,9 +50,18 @@ public abstract class GenericDialogue : GuiDialog
             return false;
         }
         var success = base.TryOpen();
+        PreCompose();
         Compose();
         if (success) RefreshValues();
         return opened;
+    }
+
+    /// <summary>
+    ///     Actions taken before the actual composition of the body of the dialogue.
+    /// </summary>
+    protected virtual void PreCompose()
+    {
+        // Base class does nothing.
     }
 
     /// <summary>
@@ -75,7 +91,7 @@ public abstract class GenericDialogue : GuiDialog
     ///     Sets the title of the dialogue box.
     /// </summary>
     /// <value>The raw, pre-localised, string literal to use for the title of the dialogue box.</value>
-    public string Title { private get; set; }
+    public string Title { get; set; }
 
     /// <summary>
     ///     Sets the alignment of the form on the screen, when set to Fixed mode.

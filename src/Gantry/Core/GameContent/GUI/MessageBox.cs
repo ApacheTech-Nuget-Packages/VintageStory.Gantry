@@ -57,7 +57,7 @@ public sealed class MessageBox : GenericDialogue
         {
             ButtonLayout.Ok => LangEx.ConfirmationString("information"),
             ButtonLayout.OkCancel => LangEx.ConfirmationString("confirmation"),
-            _ => throw new ArgumentOutOfRangeException(nameof(buttons), buttons, null)
+            _ => throw new UnreachableException()
         };
 
         Title = title.IfNullOrWhitespace(defaultTitle);
