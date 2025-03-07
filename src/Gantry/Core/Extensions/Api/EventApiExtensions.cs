@@ -36,14 +36,11 @@ public static class EventApiExtensions
         }
 
         using var waitHandle = new ManualResetEventSlim(false);
-        ApiEx.Logger.Trace($"[{Environment.CurrentManagedThreadId}] Queuing main thread task.");
         eventApi.EnqueueMainThreadTask(() =>
         {
             try
             {
-                ApiEx.Logger.Trace($"[{Environment.CurrentManagedThreadId}] Executing main thread task.");
                 action();
-                ApiEx.Logger.Trace($"[{Environment.CurrentManagedThreadId}] Main thread task completed.");
             }
             catch (Exception ex)
             {
@@ -56,13 +53,11 @@ public static class EventApiExtensions
                 waitHandle.Set();
             }
         }, "");
-        ApiEx.Logger.Trace($"[{Environment.CurrentManagedThreadId}] Waiting for task to complete.");
         if (!waitHandle.Wait(TimeSpan.FromSeconds(30))) // Add a timeout for safety
         {
             ApiEx.Logger.Error("Main thread task timed out.");
             throw new TimeoutException("Main thread task timed out.");
         }
-        ApiEx.Logger.Trace($"[{Environment.CurrentManagedThreadId}] Task completed.");
     }
 
 
