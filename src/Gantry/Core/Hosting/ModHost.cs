@@ -159,6 +159,7 @@ public abstract class ModHost : GantrySubsytemHost
 
         //  5. Build IOC Container.
         IOC.ClientIOC = _services.BuildServiceProvider();
+        _logger.VerboseDebug("ModHost: IOC.ClientIOC now populated.");
 
         // ONLY NOW ARE SERVICES AVAILABLE
 
@@ -201,7 +202,7 @@ public abstract class ModHost : GantrySubsytemHost
         StartPreUniversalSide(api);
         base.StartPreUniversal(api);
         stopwatch.Stop();
-        _logger.VerboseDebug($"Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}");
+        _logger.VerboseDebug($"ModHost Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}.");
     }
 
     /// <summary>
