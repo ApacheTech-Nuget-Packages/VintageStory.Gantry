@@ -18,6 +18,22 @@ public abstract class WorldSettingsConsumer<TSettings> : ISettingsConsumer where
     protected static TSettings Settings => _settings ??= ModSettings.World?.Feature<TSettings>();
 
     /// <summary>
+    ///     Gets or sets the settings.
+    /// </summary>
+    /// <value>
+    ///     The settings.
+    /// </value>
+    protected static TSettings ClientSettings => ModSettings.ClientWorld?.Feature<TSettings>();
+
+    /// <summary>
+    ///     Gets or sets the settings.
+    /// </summary>
+    /// <value>
+    ///     The settings.
+    /// </value>
+    protected static TSettings ServerSettings => ModSettings.ServerWorld?.Feature<TSettings>();
+
+    /// <summary>
     ///     Gets or sets the name of the feature.
     /// </summary>
     /// <value>
