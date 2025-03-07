@@ -59,4 +59,28 @@ public static class EnumEx
             }
         }
     }
+
+    /// <summary>
+    ///     Invokes the action associated with the specified enumeration value,
+    ///     if an action is defined for it.
+    /// </summary>
+    /// <typeparam name="TEnum">The enumeration type.</typeparam>
+    /// <typeparam name="TParameter">The type of the parameter to pass to the action.</typeparam>
+    /// <param name="this">The enumeration value.</param>
+    /// <param name="parameter">The parameter to pass to the invoked action.</param>
+    /// <param name="actions">
+    ///     A dictionary mapping enumeration values to corresponding actions.
+    /// </param>
+    /// <remarks>
+    ///     If the enumeration value is not found in the dictionary, no action is executed.
+    /// </remarks>
+    public static void InvokeOneOf<TEnum, TParameter>(
+        this TEnum @this,
+        TParameter parameter,
+        Dictionary<TEnum, Action<TParameter>> actions)
+        where TEnum : struct, Enum
+    {
+        if (!actions.TryGetValue(@this, out var action)) return;
+        action(parameter);
+    }
 }
