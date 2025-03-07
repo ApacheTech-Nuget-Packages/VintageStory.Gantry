@@ -12,6 +12,28 @@ namespace Gantry.Core.Extensions;
 public static class PlayerExtensions
 {
     /// <summary>
+    ///     Adjusts the player's stats.
+    /// </summary>
+    /// <param name="player">The player entity.</param>
+    /// <param name="category">The cetegory to modify.</param>
+    /// <param name="code">The unique identifier for the modification.</param>
+    /// <param name="delta">The amount to adjust the stat by.</param>
+    public static void AdjustStat(this EntityPlayer player, string category, string code, float delta)
+    {
+        var valuesByKey = player.Stats[category].ValuesByKey;
+        if (!valuesByKey.TryGetValue(code, out var stat)) stat = new();
+
+        player.Stats.Set(
+            category: category,
+            code: code,
+            value: stat.Value + delta,
+            persistent: true);
+
+        var behaviour = player.GetBehavior<EntityBehaviorHealth>();
+        behaviour.MarkDirty();
+    }
+
+    /// <summary>
     ///     Determines if the entity is a player, in Spectator Mode.
     /// </summary>
     public static bool IsSpectator(this Entity entity) => entity is EntityPlayer

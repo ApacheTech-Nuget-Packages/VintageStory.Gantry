@@ -40,8 +40,7 @@ public static class WorldMapManagerExtensions
     ///     Trick the server into sending waypoints to the client even if they don't have their map opened. <br/>
     ///     Credit to Novocain.
     /// </summary>
-    /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
-    public static void ForceSendWaypoints(this WorldMapManager mapManager)
+    public static void ForceSendWaypoints(this WorldMapManager _)
     {
         ApiEx.Client!.Event.EnqueueMainThreadTask(() =>
             ApiEx.Client.Event.RegisterCallback(_ =>
