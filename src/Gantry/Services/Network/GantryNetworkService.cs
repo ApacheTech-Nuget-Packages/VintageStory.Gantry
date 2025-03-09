@@ -1,4 +1,4 @@
-﻿using Gantry.Core.Extensions.Api;
+﻿using Gantry.Core.Annotation;
 using Vintagestory.API.Server;
 
 namespace Gantry.Services.Network;
@@ -11,28 +11,24 @@ namespace Gantry.Services.Network;
 /// <seealso cref="IUniversalNetworkService" />
 public class GantryNetworkService : IUniversalNetworkService
 {
-    private readonly ICoreClientAPI _capi;
-    private readonly ICoreServerAPI _sapi;
-    private readonly string _defaultChannelName;
+    private readonly NetworkServiceOptions _options;
 
     /// <summary>
     /// 	Initialises a new instance of the <see cref="GantryNetworkService"/> class.
     /// </summary>
-    /// <param name="api">The universal Core API.</param>
-    public GantryNetworkService(ICoreAPI api) : this(api, NetworkServiceOptions.Default)
+    [Universal]
+    public GantryNetworkService() : this(NetworkServiceOptions.Default)
     {
     }
 
     /// <summary>
     /// 	Initialises a new instance of the <see cref="GantryNetworkService"/> class.
     /// </summary>
-    /// <param name="api">The universal Core API.</param>
     /// <param name="options">The options to pass to the service.</param>
-    [ActivatorUtilitiesConstructor]
-    public GantryNetworkService(ICoreAPI api, NetworkServiceOptions options)
+    [Universal]
+    public GantryNetworkService(NetworkServiceOptions options)
     {
-        _defaultChannelName = options.DefaultChannelName;
-        api.SetSidedInstances(ref _capi, ref _sapi);
+        _options = options;
     }
 
     /// <summary>
@@ -40,10 +36,13 @@ public class GantryNetworkService : IUniversalNetworkService
     /// </summary>
     /// <param name="channelName">Name of the channel.</param>
     /// <returns>An instance of <see cref="IClientNetworkChannel" />, used to send and receive network messages on the client.</returns>
+    [ClientSide]
     public IClientNetworkChannel ClientChannel(string channelName)
     {
-        var channel = _capi?.Network.GetChannel(channelName);
-        return channel ?? _capi?.Network.RegisterChannel(channelName);
+        var capi = ApiEx.Client;
+        RegisterClientChannel(channelName);
+        var channel = capi.Network.GetChannel(channelName);
+        return channel;
     }
 
     /// <summary>
@@ -51,50 +50,60 @@ public class GantryNetworkService : IUniversalNetworkService
     /// </summary>
     /// <param name="channelName">The name of the channel to register.</param>
     /// <returns>An instance of <see cref="IServerNetworkChannel" />, used to send and receive network messages on the server.</returns>
+    [ServerSide]
     public IServerNetworkChannel ServerChannel(string channelName)
     {
-        var channel = _sapi?.Network.GetChannel(channelName);
-        return channel ?? _sapi?.Network.RegisterChannel(channelName);
+        var sapi = ApiEx.Server;
+        RegisterServerChannel(channelName);
+        var channel = sapi.Network.GetChannel(channelName);
+        return channel;
     }
 
     /// <summary>
     ///     Retrieves the mod's default server-side network channel.
     /// </summary>
     /// <value>The default server channel.</value>
-    public IServerNetworkChannel DefaultServerChannel => ServerChannel(_defaultChannelName);
+    [ServerSide]
+    public IServerNetworkChannel DefaultServerChannel => ServerChannel(_options.DefaultChannelName);
 
     /// <summary>
     ///     Retrieves the mod's default client-side network channel.
     /// </summary>
     /// <value>The default client channel.</value>
-    public IClientNetworkChannel DefaultClientChannel => ClientChannel(_defaultChannelName);
+    [ClientSide]
+    public IClientNetworkChannel DefaultClientChannel => ClientChannel(_options.DefaultChannelName);
 
     /// <summary>
     ///     Registers a network channel on the server.
     /// </summary>
     /// <param name="channelName">The name of the channel to register.</param>
+    [ServerSide]
     public void RegisterServerChannel(string channelName)
     {
-        if (_sapi is null || _sapi.Network.GetChannel(channelName) is not null) return;
+        var sapi = ApiEx.Server;
+        if (sapi.Network.GetChannel(channelName) is not null) return;
         ApiEx.Logger.VerboseDebug($"Registering server network channel: {channelName}");
-        _sapi.Network.RegisterChannel(channelName);
+        sapi.Network.RegisterChannel(channelName);
     }
 
     /// <summary>
     ///     Registers a network channel on client.
     /// </summary>
     /// <param name="channelName">The name of the channel to register.</param>
+    [ClientSide]
     public void RegisterClientChannel(string channelName)
     {
-        if (_capi.Network.GetChannel(channelName) is not null) return;
+        var capi = ApiEx.Client;
+        if (capi.Network.GetChannel(channelName) is not null) return;
         ApiEx.Logger.VerboseDebug($"Registering client network channel: {channelName}");
-        _capi.Network.RegisterChannel(channelName);
+        capi.Network.RegisterChannel(channelName);
     }
 
     /// <summary>
     ///     Registers a network channel on the app side this method is called from.
     /// </summary>
     /// <param name="channelName">The name of the channel to register.</param>
+    [Universal]
     public void RegisterChannel(string channelName)
     {
         ApiEx.Run(RegisterClientChannel, RegisterServerChannel, channelName);
