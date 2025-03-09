@@ -17,7 +17,7 @@ public static class GantryDependencyInjectionExtensions
     /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddNetworkService(this IServiceCollection services, ICoreAPI api, Action<NetworkServiceOptions> options = null)
     {
-        var service = new GantryNetworkService(api, NetworkServiceOptions.Default.With(options));
+        var service = new GantryNetworkService(NetworkServiceOptions.Default.With(options));
         services.AddSingleton<IUniversalNetworkService>(service);
         api.Side.RunOneOf(
             () => services.AddSingleton<IClientNetworkService>(service), 
