@@ -81,8 +81,8 @@ public abstract class ModHost : GantrySubsytemHost
         services.AddFileSystemService(o => o.RegisterSettingsFiles = true);
         _logger.VerboseDebug($"Registered {api.Side} FileSystem Service");
 
-        _logger.VerboseDebug("Adding Network Service");
-        services.AddNetworkService(api);
+        services.AddHarmonyPatchingService(o => o.AutoPatchModAssembly = true);
+        _logger.VerboseDebug($"Registered {api.Side} Harmony Service");
 
         base.ConfigureUniversalModServices(services, api);
     }
@@ -91,7 +91,7 @@ public abstract class ModHost : GantrySubsytemHost
     {
         var brighterBuilder = services.AddBrighter();
         brighterBuilder.AutoFromAssemblies(api);
-        _logger.VerboseDebug("ModHost: Registered Brighter Mediator Engine.");
+        _logger.VerboseDebug($"ModHost: Registered {api.Side} Brighter Mediator Engine.");
     }
 
     #endregion

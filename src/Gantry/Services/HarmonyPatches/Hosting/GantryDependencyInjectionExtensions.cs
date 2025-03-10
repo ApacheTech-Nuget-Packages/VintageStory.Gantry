@@ -15,14 +15,12 @@ public static class GantryDependencyInjectionExtensions
     ///     Adds the embedded resources service to the service collection.
     /// </summary>
     /// <param name="services">The services collection to add the service to.</param>
-    /// <param name="api">The universal Core API.</param>
     /// <param name="options">The options to pass to the service.</param>
     /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddHarmonyPatchingService(this IServiceCollection services,
-        ICoreAPI api,
         Action<HarmonyPatchingServiceOptions> options = null)
     {
-        services.TryAddSingleton<IHarmonyPatchingService>(new HarmonyPatchingService(api, HarmonyPatchingServiceOptions.Default.With(options)));
+        services.TryAddSingleton<IHarmonyPatchingService>(new HarmonyPatchingService(HarmonyPatchingServiceOptions.Default.With(options)));
         return services;
     }
 }

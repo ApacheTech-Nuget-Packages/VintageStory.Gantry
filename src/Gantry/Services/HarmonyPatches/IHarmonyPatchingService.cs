@@ -14,6 +14,11 @@ public interface IHarmonyPatchingService : IDisposable
     void PatchModAssembly();
 
     /// <summary>
+    ///     Remove patches from the game, located in the mod assembly.
+    /// </summary>
+    void UnpatchModAssembly();
+
+    /// <summary>
     ///     Creates a new patch host, if one with the specified ID doesn't already exist.
     /// </summary>
     /// <param name="harmonyId">The identifier to use for the patch host.</param>
@@ -31,4 +36,10 @@ public interface IHarmonyPatchingService : IDisposable
     /// be processed at launch. Manual patches can be processed later on at runtime.
     /// </summary>
     void PatchAssembly(Assembly assembly);
+
+    /// <summary>
+    /// By default, all annotated [HarmonyPatch] classes in the executing assembly will
+    /// be processed at launch. Manual patches can be processed later on at runtime.
+    /// </summary>
+    void UnpatchAssembly(Assembly assembly);
 }
