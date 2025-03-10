@@ -21,10 +21,11 @@ public sealed class FileSystemService : IFileSystemService
     ///     Initialises a new instance of the <see cref="FileSystemService"/> class.
     /// </summary>
     [ActivatorUtilitiesConstructor]
-    public FileSystemService(ICoreAPI api, FileSystemServiceOptions options)
+    public FileSystemService(FileSystemServiceOptions options)
     {
         _registeredFiles = new Dictionary<string, ModFileBase>();
 
+        var api = ApiEx.Current;
         var modId = ModEx.ModInfo.ModID;
 
         var worldIdentifier = api.World.SavegameIdentifier;

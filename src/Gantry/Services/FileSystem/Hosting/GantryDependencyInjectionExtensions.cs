@@ -17,16 +17,14 @@ public static class GantryDependencyInjectionExtensions
     ///     Attempts to add the file system service to the service collection, as service type <see cref="IFileSystemService"/>.
     /// </summary>
     /// <param name="services">The services collection to add the service to.</param>
-    /// <param name="api">The universal Core API.</param>
     /// <param name="options">The options to pass to the service.</param>
     /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddFileSystemService(
-        this IServiceCollection services, 
-        ICoreAPI api,
+        this IServiceCollection services,
         Action<FileSystemServiceOptions> options = null)
     {
         var fileSystemServiceOptions = FileSystemServiceOptions.Default.With(options);
-        services.TryAddSingleton<IFileSystemService>(new FileSystemService(api, fileSystemServiceOptions));
+        services.TryAddSingleton<IFileSystemService>(new FileSystemService(fileSystemServiceOptions));
 
         return services;
     }

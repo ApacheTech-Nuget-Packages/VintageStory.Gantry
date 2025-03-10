@@ -78,8 +78,8 @@ public abstract class ModHost : GantrySubsytemHost
         services.AddNetworkService();
         _logger.VerboseDebug($"Registered {api.Side} Network Service");
 
-        _logger.VerboseDebug("Adding Harmony Service");
-        services.AddHarmonyPatchingService(api, o => o.AutoPatchModAssembly = true);
+        services.AddFileSystemService(o => o.RegisterSettingsFiles = true);
+        _logger.VerboseDebug($"Registered {api.Side} FileSystem Service");
 
         _logger.VerboseDebug("Adding Network Service");
         services.AddNetworkService(api);
