@@ -75,8 +75,8 @@ public abstract class ModHost : GantrySubsytemHost
     /// <inheritdoc />
     protected override void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
     {
-        _logger.VerboseDebug("Adding FileSystem Service");
-        services.AddFileSystemService(api, o => o.RegisterSettingsFiles = true);
+        services.AddNetworkService();
+        _logger.VerboseDebug($"Registered {api.Side} Network Service");
 
         _logger.VerboseDebug("Adding Harmony Service");
         services.AddHarmonyPatchingService(api, o => o.AutoPatchModAssembly = true);
