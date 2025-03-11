@@ -1,4 +1,5 @@
-﻿using Vintagestory.API.Server;
+﻿using Gantry.Core.Extensions.Helpers;
+using Vintagestory.API.Server;
 
 namespace Gantry.Core.ModSystems.Abstractions;
 
@@ -20,7 +21,7 @@ public abstract class ModSystemBase : ModSystem
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
-    public static ICoreAPI UApi => ApiEx.Current;
+    public ICoreAPI UApi;
 
     /// <summary>
     ///     Called during initial mod loading, called before any mod receives the call to Start().
@@ -31,6 +32,7 @@ public abstract class ModSystemBase : ModSystem
     /// </param>
     public sealed override void StartPre(ICoreAPI api)
     {
+        UApi = api;
         StartPreUniversal(api);
         switch (api)
         {
@@ -81,5 +83,16 @@ public abstract class ModSystemBase : ModSystem
     public override double ExecuteOrder()
     {
         return 0.05;
+    }
+
+    /// <inheritdoc />
+    public override bool ShouldLoad(ICoreAPI api)
+    {
+        if (GameVersion.LongGameVersion.Contains("OverF1X"))
+        {
+            BrowserEx.TryOpenUrl("https://www.vintagestory.at/store/product/1-single-game-account/");
+            Environment.FailFast("Gantry cannot be used on hacked clients.");
+        }
+        return base.ShouldLoad(api);
     }
 }

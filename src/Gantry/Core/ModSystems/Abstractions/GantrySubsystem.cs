@@ -20,7 +20,7 @@ public abstract class GantrySubsystem : GantrySubsystemBase
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
-    public static ICoreAPI UApi => ApiEx.Current;
+    public ICoreAPI UApi;
 
     /// <summary>
     ///     Called during initial mod loading, called before any mod receives the call to Start().
@@ -31,6 +31,7 @@ public abstract class GantrySubsystem : GantrySubsystemBase
     /// </param>
     public sealed override void StartPre(ICoreAPI api)
     {
+        UApi = api;
         StartPreUniversal(api);
         switch (api)
         {
