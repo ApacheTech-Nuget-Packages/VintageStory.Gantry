@@ -249,10 +249,11 @@ public abstract class ModHost : GantrySubsytemHost
     /// </summary>
     public override void Dispose()
     {
+        base.Dispose();
         IOC.Services.Resolve<IHarmonyPatchingService>().Dispose();
         IOC.Services.Resolve<IFileSystemService>().Dispose();
-        ModEx.ModAssembly.NullifyOrphanedStaticMembers();
-        base.Dispose();
+        ApiEx.Dispose();
+        ModEx.ModAssemblies.Foreach(p => p.NullifyOrphanedStaticMembers());
     }
 
     #endregion
