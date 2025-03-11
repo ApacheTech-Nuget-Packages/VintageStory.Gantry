@@ -1,5 +1,7 @@
 ﻿#nullable enable
+using Gantry.Core.Diagnostics;
 using Vintagestory.API.Server;
+using Vintagestory.API.Util;
 using Vintagestory.Server;
 
 // ReSharper disable RedundantSuppressNullableWarningExpression
@@ -22,32 +24,63 @@ namespace Gantry.Core;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class ApiEx
 {
-    private static readonly AsyncLocal<ClientMain?> _clientMain = new();
-    private static readonly AsyncLocal<ServerMain?> _serverMain = new();
+    private static AsyncLocal<ClientMain?> _clientMain = new();
+    private static AsyncLocal<ServerMain?> _serverMain = new();
+    private static readonly Dictionary<EnumAppSide, GantryLogger> _loggers = [];
     private static Thread? _serverThread;
     private static Thread? _clientThread;
 
     #region Initialisation
 
-    internal static void Initialise(ICoreAPI api)
+    internal static void Initialise(ICoreAPI api, Mod mod)
     {
-        var logger = api.GetGantryLogger();
         switch (api.Side)
         {
             case EnumAppSide.Server:
                 _serverMain.Value = api.World as ServerMain;
                 _serverThread = Thread.CurrentThread;
-                logger.VerboseDebug("ApiEx: Added ServerMain (Thread ID: {0}).", _serverThread.ManagedThreadId);
+                CreateLogger(api, mod);
+                Logger.VerboseDebug("ApiEx: Added ServerMain (Thread ID: {0}).", _serverThread.ManagedThreadId);
                 break;
             case EnumAppSide.Client:
                 _clientMain.Value = api.World as ClientMain;
                 _clientThread = Thread.CurrentThread;
-                logger.VerboseDebug("ApiEx: Added ClientMain (Thread ID: {0}).", _clientThread.ManagedThreadId);
+                CreateLogger(api, mod);
+                Logger.VerboseDebug("ApiEx: Added ClientMain (Thread ID: {0}).", _clientThread.ManagedThreadId);
                 break;
             case EnumAppSide.Universal:
             default:
                 throw new ArgumentOutOfRangeException(nameof(api), api, "App-side cannot be determined.");
         }
+    }
+
+    private static void CreateLogger(ICoreAPI api, Mod mod)
+    {
+        api.Logger.Debug("[Gantry] Initialising gantry server loggers.");
+        ModEx.LogDirectory = new DirectoryInfo(Path.Combine(GamePaths.Logs, "gantry", mod.Info.ModID));
+        if (!ModEx.LogDirectory.Exists) ModEx.LogDirectory.Create();
+        ModEx.LogDirectory.EnumerateFiles("*.txt").Foreach(p => p.Delete());
+        api.Logger.Debug($" - Directory: {ModEx.LogDirectory}");
+        _loggers[api.Side] = new GantryLogger(api, mod.Info);
+    }
+
+    internal static void Dispose()
+    {
+        Run(
+        clientAction: () =>
+        {
+            _loggers[EnumAppSide.Client].Dispose();
+            _loggers.Remove(EnumAppSide.Client);
+            _clientMain = new();
+            _clientThread = null;
+        }, 
+        serverAction: () =>
+        {
+            _serverMain = new();
+            _serverThread = null;
+            _loggers[EnumAppSide.Server].Dispose();
+            _loggers.Remove(EnumAppSide.Server);
+        });
     }
 
     #endregion
@@ -83,7 +116,7 @@ public static class ApiEx
     /// <summary>
     ///     Interface to the client's and server's event, debug and error logging utilty.
     /// </summary>
-    public static ILogger Logger => Current.GetGantryLogger();
+    public static ILogger Logger => _loggers[Side];
 
     /// <summary>
     ///     The concrete implementation of the <see cref="IClientWorldAccessor"/> interface.<br/>
@@ -113,11 +146,12 @@ public static class ApiEx
         {
             try
             {
-                return ServerMain is not null ? EnumAppSide.Server : EnumAppSide.Client;
+                return ServerMain is not null 
+                    ? EnumAppSide.Server 
+                    : EnumAppSide.Client;
             }
-            catch (StackOverflowException exception)
+            catch
             {
-                ModEx.Mod.Logger.Error(exception);
                 return EnumAppSide.Universal;
             }
         }

@@ -7,38 +7,18 @@ namespace Gantry.Core.Diagnostics;
 /// </summary>
 public class GantryLogger : Logger
 {
-    private static ICoreAPI _api;
     private static string _modName;
-
-    /// <summary>
-    ///     Creates and initialises a new instance of the <see cref="GantryLogger"/> class.
-    /// </summary>
-    /// <param name="api">Common API Components that are available on the server and the client.</param>
-    /// <param name="modInfo">The unique information about the mod.</param>
-    /// <returns>A new instance of the <see cref="GantryLogger"/>.</returns>
-    internal static GantryLogger Create(ICoreAPI api, ModInfo modInfo)
-    {
-        _api = api;
-        _modName = modInfo.Name;
-        LogDirectory = new DirectoryInfo(Path.Combine(GamePaths.Logs, "gantry", modInfo.ModID));
-        if (!LogDirectory.Exists) LogDirectory.Create();
-        var logger = new GantryLogger();
-        return logger;
-    }
-
-    /// <summary>
-    ///     The directory that the log files are stored in.
-    /// </summary>
-    public static DirectoryInfo LogDirectory { get; private set; }
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="GantryLogger"/> class.
     /// </summary>
-    private GantryLogger() : base(program: $"Gantry {_api.Side}",
-                                  clearOldFiles: true,
-                                  archiveLogFileCount: 10,
-                                  archiveLogFileMaxSize: 1024)
+    public GantryLogger(ICoreAPI api, ModInfo modInfo) : base(
+        program: $"Gantry {api.Side}",
+        clearOldFiles: true,
+        archiveLogFileCount: 10,
+        archiveLogFileMaxSize: 1024)
     {
+        _modName = modInfo.Name;
     }
 
     /// <summary>
@@ -49,19 +29,59 @@ public class GantryLogger : Logger
     /// <param name="logType">The type of log.</param>
     /// <returns>The file path for the specified log type.</returns>
     public override string getLogFile(EnumLogType logType)
-        => Path.Combine(LogDirectory.FullName, $"{_api.Side}-{logType}.txt".ToLowerInvariant());
+        => Path.Combine(ModEx.LogDirectory.FullName, $"{ApiEx.Side}-{logType}.log".ToLowerInvariant());
 
     /// <summary>
     ///     Logs a message with the specified log type, applying custom formatting.
     /// </summary>
+    /// <param name="logFileName">The name of the file to write to.</param>
     /// <param name="logType">The type of log.</param>
     /// <param name="message">The message to log.</param>
     /// <param name="args">Optional arguments for message formatting.</param>
-    protected override void LogImpl(EnumLogType logType, string message, params object[] args)
+    public override void LogToFile(string logFileName, EnumLogType logType, string message, params object[] args)
     {
-        if (disposed) return;
-        message = $"[{_modName}] {message}";
-        base.LogImpl(logType, message, args);
+        if (!fileWriters.TryGetValue(logFileName, out var value) || disposed) return;
+
+        try
+        {
+            var num = LinesWritten[logFileName];
+            LinesWritten[logFileName] = num + 1U;
+
+            if (LinesWritten[logFileName] > LogFileSplitAfterLine)
+            {
+                LinesWritten[logFileName] = 0U;
+
+                var filename = $"{logFileName.Replace(".log", "")}-{LogfileSplitNumbers[logFileName]}.log";
+
+                fileWriters[logFileName].Dispose();
+                fileWriters[logFileName] = new DisposableWriter(filename, true);
+
+                LogfileSplitNumbers[logFileName]++;
+            }
+
+            var type = logType == EnumLogType.StoryEvent ? "Event" : logType.ToString() ?? string.Empty;
+            var timestampFormat = logType == EnumLogType.VerboseDebug ? "d.M.yyyy HH:mm:ss.fff" : "d.M.yyyy HH:mm:ss";
+            var timestamp = DateTime.Now.ToString(timestampFormat);
+            value.writer.WriteLine($"{timestamp} [{type}] [{_modName}] {message}", args);
+            value.writer.Flush();
+        }
+        catch (FormatException)
+        {
+            if (!exceptionPrinted)
+            {
+                exceptionPrinted = true;
+                ApiEx.Current.Logger.Error("Couldn't write to Gantry log file, failed formatting {0} (FormatException)", message);
+            }
+        }
+        catch (Exception e)
+        {
+            if (!exceptionPrinted)
+            {
+                exceptionPrinted = true;
+                ApiEx.Current.Logger.Error("Couldn't write to Gantry log file {0}!", logFileName);
+                ApiEx.Current.Logger.Error(e);
+            }
+        }
     }
 
     /// <summary>

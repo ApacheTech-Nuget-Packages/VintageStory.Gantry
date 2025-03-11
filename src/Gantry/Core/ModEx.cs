@@ -1,8 +1,8 @@
 ﻿using System.IO.Compression;
 using System.Reflection;
 using Gantry.Core.Diagnostics;
-using Gantry.Core.Extensions.Api;
-using Vintagestory.API.Config;
+using Vintagestory.API.Common;
+using Vintagestory.Server;
 
 // ReSharper disable ConstantNullCoalescingCondition
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -16,27 +16,18 @@ namespace Gantry.Core;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class ModEx
 {
-    private static ILogger _clientLogger;
-    private static ILogger _serverLogger;
-
     internal static void Initialise(ICoreAPI api, Mod mod, Assembly modAssembly)
     {
-        api.Logger.Debug("[Gantry] Initialising gantry loggers.");
-        api.RunOneOf(
-            capi => _clientLogger = GantryLogger.Create(capi, mod.Info), 
-            sapi => _serverLogger = GantryLogger.Create(sapi, mod.Info));
-        var logger = api.GetGantryLogger();
-
-        logger.VerboseDebug($"Setting Mod details for: {mod.FileName}");
+        ApiEx.Logger.VerboseDebug($"Setting Mod details for: {mod.FileName}");
         Mod = Ensure.PopulatedWith(Mod, mod);
 
-        logger.VerboseDebug($"Setting Mod assembly as: {modAssembly.FullName}");
+        ApiEx.Logger.VerboseDebug($"Setting Mod assembly as: {modAssembly.FullName}");
         ModAssembly = Ensure.PopulatedWith(ModAssembly, modAssembly);
 
-        logger.VerboseDebug($"Setting Mod Info for: {mod.Info.ModID}");
+        ApiEx.Logger.VerboseDebug($"Setting Mod Info for: {mod.Info.ModID}");
         ModInfo = Ensure.PopulatedWith(ModInfo, mod.Info);
 
-        logger.VerboseDebug("Creating Initial ModData Directory");
+        ApiEx.Logger.VerboseDebug("Creating Initial ModData Directory");
         CreateInitialDirectory();
     }
 
@@ -69,12 +60,9 @@ public static class ModEx
     public static ModInfo ModInfo { get; private set; }
 
     /// <summary>
-    ///     
+    ///     The directory that the log files are stored in.
     /// </summary>
-    /// <param name="api"></param>
-    /// <returns></returns>
-    public static ILogger GetGantryLogger(this ICoreAPI api)
-        => api.Side.ChooseOneOf(_clientLogger, _serverLogger);
+    public static DirectoryInfo LogDirectory { get; internal set; }
 
     /// <summary>
     ///     Cleans up the mess I made of the previous attempt to fix Linux being a pain!
