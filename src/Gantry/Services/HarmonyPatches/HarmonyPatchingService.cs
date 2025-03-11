@@ -35,7 +35,6 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// </summary>
     public void Dispose()
     {
-        var side = ApiEx.Current.Side;
         GC.SuppressFinalize(this);
         UnpatchModAssembly();
     }
@@ -157,7 +156,6 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// </summary>
     public void UnpatchModAssembly()
     {
-        var side = ApiEx.Current.Side;
         foreach (var assembly in ModEx.ModAssemblies)
         {
             UnpatchAssembly(assembly);
@@ -170,7 +168,6 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// </summary>
     public void UnpatchAssembly(Assembly assembly)
     {
-        var side = ApiEx.Current.Side;
         try
         {
             var harmony = CreateOrUseInstance(assembly.FullName);
@@ -252,7 +249,6 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// <returns>A <see cref="Harmony" /> patch host.</returns>
     public Harmony CreateOrUseInstance(string harmonyId)
     {
-        var side = ApiEx.Current.Side;
         if (_instances.TryGetValue(harmonyId, out var instance))
         {
             return instance;
