@@ -9,8 +9,8 @@ namespace Gantry.Core.Subsystems;
 /// </summary>
 public class GantryEventBus : UniversalSubsystem
 {
-    private const string EventDomain = nameof(GantryEventBus);
-    private static readonly Dictionary<string, (Type Type, Delegate Action)> Listeners = [];
+    private const string _eventDomain = nameof(GantryEventBus);
+    private static readonly Dictionary<string, (Type Type, Delegate Action)> _listeners = [];
 
     /// <inheritdoc />
     public override double ExecuteOrder() => double.NegativeInfinity;
@@ -28,14 +28,14 @@ public class GantryEventBus : UniversalSubsystem
     /// <typeparam name="T">The type of the event.</typeparam>
     /// <param name="action">The action to invoke when the event is triggered.</param>
     public static void Subscribe<T>(Action<T> action)
-        => Listeners[EventName<T>()] = (typeof(T), action);
+        => _listeners[EventName<T>()] = (typeof(T), action);
 
     /// <summary>
     ///     Unsubscribes the listener for an event of the specified type.
     /// </summary>
     /// <typeparam name="T">The type of the event.</typeparam>
     public static void Unsubscribe<T>()
-        => Listeners.RemoveIfPresent(EventName<T>());
+        => _listeners.RemoveIfPresent(EventName<T>());
 
     /// <summary>
     ///     Publishes an event of the specified type with the provided message.
@@ -46,7 +46,7 @@ public class GantryEventBus : UniversalSubsystem
         => message.ToIdentity()
             .Bind(x => JsonConvert.SerializeObject(x))
             .Bind(x => new StringAttribute(x))
-            .Invoke(x => UApi.Event.PushEvent(EventName<T>(), x));
+            .Invoke(x => ApiEx.Current.Event.PushEvent(EventName<T>(), x));
 
     /// <summary>
     ///     Gets the name of the event for the specified type.
@@ -54,7 +54,7 @@ public class GantryEventBus : UniversalSubsystem
     /// <typeparam name="T"> The type of the event.</typeparam>
     /// <returns>The fully qualified name of the event.</returns>
     public static string EventName<T>() 
-        => $"{EventDomain}.{typeof(T).Name}";
+        => $"{_eventDomain}.{typeof(T).Name}";
 
     /// <summary>
     ///     Handles incoming events from the event bus, invoking subscribed listeners.
@@ -64,8 +64,8 @@ public class GantryEventBus : UniversalSubsystem
     /// <param name="data">The event data.</param>
     private void OnEvent(string eventName, ref EnumHandling handling, IAttribute data)
     {
-        if (!eventName.StartsWith(EventDomain)) return;
-        if (!Listeners.TryGetValue(eventName, out var listener)) return;
+        if (!eventName.StartsWith(_eventDomain)) return;
+        if (!_listeners.TryGetValue(eventName, out var listener)) return;
 
         var (type, action) = listener;
 
