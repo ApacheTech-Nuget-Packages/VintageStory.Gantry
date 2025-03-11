@@ -202,7 +202,6 @@ public abstract class ModHost : GantrySubsytemHost
     {
         base.Start(api);
         StartUniversal(api);
-        if (api is ICoreClientAPI capi) capi.Event.LeftWorld += Dispose;
     }
 
     /// <summary>
