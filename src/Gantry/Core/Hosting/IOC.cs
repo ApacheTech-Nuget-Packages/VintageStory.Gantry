@@ -39,5 +39,12 @@ public static class IOC
     /// <summary>
     ///     Universal access to the Brighter command processor.
     /// </summary>
-    public static IAmACommandProcessor Brighter => Services.Resolve<IAmACommandProcessor>();
+    public static IAmACommandProcessor Brighter => Services.GetRequiredService<IAmACommandProcessor>();
+
+    internal static void Dispose()
+    {
+        ApiEx.Run(
+            () => ClientIOC = null, 
+            ()  => ServerIOC = null);
+    }
 }
