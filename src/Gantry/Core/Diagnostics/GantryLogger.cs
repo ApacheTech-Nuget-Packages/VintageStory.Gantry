@@ -1,13 +1,41 @@
-﻿using Vintagestory;
+﻿using Gantry.Services.FileSystem;
+using Vintagestory;
 
 namespace Gantry.Core.Diagnostics;
 
 /// <summary>
 ///     A logger implementation for the Gantry mod, providing customised log handling and formatting.
 /// </summary>
-public class GantryLogger : Logger
+public abstract class GantryLogger : Logger
 {
-    private static string _modName;
+    private readonly string _modName;
+    private readonly ICoreAPI _api;
+
+    internal class Server(ICoreAPI api, ModInfo modInfo) : GantryLogger(api, modInfo)
+    {
+        public override string getLogFile(EnumLogType logType)
+            => GetLogFilePath(logType, EnumAppSide.Server);
+    }
+
+    internal class Client(ICoreAPI api, ModInfo modInfo) : GantryLogger(api, modInfo)
+    {
+        public override string getLogFile(EnumLogType logType)
+            => GetLogFilePath(logType, EnumAppSide.Client);
+    }
+
+    /// <inheritdoc />
+    public abstract override string getLogFile(EnumLogType logType);
+
+    /// <summary>
+    ///     Gets the file path for a specific log type.
+    ///     
+    ///     LINUX: CASE SENSITIVE FILE SYSTEM
+    /// </summary>
+    /// <param name="logType">The type of log.</param>
+    /// <param name="side">The app side of the log file.</param>
+    /// <returns>The file path for the specified log type.</returns>
+    protected string GetLogFilePath(EnumLogType logType, EnumAppSide side)
+        => Path.Combine(ModPaths.LogDirectory.FullName, $"{side}-{logType}.log".ToLowerInvariant());
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="GantryLogger"/> class.
@@ -19,17 +47,8 @@ public class GantryLogger : Logger
         archiveLogFileMaxSize: 1024)
     {
         _modName = modInfo.Name;
+        _api = api;
     }
-
-    /// <summary>
-    ///     Gets the file path for a specific log type.
-    ///     
-    ///     LINUX: CASE SENSITIVE FILE SYSTEM
-    /// </summary>
-    /// <param name="logType">The type of log.</param>
-    /// <returns>The file path for the specified log type.</returns>
-    public override string getLogFile(EnumLogType logType)
-        => Path.Combine(ModEx.LogDirectory.FullName, $"{ApiEx.Side}-{logType}.log".ToLowerInvariant());
 
     /// <summary>
     ///     Logs a message with the specified log type, applying custom formatting.
@@ -70,7 +89,7 @@ public class GantryLogger : Logger
             if (!exceptionPrinted)
             {
                 exceptionPrinted = true;
-                ApiEx.Current.Logger.Error("Couldn't write to Gantry log file, failed formatting {0} (FormatException)", message);
+                _api.Logger.Error("Couldn't write to Gantry log file, failed formatting {0} (FormatException)", message);
             }
         }
         catch (Exception e)
@@ -78,8 +97,8 @@ public class GantryLogger : Logger
             if (!exceptionPrinted)
             {
                 exceptionPrinted = true;
-                ApiEx.Current.Logger.Error("Couldn't write to Gantry log file {0}!", logFileName);
-                ApiEx.Current.Logger.Error(e);
+                _api.Logger.Error("Couldn't write to Gantry log file {0}!", logFileName);
+                _api.Logger.Error(e);
             }
         }
     }

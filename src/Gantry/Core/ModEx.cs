@@ -1,12 +1,6 @@
 ﻿using System.IO.Compression;
 using System.Reflection;
 using Gantry.Core.Diagnostics;
-using Vintagestory.API.Common;
-using Vintagestory.Server;
-
-// ReSharper disable ConstantNullCoalescingCondition
-// ReSharper disable ConditionIsAlwaysTrueOrFalse
-// ReSharper disable ConstantConditionalAccessQualifier
 
 namespace Gantry.Core;
 
@@ -16,18 +10,18 @@ namespace Gantry.Core;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class ModEx
 {
-    internal static void Initialise(ICoreAPI api, Mod mod, Assembly modAssembly)
+    internal static void Initialise(Mod mod, Assembly modAssembly)
     {
-        ApiEx.Logger.VerboseDebug($"Setting Mod details for: {mod.FileName}");
+        G.Log.VerboseDebug($"Setting Mod details for: {mod.FileName}");
         Mod = Ensure.PopulatedWith(Mod, mod);
 
-        ApiEx.Logger.VerboseDebug($"Setting Mod assembly as: {modAssembly.FullName}");
+        G.Log.VerboseDebug($"Setting Mod assembly as: {modAssembly.FullName}");
         ModAssembly = Ensure.PopulatedWith(ModAssembly, modAssembly);
 
-        ApiEx.Logger.VerboseDebug($"Setting Mod Info for: {mod.Info.ModID}");
+        G.Log.VerboseDebug($"Setting Mod Info for: {mod.Info.ModID}");
         ModInfo = Ensure.PopulatedWith(ModInfo, mod.Info);
 
-        ApiEx.Logger.VerboseDebug("Creating Initial ModData Directory");
+        G.Log.VerboseDebug("Creating Initial ModData Directory");
         CreateInitialDirectory();
     }
 
@@ -58,11 +52,6 @@ public static class ModEx
     ///     The mod's metadata.
     /// </summary>
     public static ModInfo ModInfo { get; private set; }
-
-    /// <summary>
-    ///     The directory that the log files are stored in.
-    /// </summary>
-    public static DirectoryInfo LogDirectory { get; internal set; }
 
     /// <summary>
     ///     Cleans up the mess I made of the previous attempt to fix Linux being a pain!

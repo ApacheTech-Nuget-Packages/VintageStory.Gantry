@@ -67,6 +67,11 @@ public static class ModPaths
     public static string ModAssetsPath { get; internal set; }
 
     /// <summary>
+    ///     The directory that the log files are stored in.
+    /// </summary>
+    public static DirectoryInfo LogDirectory { get; internal set; }
+
+    /// <summary>
     ///     Creates a directory on the file-system.
     /// </summary>
     /// <param name="path">A path on the filesystem, used to store mod files.</param>
@@ -75,7 +80,7 @@ public static class ModPaths
     {
         var dir = new DirectoryInfo(path);
         if (dir.Exists) return dir.FullName;
-        ApiEx.Logger.VerboseDebug($"Creating folder: {dir}");
+        G.Log.VerboseDebug($"Creating folder: {dir}");
         dir.Create();
         return dir.FullName;
     }

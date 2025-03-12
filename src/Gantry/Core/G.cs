@@ -1,0 +1,76 @@
+﻿#nullable enable
+using Gantry.Core.Diagnostics;
+using Gantry.Services.FileSystem;
+using Vintagestory;
+using Vintagestory.API.Util;
+
+// ReSharper disable RedundantSuppressNullableWarningExpression
+// ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+// ReSharper disable ConditionalAccessQualifierIsNonNullableAccordingToAPIContract
+// ReSharper disable StringLiteralTypo
+// ReSharper disable InconsistentNaming
+// ReSharper disable CommentTypo
+
+#pragma warning disable CS8603 // Possible null reference return.
+
+namespace Gantry.Core;
+
+/// <summary>
+///     Globally accessible utilities for Gantry.
+/// </summary>
+public static class G
+{
+    #region Logging
+
+    private static readonly AsyncLocal<GantryLogger?> _serverLogger = new();
+    private static readonly AsyncLocal<GantryLogger?> _clientLogger = new();
+
+    /// <summary>
+    ///     Interface to the client's and server's event, debug and error logging utilty.
+    /// </summary>
+    public static ILogger Log => _serverLogger.Value ?? _clientLogger.Value;
+
+    internal static void CreateLogger(ICoreAPI api, Mod mod)
+    {
+        api.Logger.Debug($"[Gantry] Initialising Gantry {api.Side} logger.");
+        ModPaths.LogDirectory = new DirectoryInfo(Path.Combine(GamePaths.Logs, "gantry", mod.Info.ModID));
+        if (!ModPaths.LogDirectory.Exists) ModPaths.LogDirectory.Create();
+        ModPaths.LogDirectory.EnumerateFiles("*.txt").Foreach(p => p.Delete());
+        api.Logger.Debug($" - Directory: {ModPaths.LogDirectory}");
+
+        switch (api.Side)
+        {
+            case EnumAppSide.Server:
+                _serverLogger.Value = new GantryLogger.Server(api, mod.Info);
+                break;
+            case EnumAppSide.Client:
+                _clientLogger.Value = new GantryLogger.Client(api, mod.Info);
+                break;
+            case EnumAppSide.Universal:
+            default:
+                throw new ArgumentOutOfRangeException(nameof(api), api, "App-side cannot be determined.");
+        }
+        Log.VerboseDebug($"Hello, World!");
+    }
+
+    internal static void DisposeLogger(ICoreAPI api)
+    {
+        Log.VerboseDebug($"Gantry {api.Side} logger shut down. Goodbye!");
+        switch (api.Side)
+        {
+            case EnumAppSide.Server:
+                _serverLogger.Value?.Dispose();
+                _serverLogger.Value = null;
+                break;
+            case EnumAppSide.Client:
+                _clientLogger.Value?.Dispose();
+                _clientLogger.Value = null;
+                break;
+            case EnumAppSide.Universal:
+            default:
+                throw new ArgumentOutOfRangeException(nameof(api), api, "App-side cannot be determined.");
+        }
+    }
+
+    #endregion
+}

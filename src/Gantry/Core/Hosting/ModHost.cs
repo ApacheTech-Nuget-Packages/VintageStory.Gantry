@@ -29,6 +29,7 @@ namespace Gantry.Core.Hosting;
 [UsedImplicitly(ImplicitUseTargetFlags.All)]
 public abstract class ModHost : GantrySubsytemHost
 {
+    private ICoreAPI _api;
     private readonly IServiceCollection _services;
     private List<IUniversalServiceRegistrar> _universalServiceRegistrars;
     private List<IServerServiceRegistrar> _serverServiceRegistrars;
@@ -53,13 +54,13 @@ public abstract class ModHost : GantrySubsytemHost
     protected override void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
     {
         services.AddNetworkService();
-        ApiEx.Logger.VerboseDebug($"Registered {api.Side} Network Service");
+        G.Log.VerboseDebug($"Registered {api.Side} Network Service");
 
         services.AddFileSystemService(o => o.RegisterSettingsFiles = true);
-        ApiEx.Logger.VerboseDebug($"Registered {api.Side} FileSystem Service");
+        G.Log.VerboseDebug($"Registered {api.Side} FileSystem Service");
 
         services.AddHarmonyPatchingService(o => o.AutoPatchModAssembly = true);
-        ApiEx.Logger.VerboseDebug($"Registered {api.Side} Harmony Service");
+        G.Log.VerboseDebug($"Registered {api.Side} Harmony Service");
 
         base.ConfigureUniversalModServices(services, api);
     }
@@ -68,7 +69,7 @@ public abstract class ModHost : GantrySubsytemHost
     {
         var brighterBuilder = services.AddBrighter();
         brighterBuilder.AutoFromAssemblies(api);
-        ApiEx.Logger.VerboseDebug($"ModHost: Registered {api.Side} Brighter Mediator Engine.");
+        G.Log.VerboseDebug($"ModHost: Registered {api.Side} Brighter Mediator Engine.");
     }
 
     #endregion
@@ -79,30 +80,30 @@ public abstract class ModHost : GantrySubsytemHost
     {
         //  1. Configure game API services.
         _services.With(ioc => ServerApiRegistrar.RegisterServerApiEndpoints(ioc, sapi));
-        ApiEx.Logger.VerboseDebug("ModHost: Registered Server API Endpoints.");
+        G.Log.VerboseDebug("ModHost: Registered Server API Endpoints.");
 
         //  2. Register all ModSystems within the mod. Will also self-reference this ModHost. 
         _services.AddModSystems(EnumAppSide.Server);
         _services.AddServerSystems();
-        ApiEx.Logger.VerboseDebug("ModHost: Registered Server ModSystems.");
+        G.Log.VerboseDebug("ModHost: Registered Server ModSystems.");
 
         //  3. Delegate mod service configuration to derived class.
         _services
             .With(ioc => ConfigureBrighter(ioc, sapi))
             .With(ioc => ConfigureUniversalModServices(ioc, sapi))
             .With(ioc => ConfigureServerModServices(ioc, sapi));
-        ApiEx.Logger.VerboseDebug("ModHost: Registered ModHost Services.");
+        G.Log.VerboseDebug("ModHost: Registered ModHost Services.");
 
         //  4. Register all features that need registering. 
         _universalServiceRegistrars.ForEach(x => x.ConfigureUniversalModServices(_services, sapi));
-        ApiEx.Logger.VerboseDebug("ModHost: Registered Universal Services.");
+        G.Log.VerboseDebug("ModHost: Registered Universal Services.");
 
         _serverServiceRegistrars.ForEach(x => x.ConfigureServerModServices(_services, sapi));
-        ApiEx.Logger.VerboseDebug("ModHost: Registered Server Services.");
+        G.Log.VerboseDebug("ModHost: Registered Server Services.");
 
         //  5. Build IOC Container.
         IOC.ServerIOC = _services.BuildServiceProvider();
-        ApiEx.Logger.VerboseDebug("ModHost: IOC.ServerIOC now populated.");
+        G.Log.VerboseDebug("ModHost: IOC.ServerIOC now populated.");
 
         // ONLY NOW ARE SERVICES AVAILABLE
 
@@ -136,7 +137,7 @@ public abstract class ModHost : GantrySubsytemHost
 
         //  5. Build IOC Container.
         IOC.ClientIOC = _services.BuildServiceProvider();
-        ApiEx.Logger.VerboseDebug("ModHost: IOC.ClientIOC now populated.");
+        G.Log.VerboseDebug("ModHost: IOC.ClientIOC now populated.");
 
         // ONLY NOW ARE SERVICES AVAILABLE
 
@@ -159,35 +160,37 @@ public abstract class ModHost : GantrySubsytemHost
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     protected sealed override void StartPreUniversal(ICoreAPI api)
     {
+        _api = api;
         var stopwatch = Stopwatch.StartNew();
 
         api.Logger.Event($"Gantry - Loading {Mod.Info.Name}, by {Mod.Info.Authors[0]}");
+        G.CreateLogger(api, Mod);
 
-        ApiEx.Initialise(api, Mod);
-        ApiEx.Logger.VerboseDebug("ModHost: Initialised ApiEx.");
+        ApiEx.Initialise(api);
+        G.Log.VerboseDebug("ModHost: Initialised ApiEx.");
 
-        ModEx.Initialise(api, Mod, GetType().Assembly);
-        ApiEx.Logger.VerboseDebug("ModHost: Initialised ModEx.");
+        ModEx.Initialise(Mod, GetType().Assembly);
+        G.Log.VerboseDebug("ModHost: Initialised ModEx.");
 
         _universalServiceRegistrars = [.. Mod.Systems.OfType<IUniversalServiceRegistrar>()];
-        ApiEx.Logger.VerboseDebug("ModHost: Populated Universal Mod Service Registrars.");
+        G.Log.VerboseDebug("ModHost: Populated Universal Mod Service Registrars.");
         switch (api)
         {
             case ICoreClientAPI capi:
                 _clientServiceRegistrars = [.. Mod.Systems.OfType<IClientServiceRegistrar>()];
-                ApiEx.Logger.VerboseDebug("ModHost: Populated Client Mod Service Registrars.");
+                G.Log.VerboseDebug("ModHost: Populated Client Mod Service Registrars.");
                 BuildClientHost(capi);
                 break;
             case ICoreServerAPI sapi:
                 _serverServiceRegistrars = [.. Mod.Systems.OfType<IServerServiceRegistrar>()];
-                ApiEx.Logger.VerboseDebug("ModHost: Populated Server Mod Service Registrars.");
+                G.Log.VerboseDebug("ModHost: Populated Server Mod Service Registrars.");
                 BuildServerHost(sapi);
                 break;
         }
         StartPreUniversalSide(api);
         base.StartPreUniversal(api);
         stopwatch.Stop();
-        ApiEx.Logger.VerboseDebug($"ModHost Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}.");
+        G.Log.VerboseDebug($"ModHost Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}.");
     }
 
     /// <summary>
@@ -248,10 +251,20 @@ public abstract class ModHost : GantrySubsytemHost
     /// </summary>
     public override void Dispose()
     {
-        base.Dispose();
+        G.Log.VerboseDebug("Disposing FileSystem Service");
         IOC.Services.Resolve<IHarmonyPatchingService>().Dispose();
+
+        G.Log.VerboseDebug("Disposing Harmony Service");
         IOC.Services.Resolve<IFileSystemService>().Dispose();
-        ApiEx.Dispose();
+
+        G.Log.VerboseDebug("Disposing IOC Provider");
+        _services.Clear();
+        IOC.Dispose();
+
+        G.Log.VerboseDebug("Disposing ApiEx");
+        ApiEx.Dispose(_api);
+
+        G.DisposeLogger(_api);
         ModEx.ModAssemblies.Foreach(p => p.NullifyOrphanedStaticMembers());
     }
 
