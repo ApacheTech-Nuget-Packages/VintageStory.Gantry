@@ -28,6 +28,9 @@ public static class EventApiExtensions
     /// </remarks>
     public static void AwaitMainThreadTask(this IEventAPI eventApi, Action action)
     {
+        // Server is shutting down.
+        if (ApiEx.MainThread is null) return;
+
         // Check if already on the main thread, and execute inline if so.
         if (Environment.CurrentManagedThreadId == ApiEx.MainThread.ManagedThreadId)
         {
@@ -49,12 +52,12 @@ public static class EventApiExtensions
             }
             finally
             {
-                G.Log.Trace($"[{Environment.CurrentManagedThreadId}] Setting waitHandle.");
                 waitHandle.Set();
             }
         }, "");
         if (!waitHandle.Wait(TimeSpan.FromSeconds(30))) // Add a timeout for safety
         {
+            waitHandle.Set();
             G.Log.Error("Main thread task timed out.");
             throw new TimeoutException("Main thread task timed out.");
         }
