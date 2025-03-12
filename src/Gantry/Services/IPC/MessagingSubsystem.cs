@@ -49,14 +49,14 @@ public abstract class MessagingSubsystem : GantrySubsystem
     /// </summary>
     public override void Start(ICoreAPI api)
     {
-        ApiEx.Logger.Debug($"{GetType().Name} starting.");
+        G.Log.VerboseDebug($"{GetType().Name} starting.");
         if (!MessageListener.IsPortAvailable(ListenerPort))
         {
-            ApiEx.Logger.Error($"Could not start message listener. Port {ListenerPort} is in use.");
+            G.Log.Error($"Could not start message listener. Port {ListenerPort} is in use.");
             return;
         }
         _messageListener.Start();
-        ApiEx.Logger.Debug($"{GetType().Name} now listening on port {ListenerPort}");
+        G.Log.VerboseDebug($"{GetType().Name} now listening on port {ListenerPort}");
         base.Start(api);
     }
 

@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Text;
 using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core.Extensions.Api;
 using Gantry.Core.Extensions.DotNet;
 using Gantry.Core.GameContent.ChatCommands.DataStructures;
 using Gantry.Core.GameContent.ChatCommands.Parsers;
@@ -14,7 +13,6 @@ using Gantry.Services.FileSystem.Hosting;
 using Gantry.Services.Network;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
-using Vintagestory.Server;
 
 // ReSharper disable StringLiteralTypo
 
@@ -137,7 +135,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         api.Event.PlayerJoin += player =>
         {
             var packet = GeneratePacket(player);
-            ApiEx.Logger.VerboseDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
+            G.Log.VerboseDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
             ServerChannel.SendPacket(packet, player);
         };
     }

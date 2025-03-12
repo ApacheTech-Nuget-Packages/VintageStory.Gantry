@@ -22,7 +22,7 @@ public static class RenderApiExtensions
             }
             catch (InvalidOperationException ex)
             {
-                ApiEx.Logger.Error(ex);
+                G.Log.Error(ex);
             }
         }, "");
     }

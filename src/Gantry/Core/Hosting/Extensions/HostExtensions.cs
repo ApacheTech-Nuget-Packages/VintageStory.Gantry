@@ -72,8 +72,8 @@ public static class HostExtensions
             }
             catch(Exception ex)
             {
-                ApiEx.Logger.Error($"Could not add mod `{p.GetType().FullName}` to the service collection.");
-                ApiEx.Logger.Error(ex);
+                G.Log.Error($"Could not add mod `{p.GetType().FullName}` to the service collection.");
+                G.Log.Error(ex);
                 return false;
             }
 

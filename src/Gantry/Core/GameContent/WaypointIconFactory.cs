@@ -1,7 +1,4 @@
-﻿using OpenTK.Windowing.GraphicsLibraryFramework;
-using Vintagestory.API.Client;
-
-namespace Gantry.Core.GameContent;
+﻿namespace Gantry.Core.GameContent;
 
 /// <summary>
 ///     Provides functionality for creating and storing waypoint icons for the game.
@@ -44,7 +41,7 @@ public static class WaypointIconFactory
         }
         catch
         {
-            ApiEx.Logger.VerboseDebug("Could not find a valid icon texture factor for '{0}'.", key);
+            G.Log.VerboseDebug("Could not find a valid icon texture factor for '{0}'.", key);
         }
 
         loadedTexture = null;

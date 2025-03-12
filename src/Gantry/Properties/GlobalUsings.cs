@@ -20,7 +20,6 @@ global using Gantry.Core;
 global using Gantry.Core.Extensions;
 global using Gantry.Core.GameContent.Extensions;
 global using Gantry.Core.GameContent.Extensions.Gui;
-global using Gantry.Core.GameContent.GUI;
 global using Gantry.Core.ModSystems;
 global using Gantry.Core.Hosting;
 global using Gantry.Services.FileSystem.Configuration.Abstractions;

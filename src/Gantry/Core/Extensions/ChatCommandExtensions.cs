@@ -1,8 +1,4 @@
-﻿using ApacheTech.Common.Extensions.System;
-using Gantry.Core.Annotation;
-using Newtonsoft.Json.Linq;
-
-namespace Gantry.Core.Extensions;
+﻿namespace Gantry.Core.Extensions;
 
 /// <summary>
 ///     Extension methods to aid working with chat commands.

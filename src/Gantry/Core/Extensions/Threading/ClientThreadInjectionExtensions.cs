@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using ApacheTech.Common.Extensions.Harmony;
+﻿using ApacheTech.Common.Extensions.Harmony;
 
 // ReSharper disable StringLiteralTypo
 

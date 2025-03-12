@@ -85,7 +85,7 @@ public static class CodeInstructionExtensions
     /// <param name="instructions">The collection of CodeInstruction objects to process.</param>
     public static IEnumerable<CodeInstruction> LogOutput(this IEnumerable<CodeInstruction> instructions)
     {
-        ApiEx.Logger.Debug(instructions.ToStringBuilder().ToString());
+        G.Log.Debug(instructions.ToStringBuilder().ToString());
         return instructions;
     }
 }

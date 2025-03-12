@@ -80,7 +80,7 @@ public class MessageListener
             }
             catch (Exception ex)
             {
-                ApiEx.Logger.Error($"IPC Listener Error (localhost:{_port}): {ex.Message}");
+                G.Log.Error($"IPC Listener Error (localhost:{_port}): {ex.Message}");
             }
         }
     }

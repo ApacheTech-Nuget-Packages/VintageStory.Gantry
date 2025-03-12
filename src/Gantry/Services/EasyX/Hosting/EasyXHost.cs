@@ -31,7 +31,7 @@ public abstract class EasyXHost(string _commandName) : ModHost
     ///<inheritdoc />
     public override void StartServerSide(ICoreServerAPI api)
     {
-        ApiEx.Logger.Trace($"Create Chat Command: {_commandName}");
+        G.Log.VerboseDebug($"Creating Chat Command: {_commandName}");
 
         _globalSettings = ModSettings.Global.Feature<ConfigurationSettings>();
         _globalSettings.CommandName = _commandName;

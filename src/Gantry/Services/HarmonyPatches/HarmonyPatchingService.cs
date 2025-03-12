@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using ApacheTech.Common.Extensions.Harmony;
 using ApacheTech.Common.Extensions.Reflection;
 using Gantry.Services.HarmonyPatches.Extensions;
 
@@ -74,15 +73,15 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             PatchAll(harmony, assembly);
             var patches = harmony.GetPatchedMethods().ToList();
             if (!patches.Any()) return;
-            ApiEx.Logger.VerboseDebug($"\tPatched {side} Methods:");
+            G.Log.VerboseDebug($"\tPatched {side} Methods:");
             foreach (var method in patches)
             {
-                ApiEx.Logger.VerboseDebug($"\t\t{method.FullDescription()}");
+                G.Log.VerboseDebug($"\t\t{method.FullDescription()}");
             }
         }
         catch (Exception ex)
         {
-            ApiEx.Logger.Error(ex);
+            G.Log.Error(ex);
         }
     }
 
@@ -99,7 +98,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         {
             if (HasMissingDependencies(type)) continue;
             if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
-            ApiEx.Logger.VerboseDebug($"Patching {type} [{side}]");
+            G.Log.VerboseDebug($"Patching {type} [{side}]");
 
             var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -111,8 +110,8 @@ public class HarmonyPatchingService : IHarmonyPatchingService
                     var originalMethod = GetTargetMethod(harmonyPatch);
                     if (originalMethod is null)
                     {
-                        ApiEx.Logger.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
-                        ApiEx.Logger.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
+                        G.Log.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
+                        G.Log.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
                         continue;
                     }
 
@@ -120,25 +119,25 @@ public class HarmonyPatchingService : IHarmonyPatchingService
                     if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
                     {
                         if (originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Applying {side} prefix patch: {method.Name}_{side}");
+                        G.Log.VerboseDebug($" - Applying {side} prefix patch: {method.Name}_{side}");
                         instance.Patch(originalMethod, prefix: patchedMethod);
                     }
                     else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
                     {
                         if (originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Applying {side} postfix patch: {method.Name}_{side}");
+                        G.Log.VerboseDebug($" - Applying {side} postfix patch: {method.Name}_{side}");
                         instance.Patch(originalMethod, postfix: patchedMethod);
                     }
                     else if (method.GetCustomAttribute<HarmonyTranspiler>() is not null)
                     {
                         if (originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Applying {side} transpiler patch: {method.Name}_{side}");
+                        G.Log.VerboseDebug($" - Applying {side} transpiler patch: {method.Name}_{side}");
                         instance.Patch(originalMethod, transpiler: patchedMethod);
                     }
                     else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
                     {
                         if (originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Applying {side} finaliser patch: {method.Name}_{side}");
+                        G.Log.VerboseDebug($" - Applying {side} finaliser patch: {method.Name}_{side}");
                         instance.Patch(originalMethod, finalizer: patchedMethod);
                     }
                 }
@@ -175,7 +174,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         }
         catch (Exception ex)
         {
-            ApiEx.Logger.Error(ex);
+            G.Log.Error(ex);
         }
     }
 
@@ -192,7 +191,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         {
             if (HasMissingDependencies(type)) continue;
             if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
-            ApiEx.Logger.VerboseDebug($"Unpatching {type} [{side}]");
+            G.Log.VerboseDebug($"Unpatching {type} [{side}]");
 
             var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 
@@ -204,33 +203,33 @@ public class HarmonyPatchingService : IHarmonyPatchingService
                     var originalMethod = GetTargetMethod(harmonyPatch);
                     if (originalMethod is null)
                     {
-                        ApiEx.Logger.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
-                        ApiEx.Logger.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
+                        G.Log.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
+                        G.Log.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
                         continue;
                     }
 
                     if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
                     {
                         if (!originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Unpatching {side} prefix patch: {method.Name}");
+                        G.Log.VerboseDebug($" - Unpatching {side} prefix patch: {method.Name}");
                         instance.Unpatch(originalMethod, patch: method);
                     }
                     else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
                     {
                         if (!originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Unpatching {side} postfix patch: {method.Name}");
+                        G.Log.VerboseDebug($" - Unpatching {side} postfix patch: {method.Name}");
                         instance.Unpatch(originalMethod, patch: method);
                     }
                     else if (method.GetCustomAttribute<HarmonyTranspiler>() is not null)
                     {
                         if (!originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Unpatching {side} transpiler patch: {method.Name}");
+                        G.Log.VerboseDebug($" - Unpatching {side} transpiler patch: {method.Name}");
                         instance.Unpatch(originalMethod, patch: method);
                     }
                     else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
                     {
                         if (!originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
-                        ApiEx.Logger.VerboseDebug($" - Unpatching {side} finaliser patch: {method.Name}");
+                        G.Log.VerboseDebug($" - Unpatching {side} finaliser patch: {method.Name}");
                         instance.Unpatch(originalMethod, patch: method);
                     }
                 }
@@ -301,7 +300,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         foreach (var attribute in attributes)
         {
             if (_api.ModLoader.IsModEnabled(attribute.ModId)) continue;
-            ApiEx.Logger.VerboseDebug($"Skipping patches for {type.Name} due to missing dependency: {attribute.ModId}");
+            G.Log.VerboseDebug($"Skipping patches for {type.Name} due to missing dependency: {attribute.ModId}");
             return true;
         }
         return false;

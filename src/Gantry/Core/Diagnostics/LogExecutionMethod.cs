@@ -28,6 +28,6 @@ public sealed class LogExecutionTime : IDisposable
     public void Dispose()
     {
         _stopwatch.Stop();
-        ApiEx.Logger.VerboseDebug($"{_methodName} executed in {_stopwatch.ElapsedMilliseconds} ms");
+        G.Log.VerboseDebug($"{_methodName} executed in {_stopwatch.ElapsedMilliseconds} ms");
     }
 }

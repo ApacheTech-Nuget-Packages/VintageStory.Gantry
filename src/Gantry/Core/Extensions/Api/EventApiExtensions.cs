@@ -44,18 +44,18 @@ public static class EventApiExtensions
             }
             catch (Exception ex)
             {
-                ApiEx.Logger.Error("Error in main thread task: " + ex);
+                G.Log.Error("Error in main thread task: " + ex);
                 throw;
             }
             finally
             {
-                ApiEx.Logger.Trace($"[{Environment.CurrentManagedThreadId}] Setting waitHandle.");
+                G.Log.Trace($"[{Environment.CurrentManagedThreadId}] Setting waitHandle.");
                 waitHandle.Set();
             }
         }, "");
         if (!waitHandle.Wait(TimeSpan.FromSeconds(30))) // Add a timeout for safety
         {
-            ApiEx.Logger.Error("Main thread task timed out.");
+            G.Log.Error("Main thread task timed out.");
             throw new TimeoutException("Main thread task timed out.");
         }
     }
@@ -64,7 +64,7 @@ public static class EventApiExtensions
     /// <summary>
     ///     Executes the specified action on a background thread, blocking the calling thread until completion.
     /// </summary>
-    /// <param name="eventApi">
+    /// <param name="_">
     ///     The event API instance used to manage event-related tasks.
     /// </param>
     /// <param name="action">
@@ -74,7 +74,7 @@ public static class EventApiExtensions
     ///     This method offloads the specified action to a separate thread while synchronising its completion 
     ///     with the calling thread. Use with care to avoid performance bottlenecks or unintended blocking behaviour.
     /// </remarks>
-    public static void AwaitOffThreadTask(this IEventAPI eventApi, Action action)
+    public static void AwaitOffThreadTask(this IEventAPI _, Action action)
     {
         using var waitHandle = new ManualResetEventSlim(false);
         Task.Factory.StartNew(() =>

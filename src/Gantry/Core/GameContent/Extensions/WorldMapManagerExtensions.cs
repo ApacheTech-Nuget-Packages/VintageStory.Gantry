@@ -66,8 +66,7 @@ public static class WorldMapManagerExtensions
         }
         catch (Exception ex)
         {
-            ApiEx.Logger.Error(ex.Message);
-            ApiEx.Logger.Error(ex.StackTrace);
+            G.Log.Error(ex);
         }
     }
 
