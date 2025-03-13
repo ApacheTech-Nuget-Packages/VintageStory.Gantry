@@ -78,7 +78,7 @@ public class GantryNetworkService : IGantryNetworkService, IClientNetworkService
 
             if (side.IsClient())
             {
-                var state = ApiEx.Client.Network.GetChannelState(ModEx.ModInfo.ModID);
+                var state = ApiEx.Client.Network.GetChannelState(channelName);
                 G.Log.VerboseDebug($" - State: {state}");
                 G.Log.VerboseDebug($" - Connected: {channel.To<IClientNetworkChannel>().Connected}");
             }

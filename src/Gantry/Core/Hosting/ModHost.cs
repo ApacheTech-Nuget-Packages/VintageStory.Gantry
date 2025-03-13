@@ -41,7 +41,7 @@ public abstract class ModHost : GantrySubsytemHost
     protected ModHost()
     {
 #if DEBUG
-        Harmony.DEBUG = true;
+        //Harmony.DEBUG = true;
         RuntimeEnv.DebugOutOfRangeBlockAccess = true;
         ModEx.DebugMode = true;
 #endif
