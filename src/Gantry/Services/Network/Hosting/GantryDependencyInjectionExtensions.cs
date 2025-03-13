@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Extensions.Api;
-
-namespace Gantry.Services.Network.Hosting;
+﻿namespace Gantry.Services.Network.Hosting;
 
 /// <summary>
 ///     Extension methods to aid the registration of the Network service, into a Gantry MDK IOC Container.
@@ -17,7 +15,7 @@ public static class GantryDependencyInjectionExtensions
     public static IServiceCollection AddNetworkService(this IServiceCollection services, Action<NetworkServiceOptions> options = null)
     {
         var service = new GantryNetworkService(NetworkServiceOptions.Default.With(options));
-        services.AddSingleton<IUniversalNetworkService>(service);
+        services.AddSingleton<IGantryNetworkService>(service);
         ApiEx.Run(
             () => services.AddSingleton<IClientNetworkService>(service), 
             () => services.AddSingleton<IServerNetworkService>(service));

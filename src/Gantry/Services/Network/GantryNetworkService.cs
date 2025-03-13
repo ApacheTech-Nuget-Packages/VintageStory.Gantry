@@ -8,8 +8,8 @@ namespace Gantry.Services.Network;
 /// </summary>
 /// <seealso cref="IClientNetworkService" />
 /// <seealso cref="IServerNetworkService" />
-/// <seealso cref="IUniversalNetworkService" />
-public class GantryNetworkService : IUniversalNetworkService
+/// <seealso cref="IGantryNetworkService" />
+public class GantryNetworkService : IGantryNetworkService, IClientNetworkService, IServerNetworkService
 {
     private readonly NetworkServiceOptions _options;
 
@@ -32,80 +32,64 @@ public class GantryNetworkService : IUniversalNetworkService
     }
 
     /// <summary>
-    ///     Retrieves a client-side network channel.
-    /// </summary>
-    /// <param name="channelName">Name of the channel.</param>
-    /// <returns>An instance of <see cref="IClientNetworkChannel" />, used to send and receive network messages on the client.</returns>
-    [ClientSide]
-    public IClientNetworkChannel ClientChannel(string channelName)
-    {
-        var capi = ApiEx.Client;
-        RegisterClientChannel(channelName);
-        var channel = capi.Network.GetChannel(channelName);
-        return channel;
-    }
-
-    /// <summary>
-    ///     Retrieves a server-side network channel.
-    /// </summary>
-    /// <param name="channelName">The name of the channel to register.</param>
-    /// <returns>An instance of <see cref="IServerNetworkChannel" />, used to send and receive network messages on the server.</returns>
-    [ServerSide]
-    public IServerNetworkChannel ServerChannel(string channelName)
-    {
-        var sapi = ApiEx.Server;
-        RegisterServerChannel(channelName);
-        var channel = sapi.Network.GetChannel(channelName);
-        return channel;
-    }
-
-    /// <summary>
     ///     Retrieves the mod's default server-side network channel.
     /// </summary>
     /// <value>The default server channel.</value>
     [ServerSide]
-    public IServerNetworkChannel DefaultServerChannel => ServerChannel(_options.DefaultChannelName);
+    public IServerNetworkChannel DefaultServerChannel 
+        => GetOrRegisterChannel(_options.DefaultChannelName).To<IServerNetworkChannel>();
 
     /// <summary>
     ///     Retrieves the mod's default client-side network channel.
     /// </summary>
     /// <value>The default client channel.</value>
     [ClientSide]
-    public IClientNetworkChannel DefaultClientChannel => ClientChannel(_options.DefaultChannelName);
+    public IClientNetworkChannel DefaultClientChannel 
+        => GetOrRegisterChannel(_options.DefaultChannelName).To<IClientNetworkChannel>();
 
     /// <summary>
-    ///     Registers a network channel on the server.
-    /// </summary>
-    /// <param name="channelName">The name of the channel to register.</param>
-    [ServerSide]
-    public void RegisterServerChannel(string channelName)
-    {
-        var sapi = ApiEx.Server;
-        if (sapi.Network.GetChannel(channelName) is not null) return;
-        ApiEx.Logger.VerboseDebug($"Registering server network channel: {channelName}");
-        sapi.Network.RegisterChannel(channelName);
-    }
-
-    /// <summary>
-    ///     Registers a network channel on client.
-    /// </summary>
-    /// <param name="channelName">The name of the channel to register.</param>
-    [ClientSide]
-    public void RegisterClientChannel(string channelName)
-    {
-        var capi = ApiEx.Client;
-        if (capi.Network.GetChannel(channelName) is not null) return;
-        ApiEx.Logger.VerboseDebug($"Registering client network channel: {channelName}");
-        capi.Network.RegisterChannel(channelName);
-    }
-
-    /// <summary>
-    ///     Registers a network channel on the app side this method is called from.
+    ///     Gets or registers a network channel on the app side this method is called from.
     /// </summary>
     /// <param name="channelName">The name of the channel to register.</param>
     [Universal]
-    public void RegisterChannel(string channelName)
+    public INetworkChannel GetOrRegisterChannel(string channelName)
     {
-        ApiEx.Run(RegisterClientChannel, RegisterServerChannel, channelName);
+        try
+        {
+            var side = ApiEx.Side;
+            var channel = ApiEx.Current.Network.GetChannel(channelName);
+            if (channel is not null)
+            {
+                G.Log.VerboseDebug($"{side} network channel found: {channelName}");
+            }
+            else
+            {
+                G.Log.VerboseDebug($"{side} network channel {channelName} not found. Registering new channel.");
+                channel = ApiEx.Current.Network.RegisterChannel(channelName);
+                if (channel is null)
+                {
+                    G.Log.Error($"{side} network channel {channelName} not registered.");
+                }
+                else
+                {
+                    G.Log.VerboseDebug($"Registered {side} network channel: {channelName}");
+                }
+            }
+
+            if (side.IsClient())
+            {
+                var state = ApiEx.Client.Network.GetChannelState(ModEx.ModInfo.ModID);
+                G.Log.VerboseDebug($" - State: {state}");
+                G.Log.VerboseDebug($" - Connected: {channel.To<IClientNetworkChannel>().Connected}");
+            }
+
+            return channel;
+        }
+        catch (Exception ex)
+        {
+            G.Log.Error($"Error while registering {ApiEx.Side} network channel: {channelName}");
+            G.Log.Error(ex);
+            throw;
+        }
     }
 }
