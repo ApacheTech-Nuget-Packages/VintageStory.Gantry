@@ -12,12 +12,27 @@ public abstract class UniversalModSystem : ModSystemBase
     /// <summary>
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreClientAPI Capi => UApi as ICoreClientAPI;
+    protected ICoreClientAPI Capi { get; private set; }
 
     /// <summary>
     ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreServerAPI Sapi => UApi as ICoreServerAPI;
+    protected ICoreServerAPI Sapi { get; private set; }
+
+    /// <inheritdoc />
+    public sealed override void StartPre(ICoreAPI api)
+    {
+        switch (api)
+        {
+            case ICoreClientAPI capi:
+                Capi = capi;
+                break;
+            case ICoreServerAPI sapi:
+                Sapi = sapi;
+                break;
+        }
+        base.StartPre(api);
+    }
 
     /// <summary>
     ///     Returns if this mod should be loaded for the given app side.

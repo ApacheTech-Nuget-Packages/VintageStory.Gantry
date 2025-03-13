@@ -12,7 +12,15 @@ public abstract class ServerModSystem : ModSystemBase
     /// <summary>
     ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreServerAPI Sapi => UApi as ICoreServerAPI;
+    protected ICoreServerAPI Sapi { get; private set; }
+
+    /// <inheritdoc />
+    public sealed override void StartPre(ICoreAPI api)
+    {
+        if (api is not ICoreServerAPI sapi) return;
+        Sapi = sapi;
+        base.StartPre(api);
+    }
 
     /// <summary>
     ///     Returns if this mod should be loaded for the given app side.

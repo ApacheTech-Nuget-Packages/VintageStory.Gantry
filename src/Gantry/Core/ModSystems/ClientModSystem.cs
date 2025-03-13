@@ -12,7 +12,15 @@ public abstract class ClientModSystem : ModSystemBase
     /// <summary>
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreClientAPI Capi => UApi as ICoreClientAPI;
+    protected ICoreClientAPI Capi { get; private set; }
+
+    /// <inheritdoc />
+    public sealed override void StartPre(ICoreAPI api)
+    {
+        if (api is not ICoreClientAPI capi) return;
+        Capi = capi;
+        base.StartPre(api);
+    }
 
     /// <summary>
     ///     Returns if this mod should be loaded for the given app side.

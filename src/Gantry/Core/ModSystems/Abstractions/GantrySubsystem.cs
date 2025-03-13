@@ -29,7 +29,7 @@ public abstract class GantrySubsystem : GantrySubsystemBase
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI or ICoreClientAPI to access side specific features.
     /// </param>
-    public sealed override void StartPre(ICoreAPI api)
+    public override void StartPre(ICoreAPI api)
     {
         UApi = api;
         StartPreUniversal(api);
