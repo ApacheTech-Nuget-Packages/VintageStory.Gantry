@@ -30,6 +30,11 @@ public static class G
     /// </summary>
     public static ILogger Log => _serverLogger.Value ?? _clientLogger.Value;
 
+    /// <summary>
+    ///     Traces a message to the <see cref="ILogger.VerboseDebug(string, object[])"/> log file.
+    /// </summary>
+    public static void Trace(string template, params object[] args) => Log.VerboseDebug(template, args);
+
     internal static void CreateLogger(ICoreAPI api, Mod mod)
     {
         api.Logger.Debug($"[Gantry] Initialising Gantry {api.Side} logger.");
