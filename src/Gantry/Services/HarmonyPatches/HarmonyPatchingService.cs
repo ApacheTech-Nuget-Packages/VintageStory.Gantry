@@ -105,12 +105,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             foreach (var method in methods)
             {
                 var harmonyPatch = method.GetCustomAttribute<HarmonyPatch>();
-                if (harmonyPatch is null)
-                {
-                    G.Log.VerboseDebug($" - Failed to resolve patch data for {side} patch: {method.Name}");
-                    G.Log.Error($"Failed to resolve patch data for {side} patch: {method.Name}.");
-                    continue;
-                }
+                if (harmonyPatch is null) continue;
 
                 var originalMethod = GetTargetMethod(harmonyPatch);
                 if (originalMethod is null)
@@ -202,12 +197,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             foreach (var method in methods)
             {
                 var harmonyPatch = method.GetCustomAttribute<HarmonyPatch>();
-                if (harmonyPatch is null)
-                {
-                    G.Log.VerboseDebug($" - Failed to resolve patch data for {side} patch: {method.Name}");
-                    G.Log.Error($"Failed to resolve patch data for {side} patch: {method.Name}.");
-                    continue;
-                }
+                if (harmonyPatch is null) continue;
 
                 var originalMethod = GetTargetMethod(harmonyPatch);
                 if (originalMethod is null)
