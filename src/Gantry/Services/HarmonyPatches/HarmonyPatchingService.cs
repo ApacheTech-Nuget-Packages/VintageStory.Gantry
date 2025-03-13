@@ -105,41 +105,45 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             foreach (var method in methods)
             {
                 var harmonyPatch = method.GetCustomAttribute<HarmonyPatch>();
-                if (harmonyPatch is not null)
+                if (harmonyPatch is null)
                 {
-                    var originalMethod = GetTargetMethod(harmonyPatch);
-                    if (originalMethod is null)
-                    {
-                        G.Log.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
-                        G.Log.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
-                        continue;
-                    }
+                    G.Log.VerboseDebug($" - Failed to resolve patch data for {side} patch: {method.Name}");
+                    G.Log.Error($"Failed to resolve patch data for {side} patch: {method.Name}.");
+                    continue;
+                }
 
-                    var patchedMethod = new HarmonyMethod(method) { before = [$"{method.Name}_{side}"] };
-                    if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
-                    {
-                        if (originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Applying {side} prefix patch: {method.Name}_{side}");
-                        instance.Patch(originalMethod, prefix: patchedMethod);
-                    }
-                    else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
-                    {
-                        if (originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Applying {side} postfix patch: {method.Name}_{side}");
-                        instance.Patch(originalMethod, postfix: patchedMethod);
-                    }
-                    else if (method.GetCustomAttribute<HarmonyTranspiler>() is not null)
-                    {
-                        if (originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Applying {side} transpiler patch: {method.Name}_{side}");
-                        instance.Patch(originalMethod, transpiler: patchedMethod);
-                    }
-                    else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
-                    {
-                        if (originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Applying {side} finaliser patch: {method.Name}_{side}");
-                        instance.Patch(originalMethod, finalizer: patchedMethod);
-                    }
+                var originalMethod = GetTargetMethod(harmonyPatch);
+                if (originalMethod is null)
+                {
+                    G.Log.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
+                    G.Log.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
+                    continue;
+                }
+
+                var patchedMethod = new HarmonyMethod(method) { before = [$"{method.Name}_{side}"] };
+                if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Applying {side} prefix patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, prefix: patchedMethod);
+                }
+                else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Applying {side} postfix patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, postfix: patchedMethod);
+                }
+                else if (method.GetCustomAttribute<HarmonyTranspiler>() is not null)
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Applying {side} transpiler patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, transpiler: patchedMethod);
+                }
+                else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Applying {side} finaliser patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, finalizer: patchedMethod);
                 }
             }
         }
@@ -198,40 +202,44 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             foreach (var method in methods)
             {
                 var harmonyPatch = method.GetCustomAttribute<HarmonyPatch>();
-                if (harmonyPatch is not null)
+                if (harmonyPatch is null)
                 {
-                    var originalMethod = GetTargetMethod(harmonyPatch);
-                    if (originalMethod is null)
-                    {
-                        G.Log.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
-                        G.Log.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
-                        continue;
-                    }
+                    G.Log.VerboseDebug($" - Failed to resolve patch data for {side} patch: {method.Name}");
+                    G.Log.Error($"Failed to resolve patch data for {side} patch: {method.Name}.");
+                    continue;
+                }
 
-                    if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
-                    {
-                        if (!originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Unpatching {side} prefix patch: {method.Name}");
-                        instance.Unpatch(originalMethod, patch: method);
-                    }
-                    else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
-                    {
-                        if (!originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Unpatching {side} postfix patch: {method.Name}");
-                        instance.Unpatch(originalMethod, patch: method);
-                    }
-                    else if (method.GetCustomAttribute<HarmonyTranspiler>() is not null)
-                    {
-                        if (!originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Unpatching {side} transpiler patch: {method.Name}");
-                        instance.Unpatch(originalMethod, patch: method);
-                    }
-                    else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
-                    {
-                        if (!originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
-                        G.Log.VerboseDebug($" - Unpatching {side} finaliser patch: {method.Name}");
-                        instance.Unpatch(originalMethod, patch: method);
-                    }
+                var originalMethod = GetTargetMethod(harmonyPatch);
+                if (originalMethod is null)
+                {
+                    G.Log.VerboseDebug($" - Failed to resolve target method for {side} patch: {method.Name}");
+                    G.Log.Error($"Failed to resolve target method for {side} patch: {method.Name}. Method may have been removed, or renamed.");
+                    continue;
+                }
+
+                if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
+                {
+                    if (!originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Unpatching {side} prefix patch: {method.Name}");
+                    instance.Unpatch(originalMethod, patch: method);
+                }
+                else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
+                {
+                    if (!originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Unpatching {side} postfix patch: {method.Name}");
+                    instance.Unpatch(originalMethod, patch: method);
+                }
+                else if (method.GetCustomAttribute<HarmonyTranspiler>() is not null)
+                {
+                    if (!originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Unpatching {side} transpiler patch: {method.Name}");
+                    instance.Unpatch(originalMethod, patch: method);
+                }
+                else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
+                {
+                    if (!originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
+                    G.Log.VerboseDebug($" - Unpatching {side} finaliser patch: {method.Name}");
+                    instance.Unpatch(originalMethod, patch: method);
                 }
             }
         }
