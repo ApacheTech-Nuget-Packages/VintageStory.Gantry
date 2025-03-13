@@ -1,4 +1,5 @@
-﻿using ApacheTech.Common.Extensions.Harmony;
+﻿using System.Runtime.CompilerServices;
+using ApacheTech.Common.Extensions.Harmony;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 
@@ -10,6 +11,22 @@ namespace Gantry.Services.Network.Extensions;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class NetworkChannelExtensions
 {
+    /// <summary>
+    ///     Gets or registers a network channel on the app side this method is called from.
+    /// </summary>
+    /// <param name="napi">The game's network API.</param>
+    /// <param name="channelName">The name of the channel to register.</param>
+    public static IServerNetworkChannel GetOrRegisterChannel(this IServerNetworkAPI napi, string channelName)
+        => napi.GetChannel(channelName) ?? napi.RegisterChannel(channelName);
+
+    /// <summary>
+    ///     Gets or registers a network channel on the app side this method is called from.
+    /// </summary>
+    /// <param name="napi">The game's network API.</param>
+    /// <param name="channelName">The name of the channel to register.</param>
+    public static IClientNetworkChannel GetOrRegisterChannel(this IClientNetworkAPI napi, string channelName)
+        => napi.GetChannel(channelName) ?? napi.RegisterChannel(channelName);
+
     /// <summary>
     ///     Unregisters a specific message handler from the <see cref="IClientNetworkChannel"/>.
     /// </summary>
