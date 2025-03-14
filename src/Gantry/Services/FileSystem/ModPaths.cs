@@ -80,7 +80,7 @@ public static class ModPaths
     {
         var dir = new DirectoryInfo(path);
         if (dir.Exists) return dir.FullName;
-        G.Log.VerboseDebug($"Creating folder: {dir}");
+        G.Logger.VerboseDebug($"Creating folder: {dir}");
         dir.Create();
         return dir.FullName;
     }

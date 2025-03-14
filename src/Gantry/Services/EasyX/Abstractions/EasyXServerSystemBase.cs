@@ -135,7 +135,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         api.Event.PlayerJoin += player =>
         {
             var packet = GeneratePacket(player);
-            G.Log.VerboseDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
+            G.Logger.VerboseDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
             ServerChannel.SendPacket(packet, player);
         };
     }

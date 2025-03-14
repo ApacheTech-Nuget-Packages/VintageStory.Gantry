@@ -238,8 +238,8 @@ public sealed class JsonModFile : ModFile, IJsonModFile
         }
         catch (IOException e)
         {
-            G.Log.Warning($"Failed to save JSON file: {ModFileInfo.FullName}");
-            G.Log.Warning(e.Message);
+            G.Logger.Warning($"Failed to save JSON file: {ModFileInfo.FullName}");
+            G.Logger.Warning(e.Message);
         }
     }
 

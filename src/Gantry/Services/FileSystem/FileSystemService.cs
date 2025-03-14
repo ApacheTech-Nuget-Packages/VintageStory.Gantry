@@ -30,38 +30,38 @@ public sealed class FileSystemService : IFileSystemService
 
         var worldIdentifier = api.World.SavegameIdentifier;
         WorldGuid = Ensure.PopulatedWith(WorldGuid, worldIdentifier);
-        G.Log.VerboseDebug($"Initialising FileSystem Service Settings");
-        G.Log.VerboseDebug($" - World Identifier: {WorldGuid}");
-        G.Log.VerboseDebug($" - World Seed: {api.World.Seed}");
+        G.Logger.VerboseDebug($"Initialising FileSystem Service Settings");
+        G.Logger.VerboseDebug($" - World Identifier: {WorldGuid}");
+        G.Logger.VerboseDebug($" - World Seed: {api.World.Seed}");
 
         var rootPath = ModInfo.ToModID(ModEx.ModInfo.Authors[0].IfNullOrWhitespace("Gantry"));
         VintageModsRootPath = CreateDirectory(Path.Combine(GamePaths.DataPath, "ModData", rootPath));
-        G.Log.VerboseDebug($" - VintageModsRootPath: {VintageModsRootPath}");
+        G.Logger.VerboseDebug($" - VintageModsRootPath: {VintageModsRootPath}");
 
         var rootFolderName = options.RootFolderName.IfNullOrWhitespace(modId);
         ModDataRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, rootFolderName));
-        G.Log.VerboseDebug($" - ModDataRootPath: {ModDataRootPath}");
+        G.Logger.VerboseDebug($" - ModDataRootPath: {ModDataRootPath}");
 
         ModDataGantryRootPath = CreateDirectory(Path.Combine(VintageModsRootPath, "gantry"));
-        G.Log.VerboseDebug($" - ModDataGantryRootPath: {ModDataGantryRootPath}");
+        G.Logger.VerboseDebug($" - ModDataGantryRootPath: {ModDataGantryRootPath}");
 
         ModDataGantryGlobalPath = CreateDirectory(Path.Combine(ModDataGantryRootPath, "Global"));
-        G.Log.VerboseDebug($" - ModDataGantryGlobalPath: {ModDataGantryGlobalPath}");
+        G.Logger.VerboseDebug($" - ModDataGantryGlobalPath: {ModDataGantryGlobalPath}");
 
         ModDataGantryWorldPath = CreateDirectory(Path.Combine(ModDataGantryRootPath, worldIdentifier));
-        G.Log.VerboseDebug($" - ModDataGantryWorldPath: {ModDataGantryWorldPath}");
+        G.Logger.VerboseDebug($" - ModDataGantryWorldPath: {ModDataGantryWorldPath}");
 
         ModDataGlobalPath = CreateDirectory(Path.Combine(ModDataRootPath, "Global"));
-        G.Log.VerboseDebug($" - ModDataGlobalPath: {ModDataGlobalPath}");
+        G.Logger.VerboseDebug($" - ModDataGlobalPath: {ModDataGlobalPath}");
 
         ModDataWorldPath = CreateDirectory(Path.Combine(ModDataRootPath, worldIdentifier));
-        G.Log.VerboseDebug($" - ModDataWorldPath: {ModDataWorldPath}");
+        G.Logger.VerboseDebug($" - ModDataWorldPath: {ModDataWorldPath}");
 
         ModRootPath = Path.GetDirectoryName(ModEx.ModAssembly.Location)!;
-        G.Log.VerboseDebug($" - ModRootPath: {ModRootPath}");
+        G.Logger.VerboseDebug($" - ModRootPath: {ModRootPath}");
 
         ModAssetsPath = Path.Combine(ModRootPath, "assets");
-        G.Log.VerboseDebug($" - ModAssetsPath: {ModAssetsPath}");
+        G.Logger.VerboseDebug($" - ModAssetsPath: {ModAssetsPath}");
 
         this.RegisterGantrySettingsFiles(api);
         if (options.RegisterSettingsFiles) this.RegisterSettingsFiles(api);
@@ -80,7 +80,7 @@ public sealed class FileSystemService : IFileSystemService
     public IFileSystemService RegisterFile(string fileName, FileScope scope, bool gantryFile = false)
     {
         var file = new FileInfo(GetScopedPath(fileName, scope, gantryFile));
-        G.Log.VerboseDebug($"Registering new {scope} file: {fileName}");
+        G.Logger.VerboseDebug($"Registering new {scope} file: {fileName}");
         _registeredFiles.Add(fileName, file.CreateModFileWrapper());
         if (!file.Exists)
         {
@@ -218,10 +218,10 @@ public sealed class FileSystemService : IFileSystemService
         ModAssetsPath = null;
         WorldGuid = null;
 
-        G.Log.VerboseDebug("Disposing Mod Settings");
+        G.Logger.VerboseDebug("Disposing Mod Settings");
         ModSettings.Dispose();
 
-        G.Log.VerboseDebug("Clearing Registered Files");
+        G.Logger.VerboseDebug("Clearing Registered Files");
         _registeredFiles.Clear();
     }
 }

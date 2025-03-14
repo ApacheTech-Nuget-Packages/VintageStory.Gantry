@@ -26,7 +26,7 @@ public class MessageSender(string host, int port)
         }
         catch (Exception ex)
         {
-            G.Log.Error($"IPC Sender Error ({_host}:{_port}): {ex.Message}");
+            G.Logger.Error($"IPC Sender Error ({_host}:{_port}): {ex.Message}");
         }
     }
 }

@@ -60,35 +60,35 @@ public class GantryNetworkService : IGantryNetworkService, IClientNetworkService
             var channel = ApiEx.Current.Network.GetChannel(channelName);
             if (channel is not null)
             {
-                G.Log.VerboseDebug($"{side} network channel found: {channelName}");
+                G.Logger.VerboseDebug($"{side} network channel found: {channelName}");
             }
             else
             {
-                G.Log.VerboseDebug($"{side} network channel {channelName} not found. Registering new channel.");
+                G.Logger.VerboseDebug($"{side} network channel {channelName} not found. Registering new channel.");
                 channel = ApiEx.Current.Network.RegisterChannel(channelName);
                 if (channel is null)
                 {
-                    G.Log.Error($"{side} network channel {channelName} not registered.");
+                    G.Logger.Error($"{side} network channel {channelName} not registered.");
                 }
                 else
                 {
-                    G.Log.VerboseDebug($"Registered {side} network channel: {channelName}");
+                    G.Logger.VerboseDebug($"Registered {side} network channel: {channelName}");
                 }
             }
 
             if (side.IsClient())
             {
                 var state = ApiEx.Client.Network.GetChannelState(channelName);
-                G.Log.VerboseDebug($" - State: {state}");
-                G.Log.VerboseDebug($" - Connected: {channel.To<IClientNetworkChannel>().Connected}");
+                G.Logger.VerboseDebug($" - State: {state}");
+                G.Logger.VerboseDebug($" - Connected: {channel.To<IClientNetworkChannel>().Connected}");
             }
 
             return channel;
         }
         catch (Exception ex)
         {
-            G.Log.Error($"Error while registering {ApiEx.Side} network channel: {channelName}");
-            G.Log.Error(ex);
+            G.Logger.Error($"Error while registering {ApiEx.Side} network channel: {channelName}");
+            G.Logger.Error(ex);
             throw;
         }
     }

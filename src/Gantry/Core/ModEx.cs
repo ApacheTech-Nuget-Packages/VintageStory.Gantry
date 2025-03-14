@@ -12,16 +12,16 @@ public static class ModEx
 {
     internal static void Initialise(Mod mod, Assembly modAssembly)
     {
-        G.Log.VerboseDebug($"Setting Mod details for: {mod.FileName}");
+        G.Logger.VerboseDebug($"Setting Mod details for: {mod.FileName}");
         Mod = Ensure.PopulatedWith(Mod, mod);
 
-        G.Log.VerboseDebug($"Setting Mod assembly as: {modAssembly.FullName}");
+        G.Logger.VerboseDebug($"Setting Mod assembly as: {modAssembly.FullName}");
         ModAssembly = Ensure.PopulatedWith(ModAssembly, modAssembly);
 
-        G.Log.VerboseDebug($"Setting Mod Info for: {mod.Info.ModID}");
+        G.Logger.VerboseDebug($"Setting Mod Info for: {mod.Info.ModID}");
         ModInfo = Ensure.PopulatedWith(ModInfo, mod.Info);
 
-        G.Log.VerboseDebug("Creating Initial ModData Directory");
+        G.Logger.VerboseDebug("Creating Initial ModData Directory");
         CreateInitialDirectory();
     }
 

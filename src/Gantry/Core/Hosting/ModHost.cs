@@ -54,13 +54,13 @@ public abstract class ModHost : GantrySubsytemHost
     protected override void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
     {
         services.AddNetworkService();
-        G.Log.VerboseDebug($"Registered {api.Side} Network Service");
+        G.Logger.VerboseDebug($"Registered {api.Side} Network Service");
 
         services.AddFileSystemService(o => o.RegisterSettingsFiles = true);
-        G.Log.VerboseDebug($"Registered {api.Side} FileSystem Service");
+        G.Logger.VerboseDebug($"Registered {api.Side} FileSystem Service");
 
         services.AddHarmonyPatchingService(o => o.AutoPatchModAssembly = true);
-        G.Log.VerboseDebug($"Registered {api.Side} Harmony Service");
+        G.Logger.VerboseDebug($"Registered {api.Side} Harmony Service");
 
         base.ConfigureUniversalModServices(services, api);
     }
@@ -69,7 +69,7 @@ public abstract class ModHost : GantrySubsytemHost
     {
         var brighterBuilder = services.AddBrighter();
         brighterBuilder.AutoFromAssemblies(api);
-        G.Log.VerboseDebug($"ModHost: Registered {api.Side} Brighter Mediator Engine.");
+        G.Logger.VerboseDebug($"ModHost: Registered {api.Side} Brighter Mediator Engine.");
     }
 
     #endregion
@@ -80,30 +80,30 @@ public abstract class ModHost : GantrySubsytemHost
     {
         //  1. Configure game API services.
         _services.With(ioc => ServerApiRegistrar.RegisterServerApiEndpoints(ioc, sapi));
-        G.Log.VerboseDebug("ModHost: Registered Server API Endpoints.");
+        G.Logger.VerboseDebug("ModHost: Registered Server API Endpoints.");
 
         //  2. Register all ModSystems within the mod. Will also self-reference this ModHost. 
         _services.AddModSystems(EnumAppSide.Server);
         _services.AddServerSystems();
-        G.Log.VerboseDebug("ModHost: Registered Server ModSystems.");
+        G.Logger.VerboseDebug("ModHost: Registered Server ModSystems.");
 
         //  3. Delegate mod service configuration to derived class.
         _services
             .With(ioc => ConfigureBrighter(ioc, sapi))
             .With(ioc => ConfigureUniversalModServices(ioc, sapi))
             .With(ioc => ConfigureServerModServices(ioc, sapi));
-        G.Log.VerboseDebug("ModHost: Registered ModHost Services.");
+        G.Logger.VerboseDebug("ModHost: Registered ModHost Services.");
 
         //  4. Register all features that need registering. 
         _universalServiceRegistrars.ForEach(x => x.ConfigureUniversalModServices(_services, sapi));
-        G.Log.VerboseDebug("ModHost: Registered Universal Services.");
+        G.Logger.VerboseDebug("ModHost: Registered Universal Services.");
 
         _serverServiceRegistrars.ForEach(x => x.ConfigureServerModServices(_services, sapi));
-        G.Log.VerboseDebug("ModHost: Registered Server Services.");
+        G.Logger.VerboseDebug("ModHost: Registered Server Services.");
 
         //  5. Build IOC Container.
         IOC.ServerIOC = _services.BuildServiceProvider();
-        G.Log.VerboseDebug("ModHost: IOC.ServerIOC now populated.");
+        G.Logger.VerboseDebug("ModHost: IOC.ServerIOC now populated.");
 
         // ONLY NOW ARE SERVICES AVAILABLE
 
@@ -137,7 +137,7 @@ public abstract class ModHost : GantrySubsytemHost
 
         //  5. Build IOC Container.
         IOC.ClientIOC = _services.BuildServiceProvider();
-        G.Log.VerboseDebug("ModHost: IOC.ClientIOC now populated.");
+        G.Logger.VerboseDebug("ModHost: IOC.ClientIOC now populated.");
 
         // ONLY NOW ARE SERVICES AVAILABLE
 
@@ -167,30 +167,30 @@ public abstract class ModHost : GantrySubsytemHost
         G.CreateLogger(api, Mod);
 
         ApiEx.Initialise(api);
-        G.Log.VerboseDebug("ModHost: Initialised ApiEx.");
+        G.Logger.VerboseDebug("ModHost: Initialised ApiEx.");
 
         ModEx.Initialise(Mod, GetType().Assembly);
-        G.Log.VerboseDebug("ModHost: Initialised ModEx.");
+        G.Logger.VerboseDebug("ModHost: Initialised ModEx.");
 
         _universalServiceRegistrars = [.. Mod.Systems.OfType<IUniversalServiceRegistrar>()];
-        G.Log.VerboseDebug("ModHost: Populated Universal Mod Service Registrars.");
+        G.Logger.VerboseDebug("ModHost: Populated Universal Mod Service Registrars.");
         switch (api)
         {
             case ICoreClientAPI capi:
                 _clientServiceRegistrars = [.. Mod.Systems.OfType<IClientServiceRegistrar>()];
-                G.Log.VerboseDebug("ModHost: Populated Client Mod Service Registrars.");
+                G.Logger.VerboseDebug("ModHost: Populated Client Mod Service Registrars.");
                 BuildClientHost(capi);
                 break;
             case ICoreServerAPI sapi:
                 _serverServiceRegistrars = [.. Mod.Systems.OfType<IServerServiceRegistrar>()];
-                G.Log.VerboseDebug("ModHost: Populated Server Mod Service Registrars.");
+                G.Logger.VerboseDebug("ModHost: Populated Server Mod Service Registrars.");
                 BuildServerHost(sapi);
                 break;
         }
         StartPreUniversalSide(api);
         base.StartPreUniversal(api);
         stopwatch.Stop();
-        G.Log.VerboseDebug($"ModHost Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}.");
+        G.Logger.VerboseDebug($"ModHost Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}.");
     }
 
     /// <summary>
@@ -251,17 +251,17 @@ public abstract class ModHost : GantrySubsytemHost
     /// </summary>
     public override void Dispose()
     {
-        G.Log.VerboseDebug("Disposing FileSystem Service");
+        G.Logger.VerboseDebug("Disposing FileSystem Service");
         IOC.Services.Resolve<IHarmonyPatchingService>().Dispose();
 
-        G.Log.VerboseDebug("Disposing Harmony Service");
+        G.Logger.VerboseDebug("Disposing Harmony Service");
         IOC.Services.Resolve<IFileSystemService>().Dispose();
 
-        G.Log.VerboseDebug("Disposing IOC Provider");
+        G.Logger.VerboseDebug("Disposing IOC Provider");
         _services.Clear();
         IOC.Dispose();
 
-        G.Log.VerboseDebug("Disposing ApiEx");
+        G.Logger.VerboseDebug("Disposing ApiEx");
         ApiEx.Dispose(_api);
 
         G.DisposeLogger(_api);

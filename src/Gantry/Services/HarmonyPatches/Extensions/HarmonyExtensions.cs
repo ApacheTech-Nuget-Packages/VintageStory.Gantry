@@ -156,7 +156,7 @@ public static class HarmonyExtensions
         // Prefix method to log the start of method execution and initialise a stopwatch for timing.
         void Prefix(out Stopwatch __state)
         {
-            G.Log.VerboseDebug($"Running method: {method.Name}");
+            G.Logger.VerboseDebug($"Running method: {method.Name}");
             __state = Stopwatch.StartNew();
         }
 
@@ -164,7 +164,7 @@ public static class HarmonyExtensions
         void Postfix(Stopwatch __state)
         {
             __state.Stop();
-            G.Log.VerboseDebug($"Method {method.Name} took {__state.ElapsedMilliseconds} ms to execute.");
+            G.Logger.VerboseDebug($"Method {method.Name} took {__state.ElapsedMilliseconds} ms to execute.");
         }
     }
 }

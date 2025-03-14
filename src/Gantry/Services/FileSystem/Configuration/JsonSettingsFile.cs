@@ -80,8 +80,8 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
         }
         catch (Exception exception)
         {
-            G.Log.Error($"Error loading feature `{featureName}` from file `{File.AsFileInfo().Name}`: {exception.Message}");
-            G.Log.Error(exception.StackTrace);
+            G.Logger.Error($"Error loading feature `{featureName}` from file `{File.AsFileInfo().Name}`: {exception.Message}");
+            G.Logger.Error(exception.StackTrace);
             throw;
         }
     }

@@ -32,12 +32,12 @@ public static class ApiEx
             case EnumAppSide.Server:
                 _serverMain.Value = api.World as ServerMain;
                 _serverThread = Thread.CurrentThread;
-                G.Log.VerboseDebug("ApiEx: Added ServerMain (Thread ID: {0}).", _serverThread.ManagedThreadId);
+                G.Logger.VerboseDebug("ApiEx: Added ServerMain (Thread ID: {0}).", _serverThread.ManagedThreadId);
                 break;
             case EnumAppSide.Client:
                 _clientMain.Value = api.World as ClientMain;
                 _clientThread = Thread.CurrentThread;
-                G.Log.VerboseDebug("ApiEx: Added ClientMain (Thread ID: {0}).", _clientThread.ManagedThreadId);
+                G.Logger.VerboseDebug("ApiEx: Added ClientMain (Thread ID: {0}).", _clientThread.ManagedThreadId);
                 break;
             case EnumAppSide.Universal:
             default:
@@ -61,7 +61,7 @@ public static class ApiEx
             default:
                 throw new ArgumentOutOfRangeException(nameof(api), api, "App-side cannot be determined.");
         }
-        G.Log.VerboseDebug($"ApiEx {api.Side} Disposed.");
+        G.Logger.VerboseDebug($"ApiEx {api.Side} Disposed.");
     }
     #endregion
 

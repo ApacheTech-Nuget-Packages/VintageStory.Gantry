@@ -47,7 +47,7 @@ public static class EventApiExtensions
             }
             catch (Exception ex)
             {
-                G.Log.Error("Error in main thread task: " + ex);
+                G.Logger.Error("Error in main thread task: " + ex);
                 throw;
             }
             finally
@@ -58,7 +58,7 @@ public static class EventApiExtensions
         if (!waitHandle.Wait(TimeSpan.FromSeconds(30))) // Add a timeout for safety
         {
             waitHandle.Set();
-            G.Log.Error("Main thread task timed out.");
+            G.Logger.Error("Main thread task timed out.");
             throw new TimeoutException("Main thread task timed out.");
         }
     }

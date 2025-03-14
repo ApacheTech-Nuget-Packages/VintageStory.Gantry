@@ -85,8 +85,8 @@ public class ToastService : UniversalSubsystem, IToastService
         }
         catch (Exception ex)
         {
-            G.Log.Error("Toast failed to render.");
-            G.Log.Error(ex);
+            G.Logger.Error("Toast failed to render.");
+            G.Logger.Error(ex);
         }
     }
 

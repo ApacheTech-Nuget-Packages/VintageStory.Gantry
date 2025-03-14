@@ -80,7 +80,7 @@ public static class FileSystemServiceExtensions
     /// </summary>
     public static IFileSystemService RegisterGantrySettingsFiles(this IFileSystemService fileSystem, ICoreAPI api)
     {
-        G.Log.VerboseDebug("Registering Gantry settings files.");
+        G.Logger.VerboseDebug("Registering Gantry settings files.");
         var side = api.Side.ToString().ToLower();
         return fileSystem
             .RegisterGantrySettingsFile($"gantry-settings-world-{side}.json", FileScope.World)
@@ -92,7 +92,7 @@ public static class FileSystemServiceExtensions
     /// </summary>
     public static IFileSystemService RegisterSettingsFiles(this IFileSystemService fileSystem, ICoreAPI api)
     {
-        G.Log.VerboseDebug("Registering settings files.");
+        G.Logger.VerboseDebug("Registering settings files.");
         var side = api.Side.ToString().ToLower();
         return fileSystem
             .RegisterSettingsFile($"settings-world-{side}.json", FileScope.World)

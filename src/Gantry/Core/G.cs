@@ -28,12 +28,12 @@ public static class G
     /// <summary>
     ///     Interface to the client's and server's event, debug and error logging utilty.
     /// </summary>
-    public static ILogger Log => _serverLogger.Value ?? _clientLogger.Value;
+    public static ILogger Logger => _serverLogger.Value ?? _clientLogger.Value;
 
     /// <summary>
     ///     Traces a message to the <see cref="ILogger.VerboseDebug(string, object[])"/> log file.
     /// </summary>
-    public static void Trace(string template, params object[] args) => Log.VerboseDebug(template, args);
+    public static void Log(string template, params object[] args) => Logger.VerboseDebug(template, args);
 
     internal static void CreateLogger(ICoreAPI api, Mod mod)
     {
@@ -55,12 +55,12 @@ public static class G
             default:
                 throw new ArgumentOutOfRangeException(nameof(api), api, "App-side cannot be determined.");
         }
-        Log.VerboseDebug($"Hello, World!");
+        Logger.VerboseDebug($"Hello, World!");
     }
 
     internal static void DisposeLogger(ICoreAPI api)
     {
-        Log.VerboseDebug($"Gantry {api.Side} logger shut down. Goodbye!");
+        Logger.VerboseDebug($"Gantry {api.Side} logger shut down. Goodbye!");
         switch (api.Side)
         {
             case EnumAppSide.Server:

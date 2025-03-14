@@ -41,7 +41,7 @@ public static class WaypointIconFactory
         }
         catch
         {
-            G.Log.VerboseDebug("Could not find a valid icon texture factor for '{0}'.", key);
+            G.Logger.VerboseDebug("Could not find a valid icon texture factor for '{0}'.", key);
         }
 
         loadedTexture = null;

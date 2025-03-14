@@ -60,7 +60,7 @@ public class ObservableFeatureSettings<TSettings> : ObservableObject<TSettings> 
         }
         catch (Exception ex)
         {
-            G.Log.Error(ex);
+            G.Logger.Error(ex);
         }
     }
 }
