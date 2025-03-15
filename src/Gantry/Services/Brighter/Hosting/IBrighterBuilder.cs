@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using ApacheTech.Common.BrighterSlim;
-using Polly.Registry;
 
 namespace Gantry.Services.Brighter.Hosting;
 
@@ -67,12 +66,6 @@ internal interface IBrighterBuilder
     /// <param name="assemblies">The assemblies to scan</param>
     /// <returns>This builder, allows chaining calls</returns>
     IBrighterBuilder TransformsFromAssemblies(EnumAppSide side, params Assembly[] assemblies);
-
-    /// <summary>
-    ///     The policy registry to use for the command processor and the event bus
-    ///     It needs to be here as we need to pass it between AddBrighter and UseExternalBus.
-    /// </summary>
-    IPolicyRegistry<string> PolicyRegistry { get; set; }
 
 
     /// <summary>

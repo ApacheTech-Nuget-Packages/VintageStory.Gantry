@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using ApacheTech.Common.BrighterSlim;
 using Gantry.Core.Annotation;
-using Polly.Registry;
 
 namespace Gantry.Services.Brighter.Hosting;
 
@@ -17,33 +16,23 @@ internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
     private readonly ServiceCollectionTransformerRegistry _transformerRegistry;
 
     /// <summary>
-    ///     The policy registry to use for the command processor and the event bus
-    ///     It needs to be here as we need to pass it between AddBrighter and UseExternalBus.
-    /// </summary>
-    /// <value>The policy registry.</value>
-    public IPolicyRegistry<string> PolicyRegistry { get; set; }
-
-    /// <summary>
     /// Registers the components of Brighter pipelines
     /// </summary>
     /// <param name="services">The IoC container to update</param>
     /// <param name="serviceCollectionSubscriberRegistry">The register for looking up message handlers</param>
     /// <param name="mapperRegistry">The register for looking up message mappers</param>
     /// <param name="transformerRegistry">The register for transforms</param>
-    /// <param name="policyRegistry">The list of policies that we require</param>
     public ServiceCollectionBrighterBuilder(
         IServiceCollection services,
         ServiceCollectionSubscriberRegistry serviceCollectionSubscriberRegistry,
         ServiceCollectionMessageMapperRegistry mapperRegistry,
-        ServiceCollectionTransformerRegistry transformerRegistry = null,
-        IPolicyRegistry<string> policyRegistry = null
+        ServiceCollectionTransformerRegistry transformerRegistry = null
     )
     {
         Services = services;
         _serviceCollectionSubscriberRegistry = serviceCollectionSubscriberRegistry;
         _mapperRegistry = mapperRegistry;
         _transformerRegistry = transformerRegistry ?? new ServiceCollectionTransformerRegistry(services);
-        PolicyRegistry = policyRegistry;
     }
 
     /// <summary>

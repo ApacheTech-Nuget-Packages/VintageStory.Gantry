@@ -10,8 +10,6 @@ using Gantry.Services.FileSystem.Hosting;
 using Gantry.Services.HarmonyPatches;
 using Gantry.Services.HarmonyPatches.Hosting;
 using Gantry.Services.Network.Hosting;
-using Humanizer;
-using Humanizer.Localisation;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 
@@ -190,7 +188,7 @@ public abstract class ModHost : GantrySubsytemHost
         StartPreUniversalSide(api);
         base.StartPreUniversal(api);
         stopwatch.Stop();
-        G.Logger.VerboseDebug($"ModHost Loaded in {stopwatch.Elapsed.Humanize(maxUnit: TimeUnit.Millisecond)}.");
+        G.Logger.VerboseDebug($"ModHost Loaded in {stopwatch.ElapsedMilliseconds:N0}ms.");
     }
 
     /// <summary>

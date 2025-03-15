@@ -1,6 +1,5 @@
 ﻿using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.BrighterSlim.FeatureSwitch;
-using Polly.Registry;
 
 namespace Gantry.Services.Brighter.Hosting;
 
@@ -29,11 +28,6 @@ internal class BrighterOptions : IBrighterOptions
     ///     Configures the lifetime of mappers. Defaults to Singleton
     /// </summary>
     public ServiceLifetime MapperLifetime { get; set; } = ServiceLifetime.Singleton;
-
-    /// <summary>
-    ///     Configures the polly policy registry.
-    /// </summary>
-    public IPolicyRegistry<string> PolicyRegistry { get; set; } = new DefaultPolicy();
 
     /// <summary>
     ///     Configures the request context factory. Defaults to <see cref="InMemoryRequestContextFactory" />.

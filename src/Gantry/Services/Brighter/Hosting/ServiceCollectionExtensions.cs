@@ -2,7 +2,6 @@
 using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.BrighterSlim.FeatureSwitch;
 using Gantry.Core.Hosting.Extensions;
-using Polly.Registry;
 
 // ReSharper disable StringLiteralTypo
 
@@ -67,11 +66,6 @@ internal static class ServiceCollectionExtensions
         if (options.FeatureSwitchRegistry != null)
             services.TryAddSingleton(options.FeatureSwitchRegistry);
 
-        //Add the policy registry
-        var policyRegistry = options.PolicyRegistry == null
-            ? new DefaultPolicy()
-            : AddDefaults(options.PolicyRegistry);
-
         services.TryAdd(new ServiceDescriptor(typeof(IAmACommandProcessor),
             (serviceProvider) => (IAmACommandProcessor)BuildCommandProcessor(serviceProvider),
             options.CommandProcessorLifetime));
@@ -80,8 +74,7 @@ internal static class ServiceCollectionExtensions
             services,
             subscriberRegistry,
             mapperRegistry,
-            transformRegistry,
-            policyRegistry
+            transformRegistry
         );
     }
 
@@ -143,19 +136,6 @@ internal static class ServiceCollectionExtensions
         return ExternalBusBuilder(brighterBuilder, busConfiguration, transactionType);
     }
 
-    private static IPolicyRegistry<string> AddDefaults(IPolicyRegistry<string> policyRegistry)
-    {
-        if (!policyRegistry.ContainsKey(CommandProcessor.RETRYPOLICY))
-            throw new ConfigurationException(
-                "The policy registry is missing the CommandProcessor.RETRYPOLICY policy which is required");
-
-        if (!policyRegistry.ContainsKey(CommandProcessor.CIRCUITBREAKER))
-            throw new ConfigurationException(
-                "The policy registry is missing the CommandProcessor.CIRCUITBREAKER policy which is required");
-
-        return policyRegistry;
-    }
-
     private static object BuildCommandProcessor(IServiceProvider provider)
     {
         var options = provider.Resolve<IBrighterOptions>();
@@ -174,11 +154,7 @@ internal static class ServiceCollectionExtensions
 
         var policyBuilder = needHandlers.Handlers(handlerConfiguration);
 
-        var messagingBuilder = options.PolicyRegistry == null
-            ? policyBuilder.DefaultPolicy()
-            : policyBuilder.Policies(options.PolicyRegistry);
-
-        var ret = AddEventBus(provider, messagingBuilder, useRequestResponse);
+        var ret = AddEventBus(provider, policyBuilder, useRequestResponse);
 
         var commandProcessor = ret
             .RequestContextFactory(options.RequestContextFactory)
@@ -270,7 +246,6 @@ internal static class ServiceCollectionExtensions
 
         var bus = (IAmAnExternalBusService)Activator.CreateInstance(busType,
             externalBusConfiguration.ProducerRegistry,
-            brighterBuilder.PolicyRegistry,
             outbox,
             externalBusConfiguration.OutboxBulkChunkSize,
             externalBusConfiguration.OutboxTimeout);

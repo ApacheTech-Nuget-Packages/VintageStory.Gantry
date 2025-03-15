@@ -16,5 +16,5 @@ public abstract class MediatedChatCommand : CommandBase
     /// <summary>
     ///     Gets the result of executing the chat command.
     /// </summary>
-    public TextCommandResult Result { get; protected internal set; }
+    public TextCommandResult Result { get; set; }
 }
