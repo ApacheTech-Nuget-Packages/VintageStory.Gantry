@@ -15,12 +15,31 @@ public abstract class GantryLogger : Logger
     {
         public override string getLogFile(EnumLogType logType)
             => GetLogFilePath(logType, EnumAppSide.Server);
+
+        public override bool printToConsole(EnumLogType logType) 
+            => logType is not EnumLogType.VerboseDebug 
+                      and not EnumLogType.StoryEvent 
+                      and not EnumLogType.Build 
+                      and not EnumLogType.Audit;
+
+        public override bool printToDebugWindow(EnumLogType logType)
+            => logType is not EnumLogType.VerboseDebug
+                      and not EnumLogType.StoryEvent
+                      and not EnumLogType.Build;
     }
 
     internal class Client(ICoreAPI api, ModInfo modInfo) : GantryLogger(api, modInfo)
     {
         public override string getLogFile(EnumLogType logType)
             => GetLogFilePath(logType, EnumAppSide.Client);
+
+        public override bool printToConsole(EnumLogType logType)
+            => logType is not EnumLogType.VerboseDebug
+                      and not EnumLogType.StoryEvent;
+
+        public override bool printToDebugWindow(EnumLogType logType)
+            => logType is not EnumLogType.VerboseDebug
+                      and not EnumLogType.StoryEvent;
     }
 
     /// <inheritdoc />
@@ -34,7 +53,7 @@ public abstract class GantryLogger : Logger
     /// <param name="logType">The type of log.</param>
     /// <param name="side">The app side of the log file.</param>
     /// <returns>The file path for the specified log type.</returns>
-    protected string GetLogFilePath(EnumLogType logType, EnumAppSide side)
+    protected static string GetLogFilePath(EnumLogType logType, EnumAppSide side)
         => Path.Combine(ModPaths.LogDirectory.FullName, $"{side}-{logType}.log".ToLowerInvariant());
 
     /// <summary>
@@ -102,14 +121,4 @@ public abstract class GantryLogger : Logger
             }
         }
     }
-
-    /// <summary>
-    ///     Determines whether the specified log type should be printed to the console.
-    /// </summary>
-    /// <param name="logType">The type of log.</param>
-    /// <returns><c>true</c> if the log type should be printed to the console; otherwise, <c>false</c>.</returns>
-    public override bool printToConsole(EnumLogType logType)
-        => logType is not EnumLogType.VerboseDebug
-           and not EnumLogType.StoryEvent
-           and not EnumLogType.Audit;
 }
