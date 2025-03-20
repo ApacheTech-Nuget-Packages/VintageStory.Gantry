@@ -14,7 +14,7 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures;
 ///     Notifies observers that a property value has changed within a wrapped POCO class.
 /// </summary>
 /// <typeparam name="T">The <see cref="Type"/> of object to watch.</typeparam>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+[DoNotPruneType]
 public class ObservableObject<T> : IObservableObject where T: class, new()
 {
     private readonly Harmony _harmony;
@@ -110,7 +110,6 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
         set => _onObjectPropertyChanged = value;
     }
 
-    [DoNotPrune]
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static void Patch_Property_SetMethod_Postfix(MemberInfo __originalMethod)
     {
