@@ -2,10 +2,12 @@
 using Gantry.Core.Annotation;
 using Gantry.Services.Brighter.Filters;
 using Gantry.Services.BrighterChat;
+using SmartAssembly.Attributes;
 
 namespace Gantry.Features.GantryChatCommands.ClientCommands;
 
 [ClientSide]
+[DoNotPruneType]
 internal class CmdClientDebug : MediatedChatCommand
 {
     [ClientSide]

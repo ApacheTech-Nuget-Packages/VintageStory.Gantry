@@ -1,5 +1,6 @@
 ﻿using ApacheTech.Common.BrighterSlim;
 using Gantry.Core.Annotation;
+using SmartAssembly.Attributes;
 
 namespace Gantry.Services.Brighter.Filters;
 
@@ -8,6 +9,7 @@ namespace Gantry.Services.Brighter.Filters;
 /// </summary>
 /// <seealso cref="RequestHandlerAttribute" />
 [UsedImplicitly(ImplicitUseTargetFlags.WithInheritors | ImplicitUseTargetFlags.WithMembers)]
+[DoNotPruneType]
 public class HandledOnAttribute : RequestHandlerAttribute
 {
     /// <summary>
