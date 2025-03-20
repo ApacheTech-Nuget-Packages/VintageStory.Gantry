@@ -1,4 +1,5 @@
 ﻿using Gantry.Services.ExtendedEnums;
+using SmartAssembly.Attributes;
 
 // ReSharper disable StringLiteralTypo
 
@@ -10,6 +11,7 @@ namespace Gantry.Core.GameContent.AssetEnum;
 ///     The different types of trader that are available in the vanilla game.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+[DoNotPruneType]
 public sealed class TraderType : StringEnum<TraderType>
 {
     public static string Artisan { get; } = Create("artisan");

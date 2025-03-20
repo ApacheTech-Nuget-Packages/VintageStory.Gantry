@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Reflection;
 using Gantry.Services.ExtendedEnums;
+using SmartAssembly.Attributes;
 
 #pragma warning disable CS1591
 
@@ -10,6 +11,7 @@ namespace Gantry.Core.GameContent.AssetEnum;
 ///     The colours that can be used when adding waypoints to the map.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+[DoNotPruneType]
 public class NamedColour : StringEnum<NamedColour>
 {
     //

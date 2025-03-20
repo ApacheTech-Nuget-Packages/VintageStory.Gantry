@@ -1,4 +1,5 @@
 ﻿using Gantry.Services.ExtendedEnums;
+using SmartAssembly.Attributes;
 
 #pragma warning disable CS1591
 
@@ -8,6 +9,7 @@ namespace Gantry.Core.GameContent.AssetEnum;
 ///     The icons that can be used to add waypoints to the map.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+[DoNotPruneType]
 public sealed class WaypointIcon : StringEnum<WaypointIcon>
 {
     public static WaypointIcon Circle { get; } = Create("circle");
