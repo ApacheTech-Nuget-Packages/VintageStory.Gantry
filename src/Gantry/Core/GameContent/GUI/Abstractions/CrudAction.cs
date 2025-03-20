@@ -3,7 +3,7 @@
 /// <summary>
 ///     Specifies whether a dialogue is for added or edited an item.
 /// </summary>
-public enum AddEditDialogueMode
+public enum CrudAction
 {
     /// <summary>
     ///     Indicates that a new item is being added.
@@ -13,5 +13,10 @@ public enum AddEditDialogueMode
     /// <summary>
     ///     Indicates that an existing item is being edited.
     /// </summary>
-    Edit
+    Edit,
+
+    /// <summary>
+    ///     Indicates that an existing item is being deleted.
+    /// </summary>
+    Delete
 }
