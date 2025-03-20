@@ -1,0 +1,23 @@
+﻿{
+    "Features.EasyX.SetScope":  "Umfang stillinga er nú stillt á: {0}",
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} hefur verið fjarlægt af hvítum lista {1}.",
+    "Features.EasyX.PlayerSearch.NoResults":  "Leit að \"{0}\" skilaði engum árangri. Vinsamlegast reyndu aftur.",
+    "Features.EasyX.InvalidMode":  "Ógildur aðgangshamur. Gildir valkostir eru: {0}",
+    "Features.EasyX.Whitelist.NoResults":  "Sem stendur eru engir leikmenn á hvíta listanum {0}.",
+    "Features.EasyX.ServerCommandDescription":  "Leyfir netþjóninum að breyta stillingum fyrir modið á netþjóninum.",
+    "Features.EasyX.Mode":  "{0} stilling: {1}",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0} hefur verið bætt á svarta listann {1}.",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "Leitin að \"{0}\" skilaði mörgum niðurstöðum. Vinsamlegast fínstilltu leitarorðin.",
+    "Features.EasyX.Blacklist.Description":  "Bæta við/fjarlægja leikmenn af svarta listanum fyrir þennan eiginleika.",
+    "Features.EasyX.AccessMode.Description":  "Breyttu aðgangsstillingu fyrir núverandi eiginleika.",
+    "Features.EasyX.Scope":  "Stillingar Umfang: {0}",
+    "Features.EasyX.Scope.Description":  "Breyttu því hvort modið ætti að nota alþjóðlegar stillingar eða stillingar fyrir hvern heim.",
+    "Features.EasyX.Whitelist.PlayerAdded":  "{0} hefur verið bætt við hvítlista {1}.",
+    "Features.EasyX.Whitelist.Results":  "Eftirfarandi leikmenn eru sem stendur á hvítum lista {0}:",
+    "Features.EasyX.Blacklist.NoResults":  "Sem stendur eru engir leikmenn á svarta listanum {0}.",
+    "Features.EasyX.Blacklist.PlayerRemoved":  "{0} hefur verið fjarlægt af svörtum lista {1}.",
+    "Features.EasyX.InvalidScope":  "Ógilt gildissvið. Gildir valkostir eru: {0}",
+    "Features.EasyX.Blacklist.Results":  "Eftirfarandi leikmenn eru sem stendur á svörtum lista {0}:",
+    "Features.EasyX.Whitelist.Description":  "Bæta við/fjarlægja leikmenn af hvíta listanum fyrir þennan eiginleika.",
+    "Features.EasyX.SetMode":  "{0} stillingin er nú stillt á: {1}"
+}

@@ -1,0 +1,23 @@
+﻿{
+    "Features.EasyX.SetScope":  "Omfanget av innstillinger er nå satt til: {0}",
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} er fjernet fra den {1} hvitelisten.",
+    "Features.EasyX.PlayerSearch.NoResults":  "Søket etter \u0027{0}\u0027 ga ingen resultater. Prøv igjen.",
+    "Features.EasyX.InvalidMode":  "Ugyldig tilgangsmodus. Gyldige alternativer er: {0}",
+    "Features.EasyX.Whitelist.NoResults":  "Det er for øyeblikket ingen spillere på den {0} hvitelisten.",
+    "Features.EasyX.ServerCommandDescription":  "Lar serveradministratoren endre innstillingene for moden på serveren.",
+    "Features.EasyX.Mode":  "{0}-modus: {1}",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0} er lagt til den {1} svartelisten.",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "Søket etter \"{0}\" ga flere resultater. Vennligst avgrens søkeordene dine.",
+    "Features.EasyX.Blacklist.Description":  "Legg til/fjern spillere fra svartelisten for denne funksjonen.",
+    "Features.EasyX.AccessMode.Description":  "Endre tilgangsmodus for gjeldende funksjon.",
+    "Features.EasyX.Scope":  "Innstillinger Omfang: {0}",
+    "Features.EasyX.Scope.Description":  "Endre om modden skal bruke globale innstillinger, eller per verden-innstillinger.",
+    "Features.EasyX.Whitelist.PlayerAdded":  "{0} er lagt til den {1} hvitelisten.",
+    "Features.EasyX.Whitelist.Results":  "Følgende spillere er for øyeblikket på den {0} hvitelisten:",
+    "Features.EasyX.Blacklist.NoResults":  "Det er for øyeblikket ingen spillere på den {0} svartelisten.",
+    "Features.EasyX.Blacklist.PlayerRemoved":  "{0} er fjernet fra {1} svarteliste.",
+    "Features.EasyX.InvalidScope":  "Ugyldig omfang. Gyldige alternativer er: {0}",
+    "Features.EasyX.Blacklist.Results":  "Følgende spillere er for øyeblikket på {0} svarteliste:",
+    "Features.EasyX.Whitelist.Description":  "Legg til/fjern spillere fra hvitelisten for denne funksjonen.",
+    "Features.EasyX.SetMode":  "{0}modus er nå satt til: {1}"
+}

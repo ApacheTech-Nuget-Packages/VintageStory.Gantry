@@ -1,29 +1,23 @@
-{
-  "Features.EasyX.InvalidScope": "Ungültiger Bereich. Gültige Optionen sind: {0}",
-  "Features.EasyX.Scope.Description": "Ändern, ob das Mod globale Einstellungen oder weltspezifische Einstellungen verwenden soll.",
-  "Features.EasyX.Scope": "Einstellungsbereich: {0}",
-  "Features.EasyX.SetScope": "Einstellungsbereich jetzt auf {0} gesetzt.",
-
-  "Features.EasyX.ServerCommandDescription": "Ermöglicht dem Serveradministrator, die Einstellungen des Mods auf dem Server zu ändern.",
-
-  "Features.EasyX.Mode": "{0} Modus: {1}",
-  "Features.EasyX.SetMode": "Modus {0} jetzt auf {1} gesetzt.",
-  "Features.EasyX.InvalidMode": "Ungültiger Zugriffsmodus. Gültige Optionen sind: {0}",
-
-  "Features.EasyX.PlayerSearch.NoResults": "Die Suche nach '{0}' ergab keine Ergebnisse. Bitte versuchen Sie es erneut.",
-  "Features.EasyX.PlayerSearch.MultipleResults": "Die Suche nach '{0}' ergab mehrere Ergebnisse. Bitte verfeinern Sie Ihre Suchbegriffe.",
-
-  "Features.EasyX.AccessMode.Description": "Ändern Sie den Zugriffsmodus für die aktuelle Funktion.",
-
-  "Features.EasyX.Whitelist.Description": "Spieler zur Whitelist dieser Funktion hinzufügen/entfernen.",
-  "Features.EasyX.Whitelist.Results": "Die folgenden Spieler befinden sich derzeit auf der Whitelist für {0}:",
-  "Features.EasyX.Whitelist.NoResults": "Derzeit befinden sich keine Spieler auf der Whitelist für {0}.",
-  "Features.EasyX.Whitelist.PlayerRemoved": "{0} wurde von der Whitelist für {1} entfernt.",
-  "Features.EasyX.Whitelist.PlayerAdded": "{0} wurde zur Whitelist für {1} hinzugefügt.",
-
-  "Features.EasyX.Blacklist.Description": "Spieler zur Blacklist dieser Funktion hinzufügen/entfernen.",
-  "Features.EasyX.Blacklist.Results": "Die folgenden Spieler befinden sich derzeit auf der Blacklist für {0}:",
-  "Features.EasyX.Blacklist.NoResults": "Derzeit befinden sich keine Spieler auf der Blacklist für {0}.",
-  "Features.EasyX.Blacklist.PlayerRemoved": "{0} wurde von der Blacklist für {1} entfernt.",
-  "Features.EasyX.Blacklist.PlayerAdded": "{0} wurde zur Blacklist für {1} hinzugefügt."
+﻿{
+    "Features.EasyX.SetScope":  "Der Einstellungsbereich ist jetzt auf Folgendes festgelegt: {0}",
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} wurde von der Whitelist der {1} entfernt.",
+    "Features.EasyX.PlayerSearch.NoResults":  "Die Suche nach \"{0}\" ergab keine Ergebnisse. Bitte versuchen Sie es erneut.",
+    "Features.EasyX.InvalidMode":  "Ungültiger Zugriffsmodus. Gültige Optionen sind: {0}",
+    "Features.EasyX.Whitelist.NoResults":  "Derzeit befinden sich keine Spieler auf der Whitelist der {0}.",
+    "Features.EasyX.ServerCommandDescription":  "Ermöglicht es dem Serveradministrator, die Einstellungen für den Mod auf dem Server zu ändern.",
+    "Features.EasyX.Mode":  "{0}-Modus: {1}",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0} wurde der {1} Blacklist hinzugefügt.",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "Die Suche nach \"{0}\" ergab mehrere Ergebnisse. Bitte verfeinern Sie Ihre Suchbegriffe.",
+    "Features.EasyX.Blacklist.Description":  "Hinzufügen/Entfernen von Spielern aus der Blacklist für diese Funktion.",
+    "Features.EasyX.AccessMode.Description":  "Ändern Sie den Zugriffsmodus für das aktuelle Feature.",
+    "Features.EasyX.Scope":  "Einstellungsbereich: {0}",
+    "Features.EasyX.Scope.Description":  "Ändere, ob der Mod globale Einstellungen oder Einstellungen pro Welt verwenden soll.",
+    "Features.EasyX.Whitelist.PlayerAdded":  "{0} wurde der Whitelist der {1} hinzugefügt.",
+    "Features.EasyX.Whitelist.Results":  "Folgende Spieler stehen derzeit auf der Whitelist der {0}:",
+    "Features.EasyX.Blacklist.NoResults":  "Derzeit befinden sich keine Spieler auf der {0} Blacklist.",
+    "Features.EasyX.Blacklist.PlayerRemoved":  "{0} wurde von der Blacklist der {1} entfernt.",
+    "Features.EasyX.InvalidScope":  "Ungültiger Bereich. Gültige Optionen sind: {0}",
+    "Features.EasyX.Blacklist.Results":  "Folgende Spieler stehen derzeit auf der {0} Blacklist:",
+    "Features.EasyX.Whitelist.Description":  "Hinzufügen/Entfernen von Spielern aus der Whitelist für diese Funktion.",
+    "Features.EasyX.SetMode":  "{0} Modus ist jetzt auf Folgendes eingestellt: {1}"
 }

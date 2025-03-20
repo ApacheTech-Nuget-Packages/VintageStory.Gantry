@@ -1,29 +1,23 @@
-{
-  "Features.EasyX.InvalidScope": "Portée invalide. Les options valides sont : {0}",
-  "Features.EasyX.Scope.Description": "Changer si le mod doit utiliser les paramètres globaux ou les paramètres par monde.",
-  "Features.EasyX.Scope": "Portée des paramètres : {0}",
-  "Features.EasyX.SetScope": "Portée des paramètres maintenant définie sur : {0}",
-
-  "Features.EasyX.ServerCommandDescription": "Permet à l'administrateur du serveur de modifier les paramètres du mod sur le serveur.",
-
-  "Features.EasyX.Mode": "Mode {0} : {1}",
-  "Features.EasyX.SetMode": "Mode {0} maintenant défini sur : {1}",
-  "Features.EasyX.InvalidMode": "Mode d'accès invalide. Les options valides sont : {0}",
-
-  "Features.EasyX.PlayerSearch.NoResults": "La recherche de '{0}' n'a donné aucun résultat. Veuillez réessayer.",
-  "Features.EasyX.PlayerSearch.MultipleResults": "La recherche de '{0}' a donné plusieurs résultats. Veuillez affiner vos termes de recherche.",
-
-  "Features.EasyX.AccessMode.Description": "Changer le mode d'accès pour la fonctionnalité actuelle.",
-
-  "Features.EasyX.Whitelist.Description": "Ajouter/Supprimer des joueurs de la liste blanche pour cette fonctionnalité.",
-  "Features.EasyX.Whitelist.Results": "Les joueurs suivants sont actuellement sur la liste blanche pour {0} :",
-  "Features.EasyX.Whitelist.NoResults": "Il n'y a actuellement aucun joueur sur la liste blanche pour {0}.",
-  "Features.EasyX.Whitelist.PlayerRemoved": "{0} a été retiré de la liste blanche pour {1}.",
-  "Features.EasyX.Whitelist.PlayerAdded": "{0} a été ajouté à la liste blanche pour {1}.",
-
-  "Features.EasyX.Blacklist.Description": "Ajouter/Supprimer des joueurs de la liste noire pour cette fonctionnalité.",
-  "Features.EasyX.Blacklist.Results": "Les joueurs suivants sont actuellement sur la liste noire pour {0} :",
-  "Features.EasyX.Blacklist.NoResults": "Il n'y a actuellement aucun joueur sur la liste noire pour {0}.",
-  "Features.EasyX.Blacklist.PlayerRemoved": "{0} a été retiré de la liste noire pour {1}.",
-  "Features.EasyX.Blacklist.PlayerAdded": "{0} a été ajouté à la liste noire pour {1}."
+﻿{
+    "Features.EasyX.SetScope":  "La portée des paramètres est désormais définie sur : {0}",
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} a été supprimé de la liste d’autorisation {1}.",
+    "Features.EasyX.PlayerSearch.NoResults":  "La recherche de « {0} » n’a donné aucun résultat. Veuillez réessayer.",
+    "Features.EasyX.InvalidMode":  "Mode d’accès non valide. Les options valides sont : {0}",
+    "Features.EasyX.Whitelist.NoResults":  "Il n’y a actuellement aucun joueur sur la liste blanche {0}.",
+    "Features.EasyX.ServerCommandDescription":  "Permet à l’administrateur du serveur de modifier les paramètres du mod sur le serveur.",
+    "Features.EasyX.Mode":  "Mode {0} : {1}",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0} a été ajouté à la liste noire des {1}.",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "La recherche de « {0} » a donné plusieurs résultats. Veuillez affiner vos termes de recherche.",
+    "Features.EasyX.Blacklist.Description":  "Ajouter/Supprimer des joueurs de la liste noire pour cette fonctionnalité.",
+    "Features.EasyX.AccessMode.Description":  "Modifiez le mode d’accès de la fonction actuelle.",
+    "Features.EasyX.Scope":  "Portée des paramètres : {0}",
+    "Features.EasyX.Scope.Description":  "Changez si le mod doit utiliser les paramètres globaux ou les paramètres par monde.",
+    "Features.EasyX.Whitelist.PlayerAdded":  "{0} a été ajouté à la liste blanche {1}.",
+    "Features.EasyX.Whitelist.Results":  "Les joueurs suivants figurent actuellement sur la liste blanche {0} :",
+    "Features.EasyX.Blacklist.NoResults":  "Il n’y a actuellement aucun joueur sur la liste noire de la {0}.",
+    "Features.EasyX.Blacklist.PlayerRemoved":  "{0} a été retiré de la liste noire de {1}.",
+    "Features.EasyX.InvalidScope":  "Portée non valide. Les options valides sont : {0}",
+    "Features.EasyX.Blacklist.Results":  "Les joueurs suivants figurent actuellement sur la liste noire de la {0} :",
+    "Features.EasyX.Whitelist.Description":  "Ajout/Suppression de joueurs de la liste blanche pour cette fonctionnalité.",
+    "Features.EasyX.SetMode":  "{0} mode maintenant réglé sur : {1}"
 }

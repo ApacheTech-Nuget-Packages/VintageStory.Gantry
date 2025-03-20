@@ -1,29 +1,23 @@
-{
-  "Features.EasyX.InvalidScope": "Âmbito inválido. As opções válidas são: {0}",
-  "Features.EasyX.Scope.Description": "Altere se o mod deve usar configurações globais ou configurações por mundo.",
-  "Features.EasyX.Scope": "Âmbito de configuração: {0}",
-  "Features.EasyX.SetScope": "Âmbito de configuração agora definido para: {0}",
-
-  "Features.EasyX.ServerCommandDescription": "Permite ao administrador do servidor alterar as configurações do mod no servidor.",
-
-  "Features.EasyX.Mode": "Modo {0}: {1}",
-  "Features.EasyX.SetMode": "Modo {0} agora definido para: {1}",
-  "Features.EasyX.InvalidMode": "Modo de acesso inválido. As opções válidas são: {0}",
-
-  "Features.EasyX.PlayerSearch.NoResults": "A pesquisa por '{0}' não retornou resultados. Por favor, tente novamente.",
-  "Features.EasyX.PlayerSearch.MultipleResults": "A pesquisa por '{0}' retornou múltiplos resultados. Por favor, refine os seus termos de pesquisa.",
-
-  "Features.EasyX.AccessMode.Description": "Altere o modo de acesso para a funcionalidade atual.",
-
-  "Features.EasyX.Whitelist.Description": "Adicionar/Remover jogadores da lista branca para esta funcionalidade.",
-  "Features.EasyX.Whitelist.Results": "Os seguintes jogadores estão atualmente na lista branca para {0}:",
-  "Features.EasyX.Whitelist.NoResults": "Atualmente não há jogadores na lista branca para {0}.",
-  "Features.EasyX.Whitelist.PlayerRemoved": "{0} foi removido da lista branca para {1}.",
-  "Features.EasyX.Whitelist.PlayerAdded": "{0} foi adicionado à lista branca para {1}.",
-
-  "Features.EasyX.Blacklist.Description": "Adicionar/Remover jogadores da lista negra para esta funcionalidade.",
-  "Features.EasyX.Blacklist.Results": "Os seguintes jogadores estão atualmente na lista negra para {0}:",
-  "Features.EasyX.Blacklist.NoResults": "Atualmente não há jogadores na lista negra para {0}.",
-  "Features.EasyX.Blacklist.PlayerRemoved": "{0} foi removido da lista negra para {1}.",
-  "Features.EasyX.Blacklist.PlayerAdded": "{0} foi adicionado à lista negra para {1}."
+﻿{
+    "Features.EasyX.SetScope":  "Escopo das configurações agora definido como: {0}",
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} foi removido da lista branca de {1}.",
+    "Features.EasyX.PlayerSearch.NoResults":  "A pesquisa por «{0}» não produziu resultados. Por favor, tente novamente.",
+    "Features.EasyX.InvalidMode":  "Modo de acesso inválido. As opções válidas são: {0}",
+    "Features.EasyX.Whitelist.NoResults":  "Atualmente, não há jogadores na lista branca {0}.",
+    "Features.EasyX.ServerCommandDescription":  "Permite que o administrador do servidor altere as configurações para o mod no servidor.",
+    "Features.EasyX.Mode":  "Modo {0}: {1}",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0} foi adicionado à lista negra {1}.",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "A pesquisa por \"{0}\" produziu vários resultados. Por favor, refine os seus termos de pesquisa.",
+    "Features.EasyX.Blacklist.Description":  "Adicionar/Remover jogadores da lista negra para este recurso.",
+    "Features.EasyX.AccessMode.Description":  "Altere o modo de acesso para o recurso atual.",
+    "Features.EasyX.Scope":  "Escopo das configurações: {0}",
+    "Features.EasyX.Scope.Description":  "Altere se o mod deve usar configurações globais ou por configurações mundiais.",
+    "Features.EasyX.Whitelist.PlayerAdded":  "{0} foi adicionado à {1} lista branca.",
+    "Features.EasyX.Whitelist.Results":  "Os seguintes jogadores estão atualmente na {0} lista branca:",
+    "Features.EasyX.Blacklist.NoResults":  "Atualmente, não há jogadores na lista negra {0}.",
+    "Features.EasyX.Blacklist.PlayerRemoved":  "{0} foi retirado da lista negra de {1}.",
+    "Features.EasyX.InvalidScope":  "Âmbito inválido. As opções válidas são: {0}",
+    "Features.EasyX.Blacklist.Results":  "Os seguintes jogadores estão atualmente na lista negra de {0}:",
+    "Features.EasyX.Whitelist.Description":  "Adicione/Remova jogadores da lista de permissões para este recurso.",
+    "Features.EasyX.SetMode":  "{0} modo agora definido para: {1}"
 }
