@@ -22,7 +22,7 @@
 
 		<Company>ApacheTech Solutions</Company>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<Copyright>Copyright © ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
+		<Copyright>Copyright Â© ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
 
 		<DebugSymbols>True</DebugSymbols>
 		<DebugType>embedded</DebugType>
@@ -302,6 +302,24 @@
 	    -->
 		<Reference Include="System.Collections.Immutable">
 			<HintPath>$(VINTAGE_STORY)\Lib\System.Collections.Immutable.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+
+		<!--
+	        Library 50: System.Text.Encodings.Web
+	        Description: Text encoding library for web applications
+	    -->
+		<Reference Include="System.Text.Encodings.Web">
+			<HintPath>$(VINTAGE_STORY)\Lib\System.Text.Encodings.Web.dll</HintPath>
+			<Private>false</Private>
+		</Reference>
+		
+		<!--
+	        Library 51: System.Text.Json
+	        Description: A BCL .NET library for JSON handling
+	    -->
+		<Reference Include="System.Text.Json">
+			<HintPath>$(VINTAGE_STORY)\Lib\System.Text.Json.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 
