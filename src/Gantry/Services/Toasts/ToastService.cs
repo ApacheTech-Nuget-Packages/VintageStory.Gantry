@@ -11,6 +11,11 @@ namespace Gantry.Services.Toasts;
 /// </summary>
 public class ToastService : UniversalSubsystem, IToastService
 {
+    /// <summary>
+    ///     Individual mods can enabled this if required.
+    /// </summary>
+    public override bool Enabled => false;
+
     private long _listenerId;
     private const int MaxActive = 5;
 
