@@ -11,6 +11,7 @@ using Gantry.Services.EasyX.Hosting;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Hosting;
 using Gantry.Services.Network;
+using Gantry.Services.Network.Extensions;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 
@@ -128,8 +129,8 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
 
         command.EndSubCommand();
 
-        ServerChannel = IOC.Services.Resolve<IServerNetworkService>()
-            .DefaultServerChannel
+        ServerChannel = api.Network
+            .GetOrRegisterDefaultChannel()
             .RegisterMessageType<TClientSettings>();
 
         api.Event.PlayerJoin += player =>

@@ -5,10 +5,10 @@
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.11.1</Version>
+		<Version>0.11.2</Version>
 		<Configurations>Debug;Release;Package</Configurations>
 		<PackageReleaseNotes>
-			Gantry MDK v0.11.1: Game Version 1.20.6 Support
+			Gantry MDK v0.11.2: Remove network service.
 		</PackageReleaseNotes>
 	</PropertyGroup>
 
@@ -41,7 +41,6 @@
 
 	<ItemGroup>
 		<Folder Include="Domain\" />
-		<Folder Include="Services\Network\Channels\" />
 	</ItemGroup>
 
 </Project>

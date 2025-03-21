@@ -9,7 +9,6 @@ using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Hosting;
 using Gantry.Services.HarmonyPatches;
 using Gantry.Services.HarmonyPatches.Hosting;
-using Gantry.Services.Network.Hosting;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 
@@ -51,9 +50,6 @@ public abstract class ModHost : GantrySubsytemHost
     /// <inheritdoc />
     protected override void ConfigureUniversalModServices(IServiceCollection services, ICoreAPI api)
     {
-        services.AddNetworkService();
-        G.Logger.VerboseDebug($"Registered {api.Side} Network Service");
-
         services.AddFileSystemService(o => o.RegisterSettingsFiles = true);
         G.Logger.VerboseDebug($"Registered {api.Side} FileSystem Service");
 

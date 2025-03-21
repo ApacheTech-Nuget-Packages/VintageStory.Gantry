@@ -1,4 +1,4 @@
-﻿using Gantry.Services.Network;
+﻿using Gantry.Services.Network.Extensions;
 
 namespace Gantry.Services.EasyX.Abstractions;
 
@@ -17,10 +17,9 @@ public abstract class EasyXClientSystemBase<TClientSettings> : ClientModSystem
     /// <inheritdoc />
     public override void StartClientSide(ICoreClientAPI api)
     {
-        IOC.Services.Resolve<IClientNetworkService>()
-            .DefaultClientChannel
-            .RegisterMessageType<TClientSettings>()
-            .SetMessageHandler<TClientSettings>(packet =>
+        api.Network
+            .GetOrRegisterDefaultChannel()
+            .RegisterMessageHandler<TClientSettings>(packet =>
             {
                 Settings = packet;
                 OnSettingsChanged();
