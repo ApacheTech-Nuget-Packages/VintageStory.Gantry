@@ -64,10 +64,8 @@ public static class EntityExtensions
     {
         var targetDirection = agentPos.XYZ.RelativeRotationalDirection(targetPos);
         var entityPos = agentPos.Copy();
-        entityPos.Pitch = GameMath.PI - targetDirection.X;
-        entityPos.Yaw = targetDirection.Y % GameMath.TWOPI;
-        entityPos.HeadPitch = GameMath.PI - targetDirection.X;
-        entityPos.HeadYaw = targetDirection.Y % GameMath.TWOPI;
+        entityPos.Pitch = entityPos.HeadPitch = (GameMath.PI - targetDirection.X) % GameMath.TWOPI;
+        entityPos.Yaw = entityPos.HeadYaw = targetDirection.Y % GameMath.TWOPI;
         return entityPos;
     }
 
