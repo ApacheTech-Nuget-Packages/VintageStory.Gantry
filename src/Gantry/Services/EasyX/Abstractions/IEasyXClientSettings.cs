@@ -9,5 +9,6 @@ public interface IEasyXClientSettings
     /// <summary>
     ///     Determines whether the feature should be used.
     /// </summary>
+    [DoNotPrune]
     bool Enabled { get; set; }
 }

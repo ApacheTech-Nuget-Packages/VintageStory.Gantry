@@ -11,6 +11,7 @@ global using HarmonyLib;
 global using JetBrains.Annotations;
 
 global using Newtonsoft.Json;
+global using SmartAssembly.Attributes;
 
 global using ApacheTech.Common.Extensions.System;
 global using ApacheTech.Common.DependencyInjection.Abstractions;
