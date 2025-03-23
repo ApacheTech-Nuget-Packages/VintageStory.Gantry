@@ -5,6 +5,7 @@ namespace Gantry.Services.Network.Packets;
 /// <summary>
 ///     Sets a specific value within an instance.
 /// </summary>
+[DoNotPruneType]
 [ProtoContract]
 [ProtoInclude(03, typeof(SetPropertyPacket<bool>))]
 [ProtoInclude(04, typeof(SetPropertyPacket<byte>))]

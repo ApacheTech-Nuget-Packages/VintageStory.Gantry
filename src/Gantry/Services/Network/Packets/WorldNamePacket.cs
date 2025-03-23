@@ -6,6 +6,7 @@ namespace Gantry.Services.Network.Packets;
 ///     Represents a packet containing the world name.
 /// </summary>
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+[DoNotPruneType]
 public class WorldNamePacket
 {
     /// <summary>

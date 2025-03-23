@@ -7,6 +7,7 @@ namespace Gantry.Services.Network.Packets;
 ///     Represents a packet for teleporting within the world map.
 /// </summary>
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+[DoNotPruneType]
 public sealed class WorldMapTeleportPacket
 {
     /// <summary>

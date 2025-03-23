@@ -6,6 +6,7 @@ namespace Gantry.Services.Network.Packets;
 ///     Sets a specific value within an instance.
 /// </summary>
 [ProtoContract]
+[DoNotPruneType]
 public class SetPropertyPacket<T> : SetPropertyPacketBase
 {
     /// <summary>

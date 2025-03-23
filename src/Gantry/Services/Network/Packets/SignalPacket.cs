@@ -11,6 +11,7 @@ namespace Gantry.Services.Network.Packets;
 ///     Represents a generic signalling packet, used to raise an event for a change of state.
 /// </summary>
 [ProtoContract]
+[DoNotPruneType]
 public sealed class SignalPacket
 {
     /// <summary>
