@@ -13,7 +13,7 @@ public class ToastHudElement : HudElement
 
     private int Position { get; set; }
 
-    private static Queue<ToastHudElement> Active => IOC.Services.Resolve<ToastService>().Active;
+    private static Queue<ToastHudElement> Active => IOC.Services.GetRequiredService<ToastService>().Active;
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="ToastHudElement"/> class.

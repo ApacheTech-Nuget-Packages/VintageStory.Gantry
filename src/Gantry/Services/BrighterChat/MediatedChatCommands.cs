@@ -15,7 +15,7 @@ public static class MediatedChatCommands
         where TCommand : MediatedChatCommand, new()
     {
         var command = new TCommand { Args = args };
-        IOC.Brighter.Send(command);
+        IOC.CommandProcessor.Send(command);
         return command.Result;
     }
 
@@ -28,7 +28,7 @@ public static class MediatedChatCommands
     public static TextCommandResult Handle<TCommand>(TCommand command)
         where TCommand : MediatedChatCommand
     {
-        IOC.Brighter.Send(command);
+        IOC.CommandProcessor.Send(command);
         return command.Result;
     }
 }

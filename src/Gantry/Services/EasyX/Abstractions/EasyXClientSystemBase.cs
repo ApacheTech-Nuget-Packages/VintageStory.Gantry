@@ -19,7 +19,7 @@ public abstract class EasyXClientSystemBase<TClientSettings> : ClientModSystem
     {
         api.Network
             .GetOrRegisterDefaultChannel()
-            .RegisterMessageHandler<TClientSettings>(packet =>
+            .RegisterPacket<TClientSettings>(packet =>
             {
                 Settings = packet;
                 OnSettingsChanged();

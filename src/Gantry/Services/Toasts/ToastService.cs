@@ -41,8 +41,8 @@ public class ToastService : UniversalSubsystem, IToastService
         // Networking
         capi.Network
             .RegisterChannel(IToastService.ChannelName)
-            .RegisterMessageHandler<AssetLocation>(Show)
-            .RegisterMessageHandler<Toast>(Show);
+            .RegisterPacket<AssetLocation>(Show)
+            .RegisterPacket<Toast>(Show);
 
         // Listener
         _listenerId = capi.Event.RegisterGameTickListener(OnGameTick, 30);

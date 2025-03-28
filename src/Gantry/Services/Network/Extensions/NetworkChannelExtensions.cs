@@ -7,7 +7,7 @@ namespace Gantry.Services.Network.Extensions;
 /// <summary>
 ///     Extension methods for networking between client and server.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+[DoNotPruneType]
 public static class NetworkChannelExtensions
 {
     /// <summary>
@@ -127,7 +127,7 @@ public static class NetworkChannelExtensions
         }
         else
         {
-            G.Log($"No default client channel registered for mod '{modId}'.");
+            G.Logger.Error($"No default client channel registered for mod '{modId}'.");
         }
         return channel;
     }
@@ -346,9 +346,9 @@ public static class NetworkChannelExtensions
     /// <returns>
     ///     The client network channel with the registered handler.
     /// </returns>
-    public static IClientNetworkChannel RegisterMessageHandler<T>(this IClientNetworkChannel channel, NetworkServerMessageHandler<T> handler)
+    public static IClientNetworkChannel RegisterPacket<T>(this IClientNetworkChannel channel, NetworkServerMessageHandler<T> handler)
     {
-        G.Log($"Registering message handler for type '{typeof(T)}' on client channel.");
+        G.Log($"Registering duplex packet '{typeof(T)}' with handler on client channel.");
         return channel.RegisterMessageType<T>().SetMessageHandler(handler);
     }
 
@@ -361,9 +361,37 @@ public static class NetworkChannelExtensions
     /// <returns>
     ///     The server network channel with the registered handler.
     /// </returns>
-    public static IServerNetworkChannel RegisterMessageHandler<T>(this IServerNetworkChannel channel, NetworkClientMessageHandler<T> handler)
+    public static IServerNetworkChannel RegisterPacket<T>(this IServerNetworkChannel channel, NetworkClientMessageHandler<T> handler)
     {
-        G.Log($"Registering message handler for type '{typeof(T)}' on server channel.");
+        G.Log($"Registering duplex packet '{typeof(T)}' with handler on server channel.");
         return channel.RegisterMessageType<T>().SetMessageHandler(handler);
+    }
+
+    /// <summary>
+    ///     Registers a message handler for the specified message type on a server network channel.
+    /// </summary>
+    /// <typeparam name="T">The type of the message to handle.</typeparam>
+    /// <param name="channel">The server network channel to register the handler with.</param>
+    /// <returns>
+    ///     The server network channel with the registered handler.
+    /// </returns>
+    public static IClientNetworkChannel RegisterPacket<T>(this IClientNetworkChannel channel)
+    {
+        G.Log($"Registering simplex packet '{typeof(T)}' on client channel.");
+        return channel.RegisterMessageType<T>();
+    }
+
+    /// <summary>
+    ///     Registers a message handler for the specified message type on a server network channel.
+    /// </summary>
+    /// <typeparam name="T">The type of the message to handle.</typeparam>
+    /// <param name="channel">The server network channel to register the handler with.</param>
+    /// <returns>
+    ///     The server network channel with the registered handler.
+    /// </returns>
+    public static IServerNetworkChannel RegisterPacket<T>(this IServerNetworkChannel channel)
+    {
+        G.Log($"Registering simplex packet '{typeof(T)}' on server channel.");
+        return channel.RegisterMessageType<T>();
     }
 }
