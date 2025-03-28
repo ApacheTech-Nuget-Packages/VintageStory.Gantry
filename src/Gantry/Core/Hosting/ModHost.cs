@@ -86,7 +86,7 @@ public abstract class ModHost : GantrySubsytemHost
             .With(ioc => ConfigureBrighter(ioc, sapi))
             .With(ioc => ConfigureUniversalModServices(ioc, sapi))
             .With(ioc => ConfigureServerModServices(ioc, sapi));
-        G.Logger.VerboseDebug("ModHost: Registered ModHost Services.");
+        G.Log("ModHost: Registered ModHost Services.");
 
         //  4. Register all features that need registering. 
         _universalServiceRegistrars.ForEach(x => x.ConfigureUniversalModServices(_services, sapi));
@@ -246,10 +246,10 @@ public abstract class ModHost : GantrySubsytemHost
     public override void Dispose()
     {
         G.Logger.VerboseDebug("Disposing FileSystem Service");
-        IOC.Services.Resolve<IHarmonyPatchingService>().Dispose();
+        IOC.Services.GetRequiredService<IHarmonyPatchingService>().Dispose();
 
         G.Logger.VerboseDebug("Disposing Harmony Service");
-        IOC.Services.Resolve<IFileSystemService>().Dispose();
+        IOC.Services.GetRequiredService<IFileSystemService>().Dispose();
 
         G.Logger.VerboseDebug("Disposing IOC Provider");
         _services.Clear();

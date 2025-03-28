@@ -50,7 +50,7 @@ public static class RenderApiExtensions
             .ToNormalisedRgba()
             .ToRgbaVec4F();
 
-        var mapManager = IOC.Services.Resolve<WorldMapManager>();
+        var mapManager = IOC.Services.GetRequiredService<WorldMapManager>();
 
         // Coordinate Translation.
         var startViewPos = Vec2f.Zero;

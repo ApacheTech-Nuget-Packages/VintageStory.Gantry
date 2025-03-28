@@ -39,7 +39,7 @@ public static class IOC
     /// <summary>
     ///     Universal access to the Brighter command processor.
     /// </summary>
-    public static IAmACommandProcessor Brighter => Services.GetRequiredService<IAmACommandProcessor>();
+    public static IAmACommandProcessor CommandProcessor => Services.GetRequiredService<IAmACommandProcessor>();
 
     internal static void Dispose()
     {

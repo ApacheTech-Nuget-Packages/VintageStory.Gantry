@@ -18,6 +18,7 @@ namespace Gantry.Core;
 /// <summary>
 ///     Globally accessible utilities for Gantry.
 /// </summary>
+[DoNotPruneType]
 public static class G
 {
     #region Logging

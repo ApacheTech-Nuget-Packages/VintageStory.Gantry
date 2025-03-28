@@ -1,9 +1,6 @@
 ﻿#nullable enable
-using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core.Diagnostics;
 using Vintagestory.API.Server;
 using Vintagestory.Server;
-using static OpenTK.Graphics.OpenGL.GL;
 
 #pragma warning disable CS8603 // Possible null reference return.
 
@@ -15,7 +12,7 @@ namespace Gantry.Core;
 /// <remarks>
 ///     Use api.UseGantry(options) to configure this helper before use.
 /// </remarks>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
+[DoNotPruneType]
 public static class ApiEx
 {
     private static AsyncLocal<ClientMain?> _clientMain = new();

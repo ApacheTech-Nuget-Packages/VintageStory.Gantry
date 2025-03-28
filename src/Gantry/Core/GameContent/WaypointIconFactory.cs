@@ -5,7 +5,7 @@
 /// </summary>
 public static class WaypointIconFactory
 {
-    private static readonly Dictionary<string, LoadedTexture> Store = new();
+    private static readonly Dictionary<string, LoadedTexture> _store = new();
 
     /// <summary>
     ///     Creates or retrieves a waypoint icon texture associated with the specified key.
@@ -14,9 +14,9 @@ public static class WaypointIconFactory
     /// <returns>The <see cref="LoadedTexture"/> associated with the specified key.</returns>
     public static LoadedTexture Create(string key)
     {
-        if (Store.TryGetValue(key, out var value)) return value;
-        value = IOC.Services.Resolve<WaypointMapLayer>().WaypointIcons[key]();
-        Store.Add(key, value);
+        if (_store.TryGetValue(key, out var value)) return value;
+        value = IOC.Services.GetRequiredService<WaypointMapLayer>().WaypointIcons[key]();
+        _store.Add(key, value);
         return value;
     }
 
@@ -30,12 +30,12 @@ public static class WaypointIconFactory
     {
         try
         {
-            if (Store.TryGetValue(key, out loadedTexture)) return true;
-            var waypointMapLayer = IOC.Services.Resolve<WaypointMapLayer>();
+            if (_store.TryGetValue(key, out loadedTexture)) return true;
+            var waypointMapLayer = IOC.Services.GetRequiredService<WaypointMapLayer>();
             if (waypointMapLayer.WaypointIcons.TryGetValue(key, out var factory))
             {
                 loadedTexture = factory();
-                Store.Add(key, loadedTexture);
+                _store.Add(key, loadedTexture);
                 return true;
             }
         }
@@ -57,7 +57,7 @@ public static class WaypointIconFactory
         var waypointMapLayer = mapManager.WaypointMapLayer();
         foreach (var (iconName, factory) in waypointMapLayer.WaypointIcons)
         {
-            Store.Add(iconName, factory());
+            _store.Add(iconName, factory());
         }
     }
 
@@ -66,6 +66,6 @@ public static class WaypointIconFactory
     /// </summary>
     public static void Dispose()
     {
-        Store.PurgeValues();
+        _store.PurgeValues();
     }
 }
