@@ -12,7 +12,7 @@ public class GantryPlayersArgParser(string argName, ICoreAPI api, bool isMandato
     /// <summary>
     ///     Gets the search term used for filtering players.
     /// </summary>
-    public string SearchTerm { get; private set; }
+    public string SearchTerm { get; private set; } = string.Empty;
 
     /// <inheritdoc />
     public override void PreProcess(TextCommandCallingArgs args)

@@ -95,14 +95,9 @@ public static class FileInfoExtensions
     /// <returns>An instance of type <see cref="IEnumerable{TModel}"/>, populated with data from this file.</returns>
     public static IEnumerable<TModel> ParseAsMany<TModel>(this FileInfo fileInfo) where TModel : class, new()
     {
-        try
-        {
-            return JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(fileInfo.FullName));
-        }
-        catch (Exception)
-        {
-            return default;
-        }
+        var resource = JsonConvert.DeserializeObject<IEnumerable<TModel>>(File.ReadAllText(fileInfo.FullName))
+        ?? throw new JsonSerializationException();
+        return resource;
     }
 
     /// <summary>

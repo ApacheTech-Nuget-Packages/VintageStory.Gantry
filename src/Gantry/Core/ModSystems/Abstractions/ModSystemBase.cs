@@ -14,7 +14,7 @@ public abstract class ModSystemBase() : ModSystem
     ///     Common API Components that are available on the server and the client.<br/>
     ///     Cast to ICoreServerAPI, or ICoreClientAPI, to access side specific features.
     /// </summary>
-    public ICoreAPI UApi;
+    public ICoreAPI UApi = null!;
 
     /// <summary>
     ///     Called during initial mod loading, called before any mod receives the call to Start().

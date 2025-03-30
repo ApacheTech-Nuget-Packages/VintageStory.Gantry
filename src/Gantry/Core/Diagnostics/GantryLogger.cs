@@ -54,7 +54,7 @@ public abstract class GantryLogger : Logger
     /// <param name="side">The app side of the log file.</param>
     /// <returns>The file path for the specified log type.</returns>
     protected static string GetLogFilePath(EnumLogType logType, EnumAppSide side)
-        => Path.Combine(ModPaths.LogDirectory.FullName, $"{side}-{logType}.log".ToLowerInvariant());
+        => Path.Combine(G.LogDirectory.FullName, $"{side}-{logType}.log".ToLowerInvariant());
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="GantryLogger"/> class.

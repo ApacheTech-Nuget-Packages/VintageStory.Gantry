@@ -17,7 +17,7 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     /// <param name="capi">The capi.</param>
     /// <param name="settings">The settings.</param>
     /// <param name="featureName">Name of the feature.</param>
-    protected AutomaticFeatureSettingsDialogue(ICoreClientAPI capi, TFeatureSettings settings, string featureName = null)
+    protected AutomaticFeatureSettingsDialogue(ICoreClientAPI capi, TFeatureSettings settings, string? featureName = null)
         : base(capi, settings, featureName)
     {
     }

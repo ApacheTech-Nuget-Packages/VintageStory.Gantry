@@ -1,4 +1,5 @@
 ﻿using Gantry.Core.Diagnostics;
+using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.Extensions;
 using Gantry.Services.FileSystem.v2.Abstractions;
 using Gantry.Services.FileSystem.v2.DataStructures;
@@ -35,16 +36,12 @@ public class FileProvider : IFileProvider
     /// </summary>
     /// <param name="fileName">The name of the file to get.</param>
     /// <param name="scope">The scope of the file to get.</param>
-    public FileInfo GetFile(string fileName, FileScope scope)
+    public FileInfo GetFile(string? fileName, FileScope scope)
     {
         var descriptor = _fileDescriptors
             .Where(p => p.Scope == scope)
-            .SingleOrDefault(p => p.FileName == fileName);
-
-        if (descriptor is null)
-        {
-            throw new KeyNotFoundException($"No file named `{fileName}`, of scope `{scope}`, has been registered.");
-        }
+            .SingleOrDefault(p => p.FileName == fileName) 
+                ?? throw new KeyNotFoundException($"No file named `{fileName}`, of scope `{scope}`, has been registered.");
         return descriptor.File;
     }
 
@@ -55,18 +52,13 @@ public class FileProvider : IFileProvider
     /// <param name="scope">The scope of the file to get.</param>
     /// <exception cref="KeyNotFoundException">No file named `{fileName}`, of scope `{scope}`, has been registered.</exception>
     /// <exception cref="GantryException">No wrapper found for file extension, `{file.Extension}`</exception>
-    T IFileProvider.Wrap<T>(string fileName, FileScope scope)
+    T IFileProvider.Wrap<T>(string? fileName, FileScope scope)
     {
 
         var descriptor = _fileDescriptors
             .Where(p => p.Scope == scope)
-            .SingleOrDefault(p => p.FileName == fileName);
-
-        if (descriptor is null)
-        {
-            throw new KeyNotFoundException($"No file named `{fileName}`, of scope `{scope}`, has been registered.");
-        }
-
+            .SingleOrDefault(p => p.FileName == fileName) 
+                ?? throw new KeyNotFoundException($"No file named `{fileName}`, of scope `{scope}`, has been registered.");
         var file = descriptor.File;
 
         foreach (var wrapper in _wrappers)

@@ -1,4 +1,6 @@
-﻿namespace Gantry.Services.FileSystem.v2.DataStructures;
+﻿using Gantry.Services.FileSystem.Enums;
+
+namespace Gantry.Services.FileSystem.v2.DataStructures;
 
 /// <summary>
 ///     Describes a file with its scope, and <see cref="FileInfo"/> representation.
@@ -26,10 +28,11 @@ public class FileDescriptor
     /// </summary>
     public FileInfo File { get; }
 
-    internal FileDescriptor(string fileName, FileScope scope)
+    internal FileDescriptor(string fileName, FileScope scope, bool gantryFile = false)
     {
         FileName = fileName;
         Scope = scope;
+        Path = ModPaths.GetScopedPath(fileName, scope, gantryFile);
         File = new FileInfo(Path);
     }
 }

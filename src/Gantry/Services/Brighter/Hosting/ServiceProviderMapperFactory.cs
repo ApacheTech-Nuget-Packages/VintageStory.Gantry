@@ -26,6 +26,9 @@ internal class ServiceProviderMapperFactory : IAmAMessageMapperFactory
     /// <returns></returns>
     public IAmAMessageMapper Create(Type messageMapperType)
     {
-        return (IAmAMessageMapper)_serviceProvider.GetService(messageMapperType);
+        var service = _serviceProvider.GetService(messageMapperType) 
+            ?? throw new ArgumentNullException(nameof(messageMapperType));
+
+        return (IAmAMessageMapper)service;
     }
 }

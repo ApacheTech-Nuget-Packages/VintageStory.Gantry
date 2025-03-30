@@ -51,7 +51,7 @@ public class ClientSystemAsyncActions : ClientSystem, IAsyncActions
     /// <inheritdoc cref="ClientSystem.Dispose" />
     public void Dispose(ICoreClientAPI capi)
     {
-        Dispose(capi.World as ClientMain);
+        Dispose((ClientMain)capi.World);
     }
 
     /// <inheritdoc cref="ClientSystem.Dispose" />

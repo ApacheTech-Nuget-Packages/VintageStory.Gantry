@@ -22,7 +22,7 @@ public interface IObservableObject
     /// <summary>
     ///     Occurs when a property value is changed, within the observed POCO class.
     /// </summary>
-    Action<object, string> OnObjectPropertyChanged { get; set; }
+    Action<object, string>? OnObjectPropertyChanged { get; set; }
 
     /// <summary>
     ///     Removes the postfix patches from the observed item.

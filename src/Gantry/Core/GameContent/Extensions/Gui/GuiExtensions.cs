@@ -12,7 +12,7 @@ public static class GuiExtensions
     /// <param name="dialogue"></param>
     /// <param name="name"></param>
     /// <returns></returns>
-    public static T GetElement<T>(this GuiDialog dialogue, string name) where T : GuiElement
+    public static T? GetElement<T>(this GuiDialog dialogue, string name) where T : GuiElement
     {
         foreach (var composer in dialogue.Composers.Values)
         {

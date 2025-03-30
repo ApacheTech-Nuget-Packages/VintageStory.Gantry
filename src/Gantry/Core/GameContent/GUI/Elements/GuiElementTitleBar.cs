@@ -9,12 +9,12 @@ namespace Gantry.Core.GameContent.GUI.Elements;
 /// </summary>
 public class GuiElementTitleBar : GuiElementTextBase
 {
-    private readonly Action _onClose;
+    private readonly Action? _onClose;
 
     private LoadedTexture _closeIconHoverTexture;
-    private Rectangled _closeIconRect;
+    private Rectangled? _closeIconRect;
 
-    private const int UnscaledCloseIconSize = 15;
+    private const int _unscaledCloseIconSize = 15;
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="GuiElementTitleBar"/> class.
@@ -24,7 +24,7 @@ public class GuiElementTitleBar : GuiElementTextBase
     /// <param name="onClose">The action to perform when the close button is pressed.</param>
     /// <param name="font">The font to use to display the text.</param>
     /// <param name="bounds">The bounds to render the title bar within.</param>
-    public GuiElementTitleBar(ICoreClientAPI capi, string text, Action onClose = null, CairoFont font = null, ElementBounds bounds = null) : base(capi, text, font, bounds)
+    public GuiElementTitleBar(ICoreClientAPI capi, string text, Action? onClose = null, CairoFont? font = null, ElementBounds? bounds = null) : base(capi, text, font, bounds)
     {
         _closeIconHoverTexture = new LoadedTexture(capi);
         _onClose = onClose;
@@ -70,11 +70,11 @@ public class GuiElementTitleBar : GuiElementTextBase
         Font.SetupContext(ctx);
         DrawTextLineAt(ctx, text, scaled(GuiStyle.ElementToDialogPadding), (Bounds.InnerHeight - Font.GetFontExtents().Height) / 2 + scaled(2));
 
-        var crossSize = scaled(UnscaledCloseIconSize);
+        var crossSize = scaled(_unscaledCloseIconSize);
         var crossX = Bounds.drawX + Bounds.OuterWidth - crossSize - scaled(12);
         var iconY = Bounds.drawY + scaled(7);
         var crossWidth = scaled(2);
-        var menuSize = scaled(UnscaledCloseIconSize + 2);
+        var menuSize = scaled(_unscaledCloseIconSize + 2);
 
         _closeIconRect = new Rectangled(Bounds.OuterWidth - crossSize - scaled(12), scaled(5), menuSize, menuSize);
 
@@ -95,6 +95,7 @@ public class GuiElementTitleBar : GuiElementTextBase
     /// <param name="deltaTime">The change in time since the last time this method was called.</param>
     public override void RenderInteractiveElements(float deltaTime)
     {
+        if (_closeIconRect is null) return;
         var mouseX = api.Input.MouseX;
         var mouseY = api.Input.MouseY;
 
@@ -112,6 +113,7 @@ public class GuiElementTitleBar : GuiElementTextBase
     /// <param name="args">The arguments.</param>
     public override void OnMouseUpOnElement(ICoreClientAPI capi, MouseEvent args)
     {
+        if (_closeIconRect is null) return;
         var mouseX = capi.Input.MouseX;
         var mouseY = capi.Input.MouseY;
         if (!_closeIconRect.PointInside(mouseX - Bounds.absX, mouseY - Bounds.absY)) return;
@@ -131,7 +133,7 @@ public class GuiElementTitleBar : GuiElementTextBase
 
     private void ComposeHoverIcons()
     {
-        var crossSize = scaled(UnscaledCloseIconSize);
+        var crossSize = scaled(_unscaledCloseIconSize);
         const int crossWidth = 2;
 
         var surface = new ImageSurface(Format.Argb32, (int)crossSize + 4, (int)crossSize + 4);

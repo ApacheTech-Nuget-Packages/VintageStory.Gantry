@@ -21,7 +21,7 @@ internal static class SubsystemExtensions
             .SelectMany(assembly => assembly.GetTypes())
             .Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(GantrySubsystem)))
             .Select(p => Activator.CreateInstance(p) as GantrySubsystem)
-            .Where(p => p.Enabled);
+            .Where(p => p is not null && p.Enabled)!;
 
     internal static IEnumerable<GantrySubsystem> For(this IEnumerable<GantrySubsystem> subsystems, EnumAppSide side) 
         => subsystems.Where(p => p.ShouldLoad(side)).OrderBy(p => p.ExecuteOrder());

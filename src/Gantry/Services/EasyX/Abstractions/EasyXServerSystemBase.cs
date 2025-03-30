@@ -32,7 +32,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
     /// <summary>
     ///     
     /// </summary>
-    protected IServerNetworkChannel ServerChannel;
+    protected IServerNetworkChannel? ServerChannel { get; private set; }
 
     /// <summary>
     ///     
@@ -262,7 +262,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
     /// <summary>
     ///     Base Call Handler
     /// </summary>
-    protected TextCommandResult OnChange<T>(TextCommandCallingArgs args, string propertyName, Action<T> validate = null)
+    protected TextCommandResult OnChange<T>(TextCommandCallingArgs args, string propertyName, Action<T?>? validate = null)
     {
         var value = (args.Parsers[0].GetValue().To<T>() ?? default).With(validate);
         Settings.SetProperty(propertyName, value);
@@ -297,7 +297,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         var result = players.First();
         var existingPlayer = list.SingleOrDefault(p => p.Id == result.Uid);
         var isRemoved = existingPlayer is not null && list.Remove(existingPlayer);
-        if (!isRemoved) list.Add(result);
+        if (!isRemoved) list.Add(result!);
         ModSettings.World.Save(Settings);
         ServerChannel?.BroadcastUniquePacket(GeneratePacket);
         var message = LangEx.EmbeddedFeatureString("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);

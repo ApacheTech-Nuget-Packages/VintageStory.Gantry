@@ -11,7 +11,7 @@ namespace Gantry.Core.Hosting.Extensions;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal static class ActivatorEx
 {
-    private static readonly MethodInfo GetServiceInfo =
+    private static readonly MethodInfo _getServiceInfo =
         GetMethodInfo<System.Func<IServiceProvider, Type, Type, bool, object>>((sp, t, r, c) => GetService(sp, t, r, c));
 
     /// <summary>
@@ -26,7 +26,7 @@ internal static class ActivatorEx
         var bestLength = -1;
         var seenPreferred = false;
 
-        ConstructorMatcher bestMatcher = null;
+        ConstructorMatcher? bestMatcher = null;
 
         if (!instanceType.GetTypeInfo().IsAbstract)
         {
@@ -75,10 +75,8 @@ internal static class ActivatorEx
     /// <typeparam name="T">The type of instance to create.</typeparam>
     /// <param name="args">The arguments to pass to the constructor.</param>
     /// <returns>T.</returns>
-    public static T CreateInstance<T>(params object[] args)
-    {
-        return (T)Activator.CreateInstance(typeof(T), args: args);
-    }
+    public static T? CreateInstance<T>(params object?[]? args) 
+        => (T?)Activator.CreateInstance(typeof(T), args);
 
     /// <summary>
     ///     Create a delegate that will instantiate a type with constructor arguments provided directly and/or from an instance of <see cref="IServiceProvider"/>.
@@ -149,16 +147,18 @@ internal static class ActivatorEx
     private static object GetService(IServiceProvider sp, Type type, Type requiredBy, bool isDefaultParameterRequired)
     {
         var service = sp.GetService(type);
-        if (service is not null || isDefaultParameterRequired) return service;
+        if (service is not null || isDefaultParameterRequired) return service!;
         throw new InvalidOperationException($"Unable to resolve service for type '{type}' while attempting to activate '{requiredBy}'.");
     }
 
     private static Expression BuildFactoryExpression(
-        ConstructorInfo constructor,
-        IReadOnlyList<int?> parameterMap,
+        ConstructorInfo? constructor,
+        IReadOnlyList<int?>? parameterMap,
         Expression serviceProvider,
         Expression factoryArgumentArray)
     {
+        ArgumentNullException.ThrowIfNull(constructor, nameof(constructor));
+        ArgumentNullException.ThrowIfNull(parameterMap, nameof(parameterMap));
         var constructorParameters = constructor.GetParameters();
         var constructorArguments = new Expression[constructorParameters.Length];
 
@@ -178,7 +178,7 @@ internal static class ActivatorEx
                     Expression.Constant(parameterType, typeof(Type)),
                     Expression.Constant(constructor.DeclaringType, typeof(Type)),
                     Expression.Constant(hasDefaultValue) };
-                constructorArguments[i] = Expression.Call(GetServiceInfo, parameterTypeExpression);
+                constructorArguments[i] = Expression.Call(_getServiceInfo, parameterTypeExpression);
             }
 
             // Support optional constructor arguments by passing in the default value
@@ -198,15 +198,14 @@ internal static class ActivatorEx
     private static void FindApplicableConstructor(
         Type instanceType,
         Type[] argumentTypes,
-        out ConstructorInfo matchingConstructor,
-        out int?[] parameterMap)
+        out ConstructorInfo? matchingConstructor,
+        out int?[]? parameterMap)
     {
         matchingConstructor = null;
         parameterMap = null;
 
         if (TryFindPreferredConstructor(instanceType, argumentTypes, ref matchingConstructor, ref parameterMap) ||
-            TryFindMatchingConstructor(instanceType, argumentTypes, ref matchingConstructor,
-                ref parameterMap)) return;
+            TryFindMatchingConstructor(instanceType, argumentTypes, ref matchingConstructor, ref parameterMap)) return;
         var message = $"A suitable constructor for type '{instanceType}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.";
         throw new InvalidOperationException(message);
     }
@@ -215,8 +214,8 @@ internal static class ActivatorEx
     private static bool TryFindMatchingConstructor(
         Type instanceType,
         Type[] argumentTypes,
-        ref ConstructorInfo matchingConstructor,
-        ref int?[] parameterMap)
+        ref ConstructorInfo? matchingConstructor,
+        ref int?[]? parameterMap)
     {
         foreach (var constructor in instanceType.GetTypeInfo().DeclaredConstructors)
         {
@@ -243,8 +242,8 @@ internal static class ActivatorEx
     private static bool TryFindPreferredConstructor(
         Type instanceType,
         Type[] argumentTypes,
-        ref ConstructorInfo matchingConstructor,
-        ref int?[] parameterMap)
+        ref ConstructorInfo? matchingConstructor,
+        ref int?[]? parameterMap)
     {
         var seenPreferred = false;
         foreach (var constructor in instanceType.GetTypeInfo().DeclaredConstructors)

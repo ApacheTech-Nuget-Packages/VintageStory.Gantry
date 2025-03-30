@@ -20,7 +20,7 @@ internal class ServiceProviderHandlerFactory : IAmAHandlerFactorySync, IAmAHandl
     public ServiceProviderHandlerFactory(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        var options = (IBrighterOptions)serviceProvider.GetService(typeof(IBrighterOptions));
+        var options = (IBrighterOptions?)serviceProvider.GetService(typeof(IBrighterOptions));
         if (options == null) _isTransient = true; else _isTransient = options.HandlerLifetime == ServiceLifetime.Transient;
     }
 

@@ -1,7 +1,6 @@
 ﻿using ApacheTech.Common.BrighterSlim;
 using Gantry.Core.Annotation;
 using Gantry.Services.Brighter.Filters;
-using SmartAssembly.Attributes;
 using Vintagestory.API.Server;
 using Vintagestory.Server;
 

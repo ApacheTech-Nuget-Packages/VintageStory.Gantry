@@ -7,13 +7,13 @@ namespace Gantry.Services.Network.Packets;
 /// </summary>
 [ProtoContract]
 [DoNotPruneType]
-public class SetPropertyPacket<T> : SetPropertyPacketBase
+public class SetPropertyPacket<T> : SetPropertyPacketBase where T : notnull
 {
     /// <summary>
     ///     The value to set.
     /// </summary>
     [ProtoMember(1)]
-    public new T Value { get; set; }
+    public new T Value { get; set; } = default!;
 
     /// <summary>
     ///     The boxable value to set.

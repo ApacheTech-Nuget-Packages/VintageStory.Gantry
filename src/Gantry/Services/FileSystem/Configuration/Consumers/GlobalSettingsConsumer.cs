@@ -7,7 +7,7 @@
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class GlobalSettingsConsumer<TSettings> : ISettingsConsumer where TSettings : FeatureSettings<TSettings>, new()
 {
-    private static TSettings _settings;
+    private static TSettings? _settings;
     
     /// <summary>
     ///     Gets or sets the settings.
@@ -15,7 +15,7 @@ public abstract class GlobalSettingsConsumer<TSettings> : ISettingsConsumer wher
     /// <value>
     ///     The settings.
     /// </value>
-    protected internal static TSettings Settings => _settings ??= ModSettings.Global?.Feature<TSettings>();
+    protected internal static TSettings? Settings => _settings ??= ModSettings.Global?.Feature<TSettings>();
 
     /// <summary>
     ///     Gets or sets the name of the feature.

@@ -45,10 +45,10 @@ public static class AppSideExtensions
         switch (api.Side)
         {
             case EnumAppSide.Server:
-                serverAction(api as ICoreServerAPI);
+                serverAction((ICoreServerAPI)api);
                 break;
             case EnumAppSide.Client:
-                clientAction(api as ICoreClientAPI);
+                clientAction((ICoreClientAPI)api);
                 break;
             case EnumAppSide.Universal:
                 throw new InvalidOperationException("Cannot determine app-side. Enum evaluated to 'Universal'.");
@@ -81,9 +81,34 @@ public static class AppSideExtensions
     /// <param name="side">The app side in question.</param>
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
-    public static T ReturnOneOf<T>(this EnumAppSide side, System.Func<T> clientAction, System.Func<T> serverAction)
+    public static T? ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction)
     {
-        return (T)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke();
+        return (T?)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke();
+    }
+
+    /// <summary>
+    ///     Executes a side-dependent function based on whether the API instance is client or server.
+    /// </summary>
+    /// <typeparam name="T">The return type of the function.</typeparam>
+    /// <param name="api">The API instance used to determine the execution side.</param>
+    /// <param name="cf">The function to execute when on the client side.</param>
+    /// <param name="sf">The function to execute when on the server side.</param>
+    /// <returns>The result of the executed function.</returns>
+    /// <remarks>
+    ///     This method ensures that the appropriate function is invoked based on the execution context.
+    ///     If the API is neither client nor server, an exception is thrown.
+    /// </remarks>
+    /// <exception cref="InvalidOperationException">
+    ///     Thrown when the API is not specifically client or server.
+    /// </exception>
+    public static T Invoke<T>(this ICoreAPI api, System.Func<ICoreClientAPI, T> cf, System.Func<ICoreServerAPI, T> sf)
+    {
+        return api.Side switch
+        {
+            EnumAppSide.Server => sf((ICoreServerAPI)api),
+            EnumAppSide.Client => cf((ICoreClientAPI)api),
+            _ => throw new InvalidOperationException("Cannot invoke side-dependent function on universal API."),
+        };
     }
 
     /// <summary>
@@ -96,9 +121,9 @@ public static class AppSideExtensions
     /// <param name="clientAction">The client action.</param>
     /// <param name="serverAction">The server action.</param>
     /// <param name="parameter">The parameter to pass to the invoked action.</param>
-    public static T ReturnOneOf<T>(this EnumAppSide side, System.Func<T> clientAction, System.Func<T> serverAction, T parameter)
+    public static T? ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction, T parameter)
     {
-        return (T)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke(parameter);
+        return (T?)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke(parameter);
     }
 
     /// <summary>
@@ -113,10 +138,10 @@ public static class AppSideExtensions
         switch (api.Side)
         {
             case EnumAppSide.Server:
-                serverApi = api as ICoreServerAPI;
+                serverApi = (ICoreServerAPI)api;
                 break;
             case EnumAppSide.Client:
-                clientApi = api as ICoreClientAPI;
+                clientApi = (ICoreClientAPI)api;
                 break;
             case EnumAppSide.Universal:
                 break;

@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using ApacheTech.Common.Extensions.Harmony;
-using SmartAssembly.Attributes;
 
 // ReSharper disable StaticMemberInGenericType
 // ReSharper disable SuspiciousTypeConversion.Global
@@ -18,8 +17,8 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures;
 public class ObservableObject<T> : IObservableObject where T: class, new()
 {
     private readonly Harmony _harmony;
-    private static T _observedInstance;
-    private static Action<object, string> _onObjectPropertyChanged;
+    private static T _observedInstance = default!;
+    private static Action<object, string>? _onObjectPropertyChanged;
     private static bool _active;
         
     /// <summary>
@@ -104,7 +103,7 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     /// <summary>
     ///     Occurs when a property value is changed, within the observed POCO class.
     /// </summary>
-    public Action<object, string> OnObjectPropertyChanged
+    public Action<object, string>? OnObjectPropertyChanged
     {
         get => _onObjectPropertyChanged;
         set => _onObjectPropertyChanged = value;
@@ -114,7 +113,7 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     private static void Patch_Property_SetMethod_Postfix(MemberInfo __originalMethod)
     {
         if (!_active) return;
-        var propertyName = __originalMethod.Name.Remove(0, 4);
-        _onObjectPropertyChanged(_observedInstance, propertyName);
+        var propertyName = __originalMethod.Name[4..];
+        _onObjectPropertyChanged?.Invoke(_observedInstance, propertyName);
     }
 }

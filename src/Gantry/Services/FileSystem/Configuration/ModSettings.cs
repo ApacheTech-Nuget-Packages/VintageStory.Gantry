@@ -1,6 +1,8 @@
 ﻿using Gantry.Services.FileSystem.Abstractions.Contracts;
 using Gantry.Services.FileSystem.Enums;
 
+#pragma warning disable IDE0060 // Remove unused parameter
+
 namespace Gantry.Services.FileSystem.Configuration;
 
 /// <summary>
@@ -12,73 +14,73 @@ public static class ModSettings
     ///     The global mod settings; these settings will persist through each gameworld.
     /// </summary>
     /// <value>The global settings.</value>
-    internal static IJsonSettingsFile ClientGlobal { get; set; }
+    internal static IJsonSettingsFile? ClientGlobal { get; set; }
 
     /// <summary>
     ///     The per-world mod settings; these settings can change within each gameworld.
     /// </summary>
     /// <value>The per-world settings.</value>
-    internal static IJsonSettingsFile ClientWorld { get; set; }
+    internal static IJsonSettingsFile? ClientWorld { get; set; }
 
     /// <summary>
     ///     The global mod settings; these settings will persist through each gameworld.
     /// </summary>
     /// <value>The global settings.</value>
-    internal static IJsonSettingsFile GantryServerGlobal { get; set; }
+    internal static IJsonSettingsFile? GantryServerGlobal { get; set; }
 
     /// <summary>
     ///     The per-world mod settings; these settings can change within each gameworld.
     /// </summary>
     /// <value>The per-world settings.</value>
-    internal static IJsonSettingsFile GantryServerWorld { get; set; }
+    internal static IJsonSettingsFile? GantryServerWorld { get; set; }
 
     /// <summary>
     ///     The global mod settings; these settings will persist through each gameworld.
     /// </summary>
     /// <value>The global settings.</value>
-    internal static IJsonSettingsFile GantryClientGlobal { get; set; }
+    internal static IJsonSettingsFile? GantryClientGlobal { get; set; }
 
     /// <summary>
     ///     The per-world mod settings; these settings can change within each gameworld.
     /// </summary>
     /// <value>The per-world settings.</value>
-    internal static IJsonSettingsFile GantryClientWorld { get; set; }
+    internal static IJsonSettingsFile? GantryClientWorld { get; set; }
 
     /// <summary>
     ///     The global mod settings; these settings will persist through each gameworld.
     /// </summary>
     /// <value>The global settings.</value>
-    internal static IJsonSettingsFile ServerGlobal { get; set; }
+    internal static IJsonSettingsFile? ServerGlobal { get; set; }
 
     /// <summary>
     ///     The per-world mod settings; these settings can change within each gameworld.
     /// </summary>
     /// <value>The per-world settings.</value>
-    internal static IJsonSettingsFile ServerWorld { get; set; }
+    internal static IJsonSettingsFile? ServerWorld { get; set; }
 
     /// <summary>
     ///     The per-world mod settings; these settings can change within each gameworld.
     /// </summary>
     /// <value>The per-world settings.</value>
-    internal static IJsonSettingsFile GantryWorld => ApiEx.OneOf(GantryClientWorld, GantryServerWorld);
+    internal static IJsonSettingsFile? GantryWorld => ApiEx.OneOf(GantryClientWorld, GantryServerWorld);
 
     /// <summary>
     ///     The global mod settings; these settings will persist through each gameworld.
     /// </summary>
     /// <value>The global settings.</value>
-    internal static IJsonSettingsFile GantryGlobal => ApiEx.OneOf(GantryClientGlobal, GantryServerGlobal);
+    internal static IJsonSettingsFile? GantryGlobal => ApiEx.OneOf(GantryClientGlobal, GantryServerGlobal);
 
     /// <summary>
     ///     The global mod settings; these settings will persist through each gameworld.
     /// </summary>
     /// <value>The global settings.</value>
-    public static IJsonSettingsFile Global => ApiEx.OneOf(ClientGlobal, ServerGlobal);
+    public static IJsonSettingsFile Global => ApiEx.OneOf(ClientGlobal, ServerGlobal)!;
 
     /// <summary>
     ///     The per-world mod settings; these settings can change within each gameworld.
     /// </summary>
     /// <value>The per-world settings.</value>
-    public static IJsonSettingsFile World => ApiEx.OneOf(ClientWorld, ServerWorld);
+    public static IJsonSettingsFile World => ApiEx.OneOf(ClientWorld, ServerWorld)!;
 
     /// <summary>
     ///     The mod settings for a specific <see cref="FileScope"/>.

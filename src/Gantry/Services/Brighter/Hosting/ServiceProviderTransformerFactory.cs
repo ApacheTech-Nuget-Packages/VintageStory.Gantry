@@ -26,9 +26,9 @@ internal class ServiceProviderTransformerFactory : IAmAMessageTransformerFactory
     /// </summary>
     /// <param name="transformerType">The type of transformer to create</param>
     /// <returns></returns>
-    public IAmAMessageTransform Create(Type transformerType)
+    public IAmAMessageTransform? Create(Type transformerType)
     {
-        return (IAmAMessageTransform)_serviceProvider.GetService(transformerType);
+        return (IAmAMessageTransform?)_serviceProvider.GetService(transformerType);
     }
 
     /// <summary>

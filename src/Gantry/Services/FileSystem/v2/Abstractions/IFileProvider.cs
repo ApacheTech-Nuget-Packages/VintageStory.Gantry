@@ -1,4 +1,5 @@
 ﻿using Gantry.Core.Diagnostics;
+using Gantry.Services.FileSystem.Enums;
 using Gantry.Services.FileSystem.v2.DataStructures;
 
 namespace Gantry.Services.FileSystem.v2.Abstractions;

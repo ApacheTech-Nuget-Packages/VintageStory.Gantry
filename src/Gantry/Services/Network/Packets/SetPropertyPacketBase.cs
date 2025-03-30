@@ -38,7 +38,7 @@ public abstract class SetPropertyPacketBase
     ///     The name of the property to set.
     /// </summary>
     [ProtoMember(2)]
-    public string PropertyName { get; set; }
+    public string PropertyName { get; set; } = string.Empty;
 
     /// <summary>
     ///     The boxable value to set.
@@ -50,5 +50,5 @@ public abstract class SetPropertyPacketBase
     /// </summary>
     /// <typeparam name="T">The type of the value to set.</typeparam>
     /// <param name="value">The value to set.</param>
-    public static SetPropertyPacket<T> Create<T>(T value) => new() { Value = value };
+    public static SetPropertyPacket<T> Create<T>(T value) where T : notnull => new() { Value = value };
 }

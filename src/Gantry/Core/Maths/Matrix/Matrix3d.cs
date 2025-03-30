@@ -143,7 +143,7 @@ public readonly struct Matrix3d
     /// <summary>
     ///     Sets this Matrix3d to identity.
     /// </summary>
-    public Matrix3d SetIdentity()
+    public static Matrix3d SetIdentity()
     {
         return new(
             1, 0, 0,
@@ -427,7 +427,7 @@ public readonly struct Matrix3d
     ///     @param scale the scale factor for the matrix
     /// </summary>
     /// <param name="scale">The scale.</param>
-    public Matrix3d Scale(double scale)
+    public static Matrix3d Scale(double scale)
     {
         return new(
             scale, 0.0, 0.0,
@@ -442,7 +442,7 @@ public readonly struct Matrix3d
     ///     @param angle the angle to rotate about the X axis in radians
     /// </summary>
     /// <param name="angle">The angle.</param>
-    public Matrix3d RotX(double angle)
+    public static Matrix3d RotX(double angle)
     {
         var c = Math.Cos(angle);
         var s = Math.Sin(angle);
@@ -476,7 +476,7 @@ public readonly struct Matrix3d
     ///     @param angle the angle to rotate about the Z axis in radians
     /// </summary>
     /// <param name="angle">The angle.</param>
-    public Matrix3d RotZ(double angle)
+    public static Matrix3d RotZ(double angle)
     {
         var c = Math.Cos(angle);
         var s = Math.Sin(angle);
@@ -509,7 +509,7 @@ public readonly struct Matrix3d
     /// </summary>
     /// <param name="m1">The m1.</param>
     /// <param name="m2">The m2.</param>
-    public Matrix3d MulTransposeRight(Matrix3d m1, Matrix3d m2)
+    public static Matrix3d MulTransposeRight(Matrix3d m1, Matrix3d m2)
     {
         return new(
             m1.M00 * m2.M00 + m1.M01 * m2.M01 + m1.M02 * m2.M02,
@@ -533,7 +533,7 @@ public readonly struct Matrix3d
     /// </summary>
     /// <param name="m1">The m1.</param>
     /// <param name="m2">The m2.</param>
-    public Matrix3d MulTransposeLeft(Matrix3d m1, Matrix3d m2)
+    public static Matrix3d MulTransposeLeft(Matrix3d m1, Matrix3d m2)
     {
         return new(
             m1.M00 * m2.M00 + m1.M10 * m2.M10 + m1.M20 * m2.M20,
@@ -593,7 +593,7 @@ public readonly struct Matrix3d
     ///     Matrix3d.
     ///     @param o1 the object with which the comparison is made.
     /// </summary>
-    public override bool Equals(object o1)
+    public override bool Equals(object? o1)
     {
         return o1 is Matrix3d matrix3d && Equals(matrix3d);
     }
@@ -776,5 +776,17 @@ public readonly struct Matrix3d
             c + x * x * omc, tmp01 - tmp02, tmp11 + tmp12,
             tmp01 + tmp02, c + y * y * omc, tmp21 - tmp22,
             tmp11 - tmp12, tmp21 + tmp22, c + z * z * omc);
+    }
+
+    /// <inheritdoc />
+    public static bool operator ==(Matrix3d left, Matrix3d right)
+    {
+        return left.Equals(right);
+    }
+
+    /// <inheritdoc />
+    public static bool operator !=(Matrix3d left, Matrix3d right)
+    {
+        return !(left == right);
     }
 }

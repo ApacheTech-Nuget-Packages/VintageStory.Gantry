@@ -12,12 +12,12 @@ public abstract class UniversalSubsystem : GantrySubsystem
     /// <summary>
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreClientAPI Capi { get; private set; }
+    protected ICoreClientAPI Capi { get; private set; } = null!;
 
     /// <summary>
     ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreServerAPI Sapi { get; private set; }
+    protected ICoreServerAPI Sapi { get; private set; } = null!;
 
     /// <inheritdoc />
     public sealed override void StartPre(ICoreAPI api)

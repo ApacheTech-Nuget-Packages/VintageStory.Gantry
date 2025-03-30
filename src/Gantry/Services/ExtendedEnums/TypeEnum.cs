@@ -29,6 +29,6 @@ public abstract class TypeEnum<T> : ExtendedEnum<Type, T>
     /// <returns>A string that represents the current object.</returns>
     public override string ToString()
     {
-        return Value.FullName;
+        return Value?.FullName ?? string.Empty;
     }
 }

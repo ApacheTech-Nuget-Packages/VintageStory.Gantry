@@ -11,10 +11,10 @@ public abstract class MediatedChatCommand : CommandBase
     /// <summary>
     ///     Gets or sets the arguments for the chat command.
     /// </summary>
-    public TextCommandCallingArgs Args { get; set; }
+    public TextCommandCallingArgs Args { get; set; } = default!;
 
     /// <summary>
     ///     Gets the result of executing the chat command.
     /// </summary>
-    public TextCommandResult Result { get; set; }
+    public TextCommandResult Result { get; set; } = default!;
 }

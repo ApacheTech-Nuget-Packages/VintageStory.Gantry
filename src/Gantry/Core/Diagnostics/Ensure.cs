@@ -12,7 +12,7 @@ public static class Ensure
     /// <param name="source">The source object.</param>
     /// <param name="target">The target object.</param>
     /// <returns></returns>
-    public static T PopulatedWith<T>(T source, T target)
+    public static T PopulatedWith<T>(T source, T target) where T : notnull
     {
         if (source is not null && source.GetHashCode().Equals(target.GetHashCode())) return source;
         return target;

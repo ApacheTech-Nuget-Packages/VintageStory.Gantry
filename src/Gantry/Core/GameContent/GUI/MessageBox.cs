@@ -13,8 +13,8 @@ public sealed class MessageBox : GenericDialogue
     private readonly ButtonLayout _buttons;
     private readonly string _message;
 
-    private Action OnOkAction { get; set; }
-    private Action OnCancelAction { get; set; }
+    private Action? OnOkAction { get; set; }
+    private Action? OnCancelAction { get; set; }
 
     /// <inheritdoc />
     public override double DrawOrder => 1;
@@ -39,7 +39,7 @@ public sealed class MessageBox : GenericDialogue
     /// <param name="buttons">A <see cref="ButtonLayout"/> value that specifies which button or buttons to display.</param>
     /// <param name="onOkButtonPressed">The <see cref="Action"/> to be invoked if the user selects the confirm option.</param>
     /// <param name="onCancelButtonPressed">The <see cref="Action"/> to be invoked if the user selects the cancel option.</param>
-    public static void Show(string title, string message, ButtonLayout buttons = ButtonLayout.Ok, Action onOkButtonPressed = null, Action onCancelButtonPressed = null)
+    public static void Show(string title, string message, ButtonLayout buttons = ButtonLayout.Ok, Action? onOkButtonPressed = null, Action? onCancelButtonPressed = null)
     {
         var messageBox = new MessageBox(title, message, buttons)
         {
@@ -52,7 +52,6 @@ public sealed class MessageBox : GenericDialogue
 
     private MessageBox(string title, string message, ButtonLayout buttons) : base(ApiEx.Client)
     {
-
         var defaultTitle = (_buttons = buttons) switch
         {
             ButtonLayout.Ok => LangEx.ConfirmationString("information"),

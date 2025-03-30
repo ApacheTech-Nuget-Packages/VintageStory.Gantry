@@ -12,7 +12,7 @@ public abstract class ServerModSystem : ModSystemBase
     /// <summary>
     ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreServerAPI Sapi { get; private set; }
+    protected ICoreServerAPI Sapi { get; private set; } = null!;
 
     /// <inheritdoc />
     public sealed override void StartPre(ICoreAPI api)
@@ -41,7 +41,7 @@ public abstract class ServerModSystem : ModSystemBase
     /// <inheritdoc />
     public override void AssetsFinalize(ICoreAPI api)
     {
-        AssetsFinalise(api as ICoreServerAPI);
+        AssetsFinalise((ICoreServerAPI)api);
     }
 
     /// <inheritdoc cref="ModSystem.AssetsFinalize" />
@@ -53,7 +53,7 @@ public abstract class ServerModSystem : ModSystemBase
     /// <inheritdoc />
     public sealed override void AssetsLoaded(ICoreAPI api)
     {
-        AssetsLoaded(api as ICoreServerAPI);
+        AssetsLoaded((ICoreServerAPI)api);
     }
 
     /// <inheritdoc cref="ModSystem.AssetsLoaded" />

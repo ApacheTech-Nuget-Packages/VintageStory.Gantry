@@ -1,5 +1,4 @@
 ﻿using Gantry.Core.GameContent.ChatCommands;
-using Gantry.Services.FileSystem;
 using Vintagestory.API.Util;
 
 namespace Gantry.Core.Subsystems;
@@ -10,6 +9,6 @@ internal class GantryDiagnostics : UniversalSubsystem
     {
         GantryCommand.Command.TryAddSubCommand("logs", p => p
             .WithDescription("Open the Gantry logs folder.")
-            .HandleWith(_ => NetUtil.OpenUrlInBrowser(ModPaths.LogDirectory.FullName)));
+            .HandleWith(_ => NetUtil.OpenUrlInBrowser(G.LogDirectory.FullName)));
     }
 }

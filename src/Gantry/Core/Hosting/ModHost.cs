@@ -26,11 +26,11 @@ namespace Gantry.Core.Hosting;
 [UsedImplicitly(ImplicitUseTargetFlags.All)]
 public abstract class ModHost : GantrySubsytemHost
 {
-    private ICoreAPI _api;
+    private ICoreAPI _api = default!;
     private readonly IServiceCollection _services;
-    private List<IUniversalServiceRegistrar> _universalServiceRegistrars;
-    private List<IServerServiceRegistrar> _serverServiceRegistrars;
-    private List<IClientServiceRegistrar> _clientServiceRegistrars;
+    private List<IUniversalServiceRegistrar> _universalServiceRegistrars = [];
+    private List<IServerServiceRegistrar> _serverServiceRegistrars = [];
+    private List<IClientServiceRegistrar> _clientServiceRegistrars = [];
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="ModHost" /> class.

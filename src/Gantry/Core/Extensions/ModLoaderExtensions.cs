@@ -14,7 +14,7 @@ public static class ModLoaderExtensions
     /// <param name="modLoader">The instance used to load mods.</param>
     /// <param name="type">The type of <see cref="ModSystem"/> to find.</param>
     /// <returns></returns>
-    public static ModSystem GetModSystem(this ModLoader modLoader, Type type)
+    public static ModSystem? GetModSystem(this ModLoader modLoader, Type type)
     {
         return modLoader.Systems.FirstOrDefault(p => p.GetType() == type);
     }
@@ -25,8 +25,8 @@ public static class ModLoaderExtensions
     /// <typeparam name="T">The type of <see cref="ModSystem"/> to find.</typeparam>
     /// <param name="modLoader">The instance used to load mods.</param>
     /// <returns></returns>
-    public static T GetModSystem<T>(this ModLoader modLoader) where T : ModSystem
+    public static T? GetModSystem<T>(this ModLoader modLoader) where T : ModSystem
     {
-        return (T)modLoader.Systems.FirstOrDefault(p => p.GetType() == typeof(T));
+        return (T?)modLoader.Systems.FirstOrDefault(p => p.GetType() == typeof(T));
     }
 }

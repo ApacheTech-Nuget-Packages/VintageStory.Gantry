@@ -47,7 +47,7 @@ public static class NetworkChannelExtensions
     ///         This may return null if the channel has not been registered.
     ///     </para>
     /// </returns>
-    public static IServerNetworkChannel GetDefaultChannel(this IServerNetworkAPI napi)
+    public static IServerNetworkChannel? GetDefaultChannel(this IServerNetworkAPI napi)
     {
         var modId = ModEx.ModInfo.ModID;
         G.Log($"Retrieving default server channel for mod '{modId}'.");
@@ -116,7 +116,7 @@ public static class NetworkChannelExtensions
     ///         This may return null if the channel has not been registered.
     ///     </para>
     /// </returns>
-    public static IClientNetworkChannel GetDefaultChannel(this IClientNetworkAPI napi)
+    public static IClientNetworkChannel? GetDefaultChannel(this IClientNetworkAPI napi)
     {
         var modId = ModEx.ModInfo.ModID;
         G.Log($"Retrieving default client channel for mod '{modId}'.");
@@ -185,7 +185,7 @@ public static class NetworkChannelExtensions
     ///         This may return null if the channel has not been registered.
     ///     </para>
     /// </returns>
-    public static INetworkChannel GetDefaultChannel(this INetworkAPI napi)
+    public static INetworkChannel? GetDefaultChannel(this INetworkAPI napi)
     {
         var modId = ModEx.ModInfo.ModID;
         G.Log($"Retrieving default network channel for mod '{modId}'.");

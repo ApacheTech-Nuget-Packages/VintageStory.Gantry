@@ -12,7 +12,7 @@ public abstract class ClientModSystem : ModSystemBase
     /// <summary>
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreClientAPI Capi { get; private set; }
+    protected ICoreClientAPI Capi { get; private set; } = null!;
 
     /// <inheritdoc />
     public sealed override void StartPre(ICoreAPI api)
@@ -41,7 +41,7 @@ public abstract class ClientModSystem : ModSystemBase
     /// <inheritdoc />
     public sealed override void AssetsFinalize(ICoreAPI api) 
     { 
-        AssetsFinalise(api as ICoreClientAPI);
+        AssetsFinalise((ICoreClientAPI)api);
     }
 
     /// <inheritdoc cref="ModSystem.AssetsFinalize" />
@@ -53,7 +53,7 @@ public abstract class ClientModSystem : ModSystemBase
     /// <inheritdoc />
     public sealed override void AssetsLoaded(ICoreAPI api)
     {
-        AssetsLoaded(api as ICoreClientAPI);
+        AssetsLoaded((ICoreClientAPI)api);
     }
 
     /// <inheritdoc cref="ModSystem.AssetsLoaded" />

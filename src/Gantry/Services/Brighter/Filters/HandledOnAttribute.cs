@@ -1,6 +1,5 @@
 ﻿using ApacheTech.Common.BrighterSlim;
 using Gantry.Core.Annotation;
-using SmartAssembly.Attributes;
 
 namespace Gantry.Services.Brighter.Filters;
 

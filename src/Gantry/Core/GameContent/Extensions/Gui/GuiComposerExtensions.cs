@@ -42,10 +42,8 @@ public static class GuiComposerExtensions
     /// <summary>
     ///     Returns all elements of a specific type, from the composer.
     /// </summary>
-    public static List<T> GetElements<T>(this GuiComposer composer) where T : GuiElement
-    {
-        return composer.GetElements().OfType<T>().ToList();
-    }
+    public static List<T> GetElements<T>(this GuiComposer composer) where T : GuiElement 
+        => [.. composer.GetElements().OfType<T>()];
 
     /// <summary>
     ///     Returns all elements that have been added to the composer.
@@ -87,7 +85,7 @@ public static class GuiComposerExtensions
     /// <returns>
     ///    The updated <see cref="GuiComposer"/> instance to allow for method chaining.
     /// </returns>
-    public static GuiComposer AddLazySlider(this GuiComposer composer, ActionConsumable<int> onNewSliderValue, ElementBounds bounds, string key = null)
+    public static GuiComposer AddLazySlider(this GuiComposer composer, ActionConsumable<int> onNewSliderValue, ElementBounds bounds, string? key = null)
     {
         if (composer.Composed) return composer;
         var slider = new GuiElementSlider(composer.Api, onNewSliderValue, bounds);

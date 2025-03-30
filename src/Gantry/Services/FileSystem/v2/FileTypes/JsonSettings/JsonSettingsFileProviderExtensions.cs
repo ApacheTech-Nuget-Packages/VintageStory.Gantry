@@ -1,4 +1,5 @@
-﻿using Gantry.Services.FileSystem.v2.Abstractions;
+﻿using Gantry.Services.FileSystem.Enums;
+using Gantry.Services.FileSystem.v2.Abstractions;
 using Gantry.Services.FileSystem.v2.DataStructures;
 
 namespace Gantry.Services.FileSystem.v2.FileTypes.JsonSettings;
@@ -16,7 +17,7 @@ public static class JsonSettingsFileProviderExtensions
     /// <param name="fileName">The name of the file.</param>
     /// <param name="scope">The scope of the file.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetJsonSettingsFile(this IFileProvider provider, string fileName, FileScope scope)
+    public static IJsonSettingsFile? GetJsonSettingsFile(this IFileProvider provider, string fileName, FileScope scope)
         => provider.Wrap<IJsonSettingsFile>(fileName, scope);
 
     /// <summary>
@@ -25,7 +26,7 @@ public static class JsonSettingsFileProviderExtensions
     /// <param name="provider">The provider.</param>
     /// <param name="scope">The scope of the file.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetClientSettings(this IFileProvider provider, FileScope scope)
+    public static IJsonSettingsFile? GetClientSettings(this IFileProvider provider, FileScope scope)
         => provider.Wrap<IJsonSettingsFile>("Client.settings.json", scope);
 
     /// <summary>
@@ -34,7 +35,7 @@ public static class JsonSettingsFileProviderExtensions
     /// <param name="provider">The provider.</param>
     /// <param name="scope">The scope of the file.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetServerSettings(this IFileProvider provider, FileScope scope)
+    public static IJsonSettingsFile? GetServerSettings(this IFileProvider provider, FileScope scope)
         => provider.Wrap<IJsonSettingsFile>("Server.settings.json", scope);
 
     /// <summary>
@@ -44,7 +45,7 @@ public static class JsonSettingsFileProviderExtensions
     /// <param name="scope">The scope of the file.</param>
     /// <param name="side">Which side to get the settings for.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetSettings(this IFileProvider provider, FileScope scope, EnumAppSide side)
+    public static IJsonSettingsFile? GetSettings(this IFileProvider provider, FileScope scope, EnumAppSide side)
         => provider.Wrap<IJsonSettingsFile>($"{side}.settings.json", scope);
 
     /// <summary>
@@ -53,7 +54,7 @@ public static class JsonSettingsFileProviderExtensions
     /// <param name="provider">The provider.</param>
     /// <param name="side">Which side to get the settings for.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetWorldSettings(this IFileProvider provider, EnumAppSide side)
+    public static IJsonSettingsFile? GetWorldSettings(this IFileProvider provider, EnumAppSide side)
         => provider.Wrap<IJsonSettingsFile>($"{side}.settings.json", FileScope.World);
 
     /// <summary>
@@ -62,6 +63,6 @@ public static class JsonSettingsFileProviderExtensions
     /// <param name="provider">The provider.</param>
     /// <param name="side">Which side to get the settings for.</param>
     /// <returns>A <see cref="IJsonSettingsFile"/> representation of the file, on the file system.</returns>
-    public static IJsonSettingsFile GetGlobalSettings(this IFileProvider provider, EnumAppSide side)
+    public static IJsonSettingsFile? GetGlobalSettings(this IFileProvider provider, EnumAppSide side)
         => provider.Wrap<IJsonSettingsFile>($"{side}.settings.json", FileScope.Global);
 }

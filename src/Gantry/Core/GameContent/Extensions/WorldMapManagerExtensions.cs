@@ -15,7 +15,7 @@ public static class WorldMapManagerExtensions
     ///     Returns the map layer used for rendering waypoints.
     /// </summary>
     /// <param name="mapManager">The <see cref="WorldMapManager" /> instance that this method was called from.</param>
-    public static WaypointMapLayer WaypointMapLayer(this WorldMapManager mapManager)
+    public static WaypointMapLayer? WaypointMapLayer(this WorldMapManager mapManager)
     {
         var layers = mapManager.MapLayers;
         return layers.OfType<WaypointMapLayer>().FirstOrDefault();
@@ -24,7 +24,7 @@ public static class WorldMapManagerExtensions
     /// <summary>
     ///     Returns the specified map layer.
     /// </summary>
-    public static TMapLayer GetMapLayer<TMapLayer>(this ICoreClientAPI capi) 
+    public static TMapLayer? GetMapLayer<TMapLayer>(this ICoreClientAPI capi) 
         => capi.ModLoader.GetModSystem<WorldMapManager>().MapLayers.OfType<TMapLayer>().FirstOrDefault();
 
     /// <summary>

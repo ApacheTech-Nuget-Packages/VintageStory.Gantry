@@ -13,5 +13,5 @@ public sealed class WorldMapTeleportPacket
     /// <summary>
     ///     Gets or sets the target position for teleportation.
     /// </summary>
-    public Vec3d Position { get; set; }
+    public Vec3d Position { get; set; } = Vec3d.Zero;
 }

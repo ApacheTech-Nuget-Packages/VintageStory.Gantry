@@ -12,5 +12,5 @@ public class WorldNamePacket
     /// <summary>
     ///     Gets or sets the name of the world.
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

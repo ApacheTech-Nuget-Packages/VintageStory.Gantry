@@ -12,5 +12,5 @@ public class BlockEntity<TBlock> : BlockEntity where TBlock : Block
     /// <summary>
     ///     The black that this entity applies to.
     /// </summary>
-    protected TBlock OwnerBlock => Block as TBlock;
+    protected TBlock? OwnerBlock => Block as TBlock;
 }

@@ -16,5 +16,5 @@ public class HarmonyPatchingServiceOptions
     /// <summary>
     ///     The ID of the default <see cref="Harmony"/> instance used by the mod. Default: ModEx.ModAssembly.FullName.
     /// </summary>
-    public string DefaultInstanceName { get; set; } = ModEx.ModAssembly.FullName;
+    public string DefaultInstanceName { get; set; } = ModEx.ModAssembly.FullName!;
 }

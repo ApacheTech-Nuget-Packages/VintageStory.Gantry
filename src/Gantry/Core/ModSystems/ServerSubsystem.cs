@@ -12,7 +12,7 @@ public abstract class ServerSubsystem : GantrySubsystem
     /// <summary>
     ///     The core API implemented by the server. The main interface for accessing the server. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreServerAPI Sapi { get; private set; }
+    protected ICoreServerAPI Sapi { get; private set; } = null!;
 
     /// <inheritdoc />
     public sealed override void StartPre(ICoreAPI api)

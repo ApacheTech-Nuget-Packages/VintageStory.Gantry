@@ -9,5 +9,5 @@ public class CellEntry<T> : SavegameCellEntry
     /// <summary>
     ///     The model to display.
     /// </summary>
-    public T Model { get; set; }
+    public T? Model { get; set; }
 }

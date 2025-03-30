@@ -18,7 +18,7 @@ public static class GantryDependencyInjectionExtensions
     /// <param name="options">The options to pass to the service.</param>
     /// <returns>A reference to this instance, after this operation has completed.</returns>
     public static IServiceCollection AddHarmonyPatchingService(this IServiceCollection services,
-        Action<HarmonyPatchingServiceOptions> options = null)
+        Action<HarmonyPatchingServiceOptions>? options = null)
     {
         services.TryAddSingleton<IHarmonyPatchingService>(new HarmonyPatchingService(HarmonyPatchingServiceOptions.Default.With(options)));
         return services;

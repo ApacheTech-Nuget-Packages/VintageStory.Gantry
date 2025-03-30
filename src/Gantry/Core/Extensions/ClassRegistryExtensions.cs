@@ -27,7 +27,7 @@ public static class ClassRegistryExtensions
     /// <typeparam name="T">The type of the Item to register.</typeparam>
     /// <param name="api">The game's internal API.</param>
     /// <param name="name">The name to give to the item.</param>
-    public static void RegisterItem<T>(this ICoreAPI api, string name = null)
+    public static void RegisterItem<T>(this ICoreAPI api, string? name = null)
     {
         name ??= nameof(T);
         api.RegisterItemClass(name, typeof(T));
@@ -67,7 +67,7 @@ public static class ClassRegistryExtensions
     /// <typeparam name="T">The type of the Block Behaviour to register.</typeparam>
     /// <param name="api">The game's internal API.</param>
     /// <param name="friendlyName">A friendly name to give to the behaviour.</param>
-    public static void RegisterBlockBehaviour<T>(this ICoreAPICommon api, string friendlyName = null)
+    public static void RegisterBlockBehaviour<T>(this ICoreAPICommon api, string? friendlyName = null)
     {
         var type = typeof(T);
         api.RegisterBlockBehaviorClass(friendlyName?.IfNullOrEmpty(type.Name), type);
@@ -143,7 +143,7 @@ public static class ClassRegistryExtensions
     /// <typeparam name="T">The type of the Collectible Behaviour to register.</typeparam>
     /// <param name="api">The game's internal API.</param>
     /// <param name="name">The name to give to the behaviour.</param>
-    public static void RegisterCollectibleBehaviour<T>(this ICoreAPI api, string name = null)
+    public static void RegisterCollectibleBehaviour<T>(this ICoreAPI api, string? name = null)
     {
         name ??= nameof(T);
         api.RegisterCollectibleBehaviorClass(name, typeof(T));

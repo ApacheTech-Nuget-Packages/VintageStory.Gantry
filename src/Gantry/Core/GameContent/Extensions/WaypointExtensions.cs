@@ -89,13 +89,14 @@ public static class WaypointExtensions
     /// <param name="verticalRadius">The number of blocks away from the origin position to scan, on the Y axis.</param>
     /// <param name="filter">A custom filter, to narrow the scope of the search.</param>
     /// <returns><c>true</c> if a waypoint already exists within range of the specified position, <c>false</c> otherwise.</returns>
-    public static bool WaypointExistsWithinRadius(this BlockPos position, int horizontalRadius, int verticalRadius, System.Func<Waypoint, bool> filter = null)
+    public static bool WaypointExistsWithinRadius(this BlockPos position, int horizontalRadius, int verticalRadius, System.Func<Waypoint, bool>? filter = null)
     {
         try
         {
             var waypointMapLayer = ApiEx.Client!.ModLoader.GetModSystem<WorldMapManager>().WaypointMapLayer();
             var waypoints =
-                waypointMapLayer.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.InRangeCubic(position, horizontalRadius, verticalRadius) ?? false).ToList();
+                waypointMapLayer?.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.InRangeCubic(position, horizontalRadius, verticalRadius) ?? false).ToList();
+            if (waypoints is null) return false;
             if (!waypoints.Any()) return false;
             return filter == null || waypoints.Any(filter);
         }
@@ -113,7 +114,7 @@ public static class WaypointExtensions
     /// <param name="verticalRadius">The number of blocks away from the origin position to scan, on the Y axis.</param>
     /// <param name="filter">A custom filter, to narrow the scope of the search.</param>
     /// <returns><c>true</c> if a waypoint already exists within range of the specified position, <c>false</c> otherwise.</returns>
-    public static Task<bool> WaypointExistsWithinRadiusAsync(this BlockPos position, int horizontalRadius, int verticalRadius, System.Func<Waypoint, bool> filter = null)
+    public static Task<bool> WaypointExistsWithinRadiusAsync(this BlockPos position, int horizontalRadius, int verticalRadius, System.Func<Waypoint, bool>? filter = null)
     {
         return Task<bool>.Factory.StartNew(() => position.WaypointExistsWithinRadius(horizontalRadius, verticalRadius, filter));
     }
@@ -124,10 +125,11 @@ public static class WaypointExtensions
     /// <param name="pos">The position to check.</param>
     /// <param name="filter">A custom filter, to narrow the scope of the search.</param>
     /// <returns><c>true</c> if a waypoint already exists at the specified position, <c>false</c> otherwise.</returns>
-    public static bool WaypointExistsAtPos(this BlockPos pos, System.Func<Waypoint, bool> filter = null)
+    public static bool WaypointExistsAtPos(this BlockPos pos, System.Func<Waypoint, bool>? filter = null)
     {
         var waypointMapLayer = ApiEx.Client!.ModLoader.GetModSystem<WorldMapManager>().WaypointMapLayer();
-        var waypoints = waypointMapLayer.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.Equals(pos) ?? false).ToList();
+        var waypoints = waypointMapLayer?.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.Equals(pos) ?? false).ToList();
+        if (waypoints is null) return false;
         if (!waypoints.Any()) return false;
         return filter == null || waypoints.Any(filter);
     }
@@ -138,7 +140,7 @@ public static class WaypointExtensions
     /// <param name="pos">The position to check.</param>
     /// <param name="filter">A custom filter, to narrow the scope of the search.</param>
     /// <returns><c>true</c> if a waypoint already exists at the specified position, <c>false</c> otherwise.</returns>
-    public static Task<bool> WaypointExistsAtPosAsync(this BlockPos pos, System.Func<Waypoint, bool> filter = null)
+    public static Task<bool> WaypointExistsAtPosAsync(this BlockPos pos, System.Func<Waypoint, bool>? filter = null)
     {
         return Task<bool>.Factory.StartNew(() => pos.WaypointExistsAtPos(filter));
     }
@@ -209,12 +211,12 @@ public static class WaypointExtensions
     ///     Finds the current index of the specified waypoint.
     /// </summary>
     /// <param name="waypoint">The waypoint to find the index of.</param>
-    /// <param name="capi">The world in which to find the waypoint.</param>
     /// <returns>The index of the specified waypoint, or -1 if not found.</returns>
-    public static int GetIndex(this Waypoint waypoint, ICoreClientAPI capi = null)
+    public static int GetIndex(this Waypoint waypoint)
     {
-        var worldMapManager = (capi ?? ApiEx.Client).ModLoader.GetModSystem<WorldMapManager>();
+        var worldMapManager = ApiEx.Client.ModLoader.GetModSystem<WorldMapManager>();
         var waypointMapLayer = worldMapManager.WaypointMapLayer();
+        if (waypointMapLayer is null) return -1;
         return waypoint.GetIndex(waypointMapLayer);
     }
 
@@ -234,7 +236,7 @@ public static class WaypointExtensions
     /// <param name="player">The player whose position will be used for the distance calculation.</param>
     /// <returns>The distance between the player and the waypoint.</returns>
     [ClientSide]
-    public static double DistanceFromPlayer(this Waypoint waypoint, IPlayer player = null)
+    public static double DistanceFromPlayer(this Waypoint waypoint, IPlayer? player = null)
         => (player ?? ApiEx.Client.World.Player).Entity.Pos.DistanceTo(waypoint.Position);
 
 }

@@ -88,7 +88,7 @@ public static class ApiExtensions
     /// </summary>
     /// <param name="capi">Core Client API.</param>
     /// <param name="commandName">The friendly name of the system to return.</param>
-    public static object GetInternalClientSystem(this ICoreClientAPI capi, string commandName)
+    public static object? GetInternalClientSystem(this ICoreClientAPI capi, string commandName)
     {
         var clientSystems = (capi.World as ClientMain).GetField<ClientSystem[]>("clientSystems");
         return clientSystems.FirstOrDefault(p => p.Name == commandName);
@@ -98,7 +98,7 @@ public static class ApiExtensions
     ///     Returns a specific <see cref="ClientSystem"/> that is registered with the game engine.
     /// </summary>
     /// <param name="capi">Core Client API.</param>
-    public static T GetInternalClientSystem<T>(this ICoreClientAPI capi)
+    public static T? GetInternalClientSystem<T>(this ICoreClientAPI capi)
         where T : ClientSystem
     {
         var clientSystems = (capi.World as ClientMain).GetField<ClientSystem[]>("clientSystems");
@@ -166,7 +166,7 @@ public static class ApiExtensions
     /// <summary>
     ///     Returns a specific <see cref="ServerSystem"/> that is registered with the game engine.
     /// </summary>
-    public static T GetInternalServerSystem<T>(this ICoreServerAPI sapi)
+    public static T? GetInternalServerSystem<T>(this ICoreServerAPI sapi)
         where T : ServerSystem
     {
         var systems = ((ServerMain)sapi.World).GetField<ServerSystem[]>("Systems");
@@ -181,7 +181,7 @@ public static class ApiExtensions
     ///     Gets the world seed.
     /// </summary>
     /// <param name="api">The core game API.</param>
-    public static string GetSeed(this ICoreAPI api)
+    public static string? GetSeed(this ICoreAPI api)
     {
         return api.World?.Seed.ToString();
     }
@@ -190,7 +190,7 @@ public static class ApiExtensions
     ///     Converts an agnostic API to a Server-side API.
     /// </summary>
     /// <param name="api">The core game API.</param>
-    public static ICoreServerAPI ForServer(this ICoreAPI api)
+    public static ICoreServerAPI? ForServer(this ICoreAPI api)
     {
         if (api.Side.IsClient()) return null;
         return api as ICoreServerAPI;
@@ -200,7 +200,7 @@ public static class ApiExtensions
     ///     Converts a side-agnostic API to a client-side API.
     /// </summary>
     /// <param name="api">The core game API.</param>
-    public static ICoreClientAPI ForClient(this ICoreAPI api)
+    public static ICoreClientAPI? ForClient(this ICoreAPI api)
     {
         if (api.Side.IsServer()) return null;
         return api as ICoreClientAPI;
@@ -209,10 +209,9 @@ public static class ApiExtensions
     /// <summary>
     ///     Side-agnostic way to determine whether the current world is being played as a single-player world.
     /// </summary>
-    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Extension Method")]
     public static bool IsSinglePlayer(this ICoreAPI api)
     {
-        return ApiEx.Return(
+        return api.Invoke(
             capi => capi.IsSinglePlayer,
             sapi => !sapi.IsDedicatedServerProcess()
                     || ApiEx.ServerMain.MainSockets.Any(x => x is not DummyTcpNetServer));

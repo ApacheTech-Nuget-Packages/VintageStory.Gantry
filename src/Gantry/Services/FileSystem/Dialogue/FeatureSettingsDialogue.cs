@@ -30,7 +30,7 @@ public abstract class FeatureSettingsDialogue<TFeatureSettings> : GenericDialogu
     /// <param name="capi">The capi.</param>
     /// <param name="settings">The settings.</param>
     /// <param name="featureName">Name of the feature.</param>
-    protected FeatureSettingsDialogue(ICoreClientAPI capi, TFeatureSettings settings, string featureName = null) :
+    protected FeatureSettingsDialogue(ICoreClientAPI capi, TFeatureSettings settings, string? featureName = null) :
         base(capi)
     {
         Settings = settings;

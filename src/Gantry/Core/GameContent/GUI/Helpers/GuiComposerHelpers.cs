@@ -20,7 +20,7 @@ public static class GuiComposerHelpers
     /// <param name="onClose">The event fired when the title bar is closed.</param>
     /// <param name="font">The font of the title bar.</param>
     /// <param name="bounds">The bounds of the title bar.</param>
-    public static GuiComposer AddTitleBarWithNoMenu(this GuiComposer composer, string text, Action onClose = null, CairoFont font = null, ElementBounds bounds = null)
+    public static GuiComposer AddTitleBarWithNoMenu(this GuiComposer composer, string text, Action? onClose = null, CairoFont? font = null, ElementBounds? bounds = null)
     {
         if (!composer.Composed)
         {

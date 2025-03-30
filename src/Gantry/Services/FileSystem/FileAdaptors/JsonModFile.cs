@@ -54,15 +54,10 @@ public sealed class JsonModFile : ModFile, IJsonModFile
     /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
     public override TModel ParseAs<TModel>()
     {
-        try
-        {
-            var json = File.ReadAllText(ModFileInfo.FullName);
-            return JsonConvert.DeserializeObject<TModel>(json, JsonSerialiserSettings);
-        }
-        catch (Exception)
-        {
-            return default;
-        }
+        var json = File.ReadAllText(ModFileInfo.FullName);
+        var resource = JsonConvert.DeserializeObject<TModel>(json, JsonSerialiserSettings)
+            ?? throw new JsonSerializationException();
+        return resource;
     }
 
     /// <summary>

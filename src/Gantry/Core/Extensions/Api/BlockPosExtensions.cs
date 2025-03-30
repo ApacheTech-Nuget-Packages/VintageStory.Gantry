@@ -18,7 +18,7 @@ public static class BlockPosExtensions
     /// <param name="this">The <see cref="BlockPos"/> to find the block at.</param>
     /// <param name="api">The api to get the block accessor from.</param>
     /// <param name="layer">Each block pos can house a liquid, and a solid. Defaults to solid blocks.</param>
-    public static TBlock GetBlock<TBlock>(this BlockPos @this, ICoreAPI api, BlockLayer layer = BlockLayer.Default)
+    public static TBlock? GetBlock<TBlock>(this BlockPos @this, ICoreAPI api, BlockLayer layer = BlockLayer.Default)
         where TBlock : Block
     {
         return api.World.BlockAccessor.GetBlock(@this, (int)layer) as TBlock;
@@ -30,7 +30,7 @@ public static class BlockPosExtensions
     /// <typeparam name="TBlockEntity">The type of the block.</typeparam>
     /// <param name="this">The <see cref="BlockPos"/> to find the block at.</param>
     /// <param name="api">The api to get the block accessor from.</param>
-    public static TBlockEntity GetBlockEntity<TBlockEntity>(this BlockPos @this, ICoreAPI api)
+    public static TBlockEntity? GetBlockEntity<TBlockEntity>(this BlockPos @this, ICoreAPI api)
         where TBlockEntity : BlockEntity
     {
         return api.World.BlockAccessor.GetBlockEntity(@this) as TBlockEntity;

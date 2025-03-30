@@ -12,7 +12,7 @@ public abstract class ClientSubsystem : GantrySubsystem
     /// <summary>
     ///     The core API implemented by the client. The main interface for accessing the client. Contains all subcomponents, and some miscellaneous methods.
     /// </summary>
-    protected ICoreClientAPI Capi { get; private set; }
+    protected ICoreClientAPI Capi { get; private set; } = null!;
 
     /// <inheritdoc />
     public sealed override void StartPre(ICoreAPI api)

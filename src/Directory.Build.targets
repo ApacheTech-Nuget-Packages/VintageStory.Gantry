@@ -3,11 +3,6 @@
 	<!-- Set Package Version Info -->
 
 	<PropertyGroup>
-		<AssemblyFileVersion>$(Version)</AssemblyFileVersion>
-		<AssemblyVersion>$(Version)</AssemblyVersion>
-
-		<FileVersion>$(Version)</FileVersion>
-
 		<AssemblyName>VintageStory.$(ProjectName)</AssemblyName>
 		<RootNamespace>$(ProjectName)</RootNamespace>
 	</PropertyGroup>

@@ -12,32 +12,32 @@ public static class GameAssemblies
     /// <summary>
     ///     VSEssentials.dll
     /// </summary>
-    public static Assembly VSEssentials => GetAssembly("VSEssentials");
+    public static Assembly VSEssentials => GetAssembly("VSEssentials")!;
 
     /// <summary>
     ///     VSSurvivalMod.dll
     /// </summary>
-    public static Assembly VSSurvivalMod => GetAssembly("VSSurvivalMod");
+    public static Assembly VSSurvivalMod => GetAssembly("VSSurvivalMod")!;
 
     /// <summary>
     ///     VSCreativeMod.dll
     /// </summary>
-    public static Assembly VSCreativeMod => GetAssembly("VSCreativeMod");
+    public static Assembly VSCreativeMod => GetAssembly("VSCreativeMod")!;
 
     /// <summary>
     ///     VintagestoryAPI.dll
     /// </summary>
-    public static Assembly VintagestoryAPI => GetAssembly("VintagestoryAPI");
+    public static Assembly VintagestoryAPI => GetAssembly("VintagestoryAPI")!;
 
     /// <summary>
     ///     VintagestoryLib.dll
     /// </summary>
-    public static Assembly VintagestoryLib => GetAssembly("VintagestoryLib");
+    public static Assembly VintagestoryLib => GetAssembly("VintagestoryLib")!;
 
     /// <summary>
     ///     Vintagestory.exe
     /// </summary>
-    public static Assembly VintagestoryExe => Assembly.GetEntryAssembly();
+    public static Assembly VintagestoryExe => Assembly.GetEntryAssembly()!;
 
     /// <summary>
     ///     Retrieves a list of all the assemblies collated within the <see cref="GameAssemblies"/> class. 
@@ -46,11 +46,10 @@ public static class GameAssemblies
     {
         get
         {
-            return typeof(GameAssemblies)
+            return [.. typeof(GameAssemblies)
                 .GetProperties(BindingFlags.Public | BindingFlags.Static)
                 .Where(p => p.PropertyType == typeof(Assembly))
-                .Select(prop => (Assembly)prop.GetValue(null))
-                .ToList();
+                .Select(prop => prop.GetValue(null)!.To<Assembly>())];
         }
     }
 
@@ -61,7 +60,7 @@ public static class GameAssemblies
     /// <param name="assembly">The assembly to scan within.</param>
     /// <param name="typeName">The name of the type to scan for.</param>
     /// <returns>The Type definition of the object being scanned for.</returns>
-    public static Type FindType(this Assembly assembly, string typeName)
+    public static Type? FindType(this Assembly assembly, string typeName)
     {
         return AccessTools
             .GetTypesFromAssembly(assembly)
@@ -74,14 +73,14 @@ public static class GameAssemblies
     /// </summary>
     /// <param name="typeName">The name of the type to scan for.</param>
     /// <returns>The Type definition of the object being scanned for.</returns>
-    public static Type FindType(string typeName)
+    public static Type? FindType(string typeName)
     {
         return All
             .Select(assembly => assembly.FindType(typeName))
             .FirstOrDefault();
     }
 
-    private static Assembly GetAssembly(string name)
+    private static Assembly? GetAssembly(string name)
     {
         return GetLoadedAssemblies().FirstOrDefault(a => a.GetName().Name == name);
     }

@@ -30,7 +30,10 @@ public static class BlockExtensions
     /// <param name="obj">The object to check.</param>
     private static bool IsTypeNonCulled(object obj)
     {
-        return _nonCulledTypes.Contains(obj.GetType()) || _nonCulledTypes.Contains(obj.GetType().BaseType);
+        var objIsNonNullable = _nonCulledTypes.Contains(obj.GetType());
+        var baseType = obj.GetType().BaseType;
+        if (baseType is not null) objIsNonNullable |= _nonCulledTypes.Contains(baseType);
+        return objIsNonNullable;
     }
 
     private static readonly List<Type> _nonCulledTypes =

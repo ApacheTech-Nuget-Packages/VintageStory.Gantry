@@ -18,7 +18,7 @@ public abstract class StringEnum<T> : ExtendedEnum<string, T> where T : StringEn
     /// <param name="caseSensitive">If set to <c>true</c>, the value will be parsed as a case sensitive string. Default is False.</param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static T Parse(string value, bool caseSensitive = false)
+    public static T? Parse(string value, bool caseSensitive = false)
     {
         if (TryParse(value, caseSensitive, out var obj)) return obj;
         throw new InvalidOperationException(
@@ -38,7 +38,7 @@ public abstract class StringEnum<T> : ExtendedEnum<string, T> where T : StringEn
     ///     This parameter is passed uninitialised.
     /// </param>
     /// <returns>true if the <paramref name="value">value</paramref> parameter was converted successfully; otherwise, false.</returns>
-    public static bool TryParse(string value, bool caseSensitive, out T result)
+    public static bool TryParse(string value, bool caseSensitive, out T? result)
     {
         result = null;
         if (value == null)

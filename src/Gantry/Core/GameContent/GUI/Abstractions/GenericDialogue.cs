@@ -91,7 +91,7 @@ public abstract class GenericDialogue : GuiDialog
     ///     Sets the title of the dialogue box.
     /// </summary>
     /// <value>The raw, pre-localised, string literal to use for the title of the dialogue box.</value>
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
     /// <summary>
     ///     Sets the alignment of the form on the screen, when set to Fixed mode.
@@ -102,7 +102,7 @@ public abstract class GenericDialogue : GuiDialog
     /// <summary>
     ///     The overall maximum bounds of the dialogue box.
     /// </summary>
-    protected ElementBounds DialogueBounds { get; private set; }
+    protected ElementBounds DialogueBounds { get; private set; } = ElementBounds.Empty;
 
     /// <summary>
     ///     Determines whether to allow the user to be able to move the form, within the bounds of the screen.

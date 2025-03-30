@@ -50,10 +50,10 @@ public static class HarmonyReflectionExtensions
     /// <param name="args">The arguments to pass to the method.</param>
     /// <returns>The return value of the reflected base method call.</returns>
     /// <exception cref="MissingMethodException">Thrown if the base method cannot be found.</exception>
-    public static TValue CallBaseMethod<TBaseClass, TValue>(this object instance, string method, params object[] args)
+    public static TValue? CallBaseMethod<TBaseClass, TValue>(this object instance, string method, params object[] args)
     {
         var baseType = instance.GetType().BaseType;
         if (baseType is not TBaseClass) return default;
-        return (TValue)AccessTools.Method(baseType, method)?.Invoke(instance, args);
+        return (TValue?)AccessTools.Method(baseType, method)?.Invoke(instance, args);
     }
 }

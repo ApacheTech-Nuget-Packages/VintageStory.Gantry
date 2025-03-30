@@ -5,7 +5,7 @@
 /// </summary>
 public static class WaypointIconFactory
 {
-    private static readonly Dictionary<string, LoadedTexture> _store = new();
+    private static readonly Dictionary<string, LoadedTexture> _store = [];
 
     /// <summary>
     ///     Creates or retrieves a waypoint icon texture associated with the specified key.
@@ -26,7 +26,7 @@ public static class WaypointIconFactory
     /// <param name="key">The unique key identifying the waypoint icon.</param>
     /// <param name="loadedTexture">The resulting <see cref="LoadedTexture"/> if the key is found, or <c>null</c> if not.</param>
     /// <returns><c>true</c> if the icon was successfully created or retrieved; otherwise, <c>false</c>.</returns>
-    public static bool TryCreate(string key, out LoadedTexture loadedTexture)
+    public static bool TryCreate(string key, out LoadedTexture? loadedTexture)
     {
         try
         {
@@ -55,6 +55,7 @@ public static class WaypointIconFactory
     {
         var mapManager = capi.ModLoader.GetModSystem<WorldMapManager>();
         var waypointMapLayer = mapManager.WaypointMapLayer();
+        if (waypointMapLayer is null) return;
         foreach (var (iconName, factory) in waypointMapLayer.WaypointIcons)
         {
             _store.Add(iconName, factory());

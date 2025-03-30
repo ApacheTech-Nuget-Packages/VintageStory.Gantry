@@ -17,7 +17,7 @@ internal class BrighterOptions : IBrighterOptions
     ///     Do we support feature switching? In which case please supply an initialized feature switch registry
     /// </summary>
     /// <returns></returns>
-    public IAmAFeatureSwitchRegistry FeatureSwitchRegistry { get; set; } = null;
+    public IAmAFeatureSwitchRegistry FeatureSwitchRegistry { get; set; } = default!;
 
     /// <summary>
     ///     Configures the lifetime of the Handlers. Defaults to Transient.

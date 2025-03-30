@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Extensions.Api;
-using Gantry.Core.GameContent.ChatCommands.Parsers;
+﻿using Gantry.Core.GameContent.ChatCommands.Parsers;
 using Gantry.Core.GameContent.ChatCommands.Parsers.Extensions;
 using Gantry.Services.FileSystem.Configuration;
 using Gantry.Services.FileSystem.Hosting;
@@ -19,7 +18,7 @@ namespace Gantry.Services.EasyX.Hosting;
 [UsedImplicitly]
 public abstract class EasyXHost(string _commandName) : ModHost
 {
-    private ConfigurationSettings _globalSettings;
+    private ConfigurationSettings _globalSettings = null!;
 
     ///<inheritdoc />
     protected override void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi)

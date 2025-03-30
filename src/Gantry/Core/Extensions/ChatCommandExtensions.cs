@@ -95,12 +95,12 @@ public static class ChatCommandExtensions
     /// <param name="args">The text command calling arguments.</param>
     /// <param name="value">When this method returns, contains the parsed value if the parse was successful; otherwise, the default value for <typeparamref name="TValue"/>.</param>
     /// <returns><c>true</c> if parsing succeeded; otherwise, <c>false</c>.</returns>
-    public static bool TryParseNext<TParser, TValue>(this TextCommandCallingArgs args, out TValue value)
+    public static bool TryParseNext<TParser, TValue>(this TextCommandCallingArgs args, out TValue? value)
         where TParser : ArgumentParserBase, ICommandArgumentParser
     {
-        var parser = (TParser)Activator.CreateInstance(typeof(TParser), [nameof(TParser), ApiEx.Current, true]);
-        parser.PreProcess(args);
-        if (parser.TryProcess(args) == EnumParseResult.Good)
+        var parser = (TParser?)Activator.CreateInstance(typeof(TParser), [nameof(TParser), ApiEx.Current, true]);
+        parser?.PreProcess(args);
+        if (parser?.TryProcess(args) == EnumParseResult.Good)
         {
             value = (TValue)parser.GetValue();
             return true;

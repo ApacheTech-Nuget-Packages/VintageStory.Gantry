@@ -29,7 +29,7 @@ internal static class ServiceCollectionExtensions
     /// <exception cref="ArgumentNullException">Thrown if we have no IoC provided ServiceCollection</exception>
     public static IBrighterBuilder AddBrighter(
         this IServiceCollection services,
-        Action<BrighterOptions> configure = null)
+        Action<BrighterOptions>? configure = null)
     {
         if (services == null)
             throw new ArgumentNullException(nameof(services));
@@ -116,12 +116,12 @@ internal static class ServiceCollectionExtensions
 
         //Find the transaction type from the provider
         var transactionProviderInterface = typeof(IAmABoxTransactionProvider<>);
-        Type transactionType = null;
+        Type? transactionType = null;
         foreach (var i in transactionProvider.GetInterfaces())
             if (i.IsGenericType && i.GetGenericTypeDefinition() == transactionProviderInterface)
                 transactionType = i.GetGenericArguments()[0];
 
-        if (transactionType == null)
+        if (transactionType is null)
             throw new ConfigurationException(
                 $"Unable to register provider of type {transactionProvider.Name}. It does not implement {typeof(IAmABoxTransactionProvider<>).Name}.");
 
@@ -166,7 +166,7 @@ internal static class ServiceCollectionExtensions
     private static INeedARequestContext AddEventBus(
         IServiceProvider provider,
         INeedMessaging messagingBuilder,
-        IUseRpc useRequestResponse)
+        IUseRpc? useRequestResponse)
     {
         provider.TryResolve<IAmExternalBusConfiguration>(out var eventBusConfiguration);
         provider.TryResolve<IServiceActivatorOptions>(out var serviceActivatorOptions);
@@ -181,7 +181,7 @@ internal static class ServiceCollectionExtensions
             true when !useRpc => messagingBuilder.ExternalBus(ExternalBusType.FireAndForget, eventBus,
                 messageMapperRegistry, messageTransformFactory, eventBusConfiguration?.ResponseChannelFactory,
                 eventBusConfiguration?.ReplyQueueSubscriptions, serviceActivatorOptions?.InboxConfiguration),
-            _ => null
+            _ => throw new UnreachableException()
         };
 
         if (hasEventBus && useRpc)
@@ -205,7 +205,7 @@ internal static class ServiceCollectionExtensions
         IAmExternalBusConfiguration externalBusConfiguration,
         Type transactionType)
     {
-        if (externalBusConfiguration.ProducerRegistry == null)
+        if (externalBusConfiguration.ProducerRegistry is null)
             throw new ConfigurationException("An external bus must have an IAmAProducerRegistry");
 
         var serviceCollection = brighterBuilder.Services;
@@ -244,11 +244,11 @@ internal static class ServiceCollectionExtensions
         //again to prevent someone configuring Brighter from having to pass generic types
         var busType = typeof(ExternalBusServices<,>).MakeGenericType(typeof(Message), transactionType);
 
-        var bus = (IAmAnExternalBusService)Activator.CreateInstance(busType,
+        var bus = Activator.CreateInstance(busType,
             externalBusConfiguration.ProducerRegistry,
             outbox,
             externalBusConfiguration.OutboxBulkChunkSize,
-            externalBusConfiguration.OutboxTimeout);
+            externalBusConfiguration.OutboxTimeout) as IAmAnExternalBusService;
 
         serviceCollection.TryAddSingleton(bus);
 

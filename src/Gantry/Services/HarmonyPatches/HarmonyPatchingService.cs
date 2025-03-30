@@ -244,8 +244,9 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// </summary>
     /// <param name="harmonyId">The identifier to use for the patch host.</param>
     /// <returns>A <see cref="Harmony" /> patch host.</returns>
-    public Harmony CreateOrUseInstance(string harmonyId)
+    public Harmony CreateOrUseInstance(string? harmonyId)
     {
+        harmonyId ??= string.Empty;
         if (_instances.TryGetValue(harmonyId, out var instance))
         {
             return instance;

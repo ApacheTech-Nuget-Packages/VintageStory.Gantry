@@ -7,7 +7,7 @@
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class WorldSettingsConsumer<TSettings> : ISettingsConsumer where TSettings : FeatureSettings<TSettings>, new()
 {
-    private static TSettings _settings;
+    private static TSettings? _settings;
 
     /// <summary>
     ///     Gets or sets the settings.
@@ -15,7 +15,7 @@ public abstract class WorldSettingsConsumer<TSettings> : ISettingsConsumer where
     /// <value>
     ///     The settings.
     /// </value>
-    protected static TSettings Settings => _settings ??= ModSettings.World?.Feature<TSettings>();
+    protected static TSettings? Settings => _settings ??= ModSettings.World?.Feature<TSettings>();
 
     /// <summary>
     ///     Gets or sets the settings.
@@ -23,7 +23,7 @@ public abstract class WorldSettingsConsumer<TSettings> : ISettingsConsumer where
     /// <value>
     ///     The settings.
     /// </value>
-    protected static TSettings ClientSettings => ModSettings.ClientWorld?.Feature<TSettings>();
+    protected static TSettings? ClientSettings => ModSettings.ClientWorld?.Feature<TSettings>();
 
     /// <summary>
     ///     Gets or sets the settings.
@@ -31,7 +31,7 @@ public abstract class WorldSettingsConsumer<TSettings> : ISettingsConsumer where
     /// <value>
     ///     The settings.
     /// </value>
-    protected static TSettings ServerSettings => ModSettings.ServerWorld?.Feature<TSettings>();
+    protected static TSettings? ServerSettings => ModSettings.ServerWorld?.Feature<TSettings>();
 
     /// <summary>
     ///     Gets or sets the name of the feature.

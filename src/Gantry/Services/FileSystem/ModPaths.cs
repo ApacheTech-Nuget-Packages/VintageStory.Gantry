@@ -10,66 +10,61 @@ public static class ModPaths
     /// <summary>
     ///     Gets the world unique identifier.
     /// </summary>
-    public static string WorldGuid { get; internal set; }
+    public static string WorldGuid { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the root path for all VintageMods mod files.
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
-    public static string VintageModsRootPath { get; internal set; }
+    public static string VintageModsRootPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the path used for storing data files for a particular mod.
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
-    public static string ModDataRootPath { get; internal set; }
+    public static string ModDataRootPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the path used for storing gantry data files.
     /// </summary>
     /// <value>A path on the filesystem, used to store gantry files.</value>
-    public static string ModDataGantryRootPath { get; internal set; }
+    public static string ModDataGantryRootPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the path used for storing gantry data files.
     /// </summary>
     /// <value>A path on the filesystem, used to store gantry files.</value>
-    public static string ModDataGantryGlobalPath { get; internal set; }
+    public static string ModDataGantryGlobalPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the path used for storing gantry data files.
     /// </summary>
     /// <value>A path on the filesystem, used to store gantry files.</value>
-    public static string ModDataGantryWorldPath { get; internal set; }
+    public static string ModDataGantryWorldPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the path used for storing global data files.
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
-    public static string ModDataGlobalPath { get; internal set; }
+    public static string ModDataGlobalPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the path used for storing per-world data files.
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
-    public static string ModDataWorldPath { get; internal set; }
+    public static string ModDataWorldPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the path that the mod library is stored in.
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
-    public static string ModRootPath { get; internal set; }
+    public static string ModRootPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Gets the main asset origin directory for the mod.
     /// </summary>
     /// <value>A path on the filesystem, used to store mod files.</value>
-    public static string ModAssetsPath { get; internal set; }
-
-    /// <summary>
-    ///     The directory that the log files are stored in.
-    /// </summary>
-    public static DirectoryInfo LogDirectory { get; internal set; }
+    public static string ModAssetsPath { get; internal set; } = string.Empty;
 
     /// <summary>
     ///     Creates a directory on the file-system.

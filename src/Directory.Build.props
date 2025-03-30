@@ -16,13 +16,13 @@
 	<!-- General Package Details -->
 
 	<PropertyGroup>
-		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ApplicationIcon>__Icon.ico</ApplicationIcon>
 		<Authors>ApacheTech Solutions</Authors>
 
 		<Company>ApacheTech Solutions</Company>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<Copyright>Copyright Â© ApacheTech Solutons, 2023. All Rights Reserved.</Copyright>
+		<Copyright>Copyright © ApacheTech Solutons, 2025. All Rights Reserved.</Copyright>
 
 		<DebugSymbols>True</DebugSymbols>
 		<DebugType>embedded</DebugType>
@@ -32,15 +32,18 @@
 
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<PublishOnBuild>False</PublishOnBuild>
+
+		<ImplicitUsings>true</ImplicitUsings>
 
 		<NeutralLanguage>en</NeutralLanguage>
-
+		<Nullable>enable</Nullable>
+		
 		<PackageIcon>__PreviewImage.png</PackageIcon>
 		<PackageLicenseFile>LICENCE.md</PackageLicenseFile>
 		<PackageProjectUrl>https://apachetech.co.uk</PackageProjectUrl>
 		<PackageTags>C#</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PublishOnBuild>False</PublishOnBuild>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 
 		<RepositoryType>git</RepositoryType>

@@ -14,7 +14,7 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
 {
     private readonly FileScope _scope;
     private readonly Harmony _harmony;
-    private Dictionary<string, IObservableObject> _observers = [];
+    private readonly Dictionary<string, IObservableObject> _observers = [];
 
     /// <summary>
     ///     Gets the underlying <see cref="IJsonModFile" /> that this instance wraps.
@@ -56,7 +56,7 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     /// <typeparam name="TSettings">The <see cref="Type"/> of object to parse the settings for the feature into.</typeparam>
     /// <param name="featureName">The name of the feature.</param>
     /// <returns>An object, that represents the settings for a given mod feature.</returns>
-    public TSettings Feature<TSettings>(string featureName = null) where TSettings : FeatureSettings<TSettings>, new()
+    public TSettings Feature<TSettings>(string? featureName = null) where TSettings : FeatureSettings<TSettings>, new()
     {
         featureName ??= typeof(TSettings).Name.Replace("Settings", "");
         if (_observers.TryGetValue(featureName, out var cachedObserver))
@@ -92,8 +92,9 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     /// <typeparam name="TSettings">The <see cref="Type" /> of object to parse the settings for the feature into.</typeparam>
     /// <param name="settings">The settings.</param>
     /// <param name="featureName">The name of the feature.</param>
-    public void Save<TSettings>(TSettings settings, string featureName = null)
+    public void Save<TSettings>(TSettings? settings, string? featureName = null)
     {
+        if (settings is null) return;
         featureName ??= typeof(TSettings).Name.Replace("Settings", "");
 
         // Parse the JSON file or initialise a new JObject if the file is empty
@@ -125,6 +126,5 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
             observer.UnPatch();
         }
         _observers.Clear();
-        _observers = null;
     }
 }

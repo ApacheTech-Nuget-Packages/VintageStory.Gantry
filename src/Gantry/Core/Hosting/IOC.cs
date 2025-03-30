@@ -22,29 +22,24 @@ public static class IOC
     ///     Gets the IOC Resolver for the Server.
     /// </summary>
     /// <value>The IOC Resolver for the Server.</value>
-    internal static IServiceProvider ServerIOC { get; set; }
+    internal static IServiceProvider? ServerIOC { get; set; }
 
     /// <summary>
     ///     Gets the IOC Resolver for the Client.
     /// </summary>
     /// <value>The IOC Resolver for the Client.</value>
-    internal static IServiceProvider ClientIOC { get; set; }
+    internal static IServiceProvider? ClientIOC { get; set; }
 
     /// <summary>
     ///     Gets the IOC Resolver for the current app-side.
     /// </summary>      
     /// <value>The IOC Resolver for the current app-side.</value>
-    public static IServiceProvider Services => ApiEx.OneOf(ClientIOC, ServerIOC);
+    public static IServiceProvider Services => ApiEx.OneOf(ClientIOC, ServerIOC)!;
     
     /// <summary>
     ///     Universal access to the Brighter command processor.
     /// </summary>
     public static IAmACommandProcessor CommandProcessor => Services.GetRequiredService<IAmACommandProcessor>();
 
-    internal static void Dispose()
-    {
-        ApiEx.Run(
-            () => ClientIOC = null, 
-            ()  => ServerIOC = null);
-    }
+    internal static void Dispose() => ApiEx.Run(() => ClientIOC = null, () => ServerIOC = null);
 }

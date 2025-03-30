@@ -16,9 +16,9 @@ public sealed class LogExecutionTime : IDisposable
     ///     Initialises a new instance of the <see cref="LogExecutionTime"/> class.
     /// </summary>
     /// <param name="methodName">The name of the method; automatically captured if not specified.</param>
-    public LogExecutionTime([CallerMemberName] string methodName = null)
+    public LogExecutionTime([CallerMemberName] string methodName = "")
     {
-        _methodName = methodName;
+        _methodName = methodName!;
         _stopwatch = Stopwatch.StartNew();
     }
 

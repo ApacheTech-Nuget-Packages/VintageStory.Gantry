@@ -1,4 +1,5 @@
 ﻿using ApacheTech.Common.BrighterSlim;
+using ApacheTech.Common.Extensions.System;
 
 namespace Gantry.Services.Brighter.Hosting;
 
@@ -26,10 +27,9 @@ internal class ServiceProviderTransformerFactoryAsync : IAmAMessageTransformerFa
     /// </summary>
     /// <param name="transformerType">The type of transformer to create</param>
     /// <returns></returns>
-    public IAmAMessageTransformAsync Create(Type transformerType)
-    {
-        return (IAmAMessageTransformAsync)_serviceProvider.GetService(transformerType);
-    }
+    public IAmAMessageTransformAsync? Create(Type transformerType) => 
+        _serviceProvider.GetService(transformerType)?.To<IAmAMessageTransformAsync>();
+    
 
     /// <summary>
     /// If the transform was scoped as transient, we release it when the pipeline is finished

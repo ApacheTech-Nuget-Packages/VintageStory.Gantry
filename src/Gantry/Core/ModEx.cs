@@ -28,12 +28,12 @@ public static class ModEx
     /// <summary>
     ///     Represents the current mod, as registered with the mod manager.
     /// </summary>
-    public static Mod Mod { get; private set; }
+    public static Mod Mod { get; private set; } = default!;
 
     /// <summary>
     ///     The main assembly for the mod that initialised the Gantry MDK.
     /// </summary>
-    public static Assembly ModAssembly { get; private set; }
+    public static Assembly ModAssembly { get; private set; } = default!;
 
     /// <summary>
     ///     The main assemblies for the mod, including the Gantry MDK.
@@ -51,7 +51,7 @@ public static class ModEx
     /// <summary>
     ///     The mod's metadata.
     /// </summary>
-    public static ModInfo ModInfo { get; private set; }
+    public static ModInfo ModInfo { get; private set; } = default!;
 
     /// <summary>
     ///     Cleans up the mess I made of the previous attempt to fix Linux being a pain!
@@ -72,7 +72,7 @@ public static class ModEx
     public static void CreateLogsZipArchive()
     {
         var sourceFolder = GamePaths.Logs;
-        var zipFileName = Path.Combine(Path.GetDirectoryName(sourceFolder), $"{Path.GetFileName(sourceFolder)}.zip");
+        var zipFileName = Path.Combine(Path.GetDirectoryName(sourceFolder)!, $"{Path.GetFileName(sourceFolder)}.zip");
         ZipFile.CreateFromDirectory(sourceFolder, zipFileName, CompressionLevel.Optimal, includeBaseDirectory: false);
     }
 }

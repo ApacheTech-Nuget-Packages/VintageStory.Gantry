@@ -15,7 +15,7 @@ public static class DynamicWrapper
     /// <typeparam name="TOriginal">The original class to wrap.</typeparam>
     /// <param name="originalInstance">An instance of the original class to wrap.</param>
     /// <returns>An object implementing the specified interface.</returns>
-    public static TInterface CreateWrapper<TInterface, TOriginal>(TOriginal originalInstance)
+    public static TInterface? CreateWrapper<TInterface, TOriginal>(TOriginal originalInstance)
         where TInterface : class
         where TOriginal : class
     {
@@ -79,12 +79,8 @@ public static class DynamicWrapper
             }
 
             // Call the corresponding method on the original instance
-            var originalMethod = originalType.GetMethod(interfaceMethod.Name, Array.ConvertAll(interfaceMethod.GetParameters(), p => p.ParameterType));
-            if (originalMethod is null)
-            {
-                throw new InvalidOperationException($"The method {interfaceMethod.Name} is not implemented on {originalType.Name}.");
-            }
-
+            var originalMethod = originalType.GetMethod(interfaceMethod.Name, Array.ConvertAll(interfaceMethod.GetParameters(), p => p.ParameterType))
+                ?? throw new InvalidOperationException($"The method {interfaceMethod.Name} is not implemented on {originalType.Name}.");
             ilMethod.Emit(OpCodes.Callvirt, originalMethod);
             ilMethod.Emit(OpCodes.Ret);
 

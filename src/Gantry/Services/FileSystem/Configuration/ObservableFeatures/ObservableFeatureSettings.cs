@@ -56,6 +56,7 @@ public class ObservableFeatureSettings<TSettings> : ObservableObject<TSettings> 
 
             if (!((TSettings)instance).PropertyChangedDictionary.TryGetValue(propertyName, out var actions)) return;
             var value = instance.GetType().GetProperty(propertyName)?.GetValue(instance);
+            if (value is null) return;
             actions.ForEach(action => action.Action(value));
         }
         catch (Exception ex)

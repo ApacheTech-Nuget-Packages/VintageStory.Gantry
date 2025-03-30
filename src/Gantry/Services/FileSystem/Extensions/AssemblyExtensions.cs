@@ -16,7 +16,7 @@ public static class AssemblyExtensions
     /// <param name="assembly">The assembly to scan.</param>
     /// <returns></returns>
     public static IEnumerable<T> InstantiateAllTypesImplementing<T>(this Assembly assembly) =>
-        assembly.GetAllTypesImplementing<T>().Select(Activator.CreateInstance).Select(p => p.To<T>());
+        assembly.GetAllTypesImplementing<T>().Select(Activator.CreateInstance).Select(p => p!.To<T>());
 
     /// <summary>
     ///     Gets all types within the assembly that implement a specific interface.

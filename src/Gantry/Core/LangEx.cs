@@ -104,7 +104,7 @@ public static class LangEx
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <param name="args">The arguments to pass to the lang file.</param>
     /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string FeatureString(string featureName, string path, params object[] args) 
+    public static string FeatureString(string featureName, string path, params object?[]? args) 
         => Lang.Get(FeatureCode(featureName, path), args);
 
     /// <summary>

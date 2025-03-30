@@ -136,15 +136,10 @@ public sealed class FileSystemService : IFileSystemService
     /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
     public TModel ParseEmbeddedJsonFile<TModel>(string fileName)
     {
-        try
-        {
-            var json = ModEx.ModAssembly.GetResourceContent(fileName);
-            return JsonConvert.DeserializeObject<TModel>(json);
-        }
-        catch (Exception)
-        {
-            return default;
-        }
+        var json = ModEx.ModAssembly.GetResourceContent(fileName);
+        var resource = JsonConvert.DeserializeObject<TModel>(json) 
+            ?? throw new FileNotFoundException();
+        return resource;
     }
 
     /// <summary>
@@ -156,15 +151,9 @@ public sealed class FileSystemService : IFileSystemService
     /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
     public IEnumerable<TModel> ParseEmbeddedJsonArrayFile<TModel>(string fileName)
     {
-        try
-        {
-            var json = ModEx.ModAssembly.GetResourceContent(fileName);
-            return JsonConvert.DeserializeObject<IEnumerable<TModel>>(json);
-        }
-        catch (Exception)
-        {
-            return default;
-        }
+        var json = ModEx.ModAssembly.GetResourceContent(fileName);
+        if (string.IsNullOrEmpty(json)) return [];
+        return JsonConvert.DeserializeObject<IEnumerable<TModel>>(json) ?? [];
     }
 
     /// <summary>
@@ -172,10 +161,7 @@ public sealed class FileSystemService : IFileSystemService
     /// </summary>
     /// <param name="fileName">Name of the file.</param>
     /// <returns>Return a <see cref="ITextModFile" /> representation of the file, on disk.</returns>
-    public ITextModFile GetTextFile(string fileName)
-    {
-        return GetRegisteredFile<ITextModFile>(fileName);
-    }
+    public ITextModFile GetTextFile(string fileName) => GetRegisteredFile<ITextModFile>(fileName);
 
     private static void CopyFileToOutputDirectory(FileSystemInfo file)
     {
@@ -211,12 +197,12 @@ public sealed class FileSystemService : IFileSystemService
     /// </summary>
     public void Dispose()
     {
-        ModDataRootPath = null;
-        ModDataGlobalPath = null;
-        ModDataWorldPath = null;
-        ModRootPath = null;
-        ModAssetsPath = null;
-        WorldGuid = null;
+        ModDataRootPath = string.Empty;
+        ModDataGlobalPath = string.Empty;
+        ModDataWorldPath = string.Empty;
+        ModRootPath = string.Empty;
+        ModAssetsPath = string.Empty;
+        WorldGuid = string.Empty;
 
         G.Logger.VerboseDebug("Disposing Mod Settings");
         ModSettings.Dispose();

@@ -51,7 +51,7 @@ internal class GantryCommand : UniversalSubsystem
             .ToSided();
     }
 
-    private static Sided<IChatCommand> _command;
+    private static Sided<IChatCommand> _command = default!;
 
     /// <summary>
     ///     Main chat command for both sides. Available after .Start();

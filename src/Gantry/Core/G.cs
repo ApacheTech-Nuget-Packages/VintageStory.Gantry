@@ -1,7 +1,5 @@
 ﻿#nullable enable
 using Gantry.Core.Diagnostics;
-using Gantry.Services.FileSystem;
-using Vintagestory;
 using Vintagestory.API.Util;
 
 // ReSharper disable RedundantSuppressNullableWarningExpression
@@ -27,6 +25,11 @@ public static class G
     private static readonly AsyncLocal<GantryLogger?> _clientLogger = new();
 
     /// <summary>
+    ///     The directory that the log files are stored in.
+    /// </summary>
+    internal static DirectoryInfo LogDirectory { get; private set; } = default!;
+
+    /// <summary>
     ///     Interface to the client's and server's event, debug and error logging utilty.
     /// </summary>
     public static ILogger Logger => _serverLogger.Value ?? _clientLogger.Value;
@@ -39,10 +42,10 @@ public static class G
     internal static void CreateLogger(ICoreAPI api, Mod mod)
     {
         api.Logger.Debug($"[Gantry] Initialising Gantry {api.Side} logger.");
-        ModPaths.LogDirectory = new DirectoryInfo(Path.Combine(GamePaths.Logs, "gantry", mod.Info.ModID));
-        if (!ModPaths.LogDirectory.Exists) ModPaths.LogDirectory.Create();
-        ModPaths.LogDirectory.EnumerateFiles("*.txt").Foreach(p => p.Delete());
-        api.Logger.Debug($" - Directory: {ModPaths.LogDirectory}");
+        LogDirectory = new DirectoryInfo(Path.Combine(GamePaths.Logs, "gantry", mod.Info.ModID));
+        if (!LogDirectory.Exists) LogDirectory.Create();
+        LogDirectory.EnumerateFiles("*.txt").Foreach(p => p.Delete());
+        api.Logger.Debug($" - Directory: {LogDirectory}");
 
         switch (api.Side)
         {

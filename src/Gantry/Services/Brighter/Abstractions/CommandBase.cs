@@ -16,7 +16,7 @@ public abstract class CommandBase : IRequest
     ///     Gets or sets the span that this operation lives within.
     /// </summary>
     [JsonIgnore]
-    public Activity Span { get; set; }
+    public Activity? Span { get; set; }
 
     /// <summary>
     ///     Determines whether the execution of the command was successful, or not.

@@ -17,7 +17,7 @@ public static class WorldAccessorExtensions
     /// <param name="onBlockMap"></param>
     /// <param name="onBlockPredicate">The method in which you want to check for the block, whatever it may be.</param>
     /// <param name="centreOrder">If true, the blocks will be ordered by the distance to the center position</param>
-    public static TResult WalkBlocks<TResult>(
+    public static TResult? WalkBlocks<TResult>(
         this IBlockAccessor walker,
         BlockPos minPos,
         BlockPos maxPos, System.Func<Block, BlockPos, bool> onBlockPredicate, System.Func<Block, BlockPos, TResult> onBlockMap,
@@ -48,7 +48,7 @@ public static class WorldAccessorExtensions
     /// <param name="horizontalRange">The horizontal (X/Z) range to scan.</param>
     /// <param name="verticalRange">The vertical (Y) range to scan.</param>
     /// <param name="predicate">A custom filter to narrow the focus of the search.</param>
-    public static BlockPos GetNearestBlock<TBlock>(
+    public static BlockPos? GetNearestBlock<TBlock>(
         this IWorldAccessor world,
         BlockPos origin,
         float horizontalRange,
@@ -89,11 +89,11 @@ public static class WorldAccessorExtensions
     /// <param name="horRange">The horizontal (X/Z) range to scan.</param>
     /// <param name="vertRange">The vertical (Y) range to scan.</param>
     /// <param name="predicate">A custom filter to narrow the focus of the search.</param>
-    public static TBlockEntity GetNearestBlockEntity<TBlockEntity>(this IWorldAccessor world, BlockPos origin,
+    public static TBlockEntity? GetNearestBlockEntity<TBlockEntity>(this IWorldAccessor world, BlockPos origin,
         float horRange, float vertRange, System.Func<TBlockEntity, bool> predicate) where TBlockEntity : BlockEntity
     {
         var walker = world.GetBlockAccessorPrefetch(false, false);
-        TBlockEntity blockEntity = null;
+        TBlockEntity? blockEntity = null;
         var minPos = origin.AddCopy(-horRange, -vertRange, -horRange).ClampToWorldBounds(world.BlockAccessor);
         var maxPos = origin.AddCopy(horRange, vertRange, horRange).ClampToWorldBounds(world.BlockAccessor);
         walker.PrefetchBlocks(minPos, maxPos);
@@ -117,7 +117,7 @@ public static class WorldAccessorExtensions
     /// <param name="origin">The origin position.</param>
     /// <param name="horRange">The horizontal (X/Z) range to scan.</param>
     /// <param name="vertRange">The vertical (Y) range to scan.</param>
-    public static TBlockEntity GetNearestBlockEntity<TBlockEntity>(this IWorldAccessor world, BlockPos origin,
+    public static TBlockEntity? GetNearestBlockEntity<TBlockEntity>(this IWorldAccessor world, BlockPos origin,
         float horRange, float vertRange) where TBlockEntity : BlockEntity
     {
         return world.GetNearestBlockEntity<TBlockEntity>(origin, horRange, vertRange, _ => true);
@@ -133,11 +133,11 @@ public static class WorldAccessorExtensions
     /// <param name="vertRange">The vertical (Y) range to scan.</param>
     /// <param name="predicate">A custom filter to narrow the focus of the search.</param>
     /// <param name="blockPosOut">The block position the block was found at.</param>
-    public static TBlock GetNearestBlock<TBlock>(this IWorldAccessor world, BlockPos origin,
-        float horRange, float vertRange, System.Func<TBlock, bool> predicate, out BlockPos blockPosOut) where TBlock : Block
+    public static TBlock? GetNearestBlock<TBlock>(this IWorldAccessor world, BlockPos origin,
+        float horRange, float vertRange, System.Func<TBlock, bool> predicate, out BlockPos? blockPosOut) where TBlock : Block
     {
-        TBlock blockEntity = null;
-        BlockPos blockPosTemp = null;
+        TBlock? blockEntity = null;
+        BlockPos? blockPosTemp = null;
         var found = false;
         var minPos = origin.AddCopy(-horRange, -vertRange, -horRange);
         var maxPos = origin.AddCopy(horRange, vertRange, horRange);
@@ -162,8 +162,8 @@ public static class WorldAccessorExtensions
     /// <param name="horRange">The horizontal (X/Z) range to scan.</param>
     /// <param name="vertRange">The vertical (Y) range to scan.</param>
     /// <param name="blockPosOut">The block position the block was found at.</param>
-    public static TBlock GetNearestBlock<TBlock>(this IWorldAccessor world, BlockPos origin,
-        float horRange, float vertRange, out BlockPos blockPosOut) where TBlock : Block
+    public static TBlock? GetNearestBlock<TBlock>(this IWorldAccessor world, BlockPos origin,
+        float horRange, float vertRange, out BlockPos? blockPosOut) where TBlock : Block
     {
         return world.GetNearestBlock<TBlock>(
             origin, horRange, vertRange, _ => true, out blockPosOut);

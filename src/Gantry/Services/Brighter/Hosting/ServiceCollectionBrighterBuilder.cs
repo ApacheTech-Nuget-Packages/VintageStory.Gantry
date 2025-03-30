@@ -26,7 +26,7 @@ internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
         IServiceCollection services,
         ServiceCollectionSubscriberRegistry serviceCollectionSubscriberRegistry,
         ServiceCollectionMessageMapperRegistry mapperRegistry,
-        ServiceCollectionTransformerRegistry transformerRegistry = null
+        ServiceCollectionTransformerRegistry? transformerRegistry = null
     )
     {
         Services = services;

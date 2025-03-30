@@ -21,7 +21,7 @@ public class AccessModeParser(string argName, bool isMandatoryArg) : ArgumentPar
     }
 
     /// <inheritdoc />
-    public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults> onReady = null)
+    public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults>? onReady = null)
     {
         var value = args.RawArgs.PopWord("");
         Mode = DirectParse(value) ?? FuzzyParse(value);
@@ -31,7 +31,7 @@ public class AccessModeParser(string argName, bool isMandatoryArg) : ArgumentPar
     }
 
     /// <inheritdoc />
-    public override object GetValue() => Mode;
+    public override object? GetValue() => Mode;
 
     /// <inheritdoc />
     public override void SetValue(object data)

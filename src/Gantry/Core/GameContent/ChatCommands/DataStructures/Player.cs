@@ -17,7 +17,7 @@ public record Player(string Id, string Name)
     ///     A new instance of <see cref="Player"/> with the corresponding identifier and name,
     ///     or <c>null</c> if <paramref name="playerUidName"/> is <c>null</c>.
     /// </returns>
-    public static implicit operator Player(PlayerUidName playerUidName) 
+    public static implicit operator Player?(PlayerUidName playerUidName) 
         => playerUidName is null ? null : new Player(playerUidName.Uid, playerUidName.Name);
 
     /// <summary>
@@ -28,6 +28,6 @@ public record Player(string Id, string Name)
     ///     A new instance of <see cref="PlayerUidName"/> with the corresponding UID and name,
     ///     or <c>null</c> if <paramref name="player"/> is <c>null</c>.
     /// </returns>
-    public static implicit operator PlayerUidName(Player player) 
+    public static implicit operator PlayerUidName?(Player player) 
         => player is null ? null : new PlayerUidName(player.Id, player.Name);
 }

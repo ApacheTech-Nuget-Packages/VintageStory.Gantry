@@ -23,7 +23,7 @@ public class FileScopeParser(string argName, bool isMandatoryArg) : ArgumentPars
     }
 
     /// <inheritdoc />
-    public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults> onReady = null)
+    public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults>? onReady = null)
     {
         var value = args.RawArgs.PopWord("");
         Scope = DirectParse(value) ?? FuzzyParse(value);
@@ -33,7 +33,7 @@ public class FileScopeParser(string argName, bool isMandatoryArg) : ArgumentPars
     }
 
     /// <inheritdoc />
-    public override object GetValue() => Scope;
+    public override object? GetValue() => Scope;
 
     /// <inheritdoc />
     public override void SetValue(object data)

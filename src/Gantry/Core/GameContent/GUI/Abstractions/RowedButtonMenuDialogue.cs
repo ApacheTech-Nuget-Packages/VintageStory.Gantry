@@ -20,7 +20,7 @@ public abstract class RowedButtonMenuDialogue : GenericDialogue
     ///     Sets the language entry prefix.
     /// </summary>
     /// <value>The language entry prefix.</value>
-    protected virtual string LangEntryPrefix { get; }
+    protected virtual string LangEntryPrefix { get; } = string.Empty;
 
     /// <summary>
     ///     Sets the width of the buttons.
