@@ -1,0 +1,23 @@
+﻿{
+    "Features.EasyX.SetScope":  "Ayarlar kapsamı artık şu şekilde ayarlandı: {0}",
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0}, {1} beyaz listesinden kaldırıldı.",
+    "Features.EasyX.PlayerSearch.NoResults":  "\u0027{0}\u0027 araması sonuç vermedi. Lütfen tekrar deneyin.",
+    "Features.EasyX.InvalidMode":  "Geçersiz erişim modu. Geçerli seçenekler şunlardır: {0}",
+    "Features.EasyX.Whitelist.NoResults":  "Şu anda {0} beyaz listesinde oyuncu yok.",
+    "Features.EasyX.ServerCommandDescription":  "Sunucu yöneticisinin sunucudaki mod ayarlarını değiştirmesine izin verir.",
+    "Features.EasyX.Mode":  "{0} Modu: {1}",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0}, {1} kara listesine eklendi.",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "\u0027{0}\u0027 araması birden fazla sonuç verdi. Lütfen arama terimlerinizi daraltın.",
+    "Features.EasyX.Blacklist.Description":  "Bu özellik için kara listeye oyuncu ekle/listeden oyuncu çıkar.",
+    "Features.EasyX.AccessMode.Description":  "Geçerli özellik için erişim modunu değiştirin.",
+    "Features.EasyX.Scope":  "Ayarlar Kapsamı: {0}",
+    "Features.EasyX.Scope.Description":  "Modun genel ayarları mı yoksa dünya başına mı kullanacağını değiştirin.",
+    "Features.EasyX.Whitelist.PlayerAdded":  "{0}, {1} beyaz listesine eklendi.",
+    "Features.EasyX.Whitelist.Results":  "Aşağıdaki oyuncular şu anda {0} beyaz listesinde yer almaktadır:",
+    "Features.EasyX.Blacklist.NoResults":  "Şu anda {0} kara listesinde oyuncu yok.",
+    "Features.EasyX.Blacklist.PlayerRemoved":  "{0}, {1} kara listesinden çıkarıldı.",
+    "Features.EasyX.InvalidScope":  "Geçersiz kapsam. Geçerli seçenekler şunlardır: {0}",
+    "Features.EasyX.Blacklist.Results":  "Aşağıdaki oyuncular şu anda {0} kara listesinde:",
+    "Features.EasyX.Whitelist.Description":  "Bu özellik için beyaz listeye oyuncu ekle/kaldır.",
+    "Features.EasyX.SetMode":  "{0} modu şimdi şu şekilde ayarlandı: {1}"
+}

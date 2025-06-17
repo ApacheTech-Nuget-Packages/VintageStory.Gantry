@@ -40,6 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Core\_EmbeddedResources\lang\Gantry\" />
 		<Folder Include="Domain\" />
 	</ItemGroup>
 
