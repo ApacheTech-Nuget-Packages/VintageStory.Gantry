@@ -39,6 +39,13 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
         }
     }
 
+    /// <summary>
+    ///     Adds a switch control to the GUI composer for a boolean property, with label and hover text.
+    /// </summary>
+    /// <param name="composer">The GUI composer to add the switch to.</param>
+    /// <param name="propertyName">The name of the boolean property to bind to the switch.</param>
+    /// <param name="left">The bounds for the label element (updated for next row).</param>
+    /// <param name="right">The bounds for the switch element (updated for next row).</param>
     private void AddSettingSwitch(GuiComposer composer, string propertyName, ref ElementBounds left, ref ElementBounds right)
     {
         const int switchSize = 20;
@@ -54,6 +61,11 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
         right = right.BelowCopy(fixedDeltaY: gapBetweenRows);
     }
 
+    /// <summary>
+    ///     Toggles the value of a boolean property on the settings object and refreshes the displayed values.
+    /// </summary>
+    /// <param name="propertyName">The name of the property to toggle.</param>
+    /// <param name="state">The new boolean value to set.</param>
     private void ToggleProperty(string propertyName, bool state)
     {
         // HACK: Be aware that this can cause the dynamic save to be called BEFORE the value is changed.
@@ -73,7 +85,7 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     }
 
     /// <summary>
-    ///     Refreshes the displayed values on the form.
+    ///     Refreshes the displayed values on the form, updating all switch controls to match the current settings.
     /// </summary>
     protected override void RefreshValues()
     {

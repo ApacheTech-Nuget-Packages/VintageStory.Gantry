@@ -39,19 +39,19 @@ public abstract class FeatureSettingsDialogue<TFeatureSettings> : GenericDialogu
     }
 
     /// <summary>
-    ///     Gets an entry from the language files, for the feature this instance is representing.
+    ///     Returns a localised string for the specified path and arguments, using the feature's dialogue language file.
     /// </summary>
-    /// <param name="path">The entry to return.</param>
-    /// <param name="args">The entry to return.</param>
-    /// <returns>A localised <see cref="string"/>, for the specified language file code.</returns>
+    /// <param name="path">The localisation path within the feature's dialogue file.</param>
+    /// <param name="args">Optional arguments to format the localised string.</param>
+    /// <returns>A localised <see cref="string"/> for the specified language file code.</returns>
     protected string T(string path, params object[] args)
         => LangEx.FeatureString($"{FeatureName}.Dialogue", path, args);
 
     /// <summary>
-    ///     Saves the feature changes.
+    ///     Saves the feature changes to the appropriate settings file based on the specified scope.
     /// </summary>
-    /// <param name="scope">The scope.</param>
-    /// <exception cref="ArgumentOutOfRangeException">scope - null</exception>
+    /// <param name="scope">The scope to save the feature changes to (Global or World).</param>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the provided scope is not recognised.</exception>
     protected void SaveFeatureChanges(FileScope scope = FileScope.World)
     {
         switch (scope)

@@ -3,7 +3,7 @@
 namespace Gantry.Core.Extensions.Api;
 
 /// <summary>
-///     Extension method for working with the Core API.
+///     Provides extension methods for working with the Core API, enabling side-dependent logic for client and server execution contexts.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class AppSideExtensions
@@ -11,10 +11,10 @@ public static class AppSideExtensions
     /// <summary>
     ///     Chooses between one of two objects, based on whether it's being called by the client, or the server.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of object to return.</typeparam>
     /// <param name="side">The app side in question.</param>
-    /// <param name="clientObject">The client object.</param>
-    /// <param name="serverObject">The server object.</param>
+    /// <param name="clientObject">The object to return if called from the client.</param>
+    /// <param name="serverObject">The object to return if called from the server.</param>
     /// <returns>
     ///     Returns <paramref name="clientObject"/> if called from the client, or <paramref name="serverObject"/> if called from the server.
     /// </returns>
@@ -27,19 +27,19 @@ public static class AppSideExtensions
     ///     Invokes an action, based on whether it's being called by the client, or the server.
     /// </summary>
     /// <param name="side">The app side in question.</param>
-    /// <param name="clientAction">The client action.</param>
-    /// <param name="serverAction">The server action.</param>
+    /// <param name="clientAction">The action to invoke if on the client.</param>
+    /// <param name="serverAction">The action to invoke if on the server.</param>
     public static void RunOneOf(this EnumAppSide side, Action clientAction, Action serverAction)
     {
         side.ChooseOneOf(clientAction, serverAction).Invoke();
     }
 
     /// <summary>
-    ///     Invokes an action, based on whether it's being called by the client, or the server.
+    ///     Invokes an action, based on whether it's being called by the client, or the server, using the API instance.
     /// </summary>
-    /// <param name="api">The app side in question.</param>
-    /// <param name="clientAction">The client action.</param>
-    /// <param name="serverAction">The server action.</param>
+    /// <param name="api">The API instance used to determine the execution side.</param>
+    /// <param name="clientAction">The action to invoke if on the client, accepting a client API instance.</param>
+    /// <param name="serverAction">The action to invoke if on the server, accepting a server API instance.</param>
     public static void RunOneOf(this ICoreAPI api, Action<ICoreClientAPI> clientAction, Action<ICoreServerAPI> serverAction)
     {
         switch (api.Side)
@@ -58,14 +58,15 @@ public static class AppSideExtensions
     }
 
     /// <summary>
-    ///     Invokes an action, based on whether it's being called by the client, or the server.
+    ///     Invokes a side-dependent action with a parameter, based on whether it's being called by the client or the server.
     /// </summary>
     /// <remarks>
     ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
     /// </remarks>
+    /// <typeparam name="T">The type of the parameter to pass to the action.</typeparam>
     /// <param name="side">The app side in question.</param>
-    /// <param name="clientAction">The client action.</param>
-    /// <param name="serverAction">The server action.</param>
+    /// <param name="clientAction">The action to invoke if on the client.</param>
+    /// <param name="serverAction">The action to invoke if on the server.</param>
     /// <param name="parameter">The parameter to pass to the invoked action.</param>
     public static void RunOneOf<T>(this EnumAppSide side, Action<T> clientAction, Action<T> serverAction, T parameter)
     {
@@ -73,21 +74,20 @@ public static class AppSideExtensions
     }
 
     /// <summary>
-    ///     Invokes an action, based on whether it's being called by the client, or the server.
+    ///     Invokes a side-dependent function and returns its result, based on whether it's being called by the client or the server.
     /// </summary>
-    /// <remarks>
-    ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
-    /// </remarks>
+    /// <typeparam name="T">The return type of the function.</typeparam>
     /// <param name="side">The app side in question.</param>
-    /// <param name="clientAction">The client action.</param>
-    /// <param name="serverAction">The server action.</param>
+    /// <param name="clientAction">The function to invoke if on the client.</param>
+    /// <param name="serverAction">The function to invoke if on the server.</param>
+    /// <returns>The result of the invoked function.</returns>
     public static T? ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction)
     {
         return (T?)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke();
     }
 
     /// <summary>
-    ///     Executes a side-dependent function based on whether the API instance is client or server.
+    ///     Executes a side-dependent function based on whether the API instance is client or server, and returns its result.
     /// </summary>
     /// <typeparam name="T">The return type of the function.</typeparam>
     /// <param name="api">The API instance used to determine the execution side.</param>
@@ -112,15 +112,14 @@ public static class AppSideExtensions
     }
 
     /// <summary>
-    ///     Invokes an action, based on whether it's being called by the client, or the server.
+    ///     Invokes a side-dependent function with a parameter and returns its result, based on whether it's being called by the client or the server.
     /// </summary>
-    /// <remarks>
-    ///     This generic method works best with the Options Pattern, rather than anonymous tuples, when passing in multiple values as a single parameter.
-    /// </remarks>
+    /// <typeparam name="T">The return type of the function and the type of the parameter.</typeparam>
     /// <param name="side">The app side in question.</param>
-    /// <param name="clientAction">The client action.</param>
-    /// <param name="serverAction">The server action.</param>
-    /// <param name="parameter">The parameter to pass to the invoked action.</param>
+    /// <param name="clientAction">The function to invoke if on the client.</param>
+    /// <param name="serverAction">The function to invoke if on the server.</param>
+    /// <param name="parameter">The parameter to pass to the invoked function.</param>
+    /// <returns>The result of the invoked function.</returns>
     public static T? ReturnOneOf<T>(this EnumAppSide side, Func<T> clientAction, Func<T> serverAction, T parameter)
     {
         return (T?)side.ChooseOneOf(clientAction, serverAction).DynamicInvoke(parameter);
@@ -132,7 +131,7 @@ public static class AppSideExtensions
     /// <param name="api">The universal API to cast from.</param>
     /// <param name="clientApi">The client API member to populate, if on the Client app side.</param>
     /// <param name="serverApi">The server API member to populate, if on the Server app side.</param>
-    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the API side is not recognised.</exception>
     public static void SetSidedInstances(this ICoreAPI api, ref ICoreClientAPI clientApi, ref ICoreServerAPI serverApi)
     {
         switch (api.Side)

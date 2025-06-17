@@ -5,13 +5,14 @@ using System.Text;
 namespace Gantry.Services.HarmonyPatches.Extensions;
 
 /// <summary>
-///    Provides extension methods for the Harmony library.
+///    Provides extension methods for working with Harmony's <see cref="CodeInstruction"/> objects, including formatting and manipulation utilities for transpilers.
 /// </summary>
 public static class CodeInstructionExtensions
 {
     /// <summary>
     ///     Converts a collection of <see cref="CodeInstruction"/> objects into a readable string representation with each
     /// entry prefixed by its index and returns the result in a <see cref="StringBuilder"/>.
+    /// Useful for debugging transpiler output.
     /// </summary>
     /// <param name="instructions">The collection of <see cref="CodeInstruction"/> objects.</param>
     /// <returns>A <see cref="StringBuilder"/> containing the formatted instructions.</returns>
@@ -57,15 +58,15 @@ public static class CodeInstructionExtensions
         return builder;
     }
 
-
     /// <summary>
-    ///     Finds and replaces operands of the specified type in a collection of CodeInstruction objects.
+    ///     Finds and replaces operands of the specified type in a collection of <see cref="CodeInstruction"/> objects.
+    ///     This is useful for modifying IL instructions in Harmony transpilers.
     /// </summary>
     /// <typeparam name="T">The type of the operand to find and replace.</typeparam>
-    /// <param name="instructions">The collection of CodeInstruction objects to process.</param>
+    /// <param name="instructions">The collection of <see cref="CodeInstruction"/> objects to process.</param>
     /// <param name="from">The operand value to find.</param>
     /// <param name="to">The operand value to replace it with.</param>
-    /// <returns>A collection of CodeInstruction objects with the specified operand replaced.</returns>
+    /// <returns>A collection of <see cref="CodeInstruction"/> objects with the specified operand replaced.</returns>
     public static IEnumerable<CodeInstruction> Replace<T>(this IEnumerable<CodeInstruction> instructions, T from, T to)
         where T : IEquatable<T>
     {
@@ -80,9 +81,11 @@ public static class CodeInstructionExtensions
     }
 
     /// <summary>
-    ///     Logs the output of the transpiler to the debug file.
+    ///     Logs the output of the transpiler to the debug file using the Gantry logger.
+    ///     This is useful for debugging transpiler modifications.
     /// </summary>
-    /// <param name="instructions">The collection of CodeInstruction objects to process.</param>
+    /// <param name="instructions">The collection of <see cref="CodeInstruction"/> objects to process.</param>
+    /// <returns>The original collection of <see cref="CodeInstruction"/> objects, unmodified.</returns>
     public static IEnumerable<CodeInstruction> LogOutput(this IEnumerable<CodeInstruction> instructions)
     {
         G.Logger.Debug(instructions.ToStringBuilder().ToString());
