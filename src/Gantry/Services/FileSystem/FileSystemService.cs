@@ -132,6 +132,27 @@ public sealed class FileSystemService : IFileSystemService
     ///     The consuming type must have a paramaterless constructor.
     /// </summary>
     /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
+    /// <param name="pathToFile">The name of the file, including file extension.</param>
+    /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
+    public TModel ParseJsonFile<TModel>(string pathToFile)
+    {
+        var file = new FileInfo(pathToFile);
+        if (!file.Exists)
+        {
+            G.Logger.Error($"File `{file.Name}` does not exist at path `{file.FullName}`.");
+            throw new FileNotFoundException($"File `{file.Name}` does not exist at path `{file.FullName}`.");
+        }
+        var json = File.ReadAllText(pathToFile);
+        var resource = JsonConvert.DeserializeObject<TModel>(json)
+            ?? throw new FileNotFoundException();
+        return resource;
+    }
+
+    /// <summary>
+    ///     Deserialises the specified file as a strongly-typed object.
+    ///     The consuming type must have a paramaterless constructor.
+    /// </summary>
+    /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
     /// <param name="fileName">The name of the file, including file extension.</param>
     /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
     public TModel ParseEmbeddedJsonFile<TModel>(string fileName)

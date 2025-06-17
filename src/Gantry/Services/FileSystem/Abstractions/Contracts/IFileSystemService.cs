@@ -48,6 +48,15 @@ public interface IFileSystemService : IDisposable
     IEnumerable<TModel> ParseEmbeddedJsonArrayFile<TModel>(string fileName);
 
     /// <summary>
+    ///     Deserialises the specified file as a strongly-typed object.
+    ///     The consuming type must have a paramaterless constructor.
+    /// </summary>
+    /// <typeparam name="TModel">The type of object to deserialise into.</typeparam>
+    /// <param name="pathToFile">The full path of the file, including file extension.</param>
+    /// <returns>An instance of type <typeparamref name="TModel" />, populated with data from this file.</returns>
+    TModel ParseJsonFile<TModel>(string pathToFile);
+
+    /// <summary>
     ///     Retrieves a file that has previously been registered with the FileSystem Service.
     /// </summary>
     /// <param name="fileName">Name of the file.</param>
