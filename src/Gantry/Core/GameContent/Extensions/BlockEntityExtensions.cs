@@ -69,6 +69,6 @@ public static class BlockEntityExtensions
         var ignoredPaths = new[] { "posx", "posy", "posz" };
         var thisAttributes = @this.Attributes();
         var otherAttributes = other.Attributes();
-        return thisAttributes.Equals(ApiEx.ClientMain, otherAttributes, ignoredPaths);
+        return thisAttributes.Equals(@this.Api.World, otherAttributes, ignoredPaths);
     }
 }

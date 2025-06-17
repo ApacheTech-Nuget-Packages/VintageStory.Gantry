@@ -106,7 +106,6 @@ public static class RenderApiExtensions
     /// <param name="mesh">The MeshRef object representing the 2D line mesh.</param>
     public static void Render2DLine(this IRenderAPI api, MeshRef mesh)
     {
-        var clientMain = ApiEx.ClientMain;
         var guiShaderProg = ShaderPrograms.Gui;
 
         // Shader Uniforms.
@@ -117,10 +116,10 @@ public static class RenderApiExtensions
         guiShaderProg.NormalShaded = 0;
 
         // Render Line.
-        clientMain.GlPushMatrix();
-        guiShaderProg.ProjectionMatrix = clientMain.CurrentProjectionMatrix;
-        guiShaderProg.ModelViewMatrix = clientMain.CurrentModelViewMatrix;
+        api.GlPushMatrix();
+        guiShaderProg.ProjectionMatrix = api.CurrentProjectionMatrix;
+        guiShaderProg.ModelViewMatrix = api.CurrentModelviewMatrix;
         api.RenderMesh(mesh);
-        clientMain.GlPopMatrix();
+        api.GlPopMatrix();
     }
 }

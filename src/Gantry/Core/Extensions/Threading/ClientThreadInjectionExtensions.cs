@@ -54,10 +54,8 @@ public static class ClientThreadInjectionExtensions
     /// </summary>
     /// <param name="world">The world accessor API for the client.</param>
     /// <returns>A <see cref="Stack{T}" />, containing all the currently registered systems, on the client.</returns>
-    public static Stack<ClientSystem> GetClientSystems(this IClientWorldAccessor world)
-    {
-        return new((world as ClientMain).GetField<ClientSystem[]>("clientSystems"));
-    }
+    public static Stack<ClientSystem> GetClientSystems(this IClientWorldAccessor world) 
+        => new((world as ClientMain).GetField<ClientSystem[]>("clientSystems"));
 
     /// <summary>
     ///     Injects custom thread into the client process, passing control of 
@@ -83,7 +81,7 @@ public static class ClientThreadInjectionExtensions
         var clientThreads = world.GetClientThreads();
         var thread = new Thread(() =>
         {
-            var instance = CreateClientThreadInstance(name, systems);
+            var instance = CreateClientThreadInstance(world, name, systems);
             instance.CallMethod("Process");
         })
         { 
@@ -97,6 +95,7 @@ public static class ClientThreadInjectionExtensions
     /// <summary>
     ///     Instantiates an internal <c>ClientThread</c> object from the third-party library using Harmony's AccessTools.
     /// </summary>
+    /// <param name="world">The world accessor API for the client.</param>
     /// <param name="threadName">A <c>string</c> representing the name of the thread.</param>
     /// <param name="clientSystems">An array of <c>ClientSystem</c> objects.</param>
     /// <returns>
@@ -105,7 +104,7 @@ public static class ClientThreadInjectionExtensions
     /// <exception cref="InvalidOperationException">
     ///     Thrown when the <c>ClientThread</c> type or its constructor cannot be found.
     /// </exception>
-    public static object CreateClientThreadInstance(string threadName, object[] clientSystems)
+    public static object CreateClientThreadInstance(IClientWorldAccessor world, string threadName, object[] clientSystems)
     {
         // Retrieve the internal ClientThread type by its full name.
         var clientThreadType = AccessTools.TypeByName("Vintagestory.Client.NoObf.ClientThread") 
@@ -116,8 +115,8 @@ public static class ClientThreadInjectionExtensions
             ?? throw new InvalidOperationException("The constructor for ClientThread with the specified signature could not be found.");
 
         // Instantiate the internal class using the obtained constructor.
-        var cts = ApiEx.ClientMain.GetField<CancellationTokenSource>("_clientThreadsCts");
-        var instance = constructor.Invoke([ApiEx.ClientMain, threadName, clientSystems, cts.Token]);
+        var cts = world.GetField<CancellationTokenSource>("_clientThreadsCts");
+        var instance = constructor.Invoke([world, threadName, clientSystems, cts.Token]);
         return instance;
     }
 }
