@@ -72,6 +72,7 @@ public abstract class EasyXHost(string _commandName) : ModHost
         {
             ModSettings.CopyTo(scope.Value);
             globalSettings.Scope = scope.Value;
+            ModSettings.Global.Save(globalSettings);
         }
 
         var scopeMessage = LangEx.EmbeddedFeatureString("EasyX", "SetScope", _globalSettings.Scope.GetDescription());

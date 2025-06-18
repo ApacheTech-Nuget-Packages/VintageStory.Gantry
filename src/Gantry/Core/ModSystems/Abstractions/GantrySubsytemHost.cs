@@ -12,7 +12,7 @@ namespace Gantry.Core.ModSystems.Abstractions;
 /// </summary>
 public abstract class GantrySubsytemHost : UniversalModSystem
 {
-    private IEnumerable<GantrySubsystem> _subsystems = [];
+    private IEnumerable<GantrySubsystem>? _subsystems;
 
     /// <inheritdoc />
     protected override void StartPreUniversal(ICoreAPI api)
