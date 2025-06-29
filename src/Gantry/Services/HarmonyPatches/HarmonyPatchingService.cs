@@ -15,7 +15,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
 {
     private readonly ICoreAPI _api;
     private readonly Dictionary<string, Harmony> _instances = [];
-    private readonly string _defaultInstanceName;
+    private readonly HarmonyPatchingServiceOptions _options;
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="HarmonyPatchingService"/> class.
@@ -26,7 +26,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     {
         G.Log("Starting Harmony Patching Service");
         _api = ApiEx.Current;
-        _defaultInstanceName = options.DefaultInstanceName;
+        _options = options;
         if (options.AutoPatchModAssembly) PatchModAssembly();
     }
 
@@ -45,7 +45,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// <value>
     /// The default Harmony instance for the mod, with the mod assembly's full name as the instance ID.
     /// </value>
-    public Harmony Default => CreateOrUseInstance(_defaultInstanceName);
+    public Harmony Default => CreateOrUseInstance(_options.DefaultInstanceName);
 
     #region Patching
 
@@ -70,7 +70,9 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         var side = ApiEx.Current.Side;
         try
         {
-            var harmony = CreateOrUseInstance(assembly.FullName);
+            var n = assembly.GetName().Name;
+            var harmony = (assembly == ModEx.ModAssembly) 
+                ? Default : CreateOrUseInstance(assembly.GetName().Name);
             PatchAll(harmony, assembly);
             var patches = harmony.GetPatchedMethods().ToList();
             if (!patches.Any()) return;
@@ -247,7 +249,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// <returns>A <see cref="Harmony" /> patch host.</returns>
     public Harmony CreateOrUseInstance(string? harmonyId)
     {
-        harmonyId ??= string.Empty;
+        harmonyId ??= ModEx.ModInfo.ModID;
         if (_instances.TryGetValue(harmonyId, out var instance))
         {
             return instance;
