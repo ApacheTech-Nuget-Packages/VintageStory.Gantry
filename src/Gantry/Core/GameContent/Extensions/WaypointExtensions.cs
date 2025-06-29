@@ -49,14 +49,14 @@ public static class WaypointExtensions
     /// <summary>
     ///     Adds a waypoint at a position within the world, relative to the global spawn point.
     /// </summary>
-    /// <param name="world">The world to add the waypoint to.</param>
+    /// <param name="_">The world to add the waypoint to.</param>
     /// <param name="pos">The position to add the waypoint at. World Pos - Not Relative to Spawn!</param>
     /// <param name="icon">The icon to use for the waypoint.</param>
     /// <param name="colour">The colour of the waypoint.</param>    
     /// <param name="title">The title to set.</param>
     /// <param name="pinned">if set to <c>true</c>, the waypoint will be pinned to the world map.</param>
     /// <param name="allowDuplicates">if set to <c>true</c>, the waypoint will not be placed, if another similar waypoint already exists at that position.</param>
-    public static void AddWaypointAtPos(this IWorldAccessor world, BlockPos pos, string icon, string colour, string title, bool pinned, bool allowDuplicates = false)
+    public static void AddWaypointAtPos(this IWorldAccessor _, BlockPos pos, string icon, string colour, string title, bool pinned, bool allowDuplicates = false)
     {
         if (pos is null) return;
         if (!allowDuplicates)
@@ -153,8 +153,9 @@ public static class WaypointExtensions
     /// <param name="source">The source.</param>
     /// <param name="target">The target.</param>
     /// <returns>System.Boolean.</returns>
-    public static bool IsSameAs(this Waypoint source, Waypoint target)
+    public static bool IsSameAs(this Waypoint? source, Waypoint? target)
     {
+        if (source is null || target is null) return false;
         if (source.Color != target.Color) return false;
         if (source.OwningPlayerGroupId != target.OwningPlayerGroupId) return false;
         if (source.Icon != target.Icon) return false;

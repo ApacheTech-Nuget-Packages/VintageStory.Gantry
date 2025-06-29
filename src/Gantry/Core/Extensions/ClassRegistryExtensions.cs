@@ -165,6 +165,7 @@ public static class ClassRegistryExtensions
         foreach (var block in blocks.OfType<TBlock>())
         {
             var behaviour = behaviourFactory(block);
+            G.Log($" - Adding behaviour {behaviour.GetType().Name} to block {block.Code}");
             block.BlockBehaviors = block.BlockBehaviors.Append(behaviour).ToArray();
         }
     }
