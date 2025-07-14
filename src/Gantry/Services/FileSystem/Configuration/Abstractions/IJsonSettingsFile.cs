@@ -13,8 +13,18 @@ public interface IJsonSettingsFile
     /// <summary>
     ///     Gets the underlying <see cref="IJsonModFile"/> that this instance wraps.
     /// </summary>
-    /// <value>The file underlying JSON file from the file system.</value>
+    /// <value>
+    ///     The file underlying JSON file from the file system.
+    /// </value>
     IJsonModFile File { get; }
+
+    /// <summary>
+    ///     Whether the settings are for the client, or the server.
+    /// </summary>
+    /// <value>
+    ///     The App Side the settings file runs on.
+    /// </value>
+    EnumAppSide Side { get; }
 
     /// <summary>
     ///     Retrieves the settings for a specific feature, parsed as a strongly-typed POCO class instance.

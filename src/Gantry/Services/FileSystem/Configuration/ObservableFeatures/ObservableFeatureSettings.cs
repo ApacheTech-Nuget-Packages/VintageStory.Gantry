@@ -22,7 +22,7 @@ public class ObservableFeatureSettings<TSettings> : ObservableObject<TSettings> 
     /// <param name="scope">Scope of the feature.</param>
     /// <param name="harmony">The harmony instance to use to patch the files.</param>
     /// <param name="isGantry"></param>
-    public ObservableFeatureSettings(TSettings instance, string featureName, FileScope scope, Harmony harmony, bool isGantry) : base(instance, harmony)
+    public ObservableFeatureSettings(TSettings instance, string featureName, FileScope scope, Harmony harmony, bool isGantry) : base(instance, harmony, ApiEx.Side)
     {
         _isGantryFile = isGantry;
         _featureName = featureName;
@@ -46,12 +46,13 @@ public class ObservableFeatureSettings<TSettings> : ObservableObject<TSettings> 
     private void OnPropertyChanged(object instance, string propertyName)
     {
         try
-        {
+        {            
             if (!Active) return;
             if (Object is null) return;
             if (string.IsNullOrEmpty(_featureName)) return;
             var settings = ModSettings.For(_scope, _isGantryFile);
             if (settings is null) return;
+            if (!ApiEx.Side.Is(settings.Side)) return;
             settings.Save(Object, _featureName);
 
             if (!((TSettings)instance).PropertyChangedDictionary.TryGetValue(propertyName, out var actions)) return;

@@ -17,6 +17,7 @@ namespace Gantry.Services.FileSystem.Configuration.ObservableFeatures;
 public class ObservableObject<T> : IObservableObject where T: class, new()
 {
     private readonly Harmony _harmony;
+    private static EnumAppSide _appSide;
     private static T _observedInstance = default!;
     private static Action<object, string>? _onObjectPropertyChanged;
     private static bool _active;
@@ -33,17 +34,21 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     /// <summary>
     ///     Initialises a new instance of the <see cref="ObservableObject{T}"/> class.
     /// </summary>
-    public ObservableObject(Harmony harmony) : this(new T(), harmony) { }
+    /// <param name="harmony">The harmony instance to use to patch the files.</param>
+    /// <param name="side">The app-side to observe to object on.</param>
+    public ObservableObject(Harmony harmony, EnumAppSide side) : this(new T(), harmony, side) { }
 
     /// <summary>
-    /// Initialises a new instance of the <see cref="ObservableObject{T}" /> class.
+    ///     Initialises a new instance of the <see cref="ObservableObject{T}" /> class.
     /// </summary>
     /// <param name="instance">The instance.</param>
     /// <param name="harmony">The harmony instance to use to patch the files.</param>
-    public ObservableObject(T instance, Harmony harmony)
+    /// <param name="side">The app-side to observe to object on.</param>
+    public ObservableObject(T instance, Harmony harmony, EnumAppSide side)
     {
         Object = instance;
         _harmony = harmony;
+        _appSide = side;
         Patch();
     }
 
@@ -82,10 +87,11 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     /// </summary>
     /// <param name="instance">The instance of the POCO class that manages the feature settings.</param>
     /// <param name="harmony">The harmony instance to use to patch the files.</param>
+    /// <param name="side">The app-side to observe to object on.</param>
     /// <returns>An instance of <see cref="ObservableObject{T}"/>, which exposes the <c>PropertyChanged</c> event.</returns>
-    public static ObservableObject<T> Bind(T instance, Harmony harmony)
+    public static ObservableObject<T> Bind(T instance, Harmony harmony, EnumAppSide side)
     {
-        return new ObservableObject<T>(instance, harmony);
+        return new ObservableObject<T>(instance, harmony, side);
     }
 
     /// <summary>
@@ -113,6 +119,7 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     private static void Patch_Property_SetMethod_Postfix(MemberInfo __originalMethod)
     {
         if (!_active) return;
+        if (!_appSide.IsUniversal() && !_appSide.Is(ApiEx.Side)) return;
         var propertyName = __originalMethod.Name[4..];
         _onObjectPropertyChanged?.Invoke(_observedInstance, propertyName);
     }

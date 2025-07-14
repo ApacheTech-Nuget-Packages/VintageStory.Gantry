@@ -20,9 +20,17 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     ///     Gets the underlying <see cref="IJsonModFile" /> that this instance wraps.
     /// </summary>
     /// <value>
-    /// The file underlying JSON file from the file system.
+    ///     The file underlying JSON file from the file system.
     /// </value>
     public IJsonModFile File { get; }
+
+    /// <summary>
+    ///     Whether the settings are for the client, or the server.
+    /// </summary>
+    /// <value>
+    ///     The App Side the settings file runs on.
+    /// </value>
+    public EnumAppSide Side { get; }
 
     internal bool IsGantryFile => File.AsFileInfo().FullName.StartsWith(ModPaths.ModDataGantryRootPath);
 
@@ -30,20 +38,23 @@ public class JsonSettingsFile : IJsonSettingsFile, IDisposable
     /// 	Initialises a new instance of the <see cref="JsonSettingsFile"/> class.
     /// </summary>
     /// <param name="file">The underlying file, registered within the file system service.</param>
+    /// <param name="side">Whether the settings are for the client, or the server.</param>
     /// <param name="scope">The scope that the settings file resides in.</param>
     /// <param name="harmony">The harmony instance to use to patch the files.</param>
-    private JsonSettingsFile(IJsonModFile file, FileScope scope, Harmony harmony)
+    private JsonSettingsFile(IJsonModFile file, EnumAppSide side, FileScope scope, Harmony harmony)
     {
-        (File, _scope, _harmony) = (file, scope, harmony);
+        (File, Side, _scope, _harmony) = (file, side, scope, harmony);
     }
 
     /// <summary>
     /// 	Initialises a new instance of the <see cref="JsonSettingsFile"/> class.
     /// </summary>
     /// <param name="file">The underlying file, registered within the file system service.</param>
+    /// <param name="side">Whether the settings are for the client, or the server.</param>
     /// <param name="scope">The scope that the settings file resides in.</param>
     /// <param name="harmony">The harmony instance to use to patch the files.</param>
-    public static JsonSettingsFile FromJsonFile(IJsonModFile file, FileScope scope, Harmony harmony) => new(file, scope, harmony);
+    public static JsonSettingsFile FromJsonFile(IJsonModFile file, EnumAppSide side, FileScope scope, Harmony harmony) 
+        => new(file, side, scope, harmony);
 
     /// <summary>
     ///     Binds the specified feature to a POCO class object; dynamically adding an implementation of <see cref="INotifyPropertyChanged"/>, 

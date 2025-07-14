@@ -44,4 +44,16 @@
 		<Folder Include="Domain\" />
 	</ItemGroup>
 
+	<PropertyGroup>
+		<Configurations>Debug;Release;Package</Configurations>
+	</PropertyGroup>
+
+	<Target Name="CleanOutputDirectory" BeforeTargets="BeforeBuild">
+		<Message Text=" → Cleaning output directory" Importance="high" Condition="'$(Configuration)' != 'Release'" />
+		<RemoveDir Directories="$(SolutionDir).debug" Condition="'$(Configuration)' == 'Debug'" />
+		<RemoveDir Directories="$(SolutionDir).releases" Condition="'$(Configuration)' == 'Package'" />
+		<MakeDir Directories="$(SolutionDir).debug" Condition="'$(Configuration)' == 'Debug'" />
+		<MakeDir Directories="$(SolutionDir).releases" Condition="'$(Configuration)' == 'Package'" />
+	</Target>
+
 </Project>

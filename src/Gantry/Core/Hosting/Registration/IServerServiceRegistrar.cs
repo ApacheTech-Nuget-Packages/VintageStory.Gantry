@@ -13,5 +13,5 @@ public interface IServerServiceRegistrar
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="sapi">Access to the server-side API.</param>
-    virtual void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi) { }
+    void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi);
 }

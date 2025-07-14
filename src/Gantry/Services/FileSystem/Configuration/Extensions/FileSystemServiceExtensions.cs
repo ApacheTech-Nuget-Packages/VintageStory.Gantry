@@ -26,7 +26,7 @@ public static class FileSystemServiceExtensions
         FileScope scope)
     {
         fileSystem.RegisterFile(fileName, scope);
-        var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName), scope, ModSettings.FeaturePatcher);
+        var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName), ApiEx.Side, scope, ModSettings.FeaturePatcher);
         switch (scope)
         {
             case FileScope.Global:
@@ -59,7 +59,7 @@ public static class FileSystemServiceExtensions
         FileScope scope)
     {
         fileSystem.RegisterFile(fileName, scope, gantryFile: true);
-        var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName), scope, ModSettings.FeaturePatcher);
+        var file = JsonSettingsFile.FromJsonFile(fileSystem.GetJsonFile(fileName), ApiEx.Side, scope, ModSettings.FeaturePatcher);
         switch (scope)
         {
             case FileScope.Global:

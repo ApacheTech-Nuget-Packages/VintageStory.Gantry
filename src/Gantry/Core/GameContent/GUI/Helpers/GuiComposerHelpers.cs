@@ -1,7 +1,8 @@
-﻿using System.Text;
-using ApacheTech.Common.Extensions.Harmony;
+﻿using ApacheTech.Common.Extensions.Harmony;
 using Cairo;
+using Gantry.Core.GameContent.GUI.Abstractions;
 using Gantry.Core.GameContent.GUI.Elements;
+using System.Text;
 using GuiElementImage = Gantry.Core.GameContent.GUI.Elements.GuiElementImage;
 
 namespace Gantry.Core.GameContent.GUI.Helpers;
@@ -12,6 +13,15 @@ namespace Gantry.Core.GameContent.GUI.Helpers;
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class GuiComposerHelpers
 {
+    /// <summary>
+    ///     Adds a composable part to a GUI composer.
+    /// </summary>
+    /// <param name="composer">The composer.</param>
+    /// <param name="content">The content.</param>
+    /// <returns></returns>
+    public static GuiComposer AddComposablePart(this GuiComposer composer, IGuiComposablePart content)
+        => content.ComposePart(composer);
+
     /// <summary>
     ///     Adds a dialogue title bar to the GUI, with no "Movable" menu bar.  
     /// </summary>
@@ -81,5 +91,24 @@ public static class GuiComposerHelpers
         }
 
         return composer;
+    }
+
+    /// <summary>
+    ///     Only triggers the callback methods when the user releases the mouse.
+    /// </summary>
+    /// <param name="slider">The slider.</param>
+    /// <param name="value">if set to <c>true</c> the callback action will only be called when the user releases the mouse.</param>
+    public static void TriggerOnlyOnMouseUp(this GuiElementSlider slider, bool value)
+    {
+        slider.CallMethod("TriggerOnlyOnMouseUp", value);
+    }
+
+    /// <summary>
+    ///     Composes the hover-text element associated with the slider.
+    /// </summary>
+    /// <param name="slider">The slider.</param>
+    public static void ComposeHoverTextElement(this GuiElementSlider slider)
+    {
+        slider.CallMethod("ComposeHoverTextElement");
     }
 }
