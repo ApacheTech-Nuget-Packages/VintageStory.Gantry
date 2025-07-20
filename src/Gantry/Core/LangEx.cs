@@ -1,215 +1,217 @@
-﻿#nullable enable
-using Gantry.Core.Extensions.DotNet;
-using Vintagestory.API.Datastructures;
-using Vintagestory.API.Server;
+﻿using Vintagestory.API.Server;
 
 namespace Gantry.Core;
 
 /// <summary>
-///     Extended functionality for the <see cref="Lang"/> class.
+///     Provides extension methods for the <see cref="Lang"/> class, enabling advanced localisation and translation features for Gantry mods.
 /// </summary>
 [UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class LangEx
 {
-    [SuppressMessage("Style", "IDE1006:Naming Styles")]
-    private static readonly Dictionary<string, JsonObject> Translations = [];
-
-    private static JsonObject GetTranslationsFile(string category = "Gantry", string? locale = null)
-    {
-        locale ??= Lang.CurrentLocale;
-        try
-        {
-            if (Translations.TryGetValue(category, out var translations)) return translations;
-            var json = typeof(LangEx).Assembly.GetResourceContent($"lang.{category}.{locale}.json");
-            translations = JsonObject.FromJson(json);
-            Translations.AddIfNotPresent(category, translations);
-            return translations;
-        }
-        catch (JsonReaderException)
-        {
-            return GetTranslationsFile(locale: "en");
-        }
-    }
+    #region UIUX Strings
 
     /// <summary>
-    ///     Returns a localised string based on the state of a boolean variable.
+    ///     Returns a localised string representation of a boolean value.
     /// </summary>
     /// <param name="state">The boolean value to localise.</param>
-    /// <returns>A localised string representation of the boolean value.</returns>
-    public static string BooleanString(bool state)
-    {
-        var translations = GetTranslationsFile("Gantry");
-        return translations[$"boolean-{state}"].AsString();
-    }
+    /// <returns>The localised string for the boolean value.</returns>
+    public static string Boolean(bool state) 
+        => Get("gantry", $"boolean-{state}");
 
     /// <summary>
-    ///     Returns a localised string.
+    ///     Returns a localised confirmation string for a given value.
     /// </summary>
-    /// <param name="value">The value to localise.</param>
-    /// <returns>A localised string representation of the boolean value.</returns>
-    public static string ConfirmationString(string value)
-    {
-        var translations = GetTranslationsFile("Gantry");
-        return translations[$"confirmation-{value}"].AsString();
-    }
+    /// <param name="value">The value to localise as a confirmation.</param>
+    /// <returns>The localised confirmation string.</returns>
+    public static string Confirmation(string value) 
+        => Get("gantry", $"confirmation-{value}");
 
     /// <summary>
-    ///     Returns a localised string based on the month value within a <see cref="DateTime"/> object.
+    ///     Returns a localised month name for the specified <see cref="DateTime"/>.
     /// </summary>
-    /// <param name="dateTime">The <see cref="DateTime"/> object to localise.</param>
-    /// <returns>A localised string representation of the full name of the month of the year.</returns>
-    public static string FullMonthString(DateTime dateTime)
-    {
-        var translations = GetTranslationsFile("Gantry");
-        return translations[$"datetime-months-full-{dateTime.Month}"].AsString();
-    }
+    /// <param name="date">The date whose month to localise.</param>
+    /// <param name="abbreviated">Whether to return the abbreviated month name.</param>
+    /// <returns>The localised month name.</returns>
+    public static string Month(DateTime date, bool abbreviated = false) 
+        => Get("gantry", $"datetime-months-{(abbreviated ? "abbr" : "full")}-{date.Month}");
 
     /// <summary>
-    ///     Returns a localised string based on the month value within a <see cref="DateTime"/> object.
+    ///     Returns a localised day-of-week name for the specified <see cref="DateTime"/>.
     /// </summary>
-    /// <param name="dateTime">The <see cref="DateTime"/> object to localise.</param>
-    /// <returns>A localised string representation of the abbreviated name of the month of the year.</returns>
-    public static string AbbreviatedMonthString(DateTime dateTime)
-    {
-        var translations = GetTranslationsFile("Gantry");
-        return translations[$"datetime-months-abbr-{dateTime.Month}"].AsString();
-    }
+    /// <param name="date">The date whose day of week to localise.</param>
+    /// <param name="abbreviated">Whether to return the abbreviated day name.</param>
+    /// <returns>The localised day-of-week name.</returns>
+    public static string Day(DateTime date, bool abbreviated = false) 
+        => Get("gantry", $"datetime-days-{(abbreviated ? "abbr" : "full")}-{date.Month}");
+
+    #endregion
+
+    #region Feature Strings and Keys
 
     /// <summary>
-    ///     Returns a localised string based on the day value within a <see cref="DateTime"/> object.
+    ///     Returns the translation key for a feature-specific path in the current mod domain.
     /// </summary>
-    /// <param name="dateTime">The <see cref="DateTime"/> object to localise.</param>
-    /// <returns>A localised string representation of the full name of the day of the week.</returns>
-    public static string FullDayString(DateTime dateTime)
-    {
-        var translations = GetTranslationsFile("Gantry");
-        return translations[$"datetime-days-full-{dateTime.Month}"].AsString();
-    }
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <returns>The translation key string.</returns>
+    public static string FeatureKey(string feature, string path)
+        => FeatureKey(ModEx.ModInfo.ModID, feature, path);
 
     /// <summary>
-    ///     Returns a localised string based on the day value within a <see cref="DateTime"/> object.
+    ///     Returns the translation key for a feature-specific path in a given domain.
     /// </summary>
-    /// <param name="dateTime">The <see cref="DateTime"/> object to localise.</param>
-    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string AbbreviatedDayString(DateTime dateTime)
-    {
-        var translations = GetTranslationsFile("Gantry");
-        return translations[$"datetime-days-abbr-{dateTime.Month}"].AsString();
-    }
+    /// <param name="domain">The mod domain.</param>
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <returns>The translation key string.</returns>
+    public static string FeatureKey(string domain, string feature, string path) 
+        => $"{domain}:Features.{feature}.{path}";
 
     /// <summary>
-    ///     Returns a localised string.
+    ///     Returns a localised string for a feature-specific path in the current mod domain.
     /// </summary>
-    /// <param name="featureName">The name of the feature.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <param name="args">The arguments to pass to the lang file.</param>
-    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string FeatureString(string featureName, string path, params object?[]? args) 
-        => Lang.Get(FeatureCode(featureName, path), args);
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <param name="args">Optional arguments for formatting.</param>
+    /// <returns>The localised string for the feature path.</returns>
+    public static string FeatureString(string feature, string path, params object?[]? args) 
+        => Lang.Get(FeatureKey(feature, path), args);
 
     /// <summary>
-    ///     Returns a localised string.
+    ///     Returns a localised string for a feature-specific path in a specific domain.
     /// </summary>
-    /// <param name="culture">The language to get the string in.</param>
-    /// <param name="featureName">The name of the feature.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <param name="args">The arguments to pass to the lang file.</param>
-    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string CultureString(string culture, string featureName, string path, params object[] args)
-        => Lang.GetL(culture, FeatureCode(featureName, path), args);
+    /// <param name="domain">The mod domain.</param>
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <param name="args">Optional arguments for formatting.</param>
+    /// <returns>The localised string for the feature path in the specified domain.</returns>
+    public static string FeatureStringD(string domain, string feature, string path, params object?[]? args)
+        => Lang.Get(FeatureKey(domain, feature, path), args);
 
     /// <summary>
-    ///     Returns a localised string.
+    ///     Returns a localised string for a feature-specific path the Gantry domain.
     /// </summary>
-    /// <param name="domain">The mod domain the string belongs to.</param>
-    /// <param name="featureName">The name of the feature.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <param name="args">The arguments to pass to the lang file.</param>
-    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string FeatureStringFromDomain(string domain, string featureName, string path, params object[] args) 
-        => Lang.Get(FeatureCode(domain, featureName, path), args);
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <param name="args">Optional arguments for formatting.</param>
+    /// <returns>The localised string for the feature path in the specified domain.</returns>
+    public static string FeatureStringG(string feature, string path, params object?[]? args)
+        => Lang.Get(FeatureKey("gantry", feature, path), args);
 
     /// <summary>
-    ///     Returns a localised string.
+    ///     Returns a localised string for a feature-specific path in a specific culture.
     /// </summary>
-    /// <param name="featureName">The name of the feature.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string FeatureCode(string featureName, string path) 
-        => FeatureCode(ModEx.ModInfo.ModID, featureName, path);
+    /// <param name="culture">The language/culture key.</param>
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <param name="args">Arguments for formatting.</param>
+    /// <returns>The localised string for the feature path in the specified culture.</returns>
+    public static string FeatureStringL(string culture, string feature, string path, params object[] args) 
+        => Lang.GetL(culture, FeatureKey(feature, path), args);
+
+    #endregion
+
+    #region General Get Methods
 
     /// <summary>
-    ///     Returns a localised string.
+    ///     Returns a localised string from the current mod domain for the specified path.
     /// </summary>
-    /// <param name="domain">The mod domain the code belongs to.</param>
-    /// <param name="featureName">The name of the feature.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string FeatureCode(string domain, string featureName, string path) 
-        => $"{domain}:Features.{featureName}.{path}";
-
-    /// <summary>
-    ///     Returns a localised string.
-    /// </summary>
-    /// <param name="featureName">The name of the feature.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <param name="args">The arguments to pass to the lang file.</param>
-    /// <returns>A localised string representation of the abbreviated name of the day of the week.</returns>
-    public static string EmbeddedFeatureString(string featureName, string path, params object[] args) 
-        => GetGantryEmbedded(featureName, $"Features.{featureName}.{path}", args);
-
-    /// <summary>
-    ///     Returns a localised string.
-    /// </summary>
-    /// <param name="category">The category determines the embedded file to use for translations.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <param name="args">The arguments to pass to the lang file.</param>
-    /// <returns>A localised string from the current mod's language files.</returns>
-    public static string GetGantryEmbedded(string category, string path, params object[] args)
-    {
-        var translations = GetTranslationsFile(category);
-        return string.Format(translations[path].AsString(), args);
-    }
-
-    /// <summary>
-    ///     Returns a localised string.
-    /// </summary>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <returns>A localised string from the current mod's language files.</returns>
-    public static string Get(string path) 
+    /// <param name="path">The translation path within the current mod domain.</param>
+    /// <returns>The localised string from the current mod domain.</returns>
+    public static string Get(string path)
         => Lang.Get($"{ModEx.ModInfo.ModID}:{path}");
 
     /// <summary>
-    ///     Returns a localised string.
+    ///     Returns a localised string from the current mod domain for the specified path, with arguments.
     /// </summary>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <param name="args">The arguments to pass to the lang file.</param>
-    /// <returns>A localised string from the current mod's language files.</returns>
+    /// <param name="path">The translation path within the current mod domain.</param>
+    /// <param name="args">Arguments for formatting.</param>
+    /// <returns>The localised string from the current mod domain.</returns>
     public static string Get(string path, params object[] args) 
         => Lang.Get($"{ModEx.ModInfo.ModID}:{path}", args);
 
     /// <summary>
-    ///     Returns a string, based on whether the specified value if greater than one (1).
+    ///     Returns a localised string from a specific domain for the specified path.
     /// </summary>
-    /// <param name="value">The value.</param>
-    /// <param name="path">The path to the feature based string to translate.</param>
-    /// <returns>A localised string from the mod's language files.</returns>
-    public static string Pluralise(string path, int value)
-    {
-        var suffix = Math.Abs(value) == 1 ? "singular" : "plural";
-        return Lang.Get($"{path}-{suffix}");
-    }
+    /// <param name="domain">The mod domain.</param>
+    /// <param name="path">The translation path within the domain.</param>
+    /// <returns>The localised string from the specified domain.</returns>
+    public static string GetD(string domain, string path) 
+        => Lang.Get($"{domain}:{path}");
 
     /// <summary>
-    ///     Returns the title of the mod.
+    ///     Returns a localised string from a specific domain for the specified path, with arguments.
     /// </summary>
-    /// <returns>A localised string from the mod's language files.</returns>
+    /// <param name="domain">The mod domain.</param>
+    /// <param name="path">The translation path within the domain.</param>
+    /// <param name="args">Arguments for formatting.</param>
+    /// <returns>The localised string from the specified domain.</returns>
+    public static string GetD(string domain, string path, params object[] args) 
+        => Lang.Get($"{domain}:{path}", args);
+
+    #endregion
+
+    #region Gantry Domain Shortcuts
+
+    /// <summary>
+    ///     Returns a localised string from the gantry domain for the specified path.
+    /// </summary>
+    /// <param name="path">The translation path within the gantry domain.</param>
+    /// <returns>The localised string from the gantry domain.</returns>
+    public static string Gantry(string path) 
+        => GetD("gantry", path);
+
+    /// <summary>
+    ///     Returns a localised string from the gantry domain for the specified path, with arguments.
+    /// </summary>
+    /// <param name="path">The translation path within the gantry domain.</param>
+    /// <param name="args">Arguments for formatting.</param>
+    /// <returns>The localised string from the gantry domain.</returns>
+    public static string Gantry(string path, params object[] args) 
+        => GetD("gantry", path, args);
+
+    #endregion
+
+    #region Pluralisation
+
+    /// <summary>
+    ///     Returns a localised pluralised string for the specified value and path.
+    /// </summary>
+    /// <param name="path">The translation path.</param>
+    /// <param name="value">The value to determine singular/plural.</param>
+    /// <returns>The localised pluralised string.</returns>
+    public static string Pluralise(string path, int value) 
+        => Lang.Get($"{path}-{(Math.Abs(value) == 1 ? "singular" : "plural")}");
+
+    #endregion
+
+    #region Mod Info
+
+    /// <summary>
+    ///     Returns the localised mod title.
+    /// </summary>
+    /// <returns>The localised mod title string.</returns>
     public static string ModTitle() 
         => Get("ModTitle");
 
     /// <summary>
-    ///     Returns the language code of the specified player.
+    ///     Returns the localised mod description.
     /// </summary>
-    public static string GetPlayerLanguageCode(IPlayer serverPlayer) 
-        => (serverPlayer as IServerPlayer)?.LanguageCode ?? Lang.CurrentLocale;
+    /// <returns>The localised mod tidescriptiontle string.</returns>
+    public static string ModDescription()
+        => Get("ModDescription");
+
+    #endregion
+
+    #region Player
+
+    /// <summary>
+    ///     Returns the language key of the specified player, or the current locale if unavailable.
+    /// </summary>
+    /// <param name="player">The player to get the language key for.</param>
+    /// <returns>The language key string.</returns>
+    public static string PlayerLanguage(IPlayer player)
+        => (player as IServerPlayer)?.LanguageCode ?? Lang.CurrentLocale;
+
+    #endregion
 }

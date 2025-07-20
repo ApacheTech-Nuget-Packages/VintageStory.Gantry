@@ -36,7 +36,7 @@ internal class GantryCommand : UniversalSubsystem
     ///     A localised string corresponding to the specified path and arguments.
     /// </returns>
     private static string T(string path, params object[] args)
-        => LangEx.FeatureStringFromDomain("gantry", "GantryCommand", path, args);
+        => LangEx.FeatureStringG("GantryCommand", path, args);
 
     /// <summary>
     ///     Initialises the Gantry subsystem, registering the "gantry" chat command with the API.

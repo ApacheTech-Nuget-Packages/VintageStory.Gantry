@@ -54,8 +54,8 @@ public sealed class MessageBox : GenericDialogue
     {
         var defaultTitle = (_buttons = buttons) switch
         {
-            ButtonLayout.Ok => LangEx.ConfirmationString("information"),
-            ButtonLayout.OkCancel => LangEx.ConfirmationString("confirmation"),
+            ButtonLayout.Ok => LangEx.Confirmation("information"),
+            ButtonLayout.OkCancel => LangEx.Confirmation("confirmation"),
             _ => throw new UnreachableException()
         };
 
@@ -79,8 +79,8 @@ public sealed class MessageBox : GenericDialogue
             
         composer.AddStaticText(_message, messageFont, EnumTextOrientation.Center, messageBounds);
             
-        var confirmButtonText = LangEx.ConfirmationString("ok");
-        var cancelButtonText = LangEx.ConfirmationString("cancel");
+        var confirmButtonText = LangEx.Confirmation("ok");
+        var cancelButtonText = LangEx.Confirmation("cancel");
 
         var controlRowBoundsLeftFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.LeftBottom);
         var controlRowBoundsRightFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.RightBottom);

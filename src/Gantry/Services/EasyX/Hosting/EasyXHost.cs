@@ -38,12 +38,12 @@ public abstract class EasyXHost(string _commandName) : ModHost
 
         var command = api.ChatCommands.Create(_commandName)
             .RequiresPrivilege(Privilege.controlserver)
-            .WithDescription(LangEx.EmbeddedFeatureString("EasyX", "ServerCommandDescription"));
+            .WithDescription(LangEx.FeatureStringG("EasyX", "ServerCommandDescription"));
 
         command
             .BeginSubCommand("scope")
             .WithArgs(api.ChatCommands.Parsers.FileScope())
-            .WithDescription(LangEx.EmbeddedFeatureString("EasyX", "Scope.Description"))
+            .WithDescription(LangEx.FeatureStringG("EasyX", "Scope.Description"))
             .HandleWith(OnChangeSettingsScope)
             .EndSubCommand();
     }
@@ -54,14 +54,14 @@ public abstract class EasyXHost(string _commandName) : ModHost
 
         if (parser.IsMissing)
         {
-            var message = LangEx.EmbeddedFeatureString("EasyX", "Scope", _globalSettings.Scope.GetDescription());
+            var message = LangEx.FeatureStringG("EasyX", "Scope", _globalSettings.Scope.GetDescription());
             return TextCommandResult.Success(message);
         }
 
         if (parser.Scope is null)
         {
             const string validScopes = "[W]orld | [G]lobal";
-            var invalidScopeMessage = LangEx.EmbeddedFeatureString("EasyX", "InvalidScope", validScopes);
+            var invalidScopeMessage = LangEx.FeatureStringG("EasyX", "InvalidScope", validScopes);
             return TextCommandResult.Error(invalidScopeMessage);
         }
 
@@ -75,7 +75,7 @@ public abstract class EasyXHost(string _commandName) : ModHost
             ModSettings.Global.Save(globalSettings);
         }
 
-        var scopeMessage = LangEx.EmbeddedFeatureString("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
+        var scopeMessage = LangEx.FeatureStringG("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
         return TextCommandResult.Success(scopeMessage);
     }
 }

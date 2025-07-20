@@ -23,9 +23,6 @@
 		<Compile Remove="Core\GameContent\GUI\RadialMenu\**" />
 		<EmbeddedResource Remove="Core\GameContent\GUI\RadialMenu\**" />
 		<None Remove="Core\GameContent\GUI\RadialMenu\**" />
-		<None Update="_Includes\**\*.*">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -48,12 +45,22 @@
 		<Configurations>Debug;Release;Package</Configurations>
 	</PropertyGroup>
 
-	<Target Name="CleanOutputDirectory" BeforeTargets="BeforeBuild">
-		<Message Text=" → Cleaning output directory" Importance="high" Condition="'$(Configuration)' != 'Release'" />
-		<RemoveDir Directories="$(SolutionDir).debug" Condition="'$(Configuration)' == 'Debug'" />
-		<RemoveDir Directories="$(SolutionDir).releases" Condition="'$(Configuration)' == 'Package'" />
-		<MakeDir Directories="$(SolutionDir).debug" Condition="'$(Configuration)' == 'Debug'" />
-		<MakeDir Directories="$(SolutionDir).releases" Condition="'$(Configuration)' == 'Package'" />
+	<Target Name="CleanOutputDirectory" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' != 'Release'">
+		<Message Text=" → Cleaning output directory" Importance="high" />
+		<RemoveDir Directories="$(SolutionDir).debug" />
+		<RemoveDir Directories="$(SolutionDir).releases" />
+		<RemoveDir Directories="$(SolutionDir).gantry" />
+		<MakeDir Directories="$(SolutionDir).debug" />
+		<MakeDir Directories="$(SolutionDir).releases" />
+		<MakeDir Directories="$(SolutionDir).gantry" />
+	</Target>
+
+	<Target Name="GantryTranslationFiles" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' != 'Release' ">
+		<PropertyGroup>
+			<CleanOutputDir>$([System.IO.Path]::GetDirectoryName('$(TargetPath)'))</CleanOutputDir>
+		</PropertyGroup>
+		<Message Text=" → Patching and Merging Gantry Translation Files..." Importance="high" />
+		<Exec Command="$(VsModTranslationPatcherDir)\$(VsModTranslationPatcher) -p $(ProjectDir) -t $(SolutionDir).gantry -m gantry -l Information" />
 	</Target>
 
 </Project>

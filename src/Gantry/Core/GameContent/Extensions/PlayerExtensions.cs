@@ -44,8 +44,8 @@ public static class PlayerExtensions
     /// <param name="groupId">The chat group to send the message to.</param>
     public static void SendInvalidSyntaxMessage(this IPlayer player, int groupId)
     {
-        var invalidSyntax = LangEx.ConfirmationString("invalid-syntax");
-        var tryAgain = LangEx.ConfirmationString("try-again");
+        var invalidSyntax = LangEx.Confirmation("invalid-syntax");
+        var tryAgain = LangEx.Confirmation("try-again");
         player.SendMessage(groupId, $"{invalidSyntax} {tryAgain}", EnumChatType.CommandError);
     }
 }

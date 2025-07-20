@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32714.290
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test Suite", "Test Suite", "{09A02B9E-4640-4D45-8238-4D04F7BEBCA4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E2B27D3D-D7ED-49E1-8AF0-103A8C28C7A3}"
 	ProjectSection(SolutionItems) = preProject
 		pack.bat = pack.bat
@@ -29,12 +27,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		docs\TROUBLESHOOTING.md = docs\TROUBLESHOOTING.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gantry.Tests.AcceptanceMod", "tests\Gantry.Tests.AcceptanceMod\Gantry.Tests.AcceptanceMod.csproj", "{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gantry.Tests.Unit", "tests\Gantry.Tests.Unit\Gantry.Tests.Unit.csproj", "{26B7B845-E2CF-4378-9091-64D0B065F30F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gantry.Tests.Benchmarks", "tests\Gantry.Tests.Benchmarks\Gantry.Tests.Benchmarks.csproj", "{C9886626-344D-4FCE-A5FC-79C32B7CF78F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gantry", "src\Gantry\Gantry.csproj", "{F997FE8D-B383-4831-B6CC-4930B97E258E}"
 EndProject
 Global
@@ -45,30 +37,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Launch Server|Any CPU.ActiveCfg = Release|Any CPU
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Launch Server|Any CPU.Build.0 = Release|Any CPU
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Package|Any CPU.ActiveCfg = Package|Any CPU
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Package|Any CPU.Build.0 = Package|Any CPU
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Launch Server|Any CPU.ActiveCfg = Release|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Launch Server|Any CPU.Build.0 = Release|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Package|Any CPU.ActiveCfg = Debug|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Package|Any CPU.Build.0 = Debug|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26B7B845-E2CF-4378-9091-64D0B065F30F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Launch Server|Any CPU.ActiveCfg = Release|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Launch Server|Any CPU.Build.0 = Release|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Package|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Package|Any CPU.Build.0 = Debug|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Launch Server|Any CPU.ActiveCfg = Debug|Any CPU
@@ -82,9 +50,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{06886DE2-4DB9-44C0-AD47-AA17B78B0C35} = {09A02B9E-4640-4D45-8238-4D04F7BEBCA4}
-		{26B7B845-E2CF-4378-9091-64D0B065F30F} = {09A02B9E-4640-4D45-8238-4D04F7BEBCA4}
-		{C9886626-344D-4FCE-A5FC-79C32B7CF78F} = {09A02B9E-4640-4D45-8238-4D04F7BEBCA4}
 		{F997FE8D-B383-4831-B6CC-4930B97E258E} = {89BDE224-A1E6-4CEF-86C8-79798C337F3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

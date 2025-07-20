@@ -106,7 +106,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
             .BeginSubCommand("mode")
             .WithAlias("m")
             .WithArgs(parsers.AccessMode())
-            .WithDescription(LangEx.EmbeddedFeatureString("EasyX", "AccessMode.Description"))
+            .WithDescription(LangEx.Get("EasyX", "AccessMode.Description"))
             .HandleWith(OnChangeMode)
             .EndSubCommand();
 
@@ -114,7 +114,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
             .BeginSubCommand("whitelist")
             .WithAlias("wl")
             .WithArgs(parsers.OptionalServerPlayers())
-            .WithDescription(LangEx.EmbeddedFeatureString("EasyX", "Whitelist.Description"))
+            .WithDescription(LangEx.FeatureStringG("EasyX", "Whitelist.Description"))
             .HandleWith(HandleWhitelist)
             .EndSubCommand();
 
@@ -122,7 +122,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
             .BeginSubCommand("blacklist")
             .WithAlias("bl")
             .WithArgs(parsers.OptionalServerPlayers())
-            .WithDescription(LangEx.EmbeddedFeatureString("EasyX", "Blacklist.Description"))
+            .WithDescription(LangEx.FeatureStringG("EasyX", "Blacklist.Description"))
             .HandleWith(HandleBlacklist)
             .EndSubCommand();
 
@@ -188,7 +188,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
     protected virtual TextCommandResult DisplayInfo(TextCommandCallingArgs args)
     {
         var sb = new StringBuilder();
-        sb.AppendLine(LangEx.EmbeddedFeatureString("EasyX", "Mode", Lang.Get(SubCommandName.SplitPascalCase().UcFirst()), Settings.Mode));
+        sb.AppendLine(LangEx.FeatureStringG("EasyX", "Mode", Lang.Get(SubCommandName.SplitPascalCase().UcFirst()), Settings.Mode));
         ExtraDisplayInfo(sb);
         return TextCommandResult.Success(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
     }
@@ -211,12 +211,12 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         if (mode is null)
         {
             const string validModes = "[D]isabled | [E]nabled | [W]hitelist | [B]lacklist]";
-            var invalidModeMessage = LangEx.EmbeddedFeatureString("EasyX", "InvalidMode", validModes);
+            var invalidModeMessage = LangEx.FeatureStringG("EasyX", "InvalidMode", validModes);
             return TextCommandResult.Error(invalidModeMessage);
         }
 
         Settings.Mode = mode.Value;
-        var modeMessage = LangEx.EmbeddedFeatureString("EasyX", "SetMode", SubCommandName, Settings.Mode);
+        var modeMessage = LangEx.FeatureStringG("EasyX", "SetMode", SubCommandName, Settings.Mode);
         ServerChannel?.BroadcastUniquePacket(GeneratePacket);
         return TextCommandResult.Success(modeMessage);
     }
@@ -251,7 +251,7 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
 
         var sb = new StringBuilder();
         var resultCount = list.Count > 0 ? "Results" : "NoResults";
-        sb.AppendLine(LangEx.EmbeddedFeatureString("EasyX", $"{propertyName}.{resultCount}", SubCommandName));
+        sb.AppendLine(LangEx.FeatureStringG("EasyX", $"{propertyName}.{resultCount}", SubCommandName));
         foreach (var p in list)
         {
             sb.AppendLine($" - {p.Name} (PID: {p.Id})");
@@ -300,17 +300,17 @@ public abstract class EasyXServerSystemBase<TServerSettings, TClientSettings, TS
         if (!isRemoved) list.Add(result!);
         ModSettings.World.Save(Settings);
         ServerChannel?.BroadcastUniquePacket(GeneratePacket);
-        var message = LangEx.EmbeddedFeatureString("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
+        var message = LangEx.FeatureStringG("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
         return TextCommandResult.Success(message);
     }
 
     private static TextCommandResult FoundNoResults(string searchTerm)
-        => TextCommandResult.Error(LangEx.EmbeddedFeatureString("EasyX", "PlayerSearch.NoResults", searchTerm));
+        => TextCommandResult.Error(LangEx.FeatureStringG("EasyX", "PlayerSearch.NoResults", searchTerm));
 
     private static TextCommandResult FoundMultiplePlayers(string searchTerm, PlayerUidName[] players)
     {
         var sb = new StringBuilder();
-        sb.Append(LangEx.EmbeddedFeatureString("EasyX", "PlayerSearch.MultipleResults", searchTerm));
+        sb.Append(LangEx.FeatureStringG("EasyX", "PlayerSearch.MultipleResults", searchTerm));
         foreach (var p in players)
         {
             sb.Append($" - {p.Name} (PID: {p.Uid})");
