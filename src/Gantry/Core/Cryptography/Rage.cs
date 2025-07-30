@@ -1,8 +1,4 @@
-﻿
-
-// ReSharper disable InconsistentNaming
-
-namespace Gantry.Core.Cryptography;
+﻿namespace Gantry.Core.Cryptography;
 
 /// <summary>
 ///     Represents a class for generating hash keys compatible with GTA 5 file formats.
@@ -10,7 +6,6 @@ namespace Gantry.Core.Cryptography;
 /// <remarks>
 ///     Copied directly from the game -- performs uppercase to lowercase conversions amongst other things.
 /// </remarks>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class Rage
 {
     /// <summary>

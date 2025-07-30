@@ -1,4 +1,5 @@
 ﻿using ApacheTech.Common.BrighterSlim;
+using Gantry.Core.Abstractions;
 using Gantry.Core.Annotation;
 
 namespace Gantry.Services.Brighter.Filters;
@@ -7,8 +8,6 @@ namespace Gantry.Services.Brighter.Filters;
 ///     Ensures that a command will only be processed if it is running on the specified app side.
 /// </summary>
 /// <seealso cref="RequestHandlerAttribute" />
-[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors | ImplicitUseTargetFlags.WithMembers)]
-[DoNotPruneType]
 public class HandledOnAttribute : RequestHandlerAttribute
 {
     /// <summary>
@@ -47,9 +46,14 @@ public class HandledOnAttribute : RequestHandlerAttribute
     internal class SideHandler<TRequest> : RequestHandler<TRequest> where TRequest : class, IRequest
     {
         private EnumAppSide _side;
+        private readonly ICoreGantryAPI _gantry;
+
+        public SideHandler(ICoreGantryAPI gantry) => _gantry = gantry;
+
         /// <summary />
         public override void InitializeFromAttributeParams(params object[] initialiserList) => _side = (EnumAppSide)initialiserList[0];
+        
         /// <summary />
-        public override TRequest Handle(TRequest command) => _side.IsUniversal() || ApiEx.Side == _side ? base.Handle(command) : base.Fallback(command);
+        public override TRequest Handle(TRequest command) => _side.IsUniversal() || _gantry.ApiEx.Side == _side ? base.Handle(command) : base.Fallback(command);
     }
 }

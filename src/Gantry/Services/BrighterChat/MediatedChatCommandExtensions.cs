@@ -1,4 +1,6 @@
-﻿namespace Gantry.Services.BrighterChat;
+﻿using ApacheTech.Common.BrighterSlim;
+
+namespace Gantry.Services.BrighterChat;
 
 /// <summary>
 ///     Extension methods to aid the use of mediated chat commands.
@@ -10,8 +12,8 @@ public static class MediatedChatCommandExtensions
     /// </summary>
     /// <typeparam name="TCommand"></typeparam>
     /// <param name="chatCommand"></param>
-    /// <returns></returns>
-    public static IChatCommand WithMediatedHandler<TCommand>(this IChatCommand chatCommand)
+    /// <param name="commandProcessor">The command processor to use for handling the command.</param>
+    public static IChatCommand WithMediatedHandler<TCommand>(this IChatCommand chatCommand, IAmACommandProcessor commandProcessor)
         where TCommand : MediatedChatCommand, new()
-        => chatCommand.HandleWith(MediatedChatCommands.Handle<TCommand>);
+        => chatCommand.HandleWith(args => MediatedChatCommands.HandleCommand<TCommand>(args, commandProcessor));
 }

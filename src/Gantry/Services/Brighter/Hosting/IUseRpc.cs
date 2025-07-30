@@ -9,7 +9,6 @@ namespace Gantry.Services.Brighter.Hosting;
 ///     For RPC a command object needs to return a value on a private queue
 ///     This approach blocks waiting for a response
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal interface IUseRpc
 {
     /// <summary>

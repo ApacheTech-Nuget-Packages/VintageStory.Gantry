@@ -1,11 +1,8 @@
-﻿using Gantry.Core.GameContent.ChatCommands.Parsers;
-using Gantry.Core.GameContent.ChatCommands.Parsers.Extensions;
-using Gantry.Services.FileSystem.Configuration;
-using Gantry.Services.FileSystem.Hosting;
-using Vintagestory.API.Server;
-
-// ReSharper disable InconsistentNaming
-// ReSharper disable StringLiteralTypo
+﻿using Gantry.Core.Abstractions;
+using Gantry.Core.Hosting.Registration;
+using Gantry.GameContent.ChatCommands.Parsers;
+using Gantry.GameContent.ChatCommands.Parsers.Extensions;
+using Gantry.Services.IO.Hosting;
 
 namespace Gantry.Services.EasyX.Hosting;
 
@@ -14,36 +11,35 @@ namespace Gantry.Services.EasyX.Hosting;
 ///     
 ///     Registrations performed within this class should be global scope; by convention, features should aim to be as stand-alone as they can be.
 /// </summary>
-/// <seealso cref="ModHost" />
-[UsedImplicitly]
-public abstract class EasyXHost(string _commandName) : ModHost
+/// <seealso cref="ModHost{TModSystem}" />
+public abstract class EasyXHost<TModSystem>(string commandName, Action<ICoreGantryAPI> onCoreLoaded) : ModHost<TModSystem>(onCoreLoaded), IServerServiceRegistrar
+    where TModSystem : ModHost<TModSystem>
 {
+    private readonly string _commandName = commandName;
     private ConfigurationSettings _globalSettings = null!;
 
     ///<inheritdoc />
-    protected override void ConfigureServerModServices(IServiceCollection services, ICoreServerAPI sapi)
+    public void ConfigureServerModServices(IServiceCollection services, ICoreGantryAPI gantry)
     {
         services.AddFeatureGlobalSettings<ConfigurationSettings>();
-        base.ConfigureServerModServices(services, sapi);
     }
 
     ///<inheritdoc />
     public override void StartServerSide(ICoreServerAPI api)
     {
-        G.Logger.VerboseDebug($"Creating Chat Command: {_commandName}");
+        Core.Logger.VerboseDebug($"Creating Chat Command: {_commandName}");
 
-        _globalSettings = ModSettings.Global.Feature<ConfigurationSettings>();
+        _globalSettings = Core.Settings.Global.Feature<ConfigurationSettings>();
         _globalSettings.CommandName = _commandName;
-        ConfigurationSettings.Instance = _globalSettings;
 
         var command = api.ChatCommands.Create(_commandName)
             .RequiresPrivilege(Privilege.controlserver)
-            .WithDescription(LangEx.FeatureStringG("EasyX", "ServerCommandDescription"));
+            .WithDescription(Core.Lang.FeatureStringG("EasyX", "ServerCommandDescription"));
 
         command
             .BeginSubCommand("scope")
             .WithArgs(api.ChatCommands.Parsers.FileScope())
-            .WithDescription(LangEx.FeatureStringG("EasyX", "Scope.Description"))
+            .WithDescription(Core.Lang.FeatureStringG("EasyX", "Scope.Description"))
             .HandleWith(OnChangeSettingsScope)
             .EndSubCommand();
     }
@@ -54,28 +50,33 @@ public abstract class EasyXHost(string _commandName) : ModHost
 
         if (parser.IsMissing)
         {
-            var message = LangEx.FeatureStringG("EasyX", "Scope", _globalSettings.Scope.GetDescription());
+            var message = Core.Lang.FeatureStringG("EasyX", "Scope", _globalSettings.Scope.GetDescription());
             return TextCommandResult.Success(message);
         }
 
-        if (parser.Scope is null)
+        if (!parser.Scope.HasValue)
         {
             const string validScopes = "[W]orld | [G]lobal";
-            var invalidScopeMessage = LangEx.FeatureStringG("EasyX", "InvalidScope", validScopes);
+            var invalidScopeMessage = Core.Lang.FeatureStringG("EasyX", "InvalidScope", validScopes);
             return TextCommandResult.Error(invalidScopeMessage);
         }
 
-        var scope = parser.Scope!;
-
-        var globalSettings = ModSettings.Global.Feature<ConfigurationSettings>();
-        if (globalSettings.Scope != scope)
+        if (parser.Scope is IO.DataStructures.ModFileScope.Gantry)
         {
-            ModSettings.CopyTo(scope.Value);
-            globalSettings.Scope = scope.Value;
-            ModSettings.Global.Save(globalSettings);
+            const string gantryScopeMessage = "The Gantry scope is reserved for the Gantry MDK and cannot be set.";
+            return TextCommandResult.Error(gantryScopeMessage);
         }
 
-        var scopeMessage = LangEx.FeatureStringG("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
+        var toScope = parser.Scope.Value;
+
+        var fromScope = _globalSettings.Scope;
+        if (fromScope != toScope)
+        {
+            Core.Settings.CopySettings(fromScope, toScope);
+            _globalSettings.Scope = toScope;
+        }
+
+        var scopeMessage = Core.Lang.FeatureStringG("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
         return TextCommandResult.Success(scopeMessage);
     }
 }

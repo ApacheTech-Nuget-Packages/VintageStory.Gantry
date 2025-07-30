@@ -1,9 +1,41 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>ModTranslationPatcher</AssemblyName>
+		<SelfContained>false</SelfContained>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommandLineParser" Version="2.9.1" />
+		<PackageReference Include="Serilog" Version="4.3.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+		<PackageReference Include="System.Collections.Immutable" Version="[8.0.0]" />
+		<PackageReference Include="System.Text.Encodings.Web" Version="[8.0.0]" />
+		<PackageReference Include="System.Text.Json" Version="[8.0.5]" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Gantry.Tools.Common\Gantry.Tools.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="VintagestoryAPI">
+			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
+		</Reference>
+		<Reference Include="VintagestoryLib">
+			<HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
+		</Reference>
+	</ItemGroup>
 
 </Project>

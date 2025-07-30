@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using ApacheTech.Common.BrighterSlim;
+﻿using ApacheTech.Common.BrighterSlim;
+using Gantry.Core.Abstractions;
 using Gantry.Core.Annotation;
 
 namespace Gantry.Services.Brighter.Hosting;
@@ -8,7 +8,6 @@ namespace Gantry.Services.Brighter.Hosting;
 ///     Constructs Brighter message mappers and handlers
 /// </summary>
 /// <seealso cref="IBrighterBuilder" />
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
 {
     private readonly ServiceCollectionSubscriberRegistry _serviceCollectionSubscriberRegistry;
@@ -71,11 +70,10 @@ internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
     ///     Scan the assemblies provided for implementations of IHandleRequests, IHandleRequestsAsync, IAmAMessageMapper and register them with ServiceCollection
     /// </summary>
     /// <returns></returns>
-    public IBrighterBuilder AutoFromAssemblies(ICoreAPI api)
+    public IBrighterBuilder AutoFromAssemblies(ICoreGantryAPI core)
     {
-        var assemblies = new[] { GetType().Assembly, ModEx.ModAssembly }.Distinct().ToArray();
-
-        var side = api.Side;
+        var assemblies = core.ModAssemblies.ToArray();
+        var side = core.Uapi.Side;
 
         MapperRegistryFromAssemblies(side, assemblies);
         HandlersFromAssemblies(side, assemblies);

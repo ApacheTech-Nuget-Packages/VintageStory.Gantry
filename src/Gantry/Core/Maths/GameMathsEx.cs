@@ -6,7 +6,6 @@ namespace Gantry.Core.Maths;
 /// <summary>
 ///     An even larger set of extremely useful mathematical functions.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class GameMathsEx
 {
     /// <summary>

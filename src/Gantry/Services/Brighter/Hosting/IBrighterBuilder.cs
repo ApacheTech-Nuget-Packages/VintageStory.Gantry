@@ -1,18 +1,17 @@
-﻿using System.Reflection;
-using ApacheTech.Common.BrighterSlim;
+﻿using ApacheTech.Common.BrighterSlim;
+using Gantry.Core.Abstractions;
 
 namespace Gantry.Services.Brighter.Hosting;
 
 /// <summary>
 ///     Constructs Brighter message mappers and handlers
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal interface IBrighterBuilder
 {
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequests, IHandleRequestsAsync, IAmAMessageMapper and register them with ServiceCollection.
     /// </summary>
-    IBrighterBuilder AutoFromAssemblies(ICoreAPI api);
+    IBrighterBuilder AutoFromAssemblies(ICoreGantryAPI core);
 
     /// <summary>
     ///     Scan the assemblies provided for implementations of IHandleRequestsAsync and register them with ServiceCollection.

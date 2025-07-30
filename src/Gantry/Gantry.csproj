@@ -1,15 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<!-- Basic Info is set within Directory.Build.props -->
-
 	<PropertyGroup>
 		<Title>Gantry Mod Development Kit</Title>
 		<Description>Gantry MDK is a Mod Developent Kit, used to create third-party plugins for the game Vintage Story, by Anego Studios.</Description>
-		<Version>0.11.2</Version>
+		<Version>0.12.0</Version>
 		<Configurations>Debug;Release;Package</Configurations>
 		<PackageReleaseNotes>
-			Gantry MDK v0.11.2: Remove network service.
+			Gantry MDK v0.12.0: Total Overhaul of the Gantry Mod Development Kit, with a focus on modularity and extensibility.
+			This release introduces a new plugin system, allowing developers to create and share plugins easily. 
+			The API has been simplified for better usability, and extensive documentation is provided to help developers get started quickly. 
+			Additionally, this version includes performance improvements and bug fixes to enhance the overall development experience.
 		</PackageReleaseNotes>
+		<RunTargets>true</RunTargets>
+		<RootNamespace>GantryLib</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,9 +23,12 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="**\_EmbeddedResources\**" />
-		<Compile Remove="Core\GameContent\GUI\RadialMenu\**" />
-		<EmbeddedResource Remove="Core\GameContent\GUI\RadialMenu\**" />
-		<None Remove="Core\GameContent\GUI\RadialMenu\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Services\Experimental\**" />
+	  <EmbeddedResource Remove="Services\Experimental\**" />
+	  <None Remove="Services\Experimental\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,16 +42,11 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Core\_EmbeddedResources\lang\Gantry\" />
-		<Folder Include="Domain\" />
-	</ItemGroup>
-
 	<PropertyGroup>
 		<Configurations>Debug;Release;Package</Configurations>
 	</PropertyGroup>
 
-	<Target Name="CleanOutputDirectory" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' != 'Release'">
+	<Target Name="CleanOutputDirectory" BeforeTargets="BeforeBuild" Condition="'$(Configuration)' != 'Release' AND '$(RunTargets)' == 'true'">
 		<Message Text=" → Cleaning output directory" Importance="high" />
 		<RemoveDir Directories="$(SolutionDir).debug" />
 		<RemoveDir Directories="$(SolutionDir).releases" />
@@ -55,12 +56,11 @@
 		<MakeDir Directories="$(SolutionDir).gantry" />
 	</Target>
 
-	<Target Name="GantryTranslationFiles" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' != 'Release' ">
+	<Target Name="GantryTranslationFiles" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)' != 'Release' AND '$(RunTargets)' == 'true'">
 		<PropertyGroup>
 			<CleanOutputDir>$([System.IO.Path]::GetDirectoryName('$(TargetPath)'))</CleanOutputDir>
 		</PropertyGroup>
-		<Message Text=" → Patching and Merging Gantry Translation Files..." Importance="high" />
-		<Exec Command="$(VsModTranslationPatcherDir)\$(VsModTranslationPatcher) -p $(ProjectDir) -t $(SolutionDir).gantry -m gantry -l Information" />
+		<Message Text=" → Patching and Merging Gantry Translation Files..." Importance="high" />		
+		<Exec Command="$(VsModTranslationPatcherDir)\$(VsModTranslationPatcher) ^&#xD;&#xA;			  --ProjectDir=$(ProjectDir) ^&#xD;&#xA;			  --TargetDir=$(SolutionDir).gantry ^&#xD;&#xA;			  --ModId=gantry ^&#xD;&#xA;			  --LogLevel=Warning" />
 	</Target>
-
 </Project>

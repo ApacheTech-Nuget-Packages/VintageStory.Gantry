@@ -6,7 +6,6 @@ namespace Gantry.Core.Maths.Matrix;
 ///     A double precision floating point 3 by 3 matrix.
 ///     Primarily to support rotations
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public readonly struct Matrix3d
 {
     /// <summary>

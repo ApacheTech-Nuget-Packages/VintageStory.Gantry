@@ -8,7 +8,6 @@ namespace Gantry.Services.ExtendedEnums;
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <seealso cref="IEquatable{T}" />
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class StringEnum<T> : ExtendedEnum<string, T> where T : StringEnum<T>, new()
 {
     /// <summary>

@@ -4,7 +4,6 @@
 ///     Acts as a base class for each type of interpolation.
 /// </summary>
 /// <seealso cref="IInterpolator" />
-[UsedImplicitly(ImplicitUseTargetFlags.All)]
 public abstract class InterpolationBase : IInterpolator
 {
     /// <summary>

@@ -10,7 +10,6 @@ namespace Gantry.Services.Brighter.Hosting;
 /// <summary>
 ///     Service Collection Extensions.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal static class ServiceCollectionExtensions
 {
     /// <summary>
@@ -139,8 +138,8 @@ internal static class ServiceCollectionExtensions
     private static object BuildCommandProcessor(IServiceProvider provider)
     {
         var options = provider.Resolve<IBrighterOptions>();
-        var subscriberRegistry = provider.GetService<ServiceCollectionSubscriberRegistry>();
-        var useRequestResponse = provider.GetService<IUseRpc>();
+        var subscriberRegistry = provider.GetRequiredService<ServiceCollectionSubscriberRegistry>();
+        var useRequestResponse = provider.GetRequiredService<IUseRpc>();
 
         var handlerFactory = new ServiceProviderHandlerFactory(provider);
         var handlerConfiguration = new HandlerConfiguration(subscriberRegistry, handlerFactory);

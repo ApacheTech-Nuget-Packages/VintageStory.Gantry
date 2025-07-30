@@ -6,7 +6,6 @@ namespace Gantry.Services.Brighter.Hosting;
 /// <summary>
 ///     Provides options for the BrighterSlim command processor.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal interface IBrighterOptions
 {
     /// <summary>

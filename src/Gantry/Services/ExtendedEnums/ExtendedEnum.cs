@@ -7,7 +7,6 @@
 /// <typeparam name="TEnumType"></typeparam>
 /// <typeparam name="TEnumValue"></typeparam>
 /// <seealso cref="IEquatable{TEnumValue}" />
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class ExtendedEnum<TEnumType, TEnumValue> : IEquatable<TEnumValue>
     where TEnumType : class
     where TEnumValue : ExtendedEnum<TEnumType, TEnumValue>, new()

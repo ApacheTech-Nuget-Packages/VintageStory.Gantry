@@ -1,23 +1,10 @@
-﻿using System.Reflection;
-
-namespace Gantry.Services.HarmonyPatches;
+﻿namespace Gantry.Services.HarmonyPatches;
 
 /// <summary>
 ///     Provides methods of applying Harmony patches to the game.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.All)]
 public interface IHarmonyPatchingService : IDisposable
 {
-    /// <summary>
-    ///     Apply patches to the game, located in the mod assembly.
-    /// </summary>
-    void PatchModAssembly();
-
-    /// <summary>
-    ///     Remove patches from the game, located in the mod assembly.
-    /// </summary>
-    void UnpatchModAssembly();
-
     /// <summary>
     ///     Creates a new patch host, if one with the specified ID doesn't already exist.
     /// </summary>

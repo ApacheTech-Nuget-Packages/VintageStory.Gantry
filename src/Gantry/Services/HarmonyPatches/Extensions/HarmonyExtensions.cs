@@ -1,6 +1,4 @@
 ﻿#nullable enable
-using System.Reflection;
-
 namespace Gantry.Services.HarmonyPatches.Extensions;
 
 /// <summary>
@@ -130,6 +128,7 @@ public static class HarmonyExtensions
     ///     Applies a telemetry patch to the specified method using the Harmony library, adding logging and execution timing.
     /// </summary>
     /// <param name="instance">The Harmony instance used to apply the patch.</param>
+    /// <param name="logger">The logger used for logging telemetry information.</param>
     /// <param name="method">The method that serves as the reference for naming and categorisation in telemetry.</param>
     /// <param name="originalMethod">The original method to which the telemetry patch will be applied.</param>
     /// <remarks>
@@ -137,7 +136,7 @@ public static class HarmonyExtensions
     ///     execution and starts a stopwatch to measure execution time, while the postfix stops the stopwatch and logs 
     ///     the execution duration in milliseconds. Both prefix and postfix methods are categorised under "Telemetry".
     /// </remarks>
-    public static void ApplyTelemetryPatch(this Harmony instance, MethodInfo method, MethodBase originalMethod)
+    public static void ApplyTelemetryPatch(this Harmony instance, ILogger logger, MethodInfo method, MethodBase originalMethod)
     {
         var prefix = new HarmonyMethod(Prefix)
         {
@@ -156,7 +155,7 @@ public static class HarmonyExtensions
         // Prefix method to log the start of method execution and initialise a stopwatch for timing.
         void Prefix(out Stopwatch __state)
         {
-            G.Logger.VerboseDebug($"Running method: {method.Name}");
+            logger.VerboseDebug($"Running method: {method.Name}");
             __state = Stopwatch.StartNew();
         }
 
@@ -164,7 +163,7 @@ public static class HarmonyExtensions
         void Postfix(Stopwatch __state)
         {
             __state.Stop();
-            G.Logger.VerboseDebug($"Method {method.Name} took {__state.ElapsedMilliseconds} ms to execute.");
+            logger.VerboseDebug($"Method {method.Name} took {__state.ElapsedMilliseconds} ms to execute.");
         }
     }
 }

@@ -5,7 +5,6 @@ namespace Gantry.Services.Brighter.Hosting;
 /// <summary>
 /// .NET IoC backed Subscriber registry, used to find matching handlers
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal class ServiceCollectionSubscriberRegistry : IAmASubscriberRegistry, IAmAnAsyncSubcriberRegistry
 {
     private readonly IServiceCollection _services;

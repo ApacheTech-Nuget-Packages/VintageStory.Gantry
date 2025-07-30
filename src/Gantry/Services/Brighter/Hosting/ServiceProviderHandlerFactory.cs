@@ -7,7 +7,6 @@ namespace Gantry.Services.Brighter.Hosting;
 /// <summary>
 ///     A factory for handlers using the .NET IoC container for implementation details
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal class ServiceProviderHandlerFactory : IAmAHandlerFactorySync, IAmAHandlerFactoryAsync
 {
     private readonly IServiceProvider _serviceProvider;

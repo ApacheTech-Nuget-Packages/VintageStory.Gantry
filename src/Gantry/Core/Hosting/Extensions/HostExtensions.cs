@@ -1,28 +1,27 @@
-﻿#nullable enable
-using System.Reflection;
-using ApacheTech.Common.Extensions.Harmony;
+﻿using ApacheTech.Common.Extensions.Harmony;
+using Gantry.Core.Abstractions;
 using Gantry.Core.Hosting.Annotation;
-using Vintagestory.Server;
+using Gantry.Extensions.Api;
 
 namespace Gantry.Core.Hosting.Extensions;
 
 /// <summary>
 ///     Extension method that aid the registration and creation of services.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class HostExtensions
 {
     /// <summary>
     ///     Determines whether a constructor is decorated with a <see cref="SidedConstructorAttribute"/> attribute that matched the current app-side.
     /// </summary>
     /// <param name="constructor">The constructor to check.</param>
+    /// <param name="side">The app-side to check against.</param>
     /// <returns><c>true</c> if the dependencies for the constructor should be resolved via the service provider, <c>false</c> otherwise.</returns>
-    public static bool IOCEnabled(this ConstructorInfo constructor)
+    public static bool IsSided(this ConstructorInfo constructor, EnumAppSide side)
     {
         return constructor
             .GetCustomAttributes(typeof(SidedConstructorAttribute), false)
             .Cast<SidedConstructorAttribute>()
-            .Any(q => q.Side == EnumAppSide.Universal || q.Side == ApiEx.Side);
+            .Any(q => q.Side == EnumAppSide.Universal || q.Side == side);
     }
 
     /// <summary>
@@ -61,10 +60,11 @@ public static class HostExtensions
     ///     Registers all <see cref="ModSystem"/>s in the current mod, into the service collection.
     /// </summary>
     /// <param name="services">The service collection to add the <see cref="ModSystem"/>s to.</param>
-    /// <param name="side">The app side to load systems from.</param>
-    public static void AddModSystems(this IServiceCollection services, EnumAppSide side)
+    /// <param name="gantry">Access to the Core Gantry API.</param>
+    public static void AddModSystems(this IServiceCollection services, ICoreGantryAPI gantry)
     {
-        var modSystems = ApiEx.Current.ModLoader.Systems.Where(p =>
+        var side = gantry.Uapi.Side;
+        var modSystems = gantry.Uapi.ModLoader.Systems.Where(p =>
         {
             try
             {
@@ -72,8 +72,8 @@ public static class HostExtensions
             }
             catch(Exception ex)
             {
-                G.Logger.Error($"Could not add mod `{p.GetType().FullName}` to the service collection.");
-                G.Logger.Error(ex);
+                gantry.Logger.Error($"Could not add mod `{p.GetType().FullName}` to the service collection.");
+                gantry.Logger.Error(ex);
                 return false;
             }
 
@@ -82,33 +82,36 @@ public static class HostExtensions
         foreach (var system in modSystems)
         {
             services.AddSingleton(system.GetType(), system);
+            gantry.Logger.VerboseDebug($" - Mod System: {system.GetType().Name}");
         }
     }
 
     /// <summary>
-    ///     Registers all <see cref="ClientSystem"/>s into the service collection.
+    ///     Registers all <see cref="ClientSystem"/>s into the service collection on the client.
+    ///     Registers all <see cref="ServerSystem"/>s into the service collection on the client.
     /// </summary>
-    /// <param name="services">The service collection to add the <see cref="ClientSystem"/>s to.</param>
-    public static void AddClientSystems(this IServiceCollection services)
+    /// <param name="services">The service collection to add the systems to.</param>
+    /// <param name="gantry">Provides access to the Core Gantry API.</param>
+    public static void AddSystems(this IServiceCollection services, ICoreGantryAPI gantry)
     {
-        var clientSystems = ApiEx.ClientMain.GetField<ClientSystem[]>("clientSystems");
+        var api = gantry.Uapi;
+
+        api.Invoke(capi => { 
+
+        var clientSystems = capi.AsClientMain().GetField<ClientSystem[]>("clientSystems");
         foreach (var system in clientSystems)
         {
             services.AddSingleton(system.GetType(), system);
-        }
-    }
-
-    /// <summary>
-    ///     Registers all <see cref="ServerSystem"/>s into the service collection.
-    /// </summary>
-    /// <param name="services">The service collection to add the <see cref="ServerSystem"/>s to.</param>
-    public static void AddServerSystems(this IServiceCollection services)
-    {
-        var serverSystems = ApiEx.ServerMain.GetField<ServerSystem[]>("Systems");
+                gantry.Logger.VerboseDebug($" - Client System: {system.GetType().Name}");
+            }
+        }, sapi => { 
+        var serverSystems = sapi.AsServerMain().GetField<ServerSystem[]>("Systems");
         foreach (var system in serverSystems)
         {
             services.AddSingleton(system.GetType(), system);
-        }
+                gantry.Logger.VerboseDebug($" - Server System: {system.GetType().Name}");
+            }
+        });
     }
 
     /// <summary>

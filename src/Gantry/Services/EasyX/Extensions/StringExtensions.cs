@@ -5,7 +5,6 @@ namespace Gantry.Services.EasyX.Extensions;
 /// <summary>
 ///     Extension methods to aid broadcasting unique packets to players.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static partial class StringExtensions
 {
     /// <summary>

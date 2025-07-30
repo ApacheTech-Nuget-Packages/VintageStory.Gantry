@@ -1,25 +1,27 @@
-﻿using Gantry.Services.Network.Extensions;
+﻿using Gantry.Core.Abstractions;
+using Gantry.Core.Abstractions.ModSystems;
+using Gantry.Core.Network.Extensions;
 
 namespace Gantry.Services.EasyX.Abstractions;
 
 /// <summary>
-///     
+///     Acts as a base class for EasyX mod systems that require settings from the server.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.All)]
-public abstract class EasyXClientSystemBase<TClientSettings> : ClientModSystem
+public abstract class EasyXClientSystemBase<TModSystem, TClientSettings> : ClientModSystem<TModSystem>
+    where TModSystem : EasyXClientSystemBase<TModSystem, TClientSettings>
     where TClientSettings : class, IEasyXClientSettings, new()
 {
     /// <summary>
     ///     The settings used to configure the mod.
     /// </summary>
-    public static TClientSettings Settings { get; private set; } = new();
+    public TClientSettings Settings { get; private set; } = new();
 
     /// <inheritdoc />
     public override void StartClientSide(ICoreClientAPI api)
     {
         api.Network
-            .GetOrRegisterDefaultChannel()
-            .RegisterPacket<TClientSettings>(packet =>
+            .GetOrRegisterDefaultChannel(Core)
+            .RegisterPacket<TClientSettings>(Core, packet =>
             {
                 Settings = packet;
                 OnSettingsChanged();

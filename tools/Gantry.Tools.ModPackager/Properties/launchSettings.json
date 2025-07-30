@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ModPackager": {
+      "commandName": "Project",
+      "commandLineArgs": " -a \"C:\\Users\\Apache\\source\\repos\\ApacheTech.VintageMods.WaypointExtensions\\ApacheTech.VintageMods.WaypointExtensions\\bin\\Release\\netstandard2.0\\ApacheTech.VintageMods.WaypointExtensions.dll\""
+    }
+  }
+}

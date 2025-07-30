@@ -4,7 +4,6 @@
 ///     Denotes that the decorated object requires a specific mod to be enabled within the gameworld.
 ///     It is up to the developer to enforce this restriction.
 /// </summary>
-[UsedImplicitly]
 [AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
 public sealed class RequiresModAttribute : Attribute
 {

@@ -6,7 +6,6 @@ namespace Gantry.Services.Brighter.Hosting;
 /// Options around use of RPC over messaging i.e. command and document response
 /// Requires blocking for a response on a queue identified by producer to consumer
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal class UseRpc : IUseRpc
 {
     /// <summary>

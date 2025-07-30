@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Reflection.Emit;
+﻿using System.Reflection.Emit;
 using System.Text;
 
 namespace Gantry.Services.HarmonyPatches.Extensions;
@@ -85,10 +84,11 @@ public static class CodeInstructionExtensions
     ///     This is useful for debugging transpiler modifications.
     /// </summary>
     /// <param name="instructions">The collection of <see cref="CodeInstruction"/> objects to process.</param>
+    /// <param name="logger">The logger instance to use for logging.</param>
     /// <returns>The original collection of <see cref="CodeInstruction"/> objects, unmodified.</returns>
-    public static IEnumerable<CodeInstruction> LogOutput(this IEnumerable<CodeInstruction> instructions)
+    public static IEnumerable<CodeInstruction> LogOutput(this IEnumerable<CodeInstruction> instructions, ILogger logger)
     {
-        G.Logger.Debug(instructions.ToStringBuilder().ToString());
+        logger.Debug(instructions.ToStringBuilder().ToString());
         return instructions;
     }
 }

@@ -5,7 +5,6 @@
 ///     The tension is used to calculate the tangents, which must be in the interval [-1, 1].
 ///     In some sense, this can be interpreted as the "length" of the tangent.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public enum HermiteTension
 {
     /// <summary>

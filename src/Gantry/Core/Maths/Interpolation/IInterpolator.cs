@@ -3,7 +3,6 @@
 /// <summary>
 ///     Represents a specific form of interpolation between two nodes within a path.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public interface IInterpolator
 {
     /// <summary>

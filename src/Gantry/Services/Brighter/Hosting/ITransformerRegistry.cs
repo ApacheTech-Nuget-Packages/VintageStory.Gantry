@@ -3,7 +3,6 @@
 /// <summary>
 ///     The Transformer Registry is used to help us register with the Service Collection when using Brighter .NET Core Support
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal interface ITransformerRegistry
 {
     /// <summary>

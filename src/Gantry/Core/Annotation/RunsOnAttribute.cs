@@ -5,7 +5,6 @@
 /// </summary>
 /// <seealso cref="Attribute" />
 [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
-[UsedImplicitly(ImplicitUseTargetFlags.All)]
 public class RunsOnAttribute : Attribute
 {
     /// <summary>

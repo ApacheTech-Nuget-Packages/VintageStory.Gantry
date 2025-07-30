@@ -6,7 +6,6 @@
 /// </summary>
 /// <typeparam name="T"></typeparam>
 /// <seealso cref="IEquatable{T}" />
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public abstract class TypeEnum<T> : ExtendedEnum<Type, T>
     where T : TypeEnum<T>, new()
 {

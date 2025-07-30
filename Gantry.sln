@@ -9,11 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{89BDE224-A1E6-4CEF-86C8-79798C337F3C}"
-	ProjectSection(SolutionItems) = preProject
-		src\Directory.Build.props = src\Directory.Build.props
-		src\Directory.Build.targets = src\Directory.Build.targets
-		src\Directory.Packages.props = src\Directory.Packages.props
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{96DA4618-BF8E-4228-825C-1385FAD305EC}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,8 +16,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		docs\README.md = docs\README.md
 		docs\TROUBLESHOOTING.md = docs\TROUBLESHOOTING.md
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gantry", "src\Gantry\Gantry.csproj", "{F997FE8D-B383-4831-B6CC-4930B97E258E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -32,6 +25,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gantry.Tools.ModPackager", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gantry.Tools.TranslationsPatcher", "tools\Gantry.Tools.TranslationsPatcher\Gantry.Tools.TranslationsPatcher.csproj", "{7F5FB303-A101-49FA-8071-10CA898C886E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gantry.Tools.Common", "tools\Gantry.Tools.Common\Gantry.Tools.Common.csproj", "{934F3AE3-2700-4209-8F15-01783B20CA48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gantry", "src\Gantry\Gantry.csproj", "{51567F1E-4A14-F884-E99D-EB5C70364737}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{33149E72-7417-43CC-B933-3922E0C93C2A}"
+	ProjectSection(SolutionItems) = preProject
+		src\Directory.Build.props = src\Directory.Build.props
+		src\Directory.Build.targets = src\Directory.Build.targets
+		src\Directory.Packages.props = src\Directory.Packages.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{CA588D59-989E-4504-B45C-54F59DDDDF1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gantry.Tests.Unit", "tests\Gantry.Tests.Unit\Gantry.Tests.Unit.csproj", "{CD475487-9B83-442B-8550-9721CCE249A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{0F151AA0-39A5-4D86-953F-73F7B5EBB1A1}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Gantry.Shared", "shared\Gantry.Shared\Gantry.Shared.shproj", "{0EA708E9-9E9D-4FE0-855C-DF89F48CBB2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,14 +52,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Launch Server|Any CPU.ActiveCfg = Debug|Any CPU
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Launch Server|Any CPU.Build.0 = Debug|Any CPU
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Package|Any CPU.ActiveCfg = Debug|Any CPU
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Package|Any CPU.Build.0 = Debug|Any CPU
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F997FE8D-B383-4831-B6CC-4930B97E258E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EC17A5F7-D9AB-DA8E-3E1F-0B17148DD6AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC17A5F7-D9AB-DA8E-3E1F-0B17148DD6AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC17A5F7-D9AB-DA8E-3E1F-0B17148DD6AB}.Launch Server|Any CPU.ActiveCfg = Release|Any CPU
@@ -72,18 +76,51 @@ Global
 		{7F5FB303-A101-49FA-8071-10CA898C886E}.Package|Any CPU.Build.0 = Debug|Any CPU
 		{7F5FB303-A101-49FA-8071-10CA898C886E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F5FB303-A101-49FA-8071-10CA898C886E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Launch Server|Any CPU.ActiveCfg = Release|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Launch Server|Any CPU.Build.0 = Release|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Package|Any CPU.Build.0 = Debug|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{934F3AE3-2700-4209-8F15-01783B20CA48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Launch Server|Any CPU.ActiveCfg = Release|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Launch Server|Any CPU.Build.0 = Release|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Package|Any CPU.ActiveCfg = Package|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Package|Any CPU.Build.0 = Package|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51567F1E-4A14-F884-E99D-EB5C70364737}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Launch Server|Any CPU.ActiveCfg = Release|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Launch Server|Any CPU.Build.0 = Release|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Package|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Package|Any CPU.Build.0 = Debug|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD475487-9B83-442B-8550-9721CCE249A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F997FE8D-B383-4831-B6CC-4930B97E258E} = {89BDE224-A1E6-4CEF-86C8-79798C337F3C}
 		{02EA681E-C7D8-13C7-8484-4AC65E1B71E8} = {89BDE224-A1E6-4CEF-86C8-79798C337F3C}
 		{EC17A5F7-D9AB-DA8E-3E1F-0B17148DD6AB} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{B6EDD475-2F4B-1205-68BD-454B8113EAD1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{7F5FB303-A101-49FA-8071-10CA898C886E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{934F3AE3-2700-4209-8F15-01783B20CA48} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{51567F1E-4A14-F884-E99D-EB5C70364737} = {89BDE224-A1E6-4CEF-86C8-79798C337F3C}
+		{33149E72-7417-43CC-B933-3922E0C93C2A} = {89BDE224-A1E6-4CEF-86C8-79798C337F3C}
+		{CA588D59-989E-4504-B45C-54F59DDDDF1D} = {89BDE224-A1E6-4CEF-86C8-79798C337F3C}
+		{CD475487-9B83-442B-8550-9721CCE249A7} = {CA588D59-989E-4504-B45C-54F59DDDDF1D}
+		{0F151AA0-39A5-4D86-953F-73F7B5EBB1A1} = {89BDE224-A1E6-4CEF-86C8-79798C337F3C}
+		{0EA708E9-9E9D-4FE0-855C-DF89F48CBB2F} = {0F151AA0-39A5-4D86-953F-73F7B5EBB1A1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE4FB0BF-E916-43BC-BE61-00C6AFAE8041}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		shared\Gantry.Shared\Gantry.Shared.projitems*{0ea708e9-9e9d-4fe0-855c-df89f48cbb2f}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

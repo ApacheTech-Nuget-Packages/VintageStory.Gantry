@@ -6,5 +6,4 @@ namespace Gantry.Services.Brighter.Filters;
 ///     Ensures that a command will only be processed if it is running on the specified app side.
 /// </summary>
 /// <seealso cref="RequestHandlerAttribute" />
-[UsedImplicitly(ImplicitUseTargetFlags.WithInheritors | ImplicitUseTargetFlags.WithMembers)]
 public class HandledUniversallyAttribute(bool asynchronous = false) : HandledOnAttribute(EnumAppSide.Universal, asynchronous);

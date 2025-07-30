@@ -6,7 +6,6 @@ namespace Gantry.Services.Brighter.Hosting;
 /// When parsing for message mappers in assemblies, stores any found message mappers. A later step will add these to the message mapper registry
 /// Not used directly
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal class ServiceCollectionMessageMapperRegistry
 {
     private readonly IServiceCollection _serviceCollection;

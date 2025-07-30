@@ -1,11 +1,11 @@
-﻿using Vintagestory.API.MathTools;
+﻿using Gantry.Extensions;
+using Vintagestory.API.MathTools;
 
 namespace Gantry.Core.Maths.Extensions;
 
 /// <summary>
 ///     Extension methods for dealing with vectors.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 public static class Vec3dExtensions
 {
     /// <summary>
@@ -26,22 +26,24 @@ public static class Vec3dExtensions
     ///     Converts an absolute position to a relative coordinate string based on the spawn location.
     /// </summary>
     /// <param name="absolutePosition">The absolute position in world coordinates.</param>
+    /// <param name="world">The world accessor to use to get the default spawn position.</param>
     /// <returns>
     ///     A string representing the relative coordinates in the format "X: {x}, Y: {y}, Z: {z}".
     /// </returns>
-    public static string ToRelativeCoordinateString(this Vec3d absolutePosition)
-        => absolutePosition.AsBlockPos.ToRelativeCoordinateString();
+    public static string ToRelativeCoordinateString(this Vec3d absolutePosition, IWorldAccessor world)
+        => absolutePosition.AsBlockPos.ToRelativeCoordinateString(world);
 
     /// <summary>
     ///     Converts an absolute position to a relative coordinate string based on the spawn location.
     /// </summary>
     /// <param name="absolutePosition">The absolute position in world coordinates.</param>
+    /// <param name="world">The world accessor to use to get the default spawn position.</param>
     /// <returns>
     ///     A string representing the relative coordinates in the format "X: {x}, Y: {y}, Z: {z}".
     /// </returns>
-    public static string ToRelativeCoordinateString(this BlockPos absolutePosition)
+    public static string ToRelativeCoordinateString(this BlockPos absolutePosition, IWorldAccessor world)
     {
-        var relativePosition = absolutePosition.RelativeToSpawn();
+        var relativePosition = absolutePosition.RelativeToSpawn(world);
         return $"X: {relativePosition.X}, Y: {relativePosition.Y}, Z: {relativePosition.Z}";
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using System.Reflection;
 using System.Runtime.ExceptionServices;
 using ApacheTech.Common.Extensions.Reflection;
 
@@ -8,7 +7,6 @@ namespace Gantry.Core.Hosting.Extensions;
 /// <summary>
 ///     Helper code for the various activator services.
 /// </summary>
-[UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
 internal static class ActivatorEx
 {
     private static readonly MethodInfo _getServiceInfo =
@@ -37,7 +35,8 @@ internal static class ActivatorEx
             {
                 var matcher = new ConstructorMatcher(constructor);
 
-                var isPreferred = constructor.IOCEnabled();
+                var api = provider.GetRequiredService<ICoreAPI>();
+                var isPreferred = constructor.IsSided(api.Side);
                 var length = matcher.Match(parameters);
 
                 if (isPreferred)
@@ -81,6 +80,7 @@ internal static class ActivatorEx
     /// <summary>
     ///     Create a delegate that will instantiate a type with constructor arguments provided directly and/or from an instance of <see cref="IServiceProvider"/>.
     /// </summary>
+    /// <param name="side"></param>
     /// <param name="instanceType">The type to activate</param>
     /// <param name="argumentTypes">
     ///     The types of objects, in order, that will be passed to the returned function as its second parameter
@@ -88,9 +88,9 @@ internal static class ActivatorEx
     /// <returns>
     ///     A factory that will instantiate instanceType using an instance of <see cref="IServiceProvider"/>, and an argument array containing objects matching the types defined in argumentTypes
     /// </returns>
-    public static ObjectFactory CreateFactory(Type instanceType, Type[] argumentTypes)
+    public static ObjectFactory CreateSidedFactory(EnumAppSide side, Type instanceType, Type[] argumentTypes)
     {
-        FindApplicableConstructor(instanceType, argumentTypes, out var constructor, out var parameterMap);
+        FindApplicableConstructor(side, instanceType, argumentTypes, out var constructor, out var parameterMap);
 
         var provider = Expression.Parameter(typeof(IServiceProvider), "provider");
         var argumentArray = Expression.Parameter(typeof(object[]), "argumentArray");
@@ -196,6 +196,7 @@ internal static class ActivatorEx
     }
 
     private static void FindApplicableConstructor(
+        EnumAppSide side,
         Type instanceType,
         Type[] argumentTypes,
         out ConstructorInfo? matchingConstructor,
@@ -204,14 +205,14 @@ internal static class ActivatorEx
         matchingConstructor = null;
         parameterMap = null;
 
-        if (TryFindPreferredConstructor(instanceType, argumentTypes, ref matchingConstructor, ref parameterMap) ||
-            TryFindMatchingConstructor(instanceType, argumentTypes, ref matchingConstructor, ref parameterMap)) return;
+        if (TryFindPreferredConstructor(side, instanceType, argumentTypes, ref matchingConstructor, ref parameterMap) ||
+            TryFindMatchingConstructor(side, instanceType, argumentTypes, ref matchingConstructor, ref parameterMap)) return;
         var message = $"A suitable constructor for type '{instanceType}' could not be located. Ensure the type is concrete and services are registered for all parameters of a public constructor.";
         throw new InvalidOperationException(message);
     }
 
     // Tries to find constructor based on provided argument types
-    private static bool TryFindMatchingConstructor(
+    private static bool TryFindMatchingConstructor(EnumAppSide side,
         Type instanceType,
         Type[] argumentTypes,
         ref ConstructorInfo? matchingConstructor,
@@ -240,6 +241,7 @@ internal static class ActivatorEx
 
     // Tries to find constructor marked with ActivatorUtilitiesConstructorAttribute
     private static bool TryFindPreferredConstructor(
+        EnumAppSide side,
         Type instanceType,
         Type[] argumentTypes,
         ref ConstructorInfo? matchingConstructor,
@@ -253,7 +255,7 @@ internal static class ActivatorEx
                 continue;
             }
 
-            if (!constructor.IOCEnabled()) continue;
+            if (!constructor.IsSided(side)) continue;
             if (seenPreferred)
             {
                 ThrowMultipleConstructorsMarkedWithAttributeException();

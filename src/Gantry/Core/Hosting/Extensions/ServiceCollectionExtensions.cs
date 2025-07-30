@@ -1,4 +1,6 @@
-﻿namespace Gantry.Core.Hosting.Extensions;
+﻿using Gantry.Core.Hosting.Registration.Factories;
+
+namespace Gantry.Core.Hosting.Extensions;
 
 /// <summary>
 ///		Extension methods that extend the functionality of the dependency injection engine.
