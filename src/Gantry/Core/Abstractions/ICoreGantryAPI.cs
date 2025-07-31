@@ -78,6 +78,14 @@ public interface ICoreGantryAPI
     IModSettingsService Settings => Services.GetRequiredService<IModSettingsService>();
 
     /// <summary>
+    ///     Provides a mod-specific API context for the current mod, allowing access to core services and utilities. 
+    /// </summary>
+    /// <param name="modId">The ID of the mod for which to get the API context.</param>
+    /// <returns>An instance of <see cref="ICoreGantryAPI"/> for the specified mod ID.</returns>
+    ICoreGantryAPI ForMod(string modId) 
+        => Nexus.GetCore(modId, Side);
+
+    /// <summary>
     ///     Writes a verbose debug message to the mod logger.
     /// </summary>
     /// <param name="messageTemplate">The message template to log.</param>

@@ -5,13 +5,13 @@ namespace Gantry.Core.Diagnostics;
 /// <summary>
 ///     A logger implementation for the Gantry mod, providing customised log handling and formatting.
 /// </summary>
-public abstract class GantryLogger : Logger
+public abstract class GantryLogger<T> : Logger where T : ModHost<T>
 {
     private readonly EnumAppSide _side;
     private readonly ILogger _vanillaLogger;
 
     /// <summary>
-    ///     Initialises a new instance of the <see cref="GantryLogger"/> class.
+    ///     Initialises a new instance of the <see cref="GantryLogger{T}"/> class.
     /// </summary>
     protected GantryLogger(EnumAppSide side, ILogger vanillaLogger) : base(
         program: $"Gantry {side}",
@@ -24,9 +24,9 @@ public abstract class GantryLogger : Logger
     }
 
     /// <summary>
-    ///     Initialises a new instance of the <see cref="GantryLogger"/> class.
+    ///     Initialises a new instance of the <see cref="GantryLogger{T}"/> class.
     /// </summary>
-    public static GantryLogger Create(EnumAppSide side, ILogger vanillaLogger, ModInfo modInfo)
+    public static GantryLogger<T> Create(EnumAppSide side, ILogger vanillaLogger, ModInfo modInfo)
     {
         ModInfo = modInfo;
         vanillaLogger.Debug($"[Gantry] Initialising Gantry {side} logger.");
@@ -115,7 +115,7 @@ public abstract class GantryLogger : Logger
     }
 
     private class ServerLogger(EnumAppSide side, ILogger vanillaLogger)
-        : GantryLogger(side, vanillaLogger)
+        : GantryLogger<T>(side, vanillaLogger)
     {
         public override string getLogFile(EnumLogType logType)
             => GetLogFilePath(logType, EnumAppSide.Server);
@@ -133,7 +133,7 @@ public abstract class GantryLogger : Logger
     }
 
     private class ClientLogger(EnumAppSide side, ILogger vanillaLogger)
-        : GantryLogger(side, vanillaLogger)
+        : GantryLogger<T>(side, vanillaLogger)
     {
         public override string getLogFile(EnumLogType logType)
             => GetLogFilePath(logType, EnumAppSide.Client);

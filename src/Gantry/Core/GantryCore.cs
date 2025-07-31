@@ -10,17 +10,17 @@ namespace Gantry.Core;
 /// <summary>
 ///     Default implementation of the <see cref="ICoreGantryAPI"/> interface, providing access to the core Gantry API features.
 /// </summary>
-internal class GantryCore : ICoreGantryAPI
+internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
 {
-    private class GantryServerCore(ICoreAPI api, ModContainer mod) : GantryCore(api, mod);
-    private class GantryClientCore(ICoreAPI api, ModContainer mod) : GantryCore(api, mod);
+    private class GantryServerCore(ICoreAPI api, ModContainer mod) : GantryCore<T>(api, mod);
+    private class GantryClientCore(ICoreAPI api, ModContainer mod) : GantryCore<T>(api, mod);
 
     /// <summary>
-    ///     Initialises a new instance of the <see cref="GantryCore"/> class.
+    ///     Initialises a new instance of the <see cref="GantryCore{T}"/> class.
     /// </summary>
     /// <param name="api">The core API instance, provided by the game engine.</param>
     /// <param name="mod">The mod instance, which is the host for this Gantry core.</param>
-    internal static GantryCore Create(ICoreAPI api, ModContainer mod)
+    internal static GantryCore<T> Create(ICoreAPI api, ModContainer mod)
     {
         return api.Side == EnumAppSide.Server
             ? new GantryServerCore(api, mod)
@@ -32,7 +32,7 @@ internal class GantryCore : ICoreGantryAPI
         Uapi = api;
         Mod = mod;
         ModAssembly = mod.Assembly;
-        Logger = GantryLogger.Create(api.Side, mod.Logger, mod.Info);
+        Logger = GantryLogger<T>.Create(api.Side, mod.Logger, mod.Info);
         HolaMundo();
         Logger.VerboseDebug($"GantryCore: Version: {mod.Info.Version}");
         Logger.VerboseDebug($"GantryCore: Mod Assembly: {ModAssembly.FullName}");

@@ -1,7 +1,7 @@
 using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+using Gantry.Core;
 using System.Reflection;
-using Vintagestory.API.Server;
 
 namespace Gantry;
 
@@ -13,7 +13,11 @@ internal static class G
 {
     private readonly static Sided<ICoreGantryAPI> _sidedCore = new();
 
-    internal static void SetCore(ICoreGantryAPI core) => _sidedCore.Set(core.Side, core);
+    internal static void SetCore(ICoreGantryAPI core)
+    {
+        _sidedCore.Set(core.Side, core);
+        Nexus.AddCore(core);
+    }
 
     internal static ICoreGantryAPI Core => _sidedCore.Current!;
 

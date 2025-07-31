@@ -2,6 +2,7 @@
 global using System.Linq;
 global using System.Text;
 global using System.Collections.Generic;
+global using System.Threading;
 
 global using ApacheTech.Common.Extensions.Harmony;
 global using ApacheTech.Common.Extensions.System;
@@ -26,7 +27,8 @@ global using HarmonyLib;
 global using Newtonsoft.Json;
 global using ProtoBuf;
 
-global using Vintagestory.API.Client;
 global using Vintagestory.API.Common;
+global using Vintagestory.API.Client;
+global using Vintagestory.API.Server;
 global using Vintagestory.GameContent;
 global using Vintagestory.API.MathTools;

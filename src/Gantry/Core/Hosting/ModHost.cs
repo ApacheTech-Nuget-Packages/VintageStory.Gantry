@@ -24,7 +24,7 @@ public abstract class ModHost<TModSystem>(Action<ICoreGantryAPI> onCoreLoaded, A
     /// <inheritdoc />
     protected override void OnShouldLoad(ICoreAPI api)
     {
-        var core = GantryCore.Create(api, (ModContainer)Mod);
+        var core = GantryCore<TModSystem>.Create(api, (ModContainer)Mod);
         _modCore.Value = core;
         core.BuildServiceProvider(GantryHostOptions.Default.With(_options));
         _onCoreLoaded?.Invoke(core);
