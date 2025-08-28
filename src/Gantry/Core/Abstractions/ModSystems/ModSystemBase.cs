@@ -1,4 +1,6 @@
-﻿using Gantry.Core.Helpers;
+﻿using ApacheTech.Common.Extensions.Harmony;
+using Gantry.Core.Helpers;
+using Gantry.Extensions.Api;
 
 namespace Gantry.Core.Abstractions.ModSystems;
 
@@ -9,12 +11,12 @@ namespace Gantry.Core.Abstractions.ModSystems;
 public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDisposable
     where TModSystem : ModSystemBase<TModSystem>
 {
-    private static readonly AsyncLocal<TModSystem> _instance = new();
+    private static Sided<TModSystem>? _instance;
 
     /// <summary>
     ///     Provides access to the current instance of the mod system.
     /// </summary>
-    public static TModSystem Instance => _instance.Value!;
+    public static TModSystem? Instance => _instance?.Current;
 
     /// <inheritdoc />
     public ICoreAPI UApi { get; private set; } = null!;
@@ -22,10 +24,14 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
     /// <inheritdoc />
     public override bool ShouldLoad(ICoreAPI api)
     {
+        var modSsytem = GetType().Name;
         var shouldLoad = base.ShouldLoad(api);
-        if (_instance.Value is not null) return shouldLoad;        
-        _instance.Value = (TModSystem)this;     
+        _instance ??= Sided<TModSystem>.AsyncLocal();
+        if (_instance.Current is not null) return shouldLoad;
+        _instance.Set(api.Side, this.To<TModSystem>());     
         OnShouldLoad(UApi = api);
+        var host = Mod.Systems.Single(p => p is IModHost).To<IModHost>();
+        Core = host.Gantry ?? throw new InvalidOperationException("The Gantry Core API is not available. Ensure that the mod is correctly set up to use Gantry.");
         return shouldLoad;
     }
 
@@ -41,8 +47,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
     /// <summary>
     ///     The Gantry Core API for the current mod and app side.
     /// </summary>
-    protected ICoreGantryAPI Core => Mod.Systems.Single(p => p is IModHost).To<IModHost>().Gantry
-        ?? throw new InvalidOperationException("The Gantry Core API is not available. Ensure that the mod is correctly set up to use Gantry.");
+    protected ICoreGantryAPI Core { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void StartPre(ICoreAPI api)
@@ -81,6 +86,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
     public override void Dispose()
     {
         GC.SuppressFinalize(this);
-        _instance.Value = null!;
+        _instance?.Dispose(UApi.Side);
+        _instance = null!;
     }
 }

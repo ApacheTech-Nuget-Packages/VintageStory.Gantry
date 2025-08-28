@@ -23,9 +23,14 @@ public abstract class ServerModSystem<TModSystem> : ModSystemBase<TModSystem>
     /// <summary>
     ///     Returns if this mod should be loaded for the given app side.
     /// </summary>
-    /// <param name="forSide">For side.</param>
+    /// <param name="api">The core API instance, provided by the game engine.</param>
     /// <returns><c>true</c> if the mod should be loaded on the specified side, <c>false</c> otherwise.</returns>
-    public override bool ShouldLoad(EnumAppSide forSide) => forSide.IsServer();
+    public override bool ShouldLoad(ICoreAPI api)
+    {
+        var shouldLoad = api.Side.IsServer();
+        if (!shouldLoad) return false;
+        return base.ShouldLoad(api);
+    }
 
     /// <inheritdoc />
     public sealed override void StartClientSide(ICoreClientAPI api) { }
