@@ -1,6 +1,5 @@
 ﻿using Gantry.Core.Abstractions;
 using Gantry.Core.Abstractions.ModSystems;
-using Gantry.Core.Helpers;
 using Vintagestory.Common;
 
 namespace Gantry.Core.Hosting;
@@ -12,7 +11,7 @@ namespace Gantry.Core.Hosting;
 ///     instantiating, and adding Application specific services to the IOC Container.
 /// </summary>
 /// <seealso cref="ModSystem" />
-public abstract class ModHost<TModSystem>(Action<ICoreGantryAPI> onCoreLoaded, Action<GantryHostOptions>? options = null) 
+public abstract class ModHost<TModSystem>(Action<ICoreGantryAPI> onCoreLoaded, Action<GantryHostOptions>? options = null)
     : UniversalModSystem<TModSystem>, IModHost where TModSystem : ModHost<TModSystem>
 {
     private readonly Action<ICoreGantryAPI> _onCoreLoaded = onCoreLoaded;
@@ -27,6 +26,11 @@ public abstract class ModHost<TModSystem>(Action<ICoreGantryAPI> onCoreLoaded, A
         var core = GantryCore<TModSystem>.Create(api, (ModContainer)Mod);
         _modCore.Value = core;
         core.BuildServiceProvider(GantryHostOptions.Default.With(_options));
+
+        _modCore.Value.Log(Nexus.TryAddCore(core)
+            ? $"Gantry core for mod '{core.Mod.Info.ModID}' has been successfully registered within Gantry Nexus."
+            : $"Gantry core for mod '{core.Mod.Info.ModID}' was not able to be registered within Gantry Nexus.");
+
         _onCoreLoaded?.Invoke(core);
     }
 
@@ -34,4 +38,16 @@ public abstract class ModHost<TModSystem>(Action<ICoreGantryAPI> onCoreLoaded, A
     ///     Ensures that the mod host is the first mod system to be executed.
     /// </summary>
     public override double ExecuteOrder() => double.NegativeInfinity;
+
+    /// <inheritdoc />
+    public override void Dispose()
+    {
+        base.Dispose();
+        _modCore.Value?.Log(Nexus.TryRemoveCore(_modCore.Value)
+            ? $"Gantry core for mod '{_modCore.Value.Mod.Info.ModID}' has been successfully unregistered from Gantry Nexus."
+            : $"Gantry core for mod '{_modCore.Value.Mod.Info.ModID}' was not able to be unregistered from Gantry Nexus.");
+
+        _modCore.Value?.Log($"Disposing Gantry core for mod '{_modCore.Value.Mod.Info.ModID}'...");
+        _modCore.Value?.Dispose();
+    }
 }

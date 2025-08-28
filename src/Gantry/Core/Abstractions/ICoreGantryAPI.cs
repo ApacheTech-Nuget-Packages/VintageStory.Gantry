@@ -10,7 +10,7 @@ namespace Gantry.Core.Abstractions;
 ///     Provides the core API surface for Gantry mods, exposing logging, dependency injection, localisation, mod metadata, and core services.
 ///     This interface is implemented by the Gantry core and injected into mod hosts and services, ensuring correct context and isolation per mod.
 /// </summary>
-public interface ICoreGantryAPI
+public interface ICoreGantryAPI : IDisposable
 {
     /// <summary>
     ///     Logger for diagnostic and debug output.
@@ -76,14 +76,6 @@ public interface ICoreGantryAPI
     ///     Mod settings service for configuration and settings management.
     /// </summary>
     IModSettingsService Settings => Services.GetRequiredService<IModSettingsService>();
-
-    /// <summary>
-    ///     Provides a mod-specific API context for the current mod, allowing access to core services and utilities. 
-    /// </summary>
-    /// <param name="modId">The ID of the mod for which to get the API context.</param>
-    /// <returns>An instance of <see cref="ICoreGantryAPI"/> for the specified mod ID.</returns>
-    ICoreGantryAPI ForMod(string modId) 
-        => Nexus.GetCore(modId, Side);
 
     /// <summary>
     ///     Writes a verbose debug message to the mod logger.

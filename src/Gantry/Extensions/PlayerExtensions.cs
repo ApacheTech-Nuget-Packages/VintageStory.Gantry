@@ -28,7 +28,7 @@ public static class PlayerExtensions
             persistent: true);
 
         var behaviour = player.GetBehavior<EntityBehaviorHealth>();
-        behaviour.MarkDirty();
+        behaviour?.MarkDirty();
     }
 
     /// <summary>

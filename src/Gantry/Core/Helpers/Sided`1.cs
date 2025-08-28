@@ -6,10 +6,27 @@ namespace Gantry.Core.Helpers;
 ///     A monad that holds a value of type <typeparamref name="T"/> for both the client and server sides.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class Sided<T>
+public class Sided<T>()
 {
     private readonly AsyncLocal<T> _clientT = new();
     private readonly AsyncLocal<T> _serverT = new();
+    private readonly AsyncLocal<Sided<T>> _self = new();
+
+    private Sided(AsyncLocal<Sided<T>> asyncLocal) : this()
+    {
+        _self = asyncLocal;
+        _self.Value = this;
+    }
+
+    /// <summary>
+    ///     Creates a new instance of the <see cref="Sided{T}"/> class.
+    /// </summary>
+    /// <returns>A new instance of the <see cref="Sided{T}"/> class.</returns>
+    public static Sided<T> AsyncLocal()
+    {
+        var sided = new Sided<T>(new());
+        return sided._self.Value!;
+    }
 
     /// <summary>
     ///     The value of the type <typeparamref name="T"/> for the client.
@@ -59,11 +76,16 @@ public class Sided<T>
     /// </summary>
     /// <param name="side">The side to dispose.</param>
     public void Dispose(EnumAppSide side)
-        => side.Invoke(() =>
-        {
-            _clientT.Value ??= default!;
-        }, () =>
-        {
-            _serverT.Value ??= default!;
-        });
+    {
+        side.Invoke(() =>
+            {
+                _clientT.Value ??= default!;
+            }, () =>
+            {
+                _serverT.Value ??= default!;
+            });
+
+        if (_clientT.Value is null && _serverT.Value is null)
+            _self.Value = null!;
+    }
 }

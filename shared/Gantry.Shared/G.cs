@@ -1,22 +1,18 @@
 using ApacheTech.Common.BrighterSlim;
 using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using Gantry.Core;
 using System.Reflection;
-
-namespace Gantry;
 
 /// <summary>
 ///     Provides the core API surface for Gantry mods, exposing logging, dependency injection, localisation, mod metadata, and core services.
 ///     This interface is implemented by the Gantry core and injected into mod hosts and services, ensuring correct context and isolation per mod.
 /// </summary>
-internal static class G
+internal static partial class G
 {
     private readonly static Sided<ICoreGantryAPI> _sidedCore = new();
 
     internal static void SetCore(ICoreGantryAPI core)
     {
         _sidedCore.Set(core.Side, core);
-        Nexus.AddCore(core);
     }
 
     internal static ICoreGantryAPI Core => _sidedCore.Current!;
@@ -82,16 +78,16 @@ internal static class G
         => Core.Lang;
 
     /// <summary>
+    ///     The dependency injection service provider for the mod.
+    /// </summary>
+    internal static IServiceProvider Services
+        => Core.Services;
+
+    /// <summary>
     ///     Harmony patching service for runtime method interception and patch management.
     /// </summary>
     internal static IHarmonyPatchingService Harmony 
         => Services.GetRequiredService<IHarmonyPatchingService>();
-
-    /// <summary>
-    ///     The dependency injection service provider for the mod.
-    /// </summary>
-    internal static IServiceProvider Services 
-        => Core.Services;
 
     /// <summary>
     ///     Brighter command processor for CQRS and messaging patterns.

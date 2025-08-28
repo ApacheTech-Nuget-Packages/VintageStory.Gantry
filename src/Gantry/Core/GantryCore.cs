@@ -67,6 +67,11 @@ internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
                 .RegisterDefaultSettingsFiles();
     }
 
+    public void Dispose()
+    {
+        // Additional cleanup can be performed here if necessary.
+    }
+
     /// <inheritdoc />
     public ILogger Logger { get; }
 
