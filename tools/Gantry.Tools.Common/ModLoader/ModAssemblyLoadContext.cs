@@ -24,7 +24,7 @@ public class ModAssemblyLoadContext : AssemblyLoadContext, IDisposable
     /// </summary>
     public ModAssemblyLoadContext(string dependenciesDir) : base("Mods", isCollectible: true)
     {
-        var runtimePath = "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\7.0.20";
+        var runtimePath = "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\8.0.19";
         var vintageStoryPath = Environment.GetEnvironmentVariable("VINTAGE_STORY")!;
         var initialPaths = new []
         {

@@ -7,7 +7,7 @@
 
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
 		<EnablePackageValidation>true</EnablePackageValidation>
@@ -296,33 +296,6 @@
 	    -->
 		<Reference Include="SkiaSharp">
 			<HintPath>$(VINTAGE_STORY)\Lib\SkiaSharp.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-
-		<!--
-	        Library 49: System.Collections.Immutable
-	        Description: A library for creating immutable collections in .NET
-	    -->
-		<Reference Include="System.Collections.Immutable">
-			<HintPath>$(VINTAGE_STORY)\Lib\System.Collections.Immutable.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-
-		<!--
-	        Library 50: System.Text.Encodings.Web
-	        Description: Text encoding library for web applications
-	    -->
-		<Reference Include="System.Text.Encodings.Web">
-			<HintPath>$(VINTAGE_STORY)\Lib\System.Text.Encodings.Web.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-		
-		<!--
-	        Library 51: System.Text.Json
-	        Description: A BCL .NET library for JSON handling
-	    -->
-		<Reference Include="System.Text.Json">
-			<HintPath>$(VINTAGE_STORY)\Lib\System.Text.Json.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 
