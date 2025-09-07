@@ -71,32 +71,34 @@ public static class ObjectExtensions
     ///     Only properties that have both a public getter and setter will be copied.
     /// </summary>
     /// <param name="source">The source object from which the properties will be copied.</param>
-    public static TDerived CreateFrom<TBase, TDerived>(this TBase source)
-        where TDerived : TBase, new()
+    public static TTo MapTo<TFrom, TTo>(this TFrom source)
+        where TFrom : notnull
+        where TTo : new()
     {
-        if (source == null) throw new ArgumentNullException(nameof(source));
-        var target = new TDerived();
+        if (source is null) throw new ArgumentNullException(nameof(source));
+        var target = new TTo();
 
-        // Get all public properties from the type T
-        var properties = typeof(TBase).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        // Get all public properties from the type TFrom
+        var sourceProperties = typeof(TFrom).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var targetProperties = typeof(TTo).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-        foreach (var property in properties)
+        // Only consider properties that exist in both source and target
+        var commonProperties = from sp in sourceProperties
+            join tp in targetProperties on sp.Name equals tp.Name
+            where sp.CanRead && tp.CanWrite && sp.PropertyType == tp.PropertyType
+            select new { SourceProperty = sp, TargetProperty = tp };
+
+        foreach (var prop in commonProperties)
         {
-            // Ensure the property has both a public getter and setter
-            if (property.CanRead && property.CanWrite)
-            {
-                // Get the value from the source object
-                var value = property.GetValue(source);
+            // Get the value from the source object
+            var value = prop.SourceProperty.GetValue(source);
 
-                // Set the value to the target object
-                property.SetValue(target, value);
-            }
+            // Set the value to the target object
+            prop.TargetProperty.SetValue(target, value);
         }
-        
+
         return target;
     }
-
-
 
     /// <summary>
     ///     Dynamically safe-casts the object instance to a specified type.

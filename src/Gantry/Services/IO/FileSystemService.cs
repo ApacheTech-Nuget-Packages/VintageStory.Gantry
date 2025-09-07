@@ -222,8 +222,8 @@ public sealed class FileSystemService : IFileSystemService
     void IFileSystemService.RegisterDefaultSettingsFiles()
     {
         _gantry.Logger.VerboseDebug("Registering Gantry settings files.");
-        RegisterSettingsFile($"gantry-settings-{ModFileScope.World}-{_gantry.Side}.json", ModFileScope.World);
-        RegisterSettingsFile($"gantry-settings-{ModFileScope.Global}-{_gantry.Side}.json", ModFileScope.Global);
+        RegisterSettingsFile($"{_gantry.Mod.Info.ModID}-settings-{ModFileScope.World}-{_gantry.Side}.json", ModFileScope.World);
+        RegisterSettingsFile($"{_gantry.Mod.Info.ModID}-settings-{ModFileScope.Global}-{_gantry.Side}.json", ModFileScope.Global);
         RegisterSettingsFile($"gantry-settings-{ModFileScope.Gantry}-{_gantry.Side}.json", ModFileScope.Gantry);
     }
 

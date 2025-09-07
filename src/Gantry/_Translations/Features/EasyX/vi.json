@@ -1,0 +1,23 @@
+﻿{
+    "Features.EasyX.SetScope":  "Phạm vi cài đặt hiện được đặt thành: {0}",
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} đã bị xóa khỏi danh sách trắng {1}.",
+    "Features.EasyX.PlayerSearch.NoResults":  "Tìm kiếm \u0027{0}\u0027 không mang lại kết quả. Vui lòng thử lại.",
+    "Features.EasyX.InvalidMode":  "Chế độ truy cập không hợp lệ. Các tùy chọn hợp lệ là: {0}",
+    "Features.EasyX.Whitelist.NoResults":  "Hiện tại không có người chơi nào trong danh sách trắng {0}.",
+    "Features.EasyX.ServerCommandDescription":  "Cho phép quản trị viên máy chủ thay đổi cài đặt cho mod trên máy chủ.",
+    "Features.EasyX.Mode":  "Chế độ {0}: {1}",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0} đã được thêm vào danh sách đen {1}.",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "Tìm kiếm \u0027{0}\u0027 mang lại nhiều kết quả. Vui lòng tinh chỉnh cụm từ tìm kiếm của bạn.",
+    "Features.EasyX.Blacklist.Description":  "Thêm / Xóa người chơi khỏi danh sách đen cho tính năng này.",
+    "Features.EasyX.AccessMode.Description":  "Thay đổi chế độ truy cập cho tính năng hiện tại.",
+    "Features.EasyX.Scope":  "Phạm vi cài đặt: {0}",
+    "Features.EasyX.Scope.Description":  "Thay đổi xem mod nên sử dụng cài đặt toàn cầu hay cài đặt theo thế giới.",
+    "Features.EasyX.Whitelist.PlayerAdded":  "{0} đã được thêm vào danh sách trắng {1}.",
+    "Features.EasyX.Whitelist.Results":  "Những người chơi sau đây hiện đang nằm trong danh sách trắng {0}:",
+    "Features.EasyX.Blacklist.NoResults":  "Hiện tại không có người chơi nào trong danh sách đen {0}.",
+    "Features.EasyX.Blacklist.PlayerRemoved":  "{0} đã bị xóa khỏi danh sách đen {1}.",
+    "Features.EasyX.InvalidScope":  "Phạm vi không hợp lệ. Các tùy chọn hợp lệ là: {0}",
+    "Features.EasyX.Blacklist.Results":  "Những người chơi sau đây hiện đang nằm trong danh sách đen {0}:",
+    "Features.EasyX.Whitelist.Description":  "Thêm/Xóa người chơi khỏi danh sách trắng cho tính năng này.",
+    "Features.EasyX.SetMode":  "{0} chế độ hiện được đặt thành: {1}"
+}

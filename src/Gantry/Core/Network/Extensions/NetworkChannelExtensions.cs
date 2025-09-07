@@ -410,4 +410,14 @@ public static class NetworkChannelExtensions
         gapi.Log($"Registering simplex packet '{typeof(T)}' on server channel.");
         return channel.RegisterMessageType<T>();
     }
+
+    /// <summary>
+    ///     Sends a packet of type <typeparamref name="T"/> to the specified players.
+    ///     Creates a new instance of <typeparamref name="T"/> using its parameterless constructor.
+    /// </summary>
+    /// <typeparam name="T">The type of packet to send.</typeparam>
+    /// <param name="channel">The server network channel to send the packet through.</param>
+    /// <param name="players">The players to send the packet to.</param>
+    public static void SendPacket<T>(this IServerNetworkChannel channel, params IServerPlayer[] players)
+        where T : class, new() => channel.SendPacket<T>(new(), players);
 }

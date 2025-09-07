@@ -12,19 +12,19 @@ namespace Gantry.Services.EasyX.Hosting;
 ///     Registrations performed within this class should be global scope; by convention, features should aim to be as stand-alone as they can be.
 /// </summary>
 /// <seealso cref="ModHost{TModSystem}" />
-public abstract class EasyXHost<TModSystem>(string commandName, Action<ICoreGantryAPI> onCoreLoaded) : ModHost<TModSystem>(onCoreLoaded), IServerServiceRegistrar
-    where TModSystem : ModHost<TModSystem>
+public abstract class EasyXHost<TModSystem>(string commandName) 
+    : ModHost<TModSystem>(), IServerServiceRegistrar where TModSystem : ModHost<TModSystem>
 {
     private readonly string _commandName = commandName;
     private ConfigurationSettings _globalSettings = null!;
 
-    ///<inheritdoc />
+    /// <inheritdoc />
     public void ConfigureServerModServices(IServiceCollection services, ICoreGantryAPI gantry)
     {
         services.AddFeatureGlobalSettings<ConfigurationSettings>();
     }
 
-    ///<inheritdoc />
+    /// <inheritdoc />
     public override void StartServerSide(ICoreServerAPI api)
     {
         Core.Logger.VerboseDebug($"Creating Chat Command: {_commandName}");
@@ -34,12 +34,12 @@ public abstract class EasyXHost<TModSystem>(string commandName, Action<ICoreGant
 
         var command = api.ChatCommands.Create(_commandName)
             .RequiresPrivilege(Privilege.controlserver)
-            .WithDescription(Core.Lang.FeatureStringG("EasyX", "ServerCommandDescription"));
+            .WithDescription(Core.Lang.TranslateG("EasyX", "ServerCommandDescription"));
 
         command
             .BeginSubCommand("scope")
             .WithArgs(api.ChatCommands.Parsers.FileScope())
-            .WithDescription(Core.Lang.FeatureStringG("EasyX", "Scope.Description"))
+            .WithDescription(Core.Lang.TranslateG("EasyX", "Scope.Description"))
             .HandleWith(OnChangeSettingsScope)
             .EndSubCommand();
     }
@@ -50,14 +50,14 @@ public abstract class EasyXHost<TModSystem>(string commandName, Action<ICoreGant
 
         if (parser.IsMissing)
         {
-            var message = Core.Lang.FeatureStringG("EasyX", "Scope", _globalSettings.Scope.GetDescription());
+            var message = Core.Lang.TranslateG("EasyX", "Scope", _globalSettings.Scope.GetDescription());
             return TextCommandResult.Success(message);
         }
 
         if (!parser.Scope.HasValue)
         {
             const string validScopes = "[W]orld | [G]lobal";
-            var invalidScopeMessage = Core.Lang.FeatureStringG("EasyX", "InvalidScope", validScopes);
+            var invalidScopeMessage = Core.Lang.TranslateG("EasyX", "InvalidScope", validScopes);
             return TextCommandResult.Error(invalidScopeMessage);
         }
 
@@ -76,7 +76,7 @@ public abstract class EasyXHost<TModSystem>(string commandName, Action<ICoreGant
             _globalSettings.Scope = toScope;
         }
 
-        var scopeMessage = Core.Lang.FeatureStringG("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
+        var scopeMessage = Core.Lang.TranslateG("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
         return TextCommandResult.Success(scopeMessage);
     }
 }

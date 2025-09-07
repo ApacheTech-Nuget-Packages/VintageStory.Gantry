@@ -41,7 +41,7 @@ public abstract class RowedButtonMenuDialogue : GenericDialogue
     /// </summary>
     /// <param name="code">The entry to return.</param>
     /// <returns>A localised <see cref="string"/>, for the specified language file code.</returns>
-    protected string LangEntry(string code) => Gantry.Lang.FeatureString(LangEntryPrefix, code);
+    protected string LangEntry(string code) => Gantry.Lang.Translate(LangEntryPrefix, code);
 
     /// <summary>
     ///     Adds a button to the dialogue, and increments the current row.

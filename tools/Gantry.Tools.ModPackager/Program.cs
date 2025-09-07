@@ -20,12 +20,13 @@ await parsedResult.WithParsedAsync(async args =>
     }
     else
     {
-        throw new NotImplementedException();
-        //args.BackupUnmergedModAssembly();
-        //var saProject = args.CreateDebugSmartAssemblyProject(out var mergedAssemblies);
-        //saProject.GenerateSmartAssemblyProjectFile();
-        //saProject.RunSmartAssemblyProjectFile(args);
-        //args.CreateModArchive(modDetails);
+        args.CopyFilesFromTargetDirToDebugDir();
+        args.CleanupDebugDir();
+        args.BackupUnmergedModAssembly();
+        var saProject = args.CreateDebugSmartAssemblyProject(out var mergedAssemblies);
+        saProject.GenerateSmartAssemblyProjectFile();
+        saProject.RunSmartAssemblyProjectFile(args);
+        args.CreateModArchive(modDetails, mergedAssemblies);
     }
 });
 

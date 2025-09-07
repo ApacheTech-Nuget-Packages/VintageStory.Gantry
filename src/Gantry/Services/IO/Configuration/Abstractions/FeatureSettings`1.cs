@@ -35,6 +35,25 @@ public abstract class FeatureSettings<TSettings> : FeatureSettings where TSettin
     }
 
     /// <summary>
+    ///     Update the settings within this class, and save the changes.
+    /// </summary>
+    /// <param name="newSettings"></param>
+    public void UpdateSettings(TSettings newSettings)
+    {
+        // Update the properties within the current instance, with values from the new settings, via reflection.
+        var properties = typeof(TSettings).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        foreach (var property in properties)
+        {
+            var oldValue = property.GetValue(this);
+            var newValue = property.GetValue(newSettings);
+            if (Equals(oldValue, newValue)) continue;
+            property.SetValue(this, newValue);
+            if (!PropertyChangedDictionary.TryGetValue(property.Name, out var actions)) continue;
+            foreach (var action in actions) action.Action(newValue!);
+        }
+    }
+
+    /// <summary>
     ///     Removes a previously added action that is triggered when a specific property changes.
     /// </summary>
     /// <typeparam name="TProperty">The type of the property associated with the action.</typeparam>

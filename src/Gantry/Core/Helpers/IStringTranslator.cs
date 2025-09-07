@@ -1,4 +1,6 @@
-﻿namespace Gantry.Core.Helpers;
+﻿using System.Numerics;
+
+namespace Gantry.Core.Helpers;
 
 /// <summary>
 ///     Provides extension methods for the <see cref="Lang"/> class, enabling advanced localisation and translation features for Gantry mods.
@@ -18,7 +20,7 @@ public interface IStringTranslator
     /// <param name="state">The boolean value to localise.</param>
     /// <returns>The localised string for the boolean value.</returns>
     string Boolean(bool state)
-        => Get("gantry", $"boolean-{state}");
+        => Gantry($"boolean-{state}");
 
     /// <summary>
     ///     Returns a localised confirmation string for a given value.
@@ -26,7 +28,7 @@ public interface IStringTranslator
     /// <param name="value">The value to localise as a confirmation.</param>
     /// <returns>The localised confirmation string.</returns>
     string Confirmation(string value)
-        => Get("gantry", $"confirmation-{value}");
+        => Gantry($"confirmation-{value}");
 
     /// <summary>
     ///     Returns a localised month name for the specified <see cref="DateTime"/>.
@@ -35,7 +37,7 @@ public interface IStringTranslator
     /// <param name="abbreviated">Whether to return the abbreviated month name.</param>
     /// <returns>The localised month name.</returns>
     string Month(DateTime date, bool abbreviated = false)
-        => Get("gantry", $"datetime-months-{(abbreviated ? "abbr" : "full")}-{date.Month}");
+        => Gantry($"datetime-months-{(abbreviated ? "abbr" : "full")}-{date.Month}");
 
     /// <summary>
     ///     Returns a localised day-of-week name for the specified <see cref="DateTime"/>.
@@ -44,7 +46,7 @@ public interface IStringTranslator
     /// <param name="abbreviated">Whether to return the abbreviated day name.</param>
     /// <returns>The localised day-of-week name.</returns>
     string Day(DateTime date, bool abbreviated = false)
-        => Get("gantry", $"datetime-days-{(abbreviated ? "abbr" : "full")}-{date.Month}");
+        => Gantry($"datetime-days-{(abbreviated ? "abbr" : "full")}-{date.Month}");
 
     #endregion
 
@@ -56,8 +58,8 @@ public interface IStringTranslator
     /// <param name="feature">The feature name.</param>
     /// <param name="path">The translation path within the feature.</param>
     /// <returns>The translation key string.</returns>
-    string FeatureKey(string feature, string path)
-        => FeatureKey(DefaultDomain, feature, path);
+    string Code(string feature, string path)
+        => Code(DefaultDomain, feature, path);
 
     /// <summary>
     ///     Returns the translation key for a feature-specific path in a given domain.
@@ -66,7 +68,7 @@ public interface IStringTranslator
     /// <param name="feature">The feature name.</param>
     /// <param name="path">The translation path within the feature.</param>
     /// <returns>The translation key string.</returns>
-    string FeatureKey(string domain, string feature, string path)
+    string Code(string domain, string feature, string path)
         => $"{domain}:Features.{feature}.{path}";
 
     /// <summary>
@@ -76,8 +78,8 @@ public interface IStringTranslator
     /// <param name="path">The translation path within the feature.</param>
     /// <param name="args">Optional arguments for formatting.</param>
     /// <returns>The localised string for the feature path.</returns>
-    string FeatureString(string feature, string path, params object?[]? args)
-        => Lang.Get(FeatureKey(feature, path), args);
+    string Translate(string feature, string path, params object?[]? args)
+        => Lang.Get(Code(feature, path), args);
 
     /// <summary>
     ///     Returns a localised string for a feature-specific path in a specific domain.
@@ -87,8 +89,8 @@ public interface IStringTranslator
     /// <param name="path">The translation path within the feature.</param>
     /// <param name="args">Optional arguments for formatting.</param>
     /// <returns>The localised string for the feature path in the specified domain.</returns>
-    string FeatureStringD(string domain, string feature, string path, params object?[]? args)
-        => Lang.Get(FeatureKey(domain, feature, path), args);
+    string TranslateD(string domain, string feature, string path, params object?[]? args)
+        => Lang.Get(Code(domain, feature, path), args);
 
     /// <summary>
     ///     Returns a localised string for a feature-specific path the Gantry domain.
@@ -97,8 +99,8 @@ public interface IStringTranslator
     /// <param name="path">The translation path within the feature.</param>
     /// <param name="args">Optional arguments for formatting.</param>
     /// <returns>The localised string for the feature path in the specified domain.</returns>
-    string FeatureStringG(string feature, string path, params object?[]? args)
-        => Lang.Get(FeatureKey("gantry", feature, path), args);
+    string TranslateG(string feature, string path, params object?[]? args)
+        => Lang.Get(Code("gantry", feature, path), args);
 
     /// <summary>
     ///     Returns a localised string for a feature-specific path in a specific culture.
@@ -108,8 +110,8 @@ public interface IStringTranslator
     /// <param name="path">The translation path within the feature.</param>
     /// <param name="args">Arguments for formatting.</param>
     /// <returns>The localised string for the feature path in the specified culture.</returns>
-    string FeatureStringL(string culture, string feature, string path, params object[] args)
-        => Lang.GetL(culture, FeatureKey(feature, path), args);
+    string TranslateL(string culture, string feature, string path, params object[] args)
+        => Lang.GetL(culture, Code(feature, path), args);
 
     #endregion
 
@@ -182,8 +184,8 @@ public interface IStringTranslator
     /// <param name="path">The translation path.</param>
     /// <param name="value">The value to determine singular/plural.</param>
     /// <returns>The localised pluralised string.</returns>
-    string Pluralise(string path, int value)
-        => Lang.Get($"{path}-{(Math.Abs(value) == 1 ? "singular" : "plural")}");
+    string Pluralise<T>(string path, T value) where T : struct, INumber<T>
+        => Lang.Get($"{path}-{(T.Abs(value) == T.One ? "singular" : "plural")}");
 
     #endregion
 

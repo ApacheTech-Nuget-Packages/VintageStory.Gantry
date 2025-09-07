@@ -26,12 +26,18 @@ public abstract class GenericDialogue : GuiDialog
         Gantry = gantry;
         ToggleKeyCombinationCode = GetType().Name;
 
-        ClientSettings.Inst.AddWatcher<float>("guiScale", _ =>
-        {
-            PreCompose();
-            Compose();
-            RefreshValues();
-        });
+        ClientSettings.Inst.AddWatcher<float>("guiScale", _ => Recompose());
+    }
+
+    /// <summary>
+    ///     Clean and rebuild the composer.
+    /// </summary>
+    public void Recompose()
+    {
+        ClearComposers();
+        PreCompose();
+        Compose();
+        RefreshValues();
     }
 
     /// <summary>
@@ -102,12 +108,17 @@ public abstract class GenericDialogue : GuiDialog
     ///     Sets the alignment of the form on the screen, when set to Fixed mode.
     /// </summary>
     /// <value>The <see cref="EnumDialogArea"/> alignment to set the window as.</value>
-    protected EnumDialogArea Alignment { private get; set; } = EnumDialogArea.RightBottom;
+    protected EnumDialogArea Alignment { get; set; } = EnumDialogArea.RightBottom;
 
     /// <summary>
-    ///     The overall maximum bounds of the dialogue box.
+    ///     The overall maximum inner bounds of the dialogue box.
     /// </summary>
     protected ElementBounds DialogueBounds { get; private set; } = ElementBounds.Empty;
+
+    /// <summary>
+    ///     The overall maximum outer bounds of the dialogue box.
+    /// </summary>
+    protected ElementBounds OuterBounds { get; private set; } = ElementBounds.Empty;
 
     /// <summary>
     ///     Determines whether to allow the user to be able to move the form, within the bounds of the screen.
@@ -169,14 +180,14 @@ public abstract class GenericDialogue : GuiDialog
 
     private GuiComposer ComposeHeader()
     {
-        var dialogueBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(Alignment)
+        OuterBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(Alignment)
             .WithFixedAlignmentOffset(-GuiStyle.DialogToScreenPadding, -GuiStyle.DialogToScreenPadding);
 
         DialogueBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
         DialogueBounds.BothSizing = ElementSizing.FitToChildren;
 
         var composer = capi.Gui
-            .CreateCompo(ToggleKeyCombinationCode, dialogueBounds);
+            .CreateCompo(ToggleKeyCombinationCode, OuterBounds);
 
         if (!TransparentBackground)
         {

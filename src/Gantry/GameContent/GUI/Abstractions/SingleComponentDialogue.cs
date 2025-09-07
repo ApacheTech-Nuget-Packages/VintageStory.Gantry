@@ -27,7 +27,7 @@ public abstract class SingleComponentDialogue<T> : GenericDialogue where T : IGu
     /// <param name="composer">The composer.</param>
     protected override void ComposeBody(GuiComposer composer)
     {
-        composer.AddComposablePart(_component);
+        composer.AddComposablePart(this, _component);
     }
 
     /// <summary>

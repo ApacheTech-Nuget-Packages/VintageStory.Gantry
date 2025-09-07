@@ -16,10 +16,11 @@ public static class GuiComposerHelpers
     ///     Adds a composable part to a GUI composer.
     /// </summary>
     /// <param name="composer">The composer.</param>
+    /// <param name="parent">The parent dialogue.</param>
     /// <param name="content">The content.</param>
     /// <returns></returns>
-    public static GuiComposer AddComposablePart(this GuiComposer composer, IGuiComposablePart content)
-        => content.ComposePart(composer);
+    public static GuiComposer AddComposablePart(this GuiComposer composer, GenericDialogue parent, IGuiComposablePart content)
+        => content.ComposePart(parent, composer);
 
     /// <summary>
     ///     Adds a dialogue title bar to the GUI, with no "Movable" menu bar.  

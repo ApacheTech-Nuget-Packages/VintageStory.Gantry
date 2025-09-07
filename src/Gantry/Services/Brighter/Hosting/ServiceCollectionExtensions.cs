@@ -139,7 +139,7 @@ internal static class ServiceCollectionExtensions
     {
         var options = provider.Resolve<IBrighterOptions>();
         var subscriberRegistry = provider.GetRequiredService<ServiceCollectionSubscriberRegistry>();
-        var useRequestResponse = provider.GetRequiredService<IUseRpc>();
+        var useRequestResponse = provider.GetService<IUseRpc>();
 
         var handlerFactory = new ServiceProviderHandlerFactory(provider);
         var handlerConfiguration = new HandlerConfiguration(subscriberRegistry, handlerFactory);

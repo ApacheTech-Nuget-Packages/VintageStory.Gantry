@@ -83,10 +83,11 @@ public static class DebugConfigurationSteps
         {
             var debugDir = args.DebugDir();
             var assemblyPath = Path.Combine(debugDir, args.AssemblyFileName());
-            var saprojName = $"{args.ProjectName()}.saproj";
-            var saprojPath = Path.Combine(debugDir, saprojName);
             var assemblyFile = new FileInfo(assemblyPath);
             assemblyDependencies = assemblyFile.GetMergedAssemblies(args);
+
+            var saprojName = $"{args.ProjectName()}.saproj";
+            var saprojPath = Path.Combine(debugDir, saprojName);
 
             var project = new SmartAssemblyProject
             {

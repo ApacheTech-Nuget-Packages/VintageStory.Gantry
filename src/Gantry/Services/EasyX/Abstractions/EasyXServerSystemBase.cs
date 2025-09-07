@@ -1,55 +1,59 @@
-﻿using System.Linq.Expressions;
-using System.Text;
-using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Extensions.DotNet;
+﻿using ApacheTech.Common.Extensions.Harmony;
+using ApacheTech.Common.FunctionalCSharp.Extensions;
+using Gantry.Core.Abstractions;
+using Gantry.Core.Abstractions.ModSystems;
+using Gantry.Core.Annotation;
 using Gantry.Core.Hosting.Registration;
+using Gantry.Core.Network.Extensions;
+using Gantry.Extensions.Api;
+using Gantry.Extensions.DotNet;
 using Gantry.GameContent.ChatCommands.DataStructures;
 using Gantry.GameContent.ChatCommands.Parsers;
 using Gantry.GameContent.ChatCommands.Parsers.Extensions;
 using Gantry.Services.EasyX.Extensions;
 using Gantry.Services.EasyX.Hosting;
-using Gantry.Services.IO.Hosting;
-using Gantry.Core.Network.Extensions;
-using Vintagestory.API.Util;
-using Gantry.Core.Abstractions.ModSystems;
 using Gantry.Services.IO.Configuration.Abstractions;
-using Gantry.Core.Abstractions;
-using Gantry.Extensions.Api;
-using Gantry.Core.Annotation;
+using Gantry.Services.IO.DataStructures;
+using Gantry.Services.IO.Hosting;
+using System.Linq.Expressions;
+using System.Text;
+using Vintagestory.API.Util;
 
 namespace Gantry.Services.EasyX.Abstractions;
 
 /// <summary>
 ///     Acts as a base class for all EasyX features, on the server.
 /// </summary>
-public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClientSettings, TSettings> 
+public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClientSettings> 
     : ServerModSystem<TModSystem>, IServerServiceRegistrar
-    where TModSystem : EasyXServerSystemBase<TModSystem, TServerSettings, TClientSettings, TSettings>
-    where TServerSettings : TSettings, IEasyXServerSettings, new()
-    where TClientSettings : TSettings, IEasyXClientSettings, new()
-    where TSettings : FeatureSettings<TServerSettings>, new()
+    where TModSystem : EasyXServerSystemBase<TModSystem, TServerSettings, TClientSettings>
+    where TServerSettings : FeatureSettings<TServerSettings>, IEasyXServerSettings, new()
+    where TClientSettings : class, IEasyXClientSettings, new()
 {
     /// <summary>
-    ///     
+    ///     The server network channel for this feature.
     /// </summary>
     protected IServerNetworkChannel? ServerChannel { get; private set; }
 
     /// <summary>
-    ///     
+    ///     The scope at which this feature's settings are applied.
+    /// </summary>
+    protected ModFileScope Scope => Core.Settings.Global.Feature<ConfigurationSettings>().Scope;
+
+    /// <summary>
+    ///     The settings for this feature.
     /// </summary>
     public TServerSettings Settings
     {
         get
         {
-            var configuration = Core.Settings.Global.Feature<ConfigurationSettings>();
-            var settings = Core.Settings.For(configuration.Scope);
-            if (settings is null) return new TServerSettings();
+            var settings = Core.Settings.For(Scope);
             return settings.Feature<TServerSettings>() ?? new TServerSettings();
         }
     }
 
     /// <summary>
-    /// Allows a mod to include Singleton, or Transient services to the IOC Container.
+    ///     Allows a mod to include Singleton, or Transient services to the IOC Container.
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="gantry"> The Gantry API, which provides access to the mod's context and services.</param>
@@ -60,7 +64,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     }
 
     /// <summary>
-    ///     
+    ///     The name of the sub-command, used to access this feature's commands.
     /// </summary>
     protected abstract string SubCommandName { get; }
 
@@ -70,10 +74,10 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <param name="args">The arguments to pass to the lang file.</param>
     protected string T(string path, params object[] args)
-        => Core.Lang.FeatureString($"Easy{SubCommandName}", path, args);
+        => Core.Lang.Translate($"Easy{SubCommandName}", path, args);
 
     /// <summary>
-    ///     
+    ///     The name of the main chat command, used to access all EasyX features.
     /// </summary>
     protected virtual string CommandName 
         => Core.Settings.Global.Feature<ConfigurationSettings>().CommandName;
@@ -116,7 +120,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
             .BeginSubCommand("whitelist")
             .WithAlias("wl")
             .WithArgs(parsers.OptionalServerPlayers(api))
-            .WithDescription(Core.Lang.FeatureStringG("EasyX", "Whitelist.Description"))
+            .WithDescription(Core.Lang.TranslateG("EasyX", "Whitelist.Description"))
             .HandleWith(HandleWhitelist)
             .EndSubCommand();
 
@@ -124,7 +128,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
             .BeginSubCommand("blacklist")
             .WithAlias("bl")
             .WithArgs(parsers.OptionalServerPlayers(api))
-            .WithDescription(Core.Lang.FeatureStringG("EasyX", "Blacklist.Description"))
+            .WithDescription(Core.Lang.TranslateG("EasyX", "Blacklist.Description"))
             .HandleWith(HandleBlacklist)
             .EndSubCommand();
 
@@ -132,14 +136,26 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
 
         ServerChannel = api.Network
             .GetOrRegisterDefaultChannel(Core)
-            .RegisterMessageType<TClientSettings>();
+            .RegisterPacket<SettingsSavedPacket>(Core)
+            .RegisterPacket<TServerSettings>(Core, OnSettingsChanged)
+            .RegisterPacket<TClientSettings>(Core);
 
         api.Event.PlayerJoin += player =>
         {
             var packet = GeneratePacket(player);
             Core.Logger.VerboseDebug($"Sending {SubCommandName} Settings to {player.PlayerName}:");
             ServerChannel.SendPacket(packet, player);
+            ServerChannel.SendPacket(Settings, player);
         };
+    }
+
+    private void OnSettingsChanged(IServerPlayer player, TServerSettings packet)
+    {
+        if (!player.Privileges.Contains(Privilege.controlserver)) return;
+        Settings.UpdateSettings(packet);
+        ServerChannel?.BroadcastPacket(Settings);
+        ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
+        ServerChannel?.SendPacket(new SettingsSavedPacket { FeatureName = $"Easy{SubCommandName}" }, player);
     }
 
     /// <summary>
@@ -151,8 +167,8 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     /// <summary>
     ///     Generates a packet, to send to the specified player.
     /// </summary>
-    protected virtual TClientSettings GeneratePacketPerPlayer(IPlayer player, bool isEnabled)
-        => Settings.CreateFrom<TSettings, TClientSettings>().With(p => p.Enabled = isEnabled);
+    protected virtual TClientSettings GeneratePacketPerPlayer(IPlayer player, bool isEnabled) 
+        => Settings.MapTo<TServerSettings, TClientSettings>().With(p => p.Enabled = isEnabled);
 
     /// <summary>
     ///     Determines whether this feature is enabled, for all the specified players.
@@ -190,7 +206,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     protected virtual TextCommandResult DisplayInfo(TextCommandCallingArgs args)
     {
         var sb = new StringBuilder();
-        sb.AppendLine(Core.Lang.FeatureStringG("EasyX", "Mode", Lang.Get(SubCommandName.SplitPascalCase().UcFirst()), Settings.Mode));
+        sb.AppendLine(Core.Lang.TranslateG("EasyX", "Mode", Lang.Get(SubCommandName.SplitPascalCase().UcFirst()), Settings.Mode));
         ExtraDisplayInfo(sb);
         return TextCommandResult.Success(sb.ToString().TrimEnd(Environment.NewLine.ToCharArray()));
     }
@@ -213,12 +229,12 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         if (mode is null)
         {
             const string validModes = "[D]isabled | [E]nabled | [W]hitelist | [B]lacklist]";
-            var invalidModeMessage = Core.Lang.FeatureStringG("EasyX", "InvalidMode", validModes);
+            var invalidModeMessage = Core.Lang.TranslateG("EasyX", "InvalidMode", validModes);
             return TextCommandResult.Error(invalidModeMessage);
         }
 
         Settings.Mode = mode.Value;
-        var modeMessage = Core.Lang.FeatureStringG("EasyX", "SetMode", SubCommandName, Settings.Mode);
+        var modeMessage = Core.Lang.TranslateG("EasyX", "SetMode", SubCommandName, Settings.Mode);
         ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
         return TextCommandResult.Success(modeMessage);
     }
@@ -253,7 +269,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
 
         var sb = new StringBuilder();
         var resultCount = list.Count > 0 ? "Results" : "NoResults";
-        sb.AppendLine(Core.Lang.FeatureStringG("EasyX", $"{propertyName}.{resultCount}", SubCommandName));
+        sb.AppendLine(Core.Lang.TranslateG("EasyX", $"{propertyName}.{resultCount}", SubCommandName));
         foreach (var p in list)
         {
             sb.AppendLine($" - {p.Name} (PID: {p.Id})");
@@ -268,7 +284,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     {
         var value = (args.Parsers[0].GetValue().To<T>() ?? default).With(validate);
         Settings.SetProperty(propertyName, value);
-        var message = Core.Lang.FeatureString(SubCommandName, propertyName, value);
+        var message = Core.Lang.Translate(SubCommandName, propertyName, value);
         ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
         return TextCommandResult.Success(message);
     }
@@ -303,17 +319,17 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         if (!isRemoved) list.Add(result!);
         Core.Settings.World.Save(Settings);
         ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
-        var message = Core.Lang.FeatureStringG("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
+        var message = Core.Lang.TranslateG("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
         return TextCommandResult.Success(message);
     }
 
     private TextCommandResult FoundNoResults(string searchTerm)
-        => TextCommandResult.Error(Core.Lang.FeatureStringG("EasyX", "PlayerSearch.NoResults", searchTerm));
+        => TextCommandResult.Error(Core.Lang.TranslateG("EasyX", "PlayerSearch.NoResults", searchTerm));
 
     private TextCommandResult FoundMultiplePlayers(string searchTerm, PlayerUidName[] players)
     {
         var sb = new StringBuilder();
-        sb.Append(Core.Lang.FeatureStringG("EasyX", "PlayerSearch.MultipleResults", searchTerm));
+        sb.Append(Core.Lang.TranslateG("EasyX", "PlayerSearch.MultipleResults", searchTerm));
         foreach (var p in players)
         {
             sb.Append($" - {p.Name} (PID: {p.Uid})");

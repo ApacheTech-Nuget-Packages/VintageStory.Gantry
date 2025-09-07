@@ -7,8 +7,29 @@ namespace Gantry.GameContent.ChatCommands.DataStructures;
 /// </summary>
 [JsonObject]
 [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-public record Player(string Id, string Name)
+public record Player()
 {
+    /// <summary>
+    ///     Initialises a new instance of the <see cref="Player"/> class.
+    /// </summary>
+    /// <param name="id">The unique identifier of the player.</param>
+    /// <param name="name">The name of the player.</param>
+    public Player(string id, string name) : this()
+    {
+        Id = id;
+        Name = name;
+    }
+
+    /// <summary>
+    ///     The unique identifier of the player.
+    /// </summary>
+    public string Id { get; init; } = string.Empty;
+
+    /// <summary>
+    ///     The name of the player.
+    /// </summary>
+    public string Name { get; init; } = string.Empty;
+
     /// <summary>
     ///     Implicitly converts an instance of <see cref="PlayerUidName"/> to a <see cref="Player"/>.
     /// </summary>

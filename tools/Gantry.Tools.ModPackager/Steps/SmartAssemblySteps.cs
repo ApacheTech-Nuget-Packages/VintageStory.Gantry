@@ -1,9 +1,10 @@
 ﻿using Gantry.Tools.Common.ModLoader;
-using Gantry.Tools.ModPackager.SmartAssembly;
-using System.Diagnostics;
-using Serilog;
-using System.IO.Compression;
 using Gantry.Tools.ModInfoFileGenerator.DataStructures;
+using Gantry.Tools.ModPackager.SmartAssembly;
+using Serilog;
+using System.Diagnostics;
+using System.IO.Compression;
+using System.Linq;
 
 namespace Gantry.Tools.ModPackager.Steps;
 
@@ -197,10 +198,11 @@ public static class SmartAssemblySteps
         }
     }
 
-    public static void CreateModArchive(this CommandLineArgs args, ModDetails details)
+    public static void CreateModArchive(this CommandLineArgs args, ModDetails details, List<AssemblyReference> mergedAssemblies)
     {
         var sourceDir = args.DebugDir();
         var destinationDir = args.ReleaseDir();
+
         _logger.Information("Creating mod archive from {SourceDir} to {DestinationDir}", sourceDir, destinationDir);
         try
         {
@@ -222,6 +224,35 @@ public static class SmartAssemblySteps
             using var archive = ZipFile.Open(archiveFileName, ZipArchiveMode.Create);
             foreach (var file in Directory.EnumerateFiles(sourceDir, "*.*", SearchOption.AllDirectories))
             {
+                var ext = Path.GetExtension(file);
+                if (ext == ".dll")
+                {
+                    var fileName = Path.GetFileName(file);
+                    if (mergedAssemblies.Any(a => a.Name is not null && fileName.StartsWith(a.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        _logger.Debug("Skipping merged assembly file: {File}", file);
+                        continue;
+                    }
+                }
+
+                if (ext == ".pdb" && args.Configuration != Configuration.Debug)
+                {
+                    _logger.Debug("Skipping PDB file in non-debug configuration: {File}", file);
+                    continue;
+                }
+
+                if (ext == ".config" && args.Configuration != Configuration.Debug)
+                {
+                    _logger.Debug("Skipping config file in non-debug configuration: {File}", file);
+                    continue;
+                }
+
+                if (ext == ".xml" && args.Configuration != Configuration.Debug)
+                {
+                    _logger.Debug("Skipping XML documentation file in non-debug configuration: {File}", file);
+                    continue;
+                }
+
                 var entryName = Path.GetRelativePath(sourceDir, file);
                 archive.CreateEntryFromFile(file, entryName);
                 _logger.Debug("Added file to archive: {File}", file);

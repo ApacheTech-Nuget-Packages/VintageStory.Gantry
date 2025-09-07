@@ -9,7 +9,7 @@ public interface IGuiComposablePart
     ///     Uses the injected <see cref="GuiComposer"/> to compose part of a  dialogue window.
     /// </summary>
     /// <returns></returns>
-    GuiComposer ComposePart(GuiComposer composer);
+    GuiComposer ComposePart(GenericDialogue parent, GuiComposer composer);
 
     /// <summary>
     ///     Refreshes the displayed values on the form.

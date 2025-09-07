@@ -13,7 +13,7 @@ internal class ServiceProviderHandlerFactory : IAmAHandlerFactorySync, IAmAHandl
     private readonly bool _isTransient;
 
     /// <summary>
-    /// Constructs a factory that uses the .NET IoC container as the factory
+    ///     Constructs a factory that uses the .NET IoC container as the factory
     /// </summary>
     /// <param name="serviceProvider">The .NET IoC container</param>
     public ServiceProviderHandlerFactory(IServiceProvider serviceProvider)
@@ -24,8 +24,8 @@ internal class ServiceProviderHandlerFactory : IAmAHandlerFactorySync, IAmAHandl
     }
 
     /// <summary>
-    /// Creates an instance of the request handler
-    /// Lifetime is set during registration
+    ///     Creates an instance of the request handler
+    ///     Lifetime is set during registration
     /// </summary>
     /// <param name="handlerType">The type of handler to request</param>
     /// <returns>An instantiated request handler</returns>
@@ -36,8 +36,8 @@ internal class ServiceProviderHandlerFactory : IAmAHandlerFactorySync, IAmAHandl
     }
 
     /// <summary>
-    /// Creates an instance of the request handler
-    /// Lifetime is set during registration
+    ///     Creates an instance of the request handler
+    ///     Lifetime is set during registration
     /// </summary>
     /// <param name="handlerType">The type of handler to request</param>
     /// <returns>An instantiated request handler</returns>
@@ -48,7 +48,7 @@ internal class ServiceProviderHandlerFactory : IAmAHandlerFactorySync, IAmAHandl
     }
 
     /// <summary>
-    /// Release the request handler - actual behavior depends on lifetime, we only dispose if we are transient
+    ///     Release the request handler - actual behavior depends on lifetime, we only dispose if we are transient
     /// </summary>
     /// <param name="handler"></param>
     public void Release(IHandleRequests handler)

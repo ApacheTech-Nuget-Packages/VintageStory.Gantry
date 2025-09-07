@@ -35,10 +35,8 @@ public static class HostExtensions
     /// -or-
     /// 
     /// <see langword="null" /> if no object of type <paramref name="serviceType" /> can be instantiated from the service collection.</returns>
-    public static object CreateSidedInstance(this IServiceProvider provider, Type serviceType, params object[] args)
-    {
-        return ActivatorEx.CreateInstance(provider, serviceType, args);
-    }
+    public static object CreateSidedInstance(this IServiceProvider provider, Type serviceType, params object[] args) 
+        => ActivatorEx.CreateInstance(provider, serviceType, args);
 
     /// <summary>
     ///     Creates an object of a specified type, using the IOC Container to resolve dependencies.
@@ -51,10 +49,8 @@ public static class HostExtensions
     /// -or-
     /// 
     /// <see langword="null" /> if there is no object of type <typeparamref name="T" /> can be instantiated from the service collection.</returns>
-    public static T CreateSidedInstance<T>(this IServiceProvider provider, params object[] args) where T : class
-    {
-        return (T)CreateSidedInstance(provider, typeof(T), args);
-    }
+    public static T CreateSidedInstance<T>(this IServiceProvider provider, params object[] args) where T : class 
+        => CreateSidedInstance(provider, typeof(T), args).To<T>();
 
     /// <summary>
     ///     Registers all <see cref="ModSystem"/>s in the current mod, into the service collection.
@@ -63,12 +59,11 @@ public static class HostExtensions
     /// <param name="gantry">Access to the Core Gantry API.</param>
     public static void AddModSystems(this IServiceCollection services, ICoreGantryAPI gantry)
     {
-        var side = gantry.Uapi.Side;
         var modSystems = gantry.Uapi.ModLoader.Systems.Where(p =>
         {
             try
             {
-                return p.ShouldLoad(side);
+                return p.ShouldLoad(gantry.Uapi.Side);
             }
             catch(Exception ex)
             {

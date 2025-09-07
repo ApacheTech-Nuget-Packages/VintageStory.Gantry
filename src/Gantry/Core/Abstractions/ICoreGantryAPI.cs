@@ -23,6 +23,16 @@ public interface ICoreGantryAPI : IDisposable
     ICoreAPI Uapi { get; }
 
     /// <summary>
+    ///     The underlying Vintagestory API instance for the current mod.
+    /// </summary>
+    ICoreClientAPI Capi => ApiEx.Client;
+
+    /// <summary>
+    ///     The underlying Vintagestory API instance for the current mod.
+    /// </summary>
+    ICoreServerAPI Sapi => ApiEx.Server;
+
+    /// <summary>
     ///     The current mod, as registered with the mod manager.
     /// </summary>
     Mod Mod { get; }

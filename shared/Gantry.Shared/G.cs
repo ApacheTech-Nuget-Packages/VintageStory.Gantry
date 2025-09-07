@@ -10,12 +10,11 @@ internal static partial class G
 {
     private readonly static Sided<ICoreGantryAPI> _sidedCore = new();
 
-    internal static void SetCore(ICoreGantryAPI core)
-    {
-        _sidedCore.Set(core.Side, core);
-    }
+    internal static void SetCore(ICoreGantryAPI core) 
+        => _sidedCore.Set(core.Side, core);
 
-    internal static ICoreGantryAPI Core => _sidedCore.Current!;
+    internal static ICoreGantryAPI Core 
+        => _sidedCore.Current!;
 
     /// <summary>
     ///     Logger for diagnostic and debug output.
@@ -27,7 +26,7 @@ internal static partial class G
     ///     The underlying Vintagestory API instance for the current mod.
     /// </summary>
     internal static ICoreAPI Uapi 
-        => Core.Uapi;
+        => Core.ApiEx.Current;
 
     /// <summary>
     ///     The underlying Vintagestory API instance for the current mod.
@@ -78,6 +77,16 @@ internal static partial class G
         => Core.Lang;
 
     /// <summary>
+    ///     Returns a localised string for a feature-specific path in the current mod domain.
+    /// </summary>
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <param name="args">Optional arguments for formatting.</param>
+    /// <returns>The localised string for the feature path.</returns>
+    internal static string T(string featureName, string code, params object[] args)
+        => Lang.Translate(featureName, code, args);
+
+    /// <summary>
     ///     The dependency injection service provider for the mod.
     /// </summary>
     internal static IServiceProvider Services
@@ -114,4 +123,7 @@ internal static partial class G
     /// <param name="args">Arguments for formatting the message.</param>
     internal static void Log(string messageTemplate, params object[] args)
         => Logger.VerboseDebug(messageTemplate, args);
+
+    internal static void Dispose() 
+        => _sidedCore.Dispose(Side);
 }
