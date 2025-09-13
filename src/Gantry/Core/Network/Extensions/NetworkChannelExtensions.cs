@@ -375,7 +375,7 @@ public static class NetworkChannelExtensions
     /// <returns>
     ///     The server network channel with the registered handler.
     /// </returns>
-    public static IServerNetworkChannel RegisterPacket<T>(this IServerNetworkChannel channel, ICoreGantryAPI gapi, NetworkClientMessageHandler<T> handler)
+    public static IServerNetworkChannel RegisterPacket<T>(this IServerNetworkChannel channel, ICoreGantryAPI gapi, NetworkClientMessageHandler<T>? handler = null)
     {
         gapi.Log($"Registering duplex packet '{typeof(T)}' with handler on server channel.");
         return channel.RegisterMessageType<T>().SetMessageHandler(handler);

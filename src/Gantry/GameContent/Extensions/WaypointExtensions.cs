@@ -93,7 +93,7 @@ public static class WaypointExtensions
             var waypoints =
                 waypointMapLayer?.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.InRangeCubic(position, horizontalRadius, verticalRadius) ?? false).ToList();
             if (waypoints is null) return false;
-            if (!waypoints.Any()) return false;
+            if (waypoints.Count == 0) return false;
             return filter == null || waypoints.Any(filter);
         }
         catch (InvalidOperationException)
@@ -128,7 +128,7 @@ public static class WaypointExtensions
         var waypointMapLayer = world.Api.ModLoader.GetModSystem<WorldMapManager>().WaypointMapLayer();
         var waypoints = waypointMapLayer?.ownWaypoints.Where(wp => wp?.Position.AsBlockPos.Equals(pos) ?? false).ToList();
         if (waypoints is null) return false;
-        if (!waypoints.Any()) return false;
+        if (waypoints.Count == 0) return false;
         return filter == null || waypoints.Any(filter);
     }
 

@@ -8,5 +8,5 @@ public interface IGenericRenderer<TShaderProgram> : IRenderer where TShaderProgr
     /// <summary>
     ///     The <see cref="IGenericShaderProgram"/> instance to use to render graphics to the screen.
     /// </summary>
-    TShaderProgram Shader { get; set; }
+    TShaderProgram? Shader { get; set; }
 }
