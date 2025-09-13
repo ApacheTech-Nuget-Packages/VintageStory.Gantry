@@ -12,11 +12,23 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
     where TModSystem : ModSystemBase<TModSystem>
 {
     private static Sided<TModSystem> _instance = Sided<TModSystem>.AsyncLocal();
+    private static TModSystem? _client;
+    private static TModSystem? _server;
 
     /// <summary>
     ///     Provides access to the current instance of the mod system.
     /// </summary>
     public static TModSystem Instance => _instance.Current;
+
+    /// <summary>
+    ///     Provides access to the current instance of the client-side mod system.
+    /// </summary>
+    public static TModSystem Client => _client!;
+
+    /// <summary>
+    ///     Provides access to the current instance of the server-side mod system.
+    /// </summary>
+    public static TModSystem Server => _server!;
 
     /// <inheritdoc />
     public ICoreAPI UApi { get; private set; } = null!;
@@ -27,6 +39,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
         var modSsytem = GetType().Name;
         var shouldLoad = base.ShouldLoad(api);
         _instance ??= Sided<TModSystem>.AsyncLocal();
+        api.Side.Invoke(() => _client = (TModSystem)this, () => _server = (TModSystem)this);
         if (_instance.Current is not null) return shouldLoad;
         _instance.Set(api.Side, this.To<TModSystem>());     
         OnShouldLoad(UApi = api);
@@ -46,7 +59,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
     /// <summary>
     ///     The Gantry Core API for the current mod and app side.
     /// </summary>
-    protected ICoreGantryAPI Core { get; private set; } = null!;
+    public ICoreGantryAPI Core { get; private set; } = null!;
 
     /// <inheritdoc />
     public override void StartPre(ICoreAPI api)
