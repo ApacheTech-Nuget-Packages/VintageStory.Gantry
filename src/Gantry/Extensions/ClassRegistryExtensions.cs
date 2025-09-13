@@ -81,10 +81,11 @@ public static class ClassRegistryExtensions
     /// </summary>
     /// <typeparam name="T">The type of the BlockEntity Behaviour to register.</typeparam>
     /// <param name="api">The game's internal API.</param>
-    public static void RegisterBlockEntityBehaviour<T>(this ICoreAPICommon api)
+    /// <param name="friendlyName">A friendly name to give to the behaviour.</param>
+    public static void RegisterBlockEntityBehaviour<T>(this ICoreAPICommon api, string? friendlyName = null)
     {
         var type = typeof(T);
-        api.RegisterBlockEntityBehaviorClass(type.Name, type);
+        api.RegisterBlockEntityBehaviorClass(friendlyName?.IfNullOrEmpty(type.Name), type);
     }
 
     /// <summary>
@@ -169,7 +170,7 @@ public static class ClassRegistryExtensions
         {
             var behaviour = behaviourFactory(block);
             core.Log($" - Adding behaviour {behaviour.GetType().Name} to block {block.Code}");
-            block.BlockBehaviors = block.BlockBehaviors.Append(behaviour).ToArray();
+            block.BlockBehaviors = [.. block.BlockBehaviors, behaviour];
         }
     }
 }
