@@ -2,6 +2,7 @@
 using Gantry.Core.Hosting.Registration;
 using Gantry.GameContent.ChatCommands.Parsers;
 using Gantry.GameContent.ChatCommands.Parsers.Extensions;
+using Gantry.Services.IO.DataStructures;
 using Gantry.Services.IO.Hosting;
 
 namespace Gantry.Services.EasyX.Hosting;
@@ -61,22 +62,30 @@ public abstract class EasyXHost<TModSystem>(string commandName)
             return TextCommandResult.Error(invalidScopeMessage);
         }
 
-        if (parser.Scope is IO.DataStructures.ModFileScope.Gantry)
+        if (parser.Scope is ModFileScope.Gantry)
         {
             const string gantryScopeMessage = "The Gantry scope is reserved for the Gantry MDK and cannot be set.";
             return TextCommandResult.Error(gantryScopeMessage);
         }
 
-        var toScope = parser.Scope.Value;
+        SetScope(parser.Scope.Value);
+        var scopeMessage = Core.Lang.TranslateG("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
+        return TextCommandResult.Success(scopeMessage);
+    }
 
+
+    /// <summary>
+    ///     Sets the scope for the mod settings, copying existing settings to the new scope if it is different from the current scope.
+    /// </summary>
+    /// <param name="toScope">The target scope to set for the mod settings.</param>
+    public void SetScope(ModFileScope toScope)
+    {
+        if (toScope == ModFileScope.Gantry) return;
         var fromScope = _globalSettings.Scope;
         if (fromScope != toScope)
         {
             Core.Settings.CopySettings(fromScope, toScope);
             _globalSettings.Scope = toScope;
         }
-
-        var scopeMessage = Core.Lang.TranslateG("EasyX", "SetScope", _globalSettings.Scope.GetDescription());
-        return TextCommandResult.Success(scopeMessage);
     }
 }
