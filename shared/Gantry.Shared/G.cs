@@ -1,6 +1,4 @@
-using ApacheTech.Common.BrighterSlim;
-using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
-using System.Reflection;
+using Gantry.Services.EasyX.Hosting;
 
 /// <summary>
 ///     Provides the core API surface for Gantry mods, exposing logging, dependency injection, localisation, mod metadata, and core services.
@@ -8,7 +6,7 @@ using System.Reflection;
 /// </summary>
 internal static partial class G
 {
-    private readonly static Sided<ICoreGantryAPI> _sidedCore = new();
+    private readonly static Sided<ICoreGantryAPI> _sidedCore = Sided<ICoreGantryAPI>.AsyncLocal();
 
     internal static void SetCore(ICoreGantryAPI core) 
         => _sidedCore.Set(core.Side, core);
@@ -117,6 +115,12 @@ internal static partial class G
         => Services.GetRequiredService<IModSettingsService>();
 
     /// <summary>
+    ///     Provides access to the game world, including blocks, entities, and environment data.
+    /// </summary>
+    public static IWorldAccessor World
+        => Uapi.World;
+
+    /// <summary>
     ///     Writes a verbose debug message to the mod logger.
     /// </summary>
     /// <param name="messageTemplate">The message template to log.</param>
@@ -126,4 +130,31 @@ internal static partial class G
 
     internal static void Dispose() 
         => _sidedCore.Dispose(Side);
+
+    /// <summary>
+    ///     An abstract base class for creating a mod host that integrates with the Gantry core API.
+    /// </summary>
+    /// <typeparam name="TProgram">The type of the main entry point for the mod.</typeparam>
+    internal class Host<TProgram> : ModHost<TProgram> where TProgram : Host<TProgram>
+    {
+        /// <inheritdoc />
+        protected sealed override void OnCoreLoaded(ICoreGantryAPI core) => SetCore(core);
+
+        /// <inheritdoc />
+        protected override void OnCoreUnloaded() => Dispose();
+    }
+
+    /// <summary>
+    ///     An abstract base class for creating a mod host that integrates with the Gantry core API.
+    /// </summary>
+    /// <typeparam name="TProgram">The type of the main entry point for the mod.</typeparam>
+    /// <param name="commandName">The chat command name to register for server-side settings management.</param>
+    internal class ExHost<TProgram>(string commandName) : EasyXHost<TProgram>(commandName) where TProgram : ExHost<TProgram>
+    {
+        /// <inheritdoc />
+        protected sealed override void OnCoreLoaded(ICoreGantryAPI core) => SetCore(core);
+
+        /// <inheritdoc />
+        protected override void OnCoreUnloaded() => Dispose();
+    }
 }
