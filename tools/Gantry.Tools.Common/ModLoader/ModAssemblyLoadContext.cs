@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyModel;
 using System.Collections.Concurrent;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Loader;
+using Vintagestory.API.Config;
 
 namespace Gantry.Tools.Common.ModLoader;
 
@@ -24,7 +26,7 @@ public class ModAssemblyLoadContext : AssemblyLoadContext, IDisposable
     /// </summary>
     public ModAssemblyLoadContext(string dependenciesDir) : base("Mods", isCollectible: true)
     {
-        var runtimePath = "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\8.0.19";
+        var runtimePath = RuntimeEnvironment.GetRuntimeDirectory();
         var vintageStoryPath = Environment.GetEnvironmentVariable("VINTAGE_STORY")!;
         var initialPaths = new []
         {

@@ -14,6 +14,7 @@
 .debug/
 .release/
 .publish/
+.gantry/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
