@@ -2,6 +2,7 @@
 using Gantry.Core.Diagnostics;
 using Gantry.Core.Helpers;
 using Gantry.Core.Hosting.Registration;
+using Gantry.Services.HarmonyPatches;
 using Gantry.Services.IO.Abstractions.Contracts;
 using Vintagestory.Common;
 
@@ -61,10 +62,16 @@ internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
     internal void BuildServiceProvider(GantryHostOptions options)
     {
         Services = GantryServiceCollection.BuildHost(this, options);
+
         if (options.RegisterSettingsFiles)
             Services
                 .GetRequiredService<IFileSystemService>()
                 .RegisterDefaultSettingsFiles();
+
+        if (options.ApplyPatches)
+            Services
+                .GetRequiredService<IHarmonyPatchingService>()
+                .PatchModAssembly();
     }
 
     public void Dispose()

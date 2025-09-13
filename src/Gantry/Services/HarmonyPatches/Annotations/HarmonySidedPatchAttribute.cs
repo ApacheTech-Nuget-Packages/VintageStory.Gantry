@@ -1,16 +1,11 @@
-﻿
-
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedMember.Global
-
-namespace Gantry.Services.HarmonyPatches.Annotations;
+﻿namespace Gantry.Services.HarmonyPatches.Annotations;
 
 /// <summary>
 ///     Indicates that the decorated class or method should be applied as a patch, but only for a specified app-side.
 /// </summary>
 /// <seealso cref="HarmonyPatch" />
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Delegate | AttributeTargets.Method, AllowMultiple = true)]
-public abstract class HarmonySidedPatchAttribute : HarmonyPatch
+public class HarmonySidedPatchAttribute : HarmonyPatch
 {
     /// <summary>
     ///     Gets the app-side to run the patch on.
@@ -21,7 +16,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <summary>
     /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
     /// </summary>
-    protected HarmonySidedPatchAttribute()
+    public HarmonySidedPatchAttribute()
     {
         Side = EnumAppSide.Universal;
     }
@@ -30,7 +25,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
     /// </summary>
     /// <param name="forSide">The app-side to run the patch on.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide)
     {
         Side = forSide;
     }
@@ -40,7 +35,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// </summary>
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType) : base(declaringType)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType) : base(declaringType)
     {
         Side = forSide;
     }
@@ -51,7 +46,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, Type[] argumentTypes) : base(declaringType, argumentTypes)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, Type[] argumentTypes) : base(declaringType, argumentTypes)
     {
         Side = forSide;
     }
@@ -62,19 +57,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodName">The name of the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName) : base(declaringType, methodName)
-    {
-        Side = forSide;
-    }
-
-    /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
-    /// </summary>
-    /// <param name="forSide">The app-side to run the patch on.</param>
-    /// <param name="declaringType">Type of the declaring method to patch.</param>
-    /// <param name="methodName">The name of the method to patch.</param>
-    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName, params Type[] argumentTypes) : base(declaringType, methodName, argumentTypes)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName) : base(declaringType, methodName)
     {
         Side = forSide;
     }
@@ -86,8 +69,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodName">The name of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, methodName, argumentTypes, argumentVariations)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName, params Type[] argumentTypes) : base(declaringType, methodName, argumentTypes)
     {
         Side = forSide;
     }
@@ -97,78 +79,91 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// </summary>
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
-    /// <param name="methodType">Type of the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, MethodType methodType) : base(declaringType, methodType)
-    {
-        Side = forSide;
-    }
-
-    /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
-    /// </summary>
-    /// <param name="forSide">The app-side to run the patch on.</param>
-    /// <param name="declaringType">Type of the declaring method to patch.</param>
-    /// <param name="methodType">Type of the method to patch.</param>
-    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, MethodType methodType, params Type[] argumentTypes) : base(declaringType, methodType, argumentTypes)
-    {
-        Side = forSide;
-    }
-
-    /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
-    /// </summary>
-    /// <param name="forSide">The app-side to run the patch on.</param>
-    /// <param name="declaringType">Type of the declaring method to patch.</param>
-    /// <param name="methodType">Type of the method to patch.</param>
-    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, methodType, argumentTypes, argumentVariations)
-    {
-        Side = forSide;
-    }
-
-    /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
-    /// </summary>
-    /// <param name="forSide">The app-side to run the patch on.</param>
-    /// <param name="declaringType">Type of the declaring method to patch.</param>
-    /// <param name="methodName">The name of the method to patch.</param>
-    /// <param name="methodType">Type of the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName, MethodType methodType) : base(declaringType, methodName, methodType)
-    {
-        Side = forSide;
-    }
-
-    /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
-    /// </summary>
-    /// <param name="forSide">The app-side to run the patch on.</param>
-    /// <param name="methodName">The name of the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName) : base(methodName)
-    {
-        Side = forSide;
-    }
-
-    /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
-    /// </summary>
-    /// <param name="forSide">The app-side to run the patch on.</param>
-    /// <param name="methodName">The name of the method to patch.</param>
-    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName, params Type[] argumentTypes) : base(methodName, argumentTypes)
-    {
-        Side = forSide;
-    }
-
-    /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
-    /// </summary>
-    /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="methodName">The name of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
     /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(methodName, argumentTypes, argumentVariations)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, methodName, argumentTypes, argumentVariations)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="declaringType">Type of the declaring method to patch.</param>
+    /// <param name="methodType">Type of the method to patch.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, MethodType methodType) : base(declaringType, methodType)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="declaringType">Type of the declaring method to patch.</param>
+    /// <param name="methodType">Type of the method to patch.</param>
+    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, MethodType methodType, params Type[] argumentTypes) : base(declaringType, methodType, argumentTypes)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="declaringType">Type of the declaring method to patch.</param>
+    /// <param name="methodType">Type of the method to patch.</param>
+    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
+    /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(declaringType, methodType, argumentTypes, argumentVariations)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="declaringType">Type of the declaring method to patch.</param>
+    /// <param name="methodName">The name of the method to patch.</param>
+    /// <param name="methodType">Type of the method to patch.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type declaringType, string methodName, MethodType methodType) : base(declaringType, methodName, methodType)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="methodName">The name of the method to patch.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName) : base(methodName)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="methodName">The name of the method to patch.</param>
+    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName, params Type[] argumentTypes) : base(methodName, argumentTypes)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="methodName">The name of the method to patch.</param>
+    /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
+    /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(methodName, argumentTypes, argumentVariations)
     {
         Side = forSide;
     }
@@ -179,7 +174,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="methodName">The name of the method to patch.</param>
     /// <param name="methodType">Type of the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName, MethodType methodType) : base(methodName, methodType)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, string methodName, MethodType methodType) : base(methodName, methodType)
     {
         Side = forSide;
     }
@@ -189,7 +184,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// </summary>
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="methodType">Type of the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, MethodType methodType) : base(methodType)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, MethodType methodType) : base(methodType)
     {
         Side = forSide;
     }
@@ -200,7 +195,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="methodType">Type of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, MethodType methodType, params Type[] argumentTypes) : base(methodType, argumentTypes)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, MethodType methodType, params Type[] argumentTypes) : base(methodType, argumentTypes)
     {
         Side = forSide;
     }
@@ -212,7 +207,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <param name="methodType">Type of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
     /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(methodType, argumentTypes, argumentVariations)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, MethodType methodType, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(methodType, argumentTypes, argumentVariations)
     {
         Side = forSide;
     }
@@ -222,7 +217,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// </summary>
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type[] argumentTypes) : base(argumentTypes)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type[] argumentTypes) : base(argumentTypes)
     {
         Side = forSide;
     }
@@ -233,7 +228,7 @@ public abstract class HarmonySidedPatchAttribute : HarmonyPatch
     /// <param name="forSide">The app-side to run the patch on.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
     /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
-    protected HarmonySidedPatchAttribute(EnumAppSide forSide, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(argumentTypes, argumentVariations)
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(argumentTypes, argumentVariations)
     {
         Side = forSide;
     }

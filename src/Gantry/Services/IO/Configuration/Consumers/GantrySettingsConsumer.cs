@@ -8,6 +8,6 @@ namespace Gantry.Services.IO.Configuration.Consumers;
 ///     Represents a class that affects, or is affected by specific feature settings.
 /// </summary>
 /// <typeparam name="TSettings">The settings file to use within the patches in this class.</typeparam>
-public abstract class GlobalSettingsConsumer<TSettings>(ICoreGantryAPI core) :
-    SettingsConsumerBase<TSettings>(ModFileScope.Global, core)
+public abstract class GantrySettingsConsumer<TSettings>(ICoreGantryAPI core) :
+    SettingsConsumerBase<TSettings>(ModFileScope.Gantry, core)
     where TSettings : FeatureSettings<TSettings>, new();

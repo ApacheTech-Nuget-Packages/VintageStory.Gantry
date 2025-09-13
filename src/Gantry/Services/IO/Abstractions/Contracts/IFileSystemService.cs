@@ -1,4 +1,5 @@
 ﻿using Gantry.Services.IO.DataStructures;
+using Gantry.Services.IO.Helpers;
 
 namespace Gantry.Services.IO.Abstractions.Contracts;
 
@@ -109,4 +110,10 @@ public interface IFileSystemService : IDisposable
     ///     Registers the default settings files for the mod.
     /// </summary>
     internal void RegisterDefaultSettingsFiles();
+
+    /// <summary>
+    ///     Provides strongly-typed paths for Gantry mod configuration and data storage.
+    ///     Paths are scoped to the current mod and world context, ensuring correct isolation between mods and worlds.
+    /// </summary>
+    GantryPaths Paths { get; }
 }

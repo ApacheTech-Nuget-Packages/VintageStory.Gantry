@@ -1,6 +1,5 @@
 ﻿using Gantry.Core.Abstractions;
 using Gantry.Extensions.DotNet;
-using Gantry.Services.HarmonyPatches;
 using Gantry.Services.IO.Abstractions;
 using Gantry.Services.IO.Abstractions.Contracts;
 using Gantry.Services.IO.Configuration;
@@ -18,7 +17,9 @@ public sealed class FileSystemService : IFileSystemService
 {
     private readonly Dictionary<string, ModFileBase> _registeredFiles = [];
     private readonly ICoreGantryAPI _gantry;
-    private readonly GantryPaths _paths;
+
+    /// <inheritdoc />
+    public GantryPaths Paths { get; }
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="FileSystemService"/> class.
@@ -30,17 +31,17 @@ public sealed class FileSystemService : IFileSystemService
     {
         var api = gantry.Uapi;
         _gantry = gantry;
-        _paths = gantryPaths;
-        _gantry.Log($" - World Identifier: {_paths.WorldGuid}");
+        Paths = gantryPaths;
+        _gantry.Log($" - World Identifier: {Paths.WorldGuid}");
         _gantry.Log($" - World Seed: {api.World.Seed}");
-        _gantry.Log($" - World Data Path: {_paths.WorldData.FullName}");
-        _gantry.Log($" - World Settings Path: {_paths.WorldSettings.FullName}");
-        _gantry.Log($" - Global Data Path: {_paths.GlobalData.FullName}");
-        _gantry.Log($" - Global Settings Path: {_paths.GlobalSettings.FullName}");
-        _gantry.Log($" - Gantry Data Path: {_paths.GantryData.FullName}");
-        _gantry.Log($" - Gantry Settings Path: {_paths.GantrySettings.FullName}");
-        _gantry.Log($" - Mod Assembly Path: {_paths.ModRootPath.FullName}");
-        _gantry.Log($" - Mod Assets Path: {_paths.ModAssets.FullName}");
+        _gantry.Log($" - World Data Path: {Paths.WorldData.FullName}");
+        _gantry.Log($" - World Settings Path: {Paths.WorldSettings.FullName}");
+        _gantry.Log($" - Global Data Path: {Paths.GlobalData.FullName}");
+        _gantry.Log($" - Global Settings Path: {Paths.GlobalSettings.FullName}");
+        _gantry.Log($" - Gantry Data Path: {Paths.GantryData.FullName}");
+        _gantry.Log($" - Gantry Settings Path: {Paths.GantrySettings.FullName}");
+        _gantry.Log($" - Mod Assembly Path: {Paths.ModRootPath.FullName}");
+        _gantry.Log($" - Mod Assets Path: {Paths.ModAssets.FullName}");
     }
 
     /// <summary>
@@ -55,7 +56,7 @@ public sealed class FileSystemService : IFileSystemService
     /// <param name="scope">The scope of the file, be it global, per-world, or gantry.</param>
     public IFileSystemService RegisterFile(string fileName, ModFileType type, ModFileScope scope)
     {
-        var file = new FileInfo(Path.Combine(_paths.For(type, scope).FullName, fileName));
+        var file = new FileInfo(Path.Combine(Paths.For(type, scope).FullName, fileName));
         if (_registeredFiles.TryAdd(fileName, file.CreateModFileWrapper(_gantry)))
         {
             if (!file.Exists) CopyFileToOutputDirectory(file);
@@ -180,8 +181,8 @@ public sealed class FileSystemService : IFileSystemService
 
         var locations = new List<string>
         {
-            Path.Combine(_paths.ModAssets.FullName, file.Name),
-            Path.Combine(_paths.ModRootPath.FullName, file.Name)
+            Path.Combine(Paths.ModAssets.FullName, file.Name),
+            Path.Combine(Paths.ModRootPath.FullName, file.Name)
         };
         foreach (var location in locations.Where(File.Exists))
         {

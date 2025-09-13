@@ -19,14 +19,20 @@ public interface IHarmonyPatchingService : IDisposable
     Harmony Default { get; }
 
     /// <summary>
-    /// By default, all annotated [HarmonyPatch] classes in the executing assembly will
-    /// be processed at launch. Manual patches can be processed later on at runtime.
+    ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
+    ///     be processed at launch. Manual patches can be processed later on at runtime.
     /// </summary>
     void PatchAssembly(Assembly assembly);
 
     /// <summary>
-    /// By default, all annotated [HarmonyPatch] classes in the executing assembly will
-    /// be processed at launch. Manual patches can be processed later on at runtime.
+    ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
+    ///     be processed at launch. Manual patches can be processed later on at runtime.
     /// </summary>
     void UnpatchAssembly(Assembly assembly);
+
+    /// <summary>
+    ///     By default, all annotated [HarmonyPatch] classes in the executing assembly will
+    ///     be processed at launch. Manual patches can be processed later on at runtime.
+    /// </summary>
+    IHarmonyPatchingService PatchModAssembly();
 }
