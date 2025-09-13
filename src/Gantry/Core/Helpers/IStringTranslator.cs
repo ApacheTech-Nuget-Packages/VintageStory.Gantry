@@ -105,6 +105,17 @@ public interface IStringTranslator
     /// <summary>
     ///     Returns a localised string for a feature-specific path in a specific culture.
     /// </summary>
+    /// <param name="player">The player to localise the string for.</param>
+    /// <param name="feature">The feature name.</param>
+    /// <param name="path">The translation path within the feature.</param>
+    /// <param name="args">Arguments for formatting.</param>
+    /// <returns>The localised string for the feature path in the specified culture.</returns>
+    string TranslateL(IPlayer player, string feature, string path, params object[] args)
+        => Lang.GetL(PlayerLanguage(player), Code(feature, path), args);
+
+    /// <summary>
+    ///     Returns a localised string for a feature-specific path in a specific culture.
+    /// </summary>
     /// <param name="culture">The language/culture key.</param>
     /// <param name="feature">The feature name.</param>
     /// <param name="path">The translation path within the feature.</param>
