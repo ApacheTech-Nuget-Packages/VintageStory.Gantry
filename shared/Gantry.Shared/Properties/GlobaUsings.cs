@@ -11,7 +11,7 @@ global using ApacheTech.Common.BrighterSlim;
 global using ApacheTech.Common.DependencyInjection.Abstractions;
 global using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
 global using ApacheTech.Common.Extensions.Harmony;
-global using ApacheTech.Common.Extensions.System;
+global using ApacheTech.Common.Extensions.DotNet;
 
 global using Gantry.Core.Abstractions;
 global using Gantry.Core.Abstractions.ModSystems;
@@ -24,7 +24,6 @@ global using Gantry.Core.Network.Extensions;
 
 global using Gantry.Extensions;
 global using Gantry.Extensions.Api;
-global using Gantry.Extensions.DotNet;
 global using Gantry.Extensions.Harmony;
 global using Gantry.Extensions.Helpers;
 

@@ -135,13 +135,13 @@ internal static partial class G
     ///     An abstract base class for creating a mod host that integrates with the Gantry core API.
     /// </summary>
     /// <typeparam name="TProgram">The type of the main entry point for the mod.</typeparam>
-    internal class Host<TProgram> : ModHost<TProgram> where TProgram : Host<TProgram>
+    internal abstract class Host<TProgram> : ModHost<TProgram> where TProgram : Host<TProgram>
     {
         /// <inheritdoc />
         protected sealed override void OnCoreLoaded(ICoreGantryAPI core) => SetCore(core);
 
         /// <inheritdoc />
-        protected override void OnCoreUnloaded() => Dispose();
+        protected override void OnCoreUnloaded() => G.Dispose();
     }
 
     /// <summary>
@@ -149,12 +149,12 @@ internal static partial class G
     /// </summary>
     /// <typeparam name="TProgram">The type of the main entry point for the mod.</typeparam>
     /// <param name="commandName">The chat command name to register for server-side settings management.</param>
-    internal class ExHost<TProgram>(string commandName) : EasyXHost<TProgram>(commandName) where TProgram : ExHost<TProgram>
+    internal abstract class ExHost<TProgram>(string commandName) : EasyXHost<TProgram>(commandName) where TProgram : ExHost<TProgram>
     {
         /// <inheritdoc />
         protected sealed override void OnCoreLoaded(ICoreGantryAPI core) => SetCore(core);
 
         /// <inheritdoc />
-        protected override void OnCoreUnloaded() => Dispose();
+        protected override void OnCoreUnloaded() => G.Dispose();
     }
 }
