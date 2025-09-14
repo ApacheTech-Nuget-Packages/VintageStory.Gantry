@@ -15,8 +15,9 @@ global using Gantry.Core;
 global using HarmonyLib;
 global using Newtonsoft.Json;
 
-global using ApacheTech.Common.Extensions.System;
+global using ApacheTech.Common.Extensions.DotNet;
 global using ApacheTech.Common.DependencyInjection.Abstractions;
+global using ApacheTech.Common.DependencyInjection.Abstractions.Annotation;
 global using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
 
 global using Vintagestory.API.Common;

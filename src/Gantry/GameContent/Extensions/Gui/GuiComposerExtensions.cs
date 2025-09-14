@@ -51,8 +51,8 @@ public static class GuiComposerExtensions
     public static IEnumerable<GuiElement> GetElements(this GuiComposer composer)
     {
         var list = new List<GuiElement>();
-        var interactiveElements = composer.GetField<Dictionary<string, GuiElement>>("interactiveElements");
-        var staticElements = composer.GetField<Dictionary<string, GuiElement>>("staticElements");
+        var interactiveElements = composer.GetField<Dictionary<string, GuiElement>>("interactiveElements")!;
+        var staticElements = composer.GetField<Dictionary<string, GuiElement>>("staticElements")!;
         list.AddRange(interactiveElements.Values);
         list.AddRange(staticElements.Values);
         return list;

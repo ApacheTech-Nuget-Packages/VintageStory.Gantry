@@ -45,7 +45,7 @@ public static class ClientThreadInjectionExtensions
     /// <returns>A list, containing all the currently running threads, for the client process.</returns>
     public static List<Thread> GetClientThreads(this IClientWorldAccessor world)
     {
-        return (world as ClientMain).GetField<List<Thread>>("clientThreads");
+        return world.To<ClientMain>().GetField<List<Thread>>("clientThreads")!;
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public static class ClientThreadInjectionExtensions
     /// <param name="world">The world accessor API for the client.</param>
     /// <returns>A <see cref="Stack{T}" />, containing all the currently registered systems, on the client.</returns>
     public static Stack<ClientSystem> GetClientSystems(this IClientWorldAccessor world) 
-        => new((world as ClientMain).GetField<ClientSystem[]>("clientSystems"));
+        => new(world.To<ClientMain>().GetField<ClientSystem[]>("clientSystems")!);
 
     /// <summary>
     ///     Injects custom thread into the client process, passing control of 
@@ -114,7 +114,7 @@ public static class ClientThreadInjectionExtensions
             ?? throw new InvalidOperationException("The constructor for ClientThread with the specified signature could not be found.");
 
         // Instantiate the internal class using the obtained constructor.
-        var cts = world.GetField<CancellationTokenSource>("_clientThreadsCts");
+        var cts = world.GetField<CancellationTokenSource>("_clientThreadsCts")!;
         var instance = constructor.Invoke([world, threadName, clientSystems, cts.Token]);
         return instance;
     }

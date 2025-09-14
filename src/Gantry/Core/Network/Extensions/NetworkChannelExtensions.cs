@@ -294,8 +294,14 @@ public static class NetworkChannelExtensions
     {
         gapi.Log($"Attempting to unregister message handler for type '{typeof(T)}' on client channel.");
         var concrete = (Vintagestory.Client.NoObf.NetworkChannel)channel;
-        var messageTypes = concrete.GetField<Dictionary<Type, int>>("messageTypes");
         var typeFromHandle = typeof(T);
+
+        var messageTypes = concrete.GetField<Dictionary<Type, int>>("messageTypes");
+        if (messageTypes is null)
+        {
+            gapi.Log("Message types dictionary is null on client channel.");
+            throw new InvalidOperationException("Message types dictionary is null on client channel.");
+        }
         if (!messageTypes.TryGetValue(typeFromHandle, out var index))
         {
             gapi.Log($"Message type '{typeFromHandle}' not found on client channel.");
@@ -331,8 +337,13 @@ public static class NetworkChannelExtensions
     {
         gapi.Log($"Attempting to unregister message handler for type '{typeof(T)}' on server channel.");
         var concrete = (Vintagestory.Server.NetworkChannel)channel;
-        var messageTypes = concrete.GetField<Dictionary<Type, int>>("messageTypes");
         var typeFromHandle = typeof(T);
+        var messageTypes = concrete.GetField<Dictionary<Type, int>>("messageTypes");
+        if (messageTypes is null)
+        {
+            gapi.Log("Message types dictionary is null on server channel.");
+            throw new InvalidOperationException("Message types dictionary is null on server channel.");
+        }
         if (!messageTypes.TryGetValue(typeFromHandle, out var index))
         {
             gapi.Log($"Message type '{typeFromHandle}' not found on server channel.");

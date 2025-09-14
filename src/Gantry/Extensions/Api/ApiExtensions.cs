@@ -48,8 +48,8 @@ public static class ApiExtensions
         where T : ClientSystem
     {
         var clientMain = capi.World as ClientMain;
-        var clientSystems = clientMain.GetField<ClientSystem[]>("clientSystems").ToList();
-        for (var i = 0; i < clientSystems.Count; i++)
+        var clientSystems = clientMain?.GetField<ClientSystem[]>("clientSystems")?.ToList();
+        for (var i = 0; i < clientSystems?.Count; i++)
         {
             if (clientSystems[i].GetType() != typeof(T)) continue;
             clientSystems[i].Dispose(clientMain);
@@ -57,7 +57,8 @@ public static class ApiExtensions
             break;
         }
 
-        clientMain.SetField("clientSystems", clientSystems.ToArray());
+        if (clientSystems is null) return;
+        clientMain!.SetField("clientSystems", clientSystems.ToArray());
     }
 
     /// <summary>
@@ -68,8 +69,8 @@ public static class ApiExtensions
     public static void UnregisterInternalClientSystem(this ICoreClientAPI capi, string name)
     {
         var clientMain = capi.World as ClientMain;
-        var clientSystems = clientMain.GetField<ClientSystem[]>("clientSystems").ToList();
-        for (var i = 0; i < clientSystems.Count; i++)
+        var clientSystems = clientMain?.GetField<ClientSystem[]>("clientSystems")?.ToList();
+        for (var i = 0; i < clientSystems?.Count; i++)
         {
             if (clientSystems[i].Name != name) continue;
             clientSystems[i].Dispose(clientMain);
@@ -77,7 +78,8 @@ public static class ApiExtensions
             break;
         }
 
-        clientMain.SetField("clientSystems", clientSystems.ToArray());
+        if (clientSystems is null) return;
+        clientMain!.SetField("clientSystems", clientSystems.ToArray());
     }
 
     /// <summary>
@@ -87,8 +89,8 @@ public static class ApiExtensions
     /// <param name="commandName">The friendly name of the system to return.</param>
     public static object? GetInternalClientSystem(this ICoreClientAPI capi, string commandName)
     {
-        var clientSystems = (capi.World as ClientMain).GetField<ClientSystem[]>("clientSystems");
-        return clientSystems.FirstOrDefault(p => p.Name == commandName);
+        var clientSystems = (capi.World as ClientMain)?.GetField<ClientSystem[]>("clientSystems");
+        return clientSystems?.FirstOrDefault(p => p.Name == commandName);
     }
 
     /// <summary>
@@ -98,8 +100,8 @@ public static class ApiExtensions
     public static T? GetInternalClientSystem<T>(this ICoreClientAPI capi)
         where T : ClientSystem
     {
-        var clientSystems = (capi.World as ClientMain).GetField<ClientSystem[]>("clientSystems");
-        return clientSystems.FirstOrDefault(p => p.GetType() == typeof(T)) as T;
+        var clientSystems = (capi.World as ClientMain)?.GetField<ClientSystem[]>("clientSystems");
+        return clientSystems?.FirstOrDefault(p => p.GetType() == typeof(T)) as T;
     }
 
     /// <summary>
@@ -109,8 +111,11 @@ public static class ApiExtensions
     /// <param name="commandName">The name of the command to unregister.</param>
     public static void UnregisterCommand(this ICoreClientAPI capi, string commandName)
     {
-        var eventManager = (capi.World as ClientMain).GetField<ClientEventManager>("eventManager");
+        var eventManager = capi.World.To<ClientMain>().GetField<ClientEventManager>("eventManager");
+        if (eventManager is null) return;
         var chatCommands = eventManager.GetField<Dictionary<string, ChatCommand>>("chatCommands");
+        if (chatCommands is null) return;
+        if (!chatCommands.ContainsKey(commandName)) return;
         chatCommands.Remove(commandName);
         eventManager.SetField("chatCommands", chatCommands);
     }
@@ -166,7 +171,7 @@ public static class ApiExtensions
     public static T? GetInternalServerSystem<T>(this ICoreServerAPI sapi)
         where T : ServerSystem
     {
-        var systems = ((ServerMain)sapi.World).GetField<ServerSystem[]>("Systems");
+        var systems = ((ServerMain)sapi.World).GetField<ServerSystem[]>("Systems")!;
         return systems.FirstOrDefault(p => p is T) as T;
     }
 

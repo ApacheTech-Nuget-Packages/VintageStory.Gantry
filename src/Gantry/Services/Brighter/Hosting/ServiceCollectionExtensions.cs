@@ -30,8 +30,7 @@ internal static class ServiceCollectionExtensions
         this IServiceCollection services,
         Action<BrighterOptions>? configure = null)
     {
-        if (services == null)
-            throw new ArgumentNullException(nameof(services));
+        ArgumentNullException.ThrowIfNull(services);
 
         var options = new BrighterOptions();
         configure?.Invoke(options);
@@ -51,7 +50,7 @@ internal static class ServiceCollectionExtensions
     /// <param name="services">The collection of services that we want to add registrations to</param>
     /// <param name="options"></param>
     /// <returns></returns>
-    private static IBrighterBuilder BrighterHandlerBuilder(IServiceCollection services, BrighterOptions options)
+    private static ServiceCollectionBrighterBuilder BrighterHandlerBuilder(IServiceCollection services, BrighterOptions options)
     {
         var subscriberRegistry = new ServiceCollectionSubscriberRegistry(services, options.HandlerLifetime);
         services.TryAddSingleton(subscriberRegistry);
@@ -135,7 +134,7 @@ internal static class ServiceCollectionExtensions
         return ExternalBusBuilder(brighterBuilder, busConfiguration, transactionType);
     }
 
-    private static object BuildCommandProcessor(IServiceProvider provider)
+    private static CommandProcessor BuildCommandProcessor(IServiceProvider provider)
     {
         var options = provider.Resolve<IBrighterOptions>();
         var subscriberRegistry = provider.GetRequiredService<ServiceCollectionSubscriberRegistry>();
@@ -201,7 +200,7 @@ internal static class ServiceCollectionExtensions
 
     private static IBrighterBuilder ExternalBusBuilder(
         IBrighterBuilder brighterBuilder,
-        IAmExternalBusConfiguration externalBusConfiguration,
+        ExternalBusConfiguration externalBusConfiguration,
         Type transactionType)
     {
         if (externalBusConfiguration.ProducerRegistry is null)
@@ -243,13 +242,14 @@ internal static class ServiceCollectionExtensions
         //again to prevent someone configuring Brighter from having to pass generic types
         var busType = typeof(ExternalBusServices<,>).MakeGenericType(typeof(Message), transactionType);
 
-        var bus = Activator.CreateInstance(busType,
+        var busInstance = Activator.CreateInstance(busType,
             externalBusConfiguration.ProducerRegistry,
             outbox,
             externalBusConfiguration.OutboxBulkChunkSize,
-            externalBusConfiguration.OutboxTimeout) as IAmAnExternalBusService;
+            externalBusConfiguration.OutboxTimeout);
 
-        serviceCollection.TryAddSingleton(bus);
+        if (busInstance is IAmAnExternalBusService bus)
+            serviceCollection.TryAddSingleton(bus);
 
         return brighterBuilder;
     }

@@ -61,10 +61,6 @@
 			<CleanOutputDir>$([System.IO.Path]::GetDirectoryName('$(TargetPath)'))</CleanOutputDir>
 		</PropertyGroup>
 		<Message Text=" → Patching and Merging Gantry Translation Files..." Importance="high" />
-		<Exec Command="$(VsModTranslationPatcherDir)\$(VsModTranslationPatcher) ^
-			  --ProjectDir $(ProjectDir) ^
-			  --TargetDir $(SolutionDir).gantry ^
-			  --ModId gantry ^
-			  --LogLevel Verbose" />
+		<Exec Command="$(VsModTranslationPatcherDir)\$(VsModTranslationPatcher) ^&#xD;&#xA;			  --ProjectDir $(ProjectDir) ^&#xD;&#xA;			  --TargetDir $(SolutionDir).gantry ^&#xD;&#xA;			  --ModId gantry ^&#xD;&#xA;			  --LogLevel Verbose" />
 	</Target>
 </Project>

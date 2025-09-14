@@ -1,5 +1,4 @@
-﻿using Gantry.Extensions.DotNet;
-using Gantry.Services.IO.Abstractions.Contracts;
+﻿using Gantry.Services.IO.Abstractions.Contracts;
 
 namespace Gantry.Services.IO.Abstractions;
 

@@ -13,7 +13,7 @@ public static class ClientMainExtensions
     /// </summary>
     public static void StopAllSounds(this ClientMain game)
     {
-        var activeSounds = game.GetField<Queue<ILoadedSound>>("ActiveSounds");
+        var activeSounds = game.GetField<Queue<ILoadedSound>>("ActiveSounds")!;
         foreach (var sound in activeSounds)
         {
             sound.Stop();

@@ -38,11 +38,14 @@ public static class ServiceCollectionExtensions
 
     private static object CreateInstance(this IServiceProvider services, ServiceDescriptor descriptor)
     {
-        if (descriptor.Implementation != null)
+        if (descriptor.Implementation is not null)
             return descriptor.Implementation;
 
-        if (descriptor.ImplementationFactory != null)
+        if (descriptor.ImplementationFactory is not null)
             return descriptor.ImplementationFactory(services);
+
+        if (descriptor.ImplementationType is null)
+            throw new InvalidOperationException("Cannot instantiate service, no implementation or factory specified.");
 
         return ActivatorUtilities.GetServiceOrCreateInstance(services, descriptor.ImplementationType);
     }

@@ -72,7 +72,7 @@ public static class GuiComposerHelpers
         where TCellEntry : SavegameCellEntry
     {
         var cellListElement = composer.GetCellList<TCellEntry>(cellListName);
-        var cellEntries = cellListElement.GetField<List<TCellEntry>>("cellsTmp");
+        var cellEntries = cellListElement.GetField<List<TCellEntry>>("cellsTmp")!;
         cellListElement.BeforeCalcBounds();
         for (var i = 0; i < cellEntries.Count; i++)
         {

@@ -31,7 +31,7 @@ public static class ServerThreadInjectionExtensions
     /// <returns>A list, containing all the currently running threads, for the server process.</returns>
     public static List<Thread> GetServerThreads(this IServerWorldAccessor world)
     {
-        return (world as ServerMain).GetField<List<Thread>>("Serverthreads");
+        return world.To<ServerMain>().GetField<List<Thread>>("Serverthreads")!;
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public static class ServerThreadInjectionExtensions
     /// <returns>A <see cref="Stack{T}" />, containing all the currently registered systems, on the server.</returns>
     public static Stack<ServerSystem> GetServerSystems(this IServerWorldAccessor world)
     {
-        return new Stack<ServerSystem>((world as ServerMain).GetField<ServerSystem[]>("Systems"));
+        return new Stack<ServerSystem>(world.To<ServerMain>().GetField<ServerSystem[]>("Systems")!);
     }
 
     /// <summary>

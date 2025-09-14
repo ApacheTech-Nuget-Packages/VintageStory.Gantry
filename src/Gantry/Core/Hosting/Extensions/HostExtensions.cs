@@ -35,7 +35,7 @@ public static class HostExtensions
     /// -or-
     /// 
     /// <see langword="null" /> if no object of type <paramref name="serviceType" /> can be instantiated from the service collection.</returns>
-    public static object CreateSidedInstance(this IServiceProvider provider, Type serviceType, params object[] args) 
+    public static object CreateSidedInstance(this IServiceProvider provider, Type serviceType, params object[] args)
         => ActivatorEx.CreateInstance(provider, serviceType, args);
 
     /// <summary>
@@ -49,7 +49,7 @@ public static class HostExtensions
     /// -or-
     /// 
     /// <see langword="null" /> if there is no object of type <typeparamref name="T" /> can be instantiated from the service collection.</returns>
-    public static T CreateSidedInstance<T>(this IServiceProvider provider, params object[] args) where T : class 
+    public static T CreateSidedInstance<T>(this IServiceProvider provider, params object[] args) where T : class
         => CreateSidedInstance(provider, typeof(T), args).To<T>();
 
     /// <summary>
@@ -65,7 +65,7 @@ public static class HostExtensions
             {
                 return p.ShouldLoad(gantry.Uapi.Side);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 gantry.Logger.Error($"Could not add mod `{p.GetType().FullName}` to the service collection.");
                 gantry.Logger.Error(ex);
@@ -91,22 +91,27 @@ public static class HostExtensions
     {
         var api = gantry.Uapi;
 
-        api.Invoke(capi => { 
-
-        var clientSystems = capi.AsClientMain().GetField<ClientSystem[]>("clientSystems");
-        foreach (var system in clientSystems)
-        {
-            services.AddSingleton(system.GetType(), system);
-                gantry.Logger.VerboseDebug($" - Client System: {system.GetType().Name}");
-            }
-        }, sapi => { 
-        var serverSystems = sapi.AsServerMain().GetField<ServerSystem[]>("Systems");
-        foreach (var system in serverSystems)
-        {
-            services.AddSingleton(system.GetType(), system);
-                gantry.Logger.VerboseDebug($" - Server System: {system.GetType().Name}");
-            }
-        });
+        api.Invoke(
+            capi =>
+            {
+                var clientSystems = capi.AsClientMain().GetField<ClientSystem[]>("clientSystems");
+                if (clientSystems is null) return;
+                foreach (var system in clientSystems)
+                {
+                    services.AddSingleton(system.GetType(), system);
+                    gantry.Logger.VerboseDebug($" - Client System: {system.GetType().Name}");
+                }
+            },
+            sapi =>
+            {
+                var serverSystems = sapi.AsServerMain().GetField<ServerSystem[]>("Systems");
+                if (serverSystems is null) return;
+                foreach (var system in serverSystems)
+                {
+                    services.AddSingleton(system.GetType(), system);
+                    gantry.Logger.VerboseDebug($" - Server System: {system.GetType().Name}");
+                }
+            });
     }
 
     /// <summary>

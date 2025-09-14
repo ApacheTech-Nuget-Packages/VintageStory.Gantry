@@ -25,7 +25,8 @@ public class TypeStringFactory<T> : ITypeStringFactory<T>
     {
         try
         {
-            var type = Type.GetType(typeName);
+            var type = Type.GetType(typeName) 
+                ?? throw new InvalidOperationException($"Could not find type '{typeName}'");
             var instance = ActivatorUtilities.GetServiceOrCreateInstance(_serviceProvider, type);
             return (T)instance;
         }

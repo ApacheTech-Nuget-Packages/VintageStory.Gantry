@@ -1,5 +1,4 @@
 ﻿using Gantry.Core.Abstractions;
-using Gantry.Extensions.DotNet;
 using Gantry.Services.IO.Abstractions;
 using Gantry.Services.IO.Abstractions.Contracts;
 using Gantry.Services.IO.Configuration;

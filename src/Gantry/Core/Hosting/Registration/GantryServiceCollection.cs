@@ -17,7 +17,8 @@ internal sealed class GantryServiceCollection : ServiceCollection
     internal static IServiceProvider BuildHost(ICoreGantryAPI gantry, GantryHostOptions? options = null)
     {
         _options = options ?? GantryHostOptions.Default;
-        IServiceCollection services = new GantryServiceCollection();
+        var services = new GantryServiceCollection();
+        services.AddSingleton<IServiceCollection>(services);
 
         //  1. Register all ModSystems within the mod. Will also self-reference the GantryCore. 
         gantry.Logger.Highlight($"BuildHost: Building {gantry.Side}-Side Service Collection");
@@ -56,7 +57,7 @@ internal sealed class GantryServiceCollection : ServiceCollection
 
         //  5. Build IOC Container.
         IServiceProvider serviceProvider = null!;
-        services.AddSingleton(serviceProvider = services.BuildServiceProvider());
+        services.AddSingleton(serviceProvider = services.BuildServiceProvider(o => o.DisposableAssemblies = gantry.ModAssemblies));
         gantry.Logger.Highlight($"BuildHost: ServiceProvider built with {services.Count} services");
 
         return serviceProvider;
@@ -74,10 +75,10 @@ internal sealed class GantryServiceCollection : ServiceCollection
 
     private static void RegisterServerApiEndpoints(IServiceCollection services, ICoreGantryAPI gantry)
     {
-        var sapi = gantry.Uapi as ICoreServerAPI;
+        var sapi = gantry.Uapi.To<ICoreServerAPI>();
         services.AddSingleton(sapi);
-        services.AddSingleton(sapi!.World);
-        services.AddSingleton((sapi.World as ServerMain)!);
+        services.AddSingleton(sapi.World);
+        services.AddSingleton(sapi.World.To<ServerMain>());
         services.AddSingleton(sapi as ICoreAPICommon);
         services.AddSingleton(sapi as ICoreAPI);
         services.AddSingleton(sapi.ChatCommands);
@@ -88,14 +89,14 @@ internal sealed class GantryServiceCollection : ServiceCollection
 
     private static void RegisterClientApiEndpoints(IServiceCollection services, ICoreGantryAPI gantry)
     {
-        var capi = gantry.Uapi as ICoreClientAPI;
+        var capi = gantry.Uapi.To<ICoreClientAPI>();
         services.AddSingleton(capi);
-        services.AddSingleton(capi!.World);
-        services.AddSingleton((capi.World as ClientMain)!);
+        services.AddSingleton(capi.World);
+        services.AddSingleton(capi.World.To<ClientMain>());
         services.AddSingleton(capi as ICoreAPICommon);
         services.AddSingleton(capi as ICoreAPI);
         services.AddSingleton(ScreenManager.Platform);
-        services.AddSingleton((ScreenManager.Platform as ClientPlatformWindows)!);
+        services.AddSingleton(ScreenManager.Platform.To<ClientPlatformWindows>());
         services.AddSingleton(capi.ChatCommands);
         services.AddSingleton(capi.Event);
         services.AddSingleton(capi.Network);

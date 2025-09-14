@@ -98,6 +98,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
     public override void Dispose()
     {
         GC.SuppressFinalize(this);
+        if (UApi is null || _instance?.Current != this) return;
         _instance?.Dispose(UApi.Side);
         _instance = null!;
     }

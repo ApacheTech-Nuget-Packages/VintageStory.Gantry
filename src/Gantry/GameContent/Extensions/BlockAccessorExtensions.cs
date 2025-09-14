@@ -62,8 +62,12 @@ public static class BlockAccessorExtensions
     /// </exception>
     public static async Task SearchBlocksFromOriginAsync(this IBlockAccessor blockAccessor, BlockPos minPos, BlockPos maxPos, ActionConsumable<Block, BlockPos> onBlock)
     {
+        ArgumentNullException.ThrowIfNull(onBlock);
         var worldMap = blockAccessor.GetField<WorldMap>("worldmap");
         var chunkSize = blockAccessor.GetField<int>("chunksize");
+        if (worldMap is null) return;
+        if (minPos.X < 0 || minPos.Y < 0 || minPos.Z < 0) return;
+        if (minPos.X > worldMap.MapSizeX || minPos.Y > worldMap.MapSizeY || minPos.Z > worldMap.MapSizeZ) return;
         var minx = GameMath.Clamp(Math.Min(minPos.X, maxPos.X), 0, worldMap.MapSizeX);
         var miny = GameMath.Clamp(Math.Min(minPos.Y, maxPos.Y), 0, worldMap.MapSizeY);
         var minz = GameMath.Clamp(Math.Min(minPos.Z, maxPos.Z), 0, worldMap.MapSizeZ);
@@ -76,7 +80,8 @@ public static class BlockAccessorExtensions
         var maxcx = maxx / chunkSize;
         var maxcy = maxy / chunkSize;
         var maxcz = maxz / chunkSize;
-        var chunks = blockAccessor.CallMethod<ChunkData[]>("LoadChunksToCache", mincx, mincy, mincz, maxcx, maxcy, maxcz, null);
+        var chunks = blockAccessor.CallMethod<ChunkData[]>("LoadChunksToCache", mincx, mincy, mincz, maxcx, maxcy, maxcz, null!) 
+            ?? throw new InvalidOperationException("Failed to load chunks to cache.");
         var cxCount = maxcx - mincx + 1;
         var czCount = maxcz - mincz + 1;
 

@@ -39,7 +39,7 @@ public static class WorldMapManagerExtensions
     /// </summary>
     public static void ForceSendWaypoints(this WorldMapManager worldMapManager)
     {
-        var capi = worldMapManager.GetField<ICoreClientAPI>("capi");
+        var capi = worldMapManager.GetField<ICoreClientAPI>("capi")!;
         capi.Event.EnqueueMainThreadTask(() =>
             capi.Event.RegisterCallback(_ =>
                 capi.Network.GetChannel("worldmap")
@@ -57,8 +57,8 @@ public static class WorldMapManagerExtensions
     {
         var map = mapManager.worldMapDlg;
         if (map is null) return;
-        UpdateMapGui(map.GetField<GuiComposer>("fullDialog"), pos);
-        UpdateMapGui(map.GetField<GuiComposer>("hudDialog"), pos);
+        UpdateMapGui(map.GetField<GuiComposer>("fullDialog")!, pos);
+        UpdateMapGui(map.GetField<GuiComposer>("hudDialog")!, pos);
     }
 
     private static void UpdateMapGui(GuiComposer composer, Vec3d pos)

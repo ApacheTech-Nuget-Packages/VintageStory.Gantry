@@ -1,4 +1,5 @@
-﻿using Gantry.Services.IO.Abstractions.Contracts;
+﻿using Gantry.Services.EasyX;
+using Gantry.Services.IO.Abstractions.Contracts;
 using Gantry.Services.IO.Configuration;
 using Gantry.Services.IO.Configuration.Abstractions;
 using Gantry.Services.IO.DataStructures;
@@ -47,6 +48,27 @@ public static class GantryDependencyInjectionExtensions
         });
         return services;
     }
+
+    /// <summary>
+    ///     Adds a per-world settings service for a specific feature.
+    /// </summary>
+    /// <typeparam name="TSettings">The type of the settings.</typeparam>
+    /// <param name="services">The services collection to add the service to.</param>
+    /// <param name="featureName">The name of the feature.</param>
+    /// <returns>A reference to this instance, after this operation has completed.</returns>
+    public static IServiceCollection AddScopedFeatureSettings<TSettings>(this IServiceCollection services, string? featureName = null) where TSettings : FeatureSettings<TSettings>, new()
+    {
+        if (string.IsNullOrWhiteSpace(featureName)) featureName = typeof(TSettings).Name.Replace("Settings", "");
+        services.AddTransient(sp =>
+        {
+            var settingsService = sp.GetRequiredService<IModSettingsService>();
+            var configuration = settingsService.Global.Feature<ConfigurationSettings>();
+            var scope = configuration.Scope;
+            return settingsService.For(scope).Feature<TSettings>(featureName);
+        });
+        return services;
+    }
+
 
     /// <summary>
     ///     Adds a per-world settings service for a specific feature.
