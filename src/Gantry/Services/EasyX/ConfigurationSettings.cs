@@ -2,7 +2,7 @@
 using Gantry.Services.IO.DataStructures;
 using Newtonsoft.Json.Converters;
 
-namespace Gantry.Services.EasyX.Hosting;
+namespace Gantry.Services.EasyX;
 
 /// <summary>
 ///     The settings used to configure the mod.

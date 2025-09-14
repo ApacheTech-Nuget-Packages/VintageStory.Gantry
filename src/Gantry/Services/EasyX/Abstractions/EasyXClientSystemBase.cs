@@ -2,6 +2,7 @@
 using Gantry.Core.Annotation;
 using Gantry.Core.Network.Extensions;
 using Gantry.GameContent.GUI;
+using Gantry.GameContent.GUI.Models;
 using Gantry.Services.IO.Configuration.Abstractions;
 
 namespace Gantry.Services.EasyX.Abstractions;
@@ -45,10 +46,12 @@ public abstract class EasyXClientSystemBase<TModSystem, TClientSettings, TServer
 
     private void ShowSettingsSavedMessageBox(SettingsSavedPacket packet)
     {
-        var featureName = Core.Lang.Translate(packet.FeatureName, "ModMenu.TabName");
+        var featureName = packet.FeatureName.StartsWith("Easy")
+            ? Core.Lang.Translate(packet.FeatureName, "ModMenu.TabName")
+            : Core.Lang.Translate("ModMenu", $"{packet.FeatureName}.TabName");
         var message = Core.Lang.Translate("ModMenu", "SettingsSaved.Message", featureName);
         var title = Core.Lang.Translate("ModMenu", "Title");
-        MessageBox.Show(Core, title, message, Gantry.GameContent.GUI.Models.ButtonLayout.Ok);
+        MessageBox.Show(Core, title, message, ButtonLayout.Ok);
     }
 
     /// <summary>

@@ -1,17 +1,14 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using ApacheTech.Common.FunctionalCSharp.Extensions;
 using Gantry.Core.Abstractions;
 using Gantry.Core.Abstractions.ModSystems;
 using Gantry.Core.Annotation;
 using Gantry.Core.Hosting.Registration;
 using Gantry.Core.Network.Extensions;
 using Gantry.Extensions.Api;
-using Gantry.Extensions.DotNet;
 using Gantry.GameContent.ChatCommands.DataStructures;
 using Gantry.GameContent.ChatCommands.Parsers;
 using Gantry.GameContent.ChatCommands.Parsers.Extensions;
 using Gantry.Services.EasyX.Extensions;
-using Gantry.Services.EasyX.Hosting;
 using Gantry.Services.IO.Configuration.Abstractions;
 using Gantry.Services.IO.DataStructures;
 using Gantry.Services.IO.Hosting;
@@ -59,8 +56,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     /// <param name="gantry"> The Gantry API, which provides access to the mod's context and services.</param>
     public void ConfigureServerModServices(IServiceCollection services, ICoreGantryAPI gantry)
     {
-        services.AddFeatureWorldSettings<TServerSettings>();
-        services.AddFeatureGlobalSettings<TServerSettings>();
+        services.AddScopedFeatureSettings<TServerSettings>();
     }
 
     /// <summary>
@@ -257,8 +253,8 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         if (property.Body is not MemberExpression memberExpression)
             throw new ArgumentException("The provided expression does not represent a property.");
         var propertyName = memberExpression.Member.Name;
-        var list = Settings.GetProperty<TProperty>(propertyName);
-
+        var list = Settings.GetProperty<TProperty>(propertyName) 
+            ?? throw new InvalidOperationException($"The property '{propertyName}' is null or not a collection.");
         var parser = args.Parsers[0].To<GantryPlayersArgParser>();
         if (!parser.IsMissing)
         {
@@ -282,7 +278,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     /// </summary>
     protected TextCommandResult OnChange<T>(TextCommandCallingArgs args, string propertyName, Action<T?>? validate = null)
     {
-        var value = (args.Parsers[0].GetValue().To<T>() ?? default).With(validate);
+        var value = (args.Parsers[0].GetValue().To<T>() ?? default).With(validate)!;
         Settings.SetProperty(propertyName, value);
         var message = Core.Lang.Translate(SubCommandName, propertyName, value);
         ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);

@@ -7,7 +7,7 @@ namespace Gantry.Services.IO.Configuration.Consumers;
 /// <summary>
 ///     Represents a class that affects, or is affected by specific feature settings.
 /// </summary>
-public abstract class SettingsConsumerBase<TSettings> : ISettingsConsumer 
+public abstract class SettingsConsumerBase<TSettings>() : ISettingsConsumer 
     where TSettings : FeatureSettings<TSettings>, new()
 {
     /// <summary>
@@ -15,7 +15,7 @@ public abstract class SettingsConsumerBase<TSettings> : ISettingsConsumer
     /// </summary>
     /// <param name="scope">The scope of the settings file to use (gantry, world, or global).</param>
     /// <param name="core">The core Gantry API instance, provided by the mod.</param>
-    protected SettingsConsumerBase(ModFileScope scope, ICoreGantryAPI core)
+    protected SettingsConsumerBase(ModFileScope scope, ICoreGantryAPI core) : this()
     {
         Core = core;
         Scope = scope;
@@ -42,7 +42,7 @@ public abstract class SettingsConsumerBase<TSettings> : ISettingsConsumer
     /// <summary>
     ///     The settings file to use within the patches in this class.
     /// </summary>
-    protected static TSettings Settings { get; private set; } = default!;
+    protected TSettings Settings { get; private set; } = default!;
 
     /// <summary>
     ///     Saves any changes to the mod settings file.
