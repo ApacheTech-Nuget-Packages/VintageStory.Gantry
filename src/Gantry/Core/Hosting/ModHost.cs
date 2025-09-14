@@ -16,6 +16,7 @@ public abstract class ModHost<TModSystem>(Action<GantryHostOptions>? options = n
 {
     private readonly Action<GantryHostOptions>? _options = options;
     private readonly AsyncLocal<ICoreGantryAPI> _modCore = new();
+    private bool _disposed;
 
     ICoreGantryAPI IModHost.Gantry => _modCore.Value!;
 
@@ -52,15 +53,18 @@ public abstract class ModHost<TModSystem>(Action<GantryHostOptions>? options = n
     /// <inheritdoc />
     public override void Dispose()
     {
+        if (_disposed) return;
+        _disposed = true;
         base.Dispose();
         _modCore.Value?.Log(Nexus.TryRemoveCore(_modCore.Value)
             ? $"Gantry core for mod '{_modCore.Value.Mod.Info.ModID}' has been successfully unregistered from Gantry Nexus."
             : $"Gantry core for mod '{_modCore.Value.Mod.Info.ModID}' was not able to be unregistered from Gantry Nexus.");
 
         _modCore.Value?.Log($"Disposing Gantry core for mod '{_modCore.Value.Mod.Info.ModID}'...");
-        _modCore.Value?.Dispose();
+        _modCore.Value?.Services.To<IDisposable>().Dispose();
         OnCoreUnloaded();
         GetType().Assembly.NullifyOrphanedStaticMembers();
+
         GC.Collect();
         GC.WaitForPendingFinalizers();
     }

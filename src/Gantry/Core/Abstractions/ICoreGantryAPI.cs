@@ -10,7 +10,7 @@ namespace Gantry.Core.Abstractions;
 ///     Provides the core API surface for Gantry mods, exposing logging, dependency injection, localisation, mod metadata, and core services.
 ///     This interface is implemented by the Gantry core and injected into mod hosts and services, ensuring correct context and isolation per mod.
 /// </summary>
-public interface ICoreGantryAPI : IDisposable
+public interface ICoreGantryAPI
 {
     /// <summary>
     ///     Logger for diagnostic and debug output.
@@ -45,7 +45,7 @@ public interface ICoreGantryAPI : IDisposable
     /// <summary>
     ///     The main assemblies for the mod, including the Gantry MDK, if not merged into the main assembly.
     /// </summary>
-    IEnumerable<Assembly> ModAssemblies => new[] { typeof(IModHost).Assembly, ModAssembly }.Distinct();
+    List<Assembly> ModAssemblies => [.. new[] { typeof(IModHost).Assembly, ModAssembly }.Distinct()];
 
     /// <summary>
     ///     Provides access to the Gantry mod API context, including side-specific helpers and utilities.

@@ -1,4 +1,5 @@
-﻿using Gantry.Core.Abstractions;
+﻿using ApacheTech.Common.FunctionalCSharp.Monads.Extensions;
+using Gantry.Core.Abstractions;
 using Gantry.Core.Diagnostics;
 using Gantry.Core.Helpers;
 using Gantry.Core.Hosting.Registration;
@@ -64,19 +65,14 @@ internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
         Services = GantryServiceCollection.BuildHost(this, options);
 
         if (options.RegisterSettingsFiles)
-            Services
-                .GetRequiredService<IFileSystemService>()
-                .RegisterDefaultSettingsFiles();
+            Services.ToIdentity()
+                .Bind(s => s.GetRequiredService<IFileSystemService>())
+                .Invoke(fs => fs.RegisterDefaultSettingsFiles());
 
         if (options.ApplyPatches)
-            Services
-                .GetRequiredService<IHarmonyPatchingService>()
-                .PatchModAssembly();
-    }
-
-    public void Dispose()
-    {
-        // Additional cleanup can be performed here if necessary.
+            Services.ToIdentity()
+                .Bind(s => s.GetRequiredService<IHarmonyPatchingService>())
+                .Invoke(fs => fs.PatchModAssembly());
     }
 
     /// <inheritdoc />
