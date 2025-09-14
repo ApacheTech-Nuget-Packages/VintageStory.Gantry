@@ -24,9 +24,11 @@ public static class DebugConfigurationSteps
         {
             var targetDir = args.TargetDir;
             var debugDir = args.DebugDir();
+            var vanillaLibs = Constants.VanillaLibDir().EnumerateFiles().Select(p => p.Name);
             Directory.CreateDirectory(debugDir);
             foreach (var file in Directory.GetFiles(targetDir, "*", SearchOption.AllDirectories))
             {
+                if (vanillaLibs.Contains(Path.GetFileName(file))) continue;
                 var relativePath = Path.GetRelativePath(targetDir, file);
                 var targetFile = Path.Combine(debugDir, relativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(targetFile)!);
@@ -116,10 +118,10 @@ public static class DebugConfigurationSteps
     ///     Moves all files from the _Includes directory to the debug directory and deletes the _Includes directory.
     /// </summary>
     /// <param name="args">The command line arguments containing debug directory information.</param>
-    public static void CleanupDebugDir(this CommandLineArgs args)
+    public static void CleanupDebugDir(this CommandLineArgs args, List<AssemblyReference> mergedAssemblies)
     {
         _logger.Information("Cleaning up debug directory for project: {ProjectDir}", args.ProjectDir);
-        //args.MoveMergedDependenciesIntoUnmergedDir(mergedAssemblies);
+        args.MoveMergedDependenciesIntoUnmergedDir(mergedAssemblies);
         var debugDir = args.DebugDir();
         var includesDir = Path.Combine(debugDir, Constants.IncludesDirName);
         if (Directory.Exists(includesDir))

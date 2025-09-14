@@ -51,6 +51,16 @@ public static class Constants
     public const string GantryAssemblyFileName = "Gantry.dll";
 
     /// <summary>
+    ///     The environment variable that points to the Vanilla installation directory.
+    /// </summary>
+    public static string VanillaDir() => Environment.GetEnvironmentVariable("VINTAGE_STORY")!;
+
+    /// <summary>
+    ///     The directory info for the Lib directory inside the Vanilla installation.
+    /// </summary>
+    public static DirectoryInfo VanillaLibDir() => new(Path.Combine(VanillaDir(), "Lib"));
+
+    /// <summary>
     ///     Path to the Gantry directory for the current solution.
     /// </summary>
     public static string GantryDir(this CommandLineArgs args) => Path.Combine(args.SolutionDir, GantryDirName);

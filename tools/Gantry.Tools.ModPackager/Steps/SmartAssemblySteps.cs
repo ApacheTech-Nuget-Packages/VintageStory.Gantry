@@ -4,7 +4,6 @@ using Gantry.Tools.ModPackager.SmartAssembly;
 using Serilog;
 using System.Diagnostics;
 using System.IO.Compression;
-using System.Linq;
 
 namespace Gantry.Tools.ModPackager.Steps;
 
@@ -138,6 +137,10 @@ public static class SmartAssemblySteps
                     .Select(ra => new AssemblyReference(ra.Name!))
                     .ToList();
                 _logger.Debug("Found {Count} merged assemblies for: {AssemblyFile}", result.Count, assemblyFile.FullName);
+                foreach (var asm in result)
+                {
+                    _logger.Debug(" - {AssemblyName}", asm.Name);
+                }
                 return result;
             });
             if (dependencies is null) return assemblyReferences;
@@ -159,6 +162,11 @@ public static class SmartAssemblySteps
                 {
                     _logger.Debug("Dependency file not found for: {DependencyName}", dependency.Name);
                 }
+            }
+            _logger.Information("Total merged assemblies for {AssemblyFile}: {Count}", assemblyFile.FullName, assemblyReferences.Count);
+            foreach (var asm in assemblyReferences)
+            {
+                _logger.Debug(" - {AssemblyName}", asm.Name);
             }
             return assemblyReferences;
         }
