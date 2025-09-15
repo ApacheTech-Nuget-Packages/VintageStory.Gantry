@@ -8,12 +8,13 @@ namespace Gantry.Core.Abstractions.ModSystems;
 ///     Base representation of a ModSystem used to extend Vintage Story.
 /// </summary>
 /// <seealso cref="ModSystem" />
-public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDisposable
+public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem
     where TModSystem : ModSystemBase<TModSystem>
 {
     private static Sided<TModSystem> _instance = Sided<TModSystem>.AsyncLocal();
     private static TModSystem? _client;
     private static TModSystem? _server;
+    private bool _disposed;
 
     /// <summary>
     ///     Provides access to the current instance of the mod system.
@@ -97,9 +98,11 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem, IDispos
     /// <inheritdoc />
     public override void Dispose()
     {
-        GC.SuppressFinalize(this);
+        if (_disposed) return;
+        _disposed = true;
         if (UApi is null || _instance?.Current != this) return;
         _instance?.Dispose(UApi.Side);
         _instance = null!;
+        GC.SuppressFinalize(this);
     }
 }
