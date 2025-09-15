@@ -121,7 +121,7 @@ public static class DebugConfigurationSteps
     public static void CleanupDebugDir(this CommandLineArgs args, List<AssemblyReference> mergedAssemblies)
     {
         _logger.Information("Cleaning up debug directory for project: {ProjectDir}", args.ProjectDir);
-        args.MoveMergedDependenciesIntoUnmergedDir(mergedAssemblies);
+        //args.MoveMergedDependenciesIntoUnmergedDir(mergedAssemblies);
         var debugDir = args.DebugDir();
         var includesDir = Path.Combine(debugDir, Constants.IncludesDirName);
         if (Directory.Exists(includesDir))
