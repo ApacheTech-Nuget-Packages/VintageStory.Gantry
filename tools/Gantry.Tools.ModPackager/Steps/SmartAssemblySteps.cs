@@ -233,7 +233,9 @@ public static class SmartAssemblySteps
             foreach (var file in Directory.EnumerateFiles(sourceDir, "*.*", SearchOption.AllDirectories))
             {
                 var ext = Path.GetExtension(file);
-                if (ext == ".dll")
+
+                // Use case-insensitive comparisons for extensions
+                if (!string.IsNullOrEmpty(ext) && ext.Equals(".dll", StringComparison.OrdinalIgnoreCase))
                 {
                     var fileName = Path.GetFileName(file);
                     if (mergedAssemblies.Any(a => a.Name is not null && fileName.StartsWith(a.Name, StringComparison.OrdinalIgnoreCase)))
@@ -243,25 +245,29 @@ public static class SmartAssemblySteps
                     }
                 }
 
-                if (ext == ".pdb" && args.Configuration != Configuration.Debug)
+                if (!string.IsNullOrEmpty(ext) && ext.Equals(".pdb", StringComparison.OrdinalIgnoreCase) && args.Configuration != Configuration.Debug)
                 {
                     _logger.Debug("Skipping PDB file in non-debug configuration: {File}", file);
                     continue;
                 }
 
-                if (ext == ".config" && args.Configuration != Configuration.Debug)
+                if (!string.IsNullOrEmpty(ext) && ext.Equals(".config", StringComparison.OrdinalIgnoreCase) && args.Configuration != Configuration.Debug)
                 {
                     _logger.Debug("Skipping config file in non-debug configuration: {File}", file);
                     continue;
                 }
 
-                if (ext == ".xml" && args.Configuration != Configuration.Debug)
+                if (!string.IsNullOrEmpty(ext) && ext.Equals(".xml", StringComparison.OrdinalIgnoreCase) && args.Configuration != Configuration.Debug)
                 {
                     _logger.Debug("Skipping XML documentation file in non-debug configuration: {File}", file);
                     continue;
                 }
 
-                var entryName = Path.GetRelativePath(sourceDir, file);
+                // Normalise entry names to use forward slashes so they work correctly on Linux
+                var entryName = Path.GetRelativePath(sourceDir, file) ?? file;
+                entryName = entryName.Replace(Path.DirectorySeparatorChar, '/').Replace('\\', '/');
+                entryName = entryName.TrimStart('/');
+
                 archive.CreateEntryFromFile(file, entryName);
                 _logger.Debug("Added file to archive: {File}", file);
             }
