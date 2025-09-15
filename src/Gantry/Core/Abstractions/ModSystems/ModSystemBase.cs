@@ -11,7 +11,7 @@ namespace Gantry.Core.Abstractions.ModSystems;
 public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem
     where TModSystem : ModSystemBase<TModSystem>
 {
-    private static Sided<TModSystem> _instance = Sided<TModSystem>.AsyncLocal();
+    private static Sided<TModSystem> _instance = Sided<TModSystem>.AsyncLocal()!;
     private static TModSystem? _client;
     private static TModSystem? _server;
     private bool _disposed;
@@ -39,12 +39,13 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem
     {
         var modSsytem = GetType().Name;
         var shouldLoad = base.ShouldLoad(api);
-        _instance ??= Sided<TModSystem>.AsyncLocal();
+        _instance ??= Sided<TModSystem>.AsyncLocal()!;
         api.Side.Invoke(() => _client = (TModSystem)this, () => _server = (TModSystem)this);
         if (_instance.Current is not null) return shouldLoad;
         _instance.Set(api.Side, this.To<TModSystem>());     
         OnShouldLoad(UApi = api);
-        Core = Mod.Systems.Single(p => p is IModHost).To<IModHost>().Gantry ?? throw new InvalidOperationException("The Gantry Core API is not available. Ensure that the mod is correctly set up to use Gantry.");
+        Core = Mod.Systems.Single(p => p is IModHost).To<IModHost>().Gantry 
+            ?? throw new InvalidOperationException("The Gantry Core API is not available. Ensure that the mod is correctly set up to use Gantry.");
         return shouldLoad;
     }
 
@@ -102,7 +103,5 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem
         _disposed = true;
         if (UApi is null || _instance?.Current != this) return;
         _instance?.Dispose(UApi.Side);
-        _instance = null!;
-        GC.SuppressFinalize(this);
     }
 }

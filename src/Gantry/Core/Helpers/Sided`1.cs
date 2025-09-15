@@ -8,11 +8,11 @@ namespace Gantry.Core.Helpers;
 /// <typeparam name="T"></typeparam>
 public class Sided<T>()
 {
-    private readonly AsyncLocal<T> _clientT = new();
-    private readonly AsyncLocal<T> _serverT = new();
-    private readonly AsyncLocal<Sided<T>> _self = new();
+    private readonly AsyncLocal<T?> _clientT = new();
+    private readonly AsyncLocal<T?> _serverT = new();
+    private readonly AsyncLocal<Sided<T?>> _self = new();
 
-    private Sided(AsyncLocal<Sided<T>> asyncLocal) : this()
+    private Sided(AsyncLocal<Sided<T?>> asyncLocal) : this()
     {
         _self = asyncLocal;
         _self.Value = this;
@@ -22,9 +22,9 @@ public class Sided<T>()
     ///     Creates a new instance of the <see cref="Sided{T}"/> class.
     /// </summary>
     /// <returns>A new instance of the <see cref="Sided{T}"/> class.</returns>
-    public static Sided<T> AsyncLocal()
+    public static Sided<T?> AsyncLocal()
     {
-        var sided = new Sided<T>(new());
+        var sided = new Sided<T?>(new());
         return sided._self.Value!;
     }
 
@@ -60,14 +60,14 @@ public class Sided<T>()
     /// </summary>
     /// <param name="side">The side for which to set the value.</param>
     /// <param name="value">The value to set.</param>
-    public void Set(EnumAppSide side, T value)
+    public void Set(EnumAppSide side, T? value)
     {
         side.Invoke(() =>
         {
-            _clientT.Value ??= value;
+            _clientT.Value = value;
         }, () =>
         {
-            _serverT.Value ??= value;
+            _serverT.Value = value;
         });
     }
 
@@ -79,10 +79,10 @@ public class Sided<T>()
     {
         side.Invoke(() =>
             {
-                _clientT.Value ??= default!;
+                _clientT.Value = default!;
             }, () =>
             {
-                _serverT.Value ??= default!;
+                _serverT.Value = default!;
             });
 
         if (_clientT.Value is null && _serverT.Value is null)
