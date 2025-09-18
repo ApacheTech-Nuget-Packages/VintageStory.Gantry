@@ -46,6 +46,7 @@ global using Gantry.Services.EasyX.Abstractions;
 global using Gantry.Services.EasyX.Extensions;
 
 global using Gantry.Services.HarmonyPatches;
+global using Gantry.Services.HarmonyPatches.Abstractions;
 global using Gantry.Services.HarmonyPatches.Annotations;
 
 global using Gantry.Services.IO.Abstractions.Contracts;
@@ -66,6 +67,7 @@ global using Vintagestory.API.Config;
 global using Vintagestory.API.MathTools;
 global using Vintagestory.API.Server;
 global using Vintagestory.Client.NoObf;
+global using Vintagestory.Common;
 global using Vintagestory.GameContent;
 
 global using AccessToolsEx = ApacheTech.Common.Extensions.Harmony.HarmonyReflectionExtensions;

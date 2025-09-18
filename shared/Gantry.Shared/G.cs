@@ -6,7 +6,7 @@ using Gantry.Services.EasyX.Hosting;
 /// </summary>
 internal static partial class G
 {
-    private readonly static Sided<ICoreGantryAPI> _sidedCore = Sided<ICoreGantryAPI>.AsyncLocal()!;
+    private readonly static Sided<ICoreGantryAPI> _sidedCore = new();
 
     internal static void SetCore(ICoreGantryAPI core) 
         => _sidedCore.Set(core.Side, core);
