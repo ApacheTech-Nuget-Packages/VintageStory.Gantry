@@ -11,7 +11,7 @@ namespace Gantry.Core.Abstractions.ModSystems;
 public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem
     where TModSystem : ModSystemBase<TModSystem>
 {
-    private static Sided<TModSystem> _instance = Sided<TModSystem>.AsyncLocal()!;
+    private static Sided<TModSystem> _instance = new();
     private static TModSystem? _client;
     private static TModSystem? _server;
     private bool _disposed;
@@ -39,7 +39,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IModSystem
     {
         var modSsytem = GetType().Name;
         var shouldLoad = base.ShouldLoad(api);
-        _instance ??= Sided<TModSystem>.AsyncLocal()!;
+        _instance ??= new();
         api.Side.Invoke(() => _client = (TModSystem)this, () => _server = (TModSystem)this);
         if (_instance.Current is not null) return shouldLoad;
         _instance.Set(api.Side, this.To<TModSystem>());     

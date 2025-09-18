@@ -31,6 +31,7 @@ internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
 
     private GantryCore(ICoreAPI api, ModContainer mod)
     {
+        api.DynamicProperties().GantryCore = this;
         Uapi = api;
         Mod = mod;
         ModAssembly = mod.Assembly;
