@@ -1,9 +1,9 @@
-﻿using ApacheTech.Common.Extensions.Harmony;
-using ApacheTech.Common.Extensions.Reflection;
+﻿using ApacheTech.Common.Extensions.Reflection;
 using Gantry.Core.Abstractions;
+using Gantry.Core.Annotation;
+using Gantry.Services.HarmonyPatches.Abstractions;
 using Gantry.Services.HarmonyPatches.Annotations;
 using Gantry.Services.HarmonyPatches.Extensions;
-using Gantry.Services.IO.Configuration.Consumers;
 
 namespace Gantry.Services.HarmonyPatches;
 
@@ -77,8 +77,8 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             var n = assembly.GetName().Name;
             var harmony = (assembly == _gantry.ModAssembly)
                 ? Default : CreateOrUseInstance(assembly.GetName().Name);
+            PatchGantryPatchClasses(harmony, assembly);
             PatchAll(harmony, assembly);
-            PatchSettingsConsumers(harmony, assembly);
             var patches = harmony.GetPatchedMethods().ToList();
             if (patches.Count == 0) return;
             _gantry.Log($"\tPatched {side} Methods:");
@@ -94,49 +94,6 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     }
 
     /// <summary>
-    ///     Patches all settings consumers found in the specified assembly.
-    /// </summary>
-    public void PatchSettingsConsumers(Harmony harmony, Assembly assembly)
-    {
-        var side = _api.Side;
-
-        static bool InheritsFromGenericBase(Type type, Type genericBase)
-        {
-            while (type is not null && type != typeof(object))
-            {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == genericBase)
-                    return true;
-                type = type.BaseType!;
-            }
-            return false;
-        }
-
-        var consumers = assembly.GetTypes()
-            .Where(t => !t.IsAbstract && InheritsFromGenericBase(t, typeof(SettingsConsumerBase<>)))
-            .Where(t => !HasMissingDependencies(t))
-            .Select(t => ActivatorUtilities.CreateInstance(_gantry.Services, t))
-            .ToList();
-
-        foreach (var consumer in consumers)
-        {
-            var type = consumer.GetType();
-            _gantry.Log($"Patching {type} [{side}]");
-            var methods = GetMethodsForSide(type, side);
-            PatchMethods(harmony, side, methods);
-        }
-    }
-
-    private static MethodInfo[] GetMethodsForSide(Type type, EnumAppSide side)
-    {
-        return [.. type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(m => m.GetCustomAttributes().Any(attr =>
-                attr is HarmonyPrefix or HarmonyPostfix or HarmonyTranspiler or HarmonyFinalizer))
-            .Where(m => m.GetCustomAttribute<HarmonySidedPatchAttribute>() is null
-                || m.GetCustomAttribute<HarmonySidedPatchAttribute>()?.Side == EnumAppSide.Universal
-                || m.GetCustomAttribute<HarmonySidedPatchAttribute>()?.Side == side)];
-    }
-
-    /// <summary>
     ///     Runs all patches within classes decorated with the <see cref="HarmonySidedPatchAttribute" /> attribute, for the given side.
     /// </summary>
     /// <param name="instance">The harmony instance for which to run the patches for.</param>
@@ -149,16 +106,67 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         {
             if (HasMissingDependencies(type)) continue;
             if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
-            _gantry.Log($"Patching {type} [{side}]");
-
-            var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-
-            PatchMethods(instance, side, methods);
+            PatchMethods(instance, type, side);
         }
     }
 
-    private void PatchMethods(Harmony instance, EnumAppSide side, MethodInfo[] methods)
+    /// <summary>
+    ///     Patches all settings consumers found in the specified assembly.
+    /// </summary>
+    public void PatchGantryPatchClasses(Harmony harmony, Assembly assembly)
     {
+        var side = _api.Side;
+
+        var patchClasses = assembly.GetTypes()
+            .Where(t => !t.IsAbstract && !t.IsInterface)
+            .Where(t => t.IsAssignableTo(typeof(IGantryPatchClass)))
+            .Where(t => !HasMissingDependencies(t))
+            .Select(t => (IGantryPatchClass)ActivatorUtilities.CreateInstance(_gantry.Services, t))
+            .ToList();
+
+        foreach (var patchClass in patchClasses)
+        {
+            // TODO: Replace with analyser once available.
+            if (patchClass.GetType().GetCustomAttribute<HarmonySidedPatchAttribute>() is not null)
+            {
+                throw new InvalidOperationException($"Patch class {patchClass.GetType().Name} should not be annotated with HarmonySidedPatchAttribute. Use the attribute on individual patch methods instead.");
+            }
+
+            patchClass.Initialise(_gantry);
+            var type = patchClass.GetType();
+            PatchMethods(harmony, type, side);
+        }
+    }
+
+    private static IEnumerable<MethodInfo> GetMethodsForSide(Type type, EnumAppSide side)
+    {
+        var patches = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(m => m.GetCustomAttribute<HarmonyPatch>() is not null)
+            .Where(m => m.GetCustomAttributes().Any(attr =>
+                attr is HarmonyPrefix or HarmonyPostfix or HarmonyTranspiler or HarmonyFinalizer));
+
+        foreach (var m in patches)
+        {
+            var sidedAttribute = m.GetCustomAttribute<HarmonySidedPatchAttribute>();
+            var runsOnAttribute = m.GetCustomAttribute<RunsOnAttribute>();
+            if (sidedAttribute is null && runsOnAttribute is null)
+            {
+                // TODO: Replace with analyser once available.
+                throw new InvalidOperationException($"Method {m.Name} in {type.Name} is missing a HarmonySidedPatch or RunsOn attribute.");
+            }
+
+            if (sidedAttribute?.Side == EnumAppSide.Universal || sidedAttribute?.Side == side
+            ||  runsOnAttribute?.Side == EnumAppSide.Universal || runsOnAttribute?.Side == side)
+            {
+                yield return m;
+            }
+        }
+    }
+
+    private void PatchMethods(Harmony instance, Type type, EnumAppSide side)
+    {
+        _gantry.Log($"Patching {type} [{side}]");
+        var methods = GetMethodsForSide(type, side).ToArray();
         foreach (var method in methods)
         {
             var harmonyPatch = method.GetCustomAttribute<HarmonyPatch>();
