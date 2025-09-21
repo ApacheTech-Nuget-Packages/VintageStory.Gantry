@@ -14,7 +14,7 @@ public static class ApiGantryExtensions
     /// <param name="api">The core game API.</param>
     public static ICoreGantryAPI GantryCore(this ICoreAPI api) 
         => api.DynamicProperties().GantryCore
-               ?? throw new InvalidOperationException("The Gantry Core API is not available. Ensure that the mod is correctly set up to use Gantry.");
+           ?? throw new InvalidOperationException("The Gantry Core API is not available. Ensure that the mod is correctly set up to use Gantry.");
 
     /// <summary>
     ///     Returns a service of the specified type from the Gantry service provider.

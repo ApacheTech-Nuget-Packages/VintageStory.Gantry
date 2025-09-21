@@ -2,6 +2,7 @@
 global using System.Collections.Generic;
 global using System.ComponentModel;
 global using System.Diagnostics.CodeAnalysis;
+global using System.Drawing;
 global using System.Linq;
 global using System.Reflection;
 global using System.Text;
@@ -63,6 +64,7 @@ global using ProtoBuf;
 
 global using Vintagestory.API.Client;
 global using Vintagestory.API.Common;
+global using Vintagestory.API.Common.Entities;
 global using Vintagestory.API.Config;
 global using Vintagestory.API.MathTools;
 global using Vintagestory.API.Server;

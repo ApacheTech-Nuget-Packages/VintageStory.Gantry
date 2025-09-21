@@ -10,6 +10,99 @@ namespace Gantry.Extensions;
 public static class PlayerExtensions
 {
     /// <summary>
+    ///     Attempts to find an item which exposes the specified behaviour on the player.
+    ///     The search order is: right hand, left hand, then any backpacks returned by
+    ///     the player's inventory manager for the backpack inventory class name.
+    /// </summary>
+    /// <typeparam name="T">The behaviour type to look for; must derive from <see cref="CollectibleBehavior"/>.</typeparam>
+    /// <param name="player">The player whose inventories will be searched.</param>
+    /// <param name="slot">When this method returns, contains the <see cref="ItemSlot"/> that holds the item with the behaviour, or <c>null</c> if none was found.</param>
+    /// <returns><c>true</c> if an item with the requested behaviour was found; otherwise <c>false</c>.</returns>
+    public static bool TryGetItemWithBehaviour<T>(this IPlayer player, out ItemSlot? slot) where T : CollectibleBehavior
+    {
+        slot = null;
+
+        if (player.Entity.RightHandItemSlot.Itemstack?.Item?.GetBehavior<T>() is not null)
+        {
+            slot = player.Entity.RightHandItemSlot;
+        }
+        if (slot is not null) return true;
+
+        if (player.Entity.LeftHandItemSlot.Itemstack?.Item?.GetBehavior<T>() is not null)
+        {
+            slot = player.Entity.LeftHandItemSlot;
+        }
+        if (slot is not null) return true;
+
+        foreach (var backpack in player.InventoryManager.GetOwnInventory(GlobalConstants.backpackInvClassName))
+        {
+            if (backpack.Itemstack?.Item?.GetBehavior<T>() is not null)
+            {
+                slot = backpack;
+            }
+            if (slot is not null) return true;
+        }
+        return slot is not null;
+    }
+
+    /// <summary>
+    ///     Attempts to find an item of the specified usable item type on the player.
+    ///     The search order is: right hand, left hand, then any backpacks returned by
+    ///     the player's inventory manager for the backpack inventory class name.
+    /// </summary>
+    /// <typeparam name="T">The item type to look for; must derive from <see cref="Item"/>.</typeparam>
+    /// <param name="player">The player whose inventories will be searched.</param>
+    /// <param name="slot">When this method returns, contains the <see cref="ItemSlot"/> holding the item, or <c>null</c> if none was found.</param>
+    /// <param name="item">When this method returns, contains the item instance of type <typeparamref name="T"/>, or <c>null</c> if none was found.</param>
+    /// <returns><c>true</c> if an item of the requested type was found; otherwise <c>false</c>.</returns>
+    public static bool TryGetItemInUsableSlot<T>(this IPlayer player, out ItemSlot? slot, out T? item) where T : Item
+    {
+        slot = null;
+        item = null;
+
+        if (player.Entity.RightHandItemSlot.Itemstack?.Item is T rhItem)
+        {
+            slot = player.Entity.RightHandItemSlot;
+            item = rhItem;
+        }
+        if (slot is not null) return true;
+
+        if (player.Entity.LeftHandItemSlot.Itemstack?.Item is T lhItem)
+        {
+            slot = player.Entity.LeftHandItemSlot;
+            item = lhItem;
+        }
+        if (slot is not null) return true;
+
+        foreach (var backpack in player.InventoryManager.GetOwnInventory(GlobalConstants.backpackInvClassName))
+        {
+            if (backpack.Itemstack?.Item is T bpItem)
+            {
+                slot = backpack;
+                item = bpItem;
+            }
+            if (slot is not null) return true;
+        }
+        return slot is not null;
+    }
+
+    /// <summary>
+    ///     Applies the specified amount of damage to the player using an internal damage source.
+    /// </summary>
+    /// <param name="player">The player to damage.</param>
+    /// <param name="hp">The amount of hit points to apply as damage.</param>
+    public static void Damage(this EntityPlayer player, float hp)
+        => player.ReceiveDamage(new() { Source = EnumDamageSource.Internal }, hp);
+
+    /// <summary>
+    ///     Restores the specified amount of health to the player using a revive damage source.
+    /// </summary>
+    /// <param name="player">The player to heal.</param>
+    /// <param name="hp">The amount of hit points to restore.</param>
+    public static void Heal(this EntityPlayer player, float hp)
+        => player.ReceiveDamage(new() { Source = EnumDamageSource.Revive }, hp);
+
+    /// <summary>
     ///     Adjusts the player's stats.
     /// </summary>
     /// <param name="player">The player entity.</param>

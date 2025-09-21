@@ -13,6 +13,14 @@ public static class ApiExtensions
     #region Client
 
     /// <summary>
+    ///     Returns the <see cref="ClientMain"/> from the current <see cref="IWorldAccessor"/> instance.
+    /// </summary>
+    public static ClientMain AsClientMain(this IWorldAccessor world)
+    {
+        return (ClientMain)world;
+    }
+
+    /// <summary>
     ///     Returns the <see cref="ClientMain"/> from the current <see cref="ICoreClientAPI"/> instance.
     /// </summary>
     public static ClientMain AsClientMain(this ICoreClientAPI api)
@@ -123,6 +131,14 @@ public static class ApiExtensions
     #endregion
 
     #region Server
+
+    /// <summary>
+    ///     Returns the <see cref="ServerMain"/> from the current <see cref="IWorldAccessor"/> instance.
+    /// </summary>
+    public static ServerMain AsServerMain(this IWorldAccessor world)
+    {
+        return (ServerMain)world;
+    }
 
     /// <summary>
     ///     Returns the <see cref="ServerMain"/> from the current <see cref="ICoreServerAPI"/> instance.
