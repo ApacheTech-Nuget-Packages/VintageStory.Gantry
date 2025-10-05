@@ -5,26 +5,17 @@
 /// </summary>
 /// <seealso cref="Attribute" />
 [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = false)]
-public class RunsOnAttribute : Attribute
+public class SidedAttribute(EnumAppSide side = EnumAppSide.Universal) : Attribute
 {
     /// <summary>
     ///     Gets the acceptable app side.
     /// </summary>
-    public EnumAppSide Side { get; }
-
-    /// <summary>
-    ///  	Initialises a new instance of the <see cref="RunsOnAttribute"/> class.
-    /// </summary>
-    /// <param name="side">The app side that this handler should be registered on.</param>
-    public RunsOnAttribute(EnumAppSide side)
-    {
-        Side = side;
-    }
+    public EnumAppSide Side { get; } = side;
 
     /// <summary>
     ///     Determines whether the target should run on the specified app side.
     /// </summary>
     /// <param name="side">The side.</param>
-    public bool ShouldRun(EnumAppSide side)
+    public bool For(EnumAppSide side)
         => Side == EnumAppSide.Universal || side == Side;
 }
