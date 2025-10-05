@@ -106,7 +106,9 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         {
             if (HasMissingDependencies(type)) continue;
             if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
-            PatchMethods(instance, type, side);
+            var methods = GetMethodsForSide(type, side).ToArray();
+            if (methods.Length == 0) continue;
+            PatchMethods(instance, type, methods, side);
         }
     }
 
@@ -126,15 +128,11 @@ public class HarmonyPatchingService : IHarmonyPatchingService
 
         foreach (var patchClass in patchClasses)
         {
-            // TODO: Replace with analyser once available.
-            if (patchClass.GetType().GetCustomAttribute<HarmonySidedPatchAttribute>() is not null)
-            {
-                throw new InvalidOperationException($"Patch class {patchClass.GetType().Name} should not be annotated with HarmonySidedPatchAttribute. Use the attribute on individual patch methods instead.");
-            }
-
-            patchClass.Initialise(_gantry);
             var type = patchClass.GetType();
-            PatchMethods(harmony, type, side);
+            var methods = GetMethodsForSide(type, side).ToArray();
+            if (methods.Length == 0) continue;
+            patchClass.Initialise(_gantry);
+            PatchMethods(harmony, type, methods, side);
         }
     }
 
@@ -148,13 +146,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         foreach (var m in patches)
         {
             var sidedAttribute = m.GetCustomAttribute<HarmonySidedPatchAttribute>();
-            var runsOnAttribute = m.GetCustomAttribute<RunsOnAttribute>();
-            if (sidedAttribute is null && runsOnAttribute is null)
-            {
-                // TODO: Replace with analyser once available.
-                throw new InvalidOperationException($"Method {m.Name} in {type.Name} is missing a HarmonySidedPatch or RunsOn attribute.");
-            }
-
+            var runsOnAttribute = m.GetCustomAttribute<SidedAttribute>();
             if (sidedAttribute?.Side == EnumAppSide.Universal || sidedAttribute?.Side == side
             ||  runsOnAttribute?.Side == EnumAppSide.Universal || runsOnAttribute?.Side == side)
             {
@@ -163,10 +155,10 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         }
     }
 
-    private void PatchMethods(Harmony instance, Type type, EnumAppSide side)
+    private void PatchMethods(Harmony instance, Type type, MethodInfo[]? methods, EnumAppSide side)
     {
+        if (methods is not { Length: > 0 }) return;
         _gantry.Log($"Patching {type} [{side}]");
-        var methods = GetMethodsForSide(type, side).ToArray();
         foreach (var method in methods)
         {
             var harmonyPatch = method.GetCustomAttribute<HarmonyPatch>();
