@@ -159,7 +159,7 @@ internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
             where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
             from i in ti.ImplementedInterfaces
             where i == typeof(IAmAMessageTransformAsync)
-            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
+            where ti.GetCustomAttribute<SidedAttribute>()?.For(side) == true
             select new { TransformType = ti.AsType() };
 
         foreach (var transform in transforms)
@@ -192,9 +192,9 @@ internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
         // Step 6: Further filter to only include types that have the `RunsOnAttribute` and where `ShouldRun(side)` returns true.
         var filteredTypes = matchingInterfaces.Where(x =>
         {
-            var attribute = x.TypeInfo.GetCustomAttribute<RunsOnAttribute>();
+            var attribute = x.TypeInfo.GetCustomAttribute<SidedAttribute>();
             if (attribute is null) return true;
-            var shouldRun = attribute.ShouldRun(side);
+            var shouldRun = attribute.For(side);
             return shouldRun;
         }).ToList();
 
@@ -214,7 +214,7 @@ internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
             where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
             from i in ti.ImplementedInterfaces
             where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAmAMessageMapper<>)
-            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
+            where ti.GetCustomAttribute<SidedAttribute>()?.For(side) == true
             select new { RequestType = i.GenericTypeArguments.First(), HandlerType = ti.AsType() };
 
         foreach (var mapper in mappers)
@@ -230,7 +230,7 @@ internal class ServiceCollectionBrighterBuilder : IBrighterBuilder
             where ti.IsClass && !ti.IsAbstract && !ti.IsInterface
             from i in ti.ImplementedInterfaces
             where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IAmAMessageMapperAsync<>)
-            where ti.GetCustomAttribute<RunsOnAttribute>()?.ShouldRun(side) == true
+            where ti.GetCustomAttribute<SidedAttribute>()?.For(side) == true
             select new { RequestType = i.GenericTypeArguments.First(), HandlerType = ti.AsType() };
 
         foreach (var mapper in mappers)
