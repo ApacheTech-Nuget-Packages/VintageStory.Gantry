@@ -13,7 +13,7 @@ namespace Gantry.Services.EasyX.Hosting;
 ///     Registrations performed within this class should be global scope; by convention, features should aim to be as stand-alone as they can be.
 /// </summary>
 /// <seealso cref="ModHost{TModSystem}" />
-public abstract class EasyXHost<TModSystem>(string commandName) 
+public abstract class EasyXHost<TModSystem>(string commandName)
     : ModHost<TModSystem>(), IServerServiceRegistrar where TModSystem : ModHost<TModSystem>
 {
     private readonly string _commandName = commandName;

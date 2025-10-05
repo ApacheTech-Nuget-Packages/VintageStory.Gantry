@@ -33,9 +33,14 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     protected IServerNetworkChannel? ServerChannel { get; private set; }
 
     /// <summary>
+    ///     The configuration settings for the mod.
+    /// </summary>
+    public ConfigurationSettings Configuration => Core.Settings.Global.Feature<ConfigurationSettings>();
+
+    /// <summary>
     ///     The scope at which this feature's settings are applied.
     /// </summary>
-    protected ModFileScope Scope => Core.Settings.Global.Feature<ConfigurationSettings>().Scope;
+    protected ModFileScope Scope => Configuration.Scope;
 
     /// <summary>
     ///     The settings for this feature.
@@ -70,7 +75,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     /// <param name="path">The path to the feature based string to translate.</param>
     /// <param name="args">The arguments to pass to the lang file.</param>
     protected string T(string path, params object[] args)
-        => Core.Lang.Translate($"Easy{SubCommandName}", path, args);
+        => Core.Lang.Translate($"{SubCommandName}", path, args);
 
     /// <summary>
     ///     The name of the main chat command, used to access all EasyX features.
@@ -151,7 +156,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         Settings.UpdateSettings(packet);
         ServerChannel?.BroadcastPacket(Settings);
         ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
-        ServerChannel?.SendPacket(new SettingsSavedPacket { FeatureName = $"Easy{SubCommandName}" }, player);
+        ServerChannel?.SendPacket(new SettingsSavedPacket { FeatureName = SubCommandName }, player);
     }
 
     /// <summary>
