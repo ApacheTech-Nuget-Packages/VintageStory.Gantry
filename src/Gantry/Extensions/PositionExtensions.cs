@@ -131,4 +131,20 @@ public static class PositionExtensions
     /// <returns>The Euclidean distance between the two positions, rounded to the specified precision.</returns>
     public static double RoundedDistanceTo(this EntityPos aPos, Vec3d bPos, int precision)
         => Math.Round(aPos.DistanceTo(bPos), precision);
+
+    /// <summary>
+    ///     Returns the chunk position for the given BlockPos.
+    /// </summary>
+    /// <param name="pos">The BlockPos to determine the chunk of.</param>
+    /// <returns>The chunk position as a Vec2i.</returns>
+    public static Vec2i Chunk(this BlockPos pos)
+        => new(pos.X / 32, pos.Z / 32);
+
+    /// <summary>
+    ///     Returns the centre BlockPos of the given chunk position.
+    /// </summary>
+    /// <param name="chunkPos">The chunk position.</param>
+    /// <returns>The centre BlockPos of the chunk.</returns>
+    private static BlockPos CentreChunk(this Vec2i chunkPos)
+        => new(chunkPos.X * 32 + 16, 0, chunkPos.Y * 32 + 16, 0);
 }
