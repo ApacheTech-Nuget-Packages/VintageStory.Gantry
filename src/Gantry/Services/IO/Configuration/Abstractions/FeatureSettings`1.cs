@@ -10,6 +10,7 @@ namespace Gantry.Services.IO.Configuration.Abstractions;
 /// <seealso cref="IDisposable" />
 public abstract class FeatureSettings<TSettings> : FeatureSettings where TSettings : FeatureSettings<TSettings>, new()
 {
+    [DoNotPatch]
     [ProtoIgnore]
     internal Dictionary<string, List<PropertyChangedAction>> PropertyChangedDictionary { get; } = [];
     
@@ -41,7 +42,9 @@ public abstract class FeatureSettings<TSettings> : FeatureSettings where TSettin
     public void UpdateSettings(TSettings newSettings)
     {
         // Update the properties within the current instance, with values from the new settings, via reflection.
-        var properties = typeof(TSettings).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var properties = typeof(TSettings)
+            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            .Where(p => p.GetCustomAttribute<DoNotPatchAttribute>()?.For(Side) is null or false);
         foreach (var property in properties)
         {
             var oldValue = property.GetValue(this);

@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using ApacheTech.Common.Extensions.Harmony;
+﻿using ApacheTech.Common.Extensions.Harmony;
 using Gantry.Core.Abstractions;
+using Gantry.Services.IO.Configuration.Abstractions;
+using System.ComponentModel;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Gantry.Services.IO.Configuration.ObservableFeatures;
 
@@ -55,7 +57,7 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     private void Patch()
     {
         var postfix = new HarmonyMethod(this.GetMethod(nameof(Patch_Property_SetMethod_Postfix)));
-        var properties = typeof(T).GetProperties();
+        var properties = typeof(T).GetProperties().Where(p => p.GetCustomAttribute<DoNotPatchAttribute>()?.For(_appSide) is null or false);
         foreach (var propertyInfo in properties)
         {
             var declaringType = propertyInfo.DeclaringType!;
@@ -72,7 +74,7 @@ public class ObservableObject<T> : IObservableObject where T: class, new()
     /// </summary>
     public void UnPatch()
     {
-        var properties = typeof(T).GetProperties();
+        var properties = typeof(T).GetProperties().Where(p => p.GetCustomAttribute<DoNotPatchAttribute>()?.For(_appSide) is null or false);
         foreach (var propertyInfo in properties)
         {
             var original = propertyInfo.SetMethod;
