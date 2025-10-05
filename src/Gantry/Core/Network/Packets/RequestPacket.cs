@@ -6,11 +6,11 @@ namespace Gantry.Core.Network.Packets;
 ///     Represents a packet containing the world name.
 /// </summary>
 [ProtoContract]
-public class WorldNamePacket
+public class RequestPacket
 {
     /// <summary>
     ///     Gets or sets the name of the world.
     /// </summary>
     [ProtoMember(1)]
-    public string Name { get; set; } = string.Empty;
+    public required RequestType Request { get; set; }
 }
