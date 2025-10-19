@@ -19,6 +19,14 @@ public class Sided<T>()
     }
 
     /// <summary>
+    ///     Initialises a new instance of the <see cref="Sided{T}"/> class, setting the value for the specified side.
+    /// </summary>
+    /// <param name="side">The side for which to set the value.</param>
+    /// <param name="value">The value to set.</param>
+    /// <returns>A new instance of the <see cref="Sided{T}"/> class with the specified value set for the specified side.</returns>
+    public Sided(EnumAppSide side, T? value) : this() => Set(side, value);
+
+    /// <summary>
     ///     Creates a new instance of the <see cref="Sided{T}"/> class.
     /// </summary>
     /// <returns>A new instance of the <see cref="Sided{T}"/> class.</returns>

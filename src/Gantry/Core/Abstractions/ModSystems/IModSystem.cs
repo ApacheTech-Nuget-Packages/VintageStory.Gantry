@@ -4,12 +4,22 @@
 ///     Base interface for a system that is part of a code mod. Handles setup, registration, and lifecycle events for mod systems.
 ///     Mods can be split into multiple systems or have just one.
 /// </summary>
-public interface IModSystem : IDisposable
+public interface IHostedModSystem : IDisposable
 {
     /// <summary>
     ///     The <see cref="Mod"/> this mod system is part of.
     /// </summary>
     Mod Mod { get; }
+
+    /// <summary>
+    ///     The Gantry Core API for the current mod and app side.
+    /// </summary>
+    ICoreGantryAPI Core { get; }
+
+    /// <summary>
+    ///     Sets the Gantry Core API for the current mod and app side.
+    /// </summary>
+    internal void SetCore(ICoreGantryAPI core);
 
     /// <summary>
     ///     Returns whether this mod should be loaded for the given <see cref="ICoreAPI"/> instance.

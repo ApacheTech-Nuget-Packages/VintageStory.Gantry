@@ -8,5 +8,5 @@ namespace Gantry.Core.Hosting;
 public interface IModHost
 {
     /// <inheritdoc />
-    internal ICoreGantryAPI Gantry { get; }
+    internal void InitialiseCore(ICoreAPI api);
 }

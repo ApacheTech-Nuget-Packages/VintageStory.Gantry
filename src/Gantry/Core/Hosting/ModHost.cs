@@ -18,10 +18,8 @@ public abstract class ModHost<TModSystem>(Action<GantryHostOptions>? options = n
     private readonly AsyncLocal<ICoreGantryAPI> _modCore = new();
     private bool _disposed;
 
-    ICoreGantryAPI IModHost.Gantry => _modCore.Value!;
-
     /// <inheritdoc />
-    protected override void OnShouldLoad(ICoreAPI api)
+    void IModHost.InitialiseCore(ICoreAPI api)
     {
         var core = GantryCore<TModSystem>.Create(api, (ModContainer)Mod);
         _modCore.Value = core;
@@ -30,6 +28,11 @@ public abstract class ModHost<TModSystem>(Action<GantryHostOptions>? options = n
         _modCore.Value.Log(Nexus.TryAddCore(core)
             ? $"Gantry core for mod '{core.Mod.Info.ModID}' has been successfully registered within Gantry Nexus."
             : $"Gantry core for mod '{core.Mod.Info.ModID}' was not able to be registered within Gantry Nexus.");
+
+        foreach (var system in Mod.Systems.Where(p => p.ShouldLoad(api)).Select(p => p.To<IHostedModSystem>()))
+        {
+            system.SetCore(core);
+        }
 
         OnCoreLoaded(core);
     }
