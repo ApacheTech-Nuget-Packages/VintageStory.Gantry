@@ -283,7 +283,29 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     /// </summary>
     protected TextCommandResult OnChange<T>(TextCommandCallingArgs args, string propertyName, Action<T?>? validate = null)
     {
-        var value = (args.Parsers[0].GetValue().To<T>() ?? default).With(validate)!;
+        var value = (args.Parsers[0].GetValue().To<T>() ?? default).With(validate);
+        if (value is null)
+        {
+            var errorMessage = Core.Lang.Translate("EasyX", "InvalidValue", propertyName);
+            return TextCommandResult.Error(errorMessage);
+        }
+        Settings.SetProperty(propertyName, value);
+        var message = Core.Lang.Translate(SubCommandName, propertyName, value);
+        ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
+        return TextCommandResult.Success(message);
+    }
+
+    /// <summary>
+    ///     Base Call Handler
+    /// </summary>
+    protected TextCommandResult OnChange(TextCommandCallingArgs args, string propertyName)
+    {
+        var value = args.Parsers[0].GetValue();
+        if (value is null)
+        {
+            var errorMessage = Core.Lang.Translate("EasyX", "InvalidValue", propertyName);
+            return TextCommandResult.Error(errorMessage);
+        }
         Settings.SetProperty(propertyName, value);
         var message = Core.Lang.Translate(SubCommandName, propertyName, value);
         ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);

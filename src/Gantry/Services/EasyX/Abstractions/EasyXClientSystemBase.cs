@@ -1,5 +1,4 @@
 ﻿using Gantry.Core.Abstractions.ModSystems;
-using Gantry.Core.Annotation;
 using Gantry.Core.Network.Extensions;
 using Gantry.GameContent.GUI;
 using Gantry.GameContent.GUI.Models;
