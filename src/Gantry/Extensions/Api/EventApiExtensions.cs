@@ -2,8 +2,6 @@
 
 namespace Gantry.Extensions.Api;
 
-// ReSharper disable once AccessToDisposedClosure
-
 /// <summary>
 ///     Provides extension methods for the <see cref="IEventAPI" /> interface.
 /// </summary>
