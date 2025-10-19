@@ -106,6 +106,8 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         var command = api.ChatCommands.GetOrCreate(CommandName)
             .BeginSubCommand(SubCommandName.ToLowerInvariant())
             .WithAlias(SubCommandName.ToLowerCaseInitials())
+            .WithDescription(Core.Lang.Translate(SubCommandName, "Description"))
+            .WithFeatureSettings<TServerSettings>(SubCommandName, parsers, Core.Lang, OnChange)
             .WithFeatureSpecifics(FeatureSpecificCommands, parsers)
             .HandleWith(DisplayInfo);
 
@@ -218,7 +220,12 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
     /// <param name="sb"></param>
     protected virtual void ExtraDisplayInfo(StringBuilder sb)
     {
-        // Do nothing, by default.
+        foreach (var property in typeof(TServerSettings).GetProperties())
+        {
+            if (property.GetCustomAttributes(typeof(ChatCommandAttribute), true).FirstOrDefault() is not ChatCommandAttribute) continue;
+            var value = property.GetValue(Settings);
+            sb.AppendLine(Core.Lang.Translate(SubCommandName, property.Name, value));
+        }
     }
 
     /// <summary>
