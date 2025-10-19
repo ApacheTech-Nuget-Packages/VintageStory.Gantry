@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Öffnen Sie den Ordner Gantry-Protokolle."
+    "Features.Diagnostics.WorldSeed.Description":  "Holen Sie sich den Weltsamen.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Öffnen Sie den Ordner Gantry-Protokolle.",
+    "Features.Diagnostics.WorldSeed":  "Weltsaat: {0}"
 }

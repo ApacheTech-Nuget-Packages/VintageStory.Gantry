@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "เปิดโฟลเดอร์บันทึกโครงสําหรับตั้งสิ่งของ"
+    "Features.Diagnostics.WorldSeed.Description":  "รับเมล็ดพันธุ์โลก",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "เปิดโฟลเดอร์บันทึกโครงสําหรับตั้งสิ่งของ",
+    "Features.Diagnostics.WorldSeed":  "เมล็ดพันธุ์โลก: {0}"
 }

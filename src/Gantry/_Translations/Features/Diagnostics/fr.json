@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Ouvrez le dossier Gantry logs."
+    "Features.Diagnostics.WorldSeed.Description":  "Obtenez la graine mondiale.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Ouvrez le dossier Gantry logs.",
+    "Features.Diagnostics.WorldSeed":  "Graine du monde : {0}"
 }

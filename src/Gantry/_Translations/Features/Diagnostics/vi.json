@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Mở thư mục Nhật ký giàn."
+    "Features.Diagnostics.WorldSeed.Description":  "Nhận hạt giống thế giới.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Mở thư mục nhật ký giàn.",
+    "Features.Diagnostics.WorldSeed":  "Hạt giống thế giới: {0}"
 }

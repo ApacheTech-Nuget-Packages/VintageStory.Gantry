@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Opnaðu Gantry logs möppuna."
+    "Features.Diagnostics.WorldSeed.Description":  "Fáðu heimsfræið.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Opnaðu Gantry logs möppuna.",
+    "Features.Diagnostics.WorldSeed":  "Heimsfræ: {0}"
 }

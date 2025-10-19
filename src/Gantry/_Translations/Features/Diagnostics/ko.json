@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Gantry 로그 폴더를 엽니다."
+    "Features.Diagnostics.WorldSeed.Description":  "월드 시드를 획득하세요.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Gantry 로그 폴더를 엽니다.",
+    "Features.Diagnostics.WorldSeed":  "월드 시드: {0}"
 }

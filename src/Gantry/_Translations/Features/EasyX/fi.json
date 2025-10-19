@@ -1,11 +1,13 @@
 ﻿{
-    "Features.EasyX.SetScope":  "Asetusten vaikutusalueeksi on nyt määritetty: {0}",
     "Features.EasyX.Whitelist.PlayerRemoved":  "{0} on poistettu {1} sallittujen listalta.",
-    "Features.EasyX.PlayerSearch.NoResults":  "Haku \"{0}\" ei tuottanut tuloksia. Yritä uudelleen.",
+    "Features.EasyX.SetScope":  "Asetusten vaikutusalueeksi on nyt määritetty: {0}",
+    "Features.EasyX.InvalidValue":  "Virheellinen arvo. Yritä uudelleen.",
+    "Features.EasyX.PlayerSearch.NoResults":  "Haku \"{0}\" ei tuottanut tulosta. Yritä uudelleen.",
     "Features.EasyX.InvalidMode":  "Virheellinen käyttötila. Kelvollisia vaihtoehtoja ovat: {0}",
     "Features.EasyX.Whitelist.NoResults":  "Tällä hetkellä {0} sallittujen listalla ei ole pelaajia.",
+    "Features.EasyX.Mode.Description":  "Vaihda nykyisen ominaisuuden käyttötilaa.",
     "Features.EasyX.ServerCommandDescription":  "Antaa palvelimen järjestelmänvalvojan muuttaa palvelimen modin asetuksia.",
-    "Features.EasyX.Mode":  "{0}-tila: {1}",
+    "Features.EasyX.Mode":  "{0} -tila: {1}",
     "Features.EasyX.Blacklist.PlayerAdded":  "{0} on lisätty {1} mustalle listalle.",
     "Features.EasyX.PlayerSearch.MultipleResults":  "Haku \"{0}\" tuotti useita tuloksia. Tarkenna hakutermejäsi.",
     "Features.EasyX.Blacklist.Description":  "Lisää/poista pelaajia tämän ominaisuuden mustalta listalta.",
@@ -19,5 +21,5 @@
     "Features.EasyX.InvalidScope":  "Virheellinen vaikutusalue. Kelvollisia vaihtoehtoja ovat: {0}",
     "Features.EasyX.Blacklist.Results":  "Seuraavat pelaajat ovat tällä hetkellä {0} mustalla listalla:",
     "Features.EasyX.Whitelist.Description":  "Lisää/poista pelaajia tämän ominaisuuden sallittujen listalta.",
-    "Features.EasyX.SetMode":  "{0}tilaksi on nyt asetettu: {1}"
+    "Features.EasyX.SetMode":  "{0} tilaksi on nyt asetettu: {1}"
 }

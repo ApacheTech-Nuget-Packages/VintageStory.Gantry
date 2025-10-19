@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Avaa Gantry-lokit-kansio."
+    "Features.Diagnostics.WorldSeed.Description":  "Hanki maailman siemen.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Avaa Gantry-lokit-kansio.",
+    "Features.Diagnostics.WorldSeed":  "Maailman siemen: {0}"
 }

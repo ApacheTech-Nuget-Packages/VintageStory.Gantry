@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Otvorite fasciklu Gantri logs."
+    "Features.Diagnostics.WorldSeed.Description":  "Nabavite svetsko seme.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Otvorite fasciklu Gantri dnevnika.",
+    "Features.Diagnostics.WorldSeed":  "Svetsko seme: {0}"
 }

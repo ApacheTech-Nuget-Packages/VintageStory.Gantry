@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Gantry logs フォルダーを開きます。"
+    "Features.Diagnostics.WorldSeed.Description":  "ワールドシードを入手してください。",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Gantry logs フォルダーを開きます。",
+    "Features.Diagnostics.WorldSeed":  "ワールドシード: {0}"
 }

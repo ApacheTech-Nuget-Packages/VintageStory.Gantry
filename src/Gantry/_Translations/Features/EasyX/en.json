@@ -9,6 +9,8 @@
   "Features.EasyX.Mode": "{0} Mode: {1}",
   "Features.EasyX.SetMode": "{0} mode now set to: {1}",
   "Features.EasyX.InvalidMode": "Invalid access mode. Valid options are: {0}",
+  "Features.EasyX.Mode.Description": "Change the access mode for the current feature.",
+  "Features.EasyX.InvalidValue": "Invalid value. Please try again.",
 
   "Features.EasyX.PlayerSearch.NoResults": "The search for '{0}' yielded no results. Please try again.",
   "Features.EasyX.PlayerSearch.MultipleResults": "The search for '{0}' yielded multiple results. Please refine your search terms.",

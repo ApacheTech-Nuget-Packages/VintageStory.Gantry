@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Otwórz folder Dzienniki portalu."
+    "Features.Diagnostics.WorldSeed.Description":  "Zdobądź ziarno świata.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Otwórz folder Dzienniki portalu.",
+    "Features.Diagnostics.WorldSeed":  "Mistrzostwa świata: {0}"
 }

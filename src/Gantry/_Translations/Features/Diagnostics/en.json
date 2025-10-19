@@ -1,3 +1,5 @@
 {
-  "Features.Diagnostics.OpenLogsFolder": "Open the Gantry logs folder."
+  "Features.Diagnostics.OpenLogsFolder.Description": "Open the Gantry logs folder.",
+  "Features.Diagnostics.WorldSeed.Description": "Get the world seed.",
+  "Features.Diagnostics.WorldSeed": "World Seed: {0}"
 }

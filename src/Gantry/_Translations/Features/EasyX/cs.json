@@ -1,13 +1,15 @@
 ﻿{
+    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} byl odstraněn z {1} whitelistu.",
     "Features.EasyX.SetScope":  "Rozsah nastavení je nyní nastaven na: {0}",
-    "Features.EasyX.Whitelist.PlayerRemoved":  "{0} byl odstraněn ze seznamu povolených {1}.",
-    "Features.EasyX.PlayerSearch.NoResults":  "Hledání slova \"{0}\" nepřineslo žádné výsledky. Zkuste to prosím znovu.",
+    "Features.EasyX.InvalidValue":  "Neplatná hodnota. Zkuste to prosím znovu.",
+    "Features.EasyX.PlayerSearch.NoResults":  "Hledání slova \"{0}\" nepřineslo žádný výsledek. Zkuste to prosím znovu.",
     "Features.EasyX.InvalidMode":  "Neplatný režim přístupu. Platné možnosti jsou: {0}",
     "Features.EasyX.Whitelist.NoResults":  "Na {0} whitelistu nejsou v současné době žádní hráči.",
+    "Features.EasyX.Mode.Description":  "Změňte režim přístupu pro aktuální funkci.",
     "Features.EasyX.ServerCommandDescription":  "Umožňuje správci serveru změnit nastavení modu na serveru.",
     "Features.EasyX.Mode":  "Režim {0}: {1}",
-    "Features.EasyX.Blacklist.PlayerAdded":  "{0} byl přidán na {1} černou listinu.",
-    "Features.EasyX.PlayerSearch.MultipleResults":  "Hledání výrazu \"{0}\" přineslo několik výsledků. Upřesněte prosím hledané výrazy.",
+    "Features.EasyX.Blacklist.PlayerAdded":  "{0} byl přidán na černou listinu {1} .",
+    "Features.EasyX.PlayerSearch.MultipleResults":  "Hledání výrazu \u0027{0}\u0027 přineslo několik výsledků. Upřesněte prosím hledané výrazy.",
     "Features.EasyX.Blacklist.Description":  "Přidejte/Odeberte hráče z černé listiny pro tuto funkci.",
     "Features.EasyX.AccessMode.Description":  "Změňte režim přístupu pro aktuální funkci.",
     "Features.EasyX.Scope":  "Rozsah nastavení: {0}",
@@ -17,7 +19,7 @@
     "Features.EasyX.Blacklist.NoResults":  "Na {0} černé listině nejsou v současné době žádní hráči.",
     "Features.EasyX.Blacklist.PlayerRemoved":  "{0} byl odstraněn z {1} černé listiny.",
     "Features.EasyX.InvalidScope":  "Neplatný rozsah. Platné možnosti jsou: {0}",
-    "Features.EasyX.Blacklist.Results":  "Na {0} blacklistu jsou v současné době tito hráči:",
+    "Features.EasyX.Blacklist.Results":  "Následující hráči jsou v současné době na {0} černé listině:",
     "Features.EasyX.Whitelist.Description":  "Přidat/odebrat hráče ze seznamu povolených hráčů pro tuto funkci.",
     "Features.EasyX.SetMode":  "{0} režim je nyní nastaven na: {1}"
 }

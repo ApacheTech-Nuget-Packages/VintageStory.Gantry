@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Abra la carpeta de registros de Gantry."
+    "Features.Diagnostics.WorldSeed.Description":  "Consigue la semilla mundial.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Abra la carpeta de registros de Gantry.",
+    "Features.Diagnostics.WorldSeed":  "Semilla mundial: {0}"
 }

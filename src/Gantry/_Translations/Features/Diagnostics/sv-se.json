@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Öppna mappen Gantry-loggar."
+    "Features.Diagnostics.WorldSeed.Description":  "Få världens frö.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Öppna mappen Gantry-loggar.",
+    "Features.Diagnostics.WorldSeed":  "Världens frö: {0}"
 }

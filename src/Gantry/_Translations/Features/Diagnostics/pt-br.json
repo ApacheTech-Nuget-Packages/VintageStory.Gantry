@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Abra a pasta Logs do pórtico."
+    "Features.Diagnostics.WorldSeed.Description":  "Obtenha a semente do mundo.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Abra a pasta Logs do pórtico.",
+    "Features.Diagnostics.WorldSeed":  "Semente do Mundo: {0}"
 }

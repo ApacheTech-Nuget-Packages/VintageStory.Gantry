@@ -1,0 +1,5 @@
+﻿{
+    "Features.Diagnostics.WorldSeed.Description":  "Szerezd meg a világ magját.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Nyissa meg a Gantry naplók mappát.",
+    "Features.Diagnostics.WorldSeed":  "Világelső: {0}"
+}

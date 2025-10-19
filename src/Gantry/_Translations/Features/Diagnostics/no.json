@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "Åpne mappen Portallogger."
+    "Features.Diagnostics.WorldSeed.Description":  "Få verdensfrøet.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Åpne mappen Portallogger.",
+    "Features.Diagnostics.WorldSeed":  "Verdensfrø: {0}"
 }

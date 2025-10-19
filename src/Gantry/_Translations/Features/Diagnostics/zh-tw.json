@@ -1,3 +1,5 @@
 ﻿{
-    "Features.Diagnostics.OpenLogsFolder":  "開啟 Gantry 記錄資料夾。"
+    "Features.Diagnostics.WorldSeed.Description":  "獲得世界種子。",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "開啟 Gantry 記錄資料夾。",
+    "Features.Diagnostics.WorldSeed":  "世界種子： {0}"
 }
