@@ -65,7 +65,7 @@ public interface ICoreGantryAPI
     /// <summary>
     ///     Harmony patching service for runtime method interception and patch management.
     /// </summary>
-    IHarmonyPatchingService Harmony => Services.GetRequiredService<IHarmonyPatchingService>();
+    IHarmonyPatchingService Harmony => Resolve<IHarmonyPatchingService>();
 
     /// <summary>
     ///     The dependency injection service provider for the mod.
@@ -73,19 +73,28 @@ public interface ICoreGantryAPI
     IServiceProvider Services { get; }
 
     /// <summary>
+    ///     Resolves a service of the specified type from the mod's service provider.
+    /// </summary>
+    /// <typeparam name="TService">The type of service to resolve.</typeparam>
+    /// <returns>The resolved service instance.</returns>
+    TService Resolve<TService>()
+        where TService : notnull
+        => Services.GetRequiredService<TService>();
+
+    /// <summary>
     ///     Brighter command processor for CQRS and messaging patterns.
     /// </summary>
-    IAmACommandProcessor CommandProcessor => Services.GetRequiredService<IAmACommandProcessor>();
+    IAmACommandProcessor CommandProcessor => Resolve<IAmACommandProcessor>();
 
     /// <summary>
     ///     File system service for mod data and configuration file access.
     /// </summary>
-    IFileSystemService IO => Services.GetRequiredService<IFileSystemService>();
+    IFileSystemService IO => Resolve<IFileSystemService>();
 
     /// <summary>
     ///     Mod settings service for configuration and settings management.
     /// </summary>
-    IModSettingsService Settings => Services.GetRequiredService<IModSettingsService>();
+    IModSettingsService Settings => Resolve<IModSettingsService>();
 
     /// <summary>
     ///     Writes a verbose debug message to the mod logger.

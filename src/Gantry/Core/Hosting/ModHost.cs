@@ -34,6 +34,7 @@ public abstract class ModHost<TModSystem>(Action<GantryHostOptions>? options = n
             system.SetCore(core);
         }
 
+        api.Logger.Event($"Starting mod '{core.Mod.Info.Name} v{core.Mod.Info.Version}' by {core.Mod.Info.Authors[0]}...");
         OnCoreLoaded(core);
     }
 
@@ -63,8 +64,7 @@ public abstract class ModHost<TModSystem>(Action<GantryHostOptions>? options = n
             : $"Gantry core for mod '{_modCore.Value.Mod.Info.ModID}' was not able to be unregistered from Gantry Nexus.");
 
         _modCore.Value?.Log($"Disposing Gantry core for mod '{_modCore.Value.Mod.Info.ModID}'...");
-        //_modCore.Value?.Services.To<IDisposable>().Dispose();
-        //OnCoreUnloaded();
+        OnCoreUnloaded();
         base.Dispose();
         
         GC.Collect();
