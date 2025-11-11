@@ -9,7 +9,8 @@ namespace Gantry.Services.EasyX.Abstractions;
 /// <summary>
 ///     Acts as a base class for EasyX mod systems that require settings from the server.
 /// </summary>
-public abstract class EasyXClientSystemBase<TModSystem, TClientSettings, TServerSettings> : ClientModSystem<TModSystem>
+public abstract class EasyXClientSystemBase<TModSystem, TClientSettings, TServerSettings> 
+    : ClientModSystem<TModSystem>, IEasyXClientSystem<TClientSettings>
     where TModSystem : EasyXClientSystemBase<TModSystem, TClientSettings, TServerSettings>
     where TClientSettings : class, IEasyXClientSettings, new()
     where TServerSettings : FeatureSettings<TServerSettings>, IEasyXServerSettings, new()

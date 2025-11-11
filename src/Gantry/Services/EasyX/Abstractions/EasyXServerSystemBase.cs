@@ -22,7 +22,7 @@ namespace Gantry.Services.EasyX.Abstractions;
 ///     Acts as a base class for all EasyX features, on the server.
 /// </summary>
 public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClientSettings> 
-    : ServerModSystem<TModSystem>, IServerServiceRegistrar
+    : ServerModSystem<TModSystem>, IEasyXServerSystem<TServerSettings>, IServerServiceRegistrar
     where TModSystem : EasyXServerSystemBase<TModSystem, TServerSettings, TClientSettings>
     where TServerSettings : FeatureSettings<TServerSettings>, IEasyXServerSettings, new()
     where TClientSettings : class, IEasyXClientSettings, new()
@@ -115,7 +115,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
             .BeginSubCommand("mode")
             .WithAlias("m")
             .WithArgs(parsers.AccessMode())
-            .WithDescription(Core.Lang.Get("EasyX", "AccessMode.Description"))
+            .WithDescription(Core.Lang.TranslateG("EasyX", "AccessMode.Description"))
             .HandleWith(OnChangeMode)
             .EndSubCommand();
 
