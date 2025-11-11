@@ -1,6 +1,7 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
 using Gantry.Core.Abstractions;
 using Gantry.GameContent.GUI.Abstractions;
+using Gantry.Services.IO.Configuration.Abstractions;
 
 namespace Gantry.Services.IO.Dialogue;
 
@@ -23,6 +24,15 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     }
 
     /// <summary>
+    ///     A collection of the boolean properties available on the settings object.
+    /// </summary>
+    protected List<PropertyInfo> Properties => [.. Settings
+        .GetType()
+        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+        .Where(p => p.PropertyType == typeof(bool))
+        .Where(p => p.GetCustomAttribute<DoNotPatchAttribute>() is null)];
+
+    /// <summary>
     ///     Composes the header for the GUI.
     /// </summary>
     /// <param name="composer">The composer.</param>
@@ -30,11 +40,9 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     {
         var left = ElementBounds.Fixed(0, GuiStyle.TitleBarHeight + 1.0, 250, 20);
         var right = ElementBounds.Fixed(260, GuiStyle.TitleBarHeight, 20, 20);
-        for (var index = 0;
-             index < Settings.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).Length;
-             index++)
+
+        foreach (var propertyInfo in Properties)
         {
-            var propertyInfo = Settings.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance)[index];
             AddSettingSwitch(composer, propertyInfo.Name, ref left, ref right);
         }
     }
@@ -78,7 +86,8 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     protected override void RefreshValues()
     {
         if (!IsOpened()) return;
-        foreach (var propertyInfo in Settings.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+
+        foreach (var propertyInfo in Properties)
         {
             SingleComposer
                 .GetSwitch($"btn{propertyInfo.Name}")
