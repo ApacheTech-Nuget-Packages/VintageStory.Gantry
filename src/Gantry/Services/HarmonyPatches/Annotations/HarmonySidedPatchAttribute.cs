@@ -1,4 +1,6 @@
-﻿namespace Gantry.Services.HarmonyPatches.Annotations;
+﻿using Gantry.Services.HarmonyPatches.Annotations.Generic;
+
+namespace Gantry.Services.HarmonyPatches.Annotations;
 
 /// <summary>
 ///     Indicates that the decorated class or method should be applied as a patch, but only for a specified app-side.
@@ -231,5 +233,31 @@ public class HarmonySidedPatchAttribute : HarmonyPatch
     public HarmonySidedPatchAttribute(EnumAppSide forSide, Type[] argumentTypes, ArgumentType[] argumentVariations) : base(argumentTypes, argumentVariations)
     {
         Side = forSide;
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="typeName">The full name of the declaring class/type</param>
+    /// <param name="methodName">The name of the method to patch</param>
+    /// <param name="methodType">The type of the method to patch</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, string typeName, string methodName, MethodType methodType = MethodType.Normal) : base(typeName, methodName, methodType)
+    {
+        Side = forSide;
+    }
+
+    /// <summary>
+    ///     Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="forSide">The app-side to run the patch on.</param>
+    /// <param name="declaringType">The full name of the declaring type.</param>
+    /// <param name="methodName">The name of the method to patch.</param>
+    /// <param name="arguments">The argument types of the target method.</param>
+    public HarmonySidedPatchAttribute(EnumAppSide forSide, string declaringType, string methodName, params Type[] arguments)
+        : base(declaringType, methodName)
+    {
+        Side = forSide;
+        info.argumentTypes = arguments;
     }
 }

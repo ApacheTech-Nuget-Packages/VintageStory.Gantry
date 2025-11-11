@@ -8,14 +8,14 @@
 public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
 {
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     public HarmonyUniversalPatchAttribute() : base(EnumAppSide.Universal)
     {
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     public HarmonyUniversalPatchAttribute(Type declaringType) : base(EnumAppSide.Universal, declaringType)
@@ -23,7 +23,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
@@ -32,7 +32,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodName">The name of the method to patch.</param>
@@ -41,7 +41,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodName">The name of the method to patch.</param>
@@ -51,7 +51,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodName">The name of the method to patch.</param>
@@ -62,7 +62,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodType">Type of the method to patch.</param>
@@ -71,7 +71,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodType">Type of the method to patch.</param>
@@ -81,7 +81,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodType">Type of the method to patch.</param>
@@ -92,7 +92,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="declaringType">Type of the declaring method to patch.</param>
     /// <param name="methodName">The name of the method to patch.</param>
@@ -102,7 +102,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="methodName">The name of the method to patch.</param>
     public HarmonyUniversalPatchAttribute(string methodName) : base(EnumAppSide.Universal, methodName)
@@ -110,7 +110,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="methodName">The name of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
@@ -119,7 +119,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="methodName">The name of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
@@ -129,7 +129,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="methodName">The name of the method to patch.</param>
     /// <param name="methodType">Type of the method to patch.</param>
@@ -138,7 +138,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="methodType">Type of the method to patch.</param>
     public HarmonyUniversalPatchAttribute(MethodType methodType) : base(EnumAppSide.Universal, methodType)
@@ -146,7 +146,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="methodType">Type of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
@@ -155,7 +155,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="methodType">Type of the method to patch.</param>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
@@ -165,7 +165,7 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
     public HarmonyUniversalPatchAttribute(Type[] argumentTypes) : base(EnumAppSide.Universal, argumentTypes)
@@ -173,11 +173,31 @@ public class HarmonyUniversalPatchAttribute : HarmonySidedPatchAttribute
     }
 
     /// <summary>
-    /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
     /// </summary>
     /// <param name="argumentTypes">The argument types, to further identify the method to patch.</param>
     /// <param name="argumentVariations">The argument variations, to further identify the method to patch.</param>
     public HarmonyUniversalPatchAttribute(Type[] argumentTypes, ArgumentType[] argumentVariations) : base(EnumAppSide.Universal, argumentTypes, argumentVariations)
+    {
+    }
+
+    /// <summary>
+    /// 	Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="typeName">The full name of the declaring class/type</param>
+    /// <param name="methodName">The name of the method to patch</param>
+    /// <param name="methodType">The type of the method to patch</param>
+    public HarmonyUniversalPatchAttribute(string typeName, string methodName, MethodType methodType = MethodType.Normal) : base(EnumAppSide.Universal, typeName, methodName, methodType)
+    {
+    }
+
+    /// <summary>
+    ///     Initialises a new instance of the <see cref="HarmonyUniversalPatchAttribute"/> class.
+    /// </summary>
+    /// <param name="declaringType">The full name of the declaring type.</param>
+    /// <param name="methodName">The name of the method to patch.</param>
+    /// <param name="arguments">The argument types of the target method.</param>
+    public HarmonyUniversalPatchAttribute(string declaringType, string methodName, params Type[] arguments) : base(EnumAppSide.Universal, declaringType, methodName, arguments)
     {
     }
 }
