@@ -27,16 +27,16 @@ public static class InputApiExtensions
     ///     Registers a hot key, and associates it with a dialogue form, as transient, using a factory to instantiate the dialogue.
     /// </summary>
     public static void RegisterTransientGuiDialogueHotKey<T>(
-        this IInputAPI api,
+        this IInputAPI iapi,
         Func<T> dialogueFactory,
         string displayText,
         GlKeys hotKey,
         bool altPressed = false,
         bool ctrlPressed = false,
         bool shiftPressed = false)
-        where T : GuiDialog
+        where T : GenericDialogue
     {
-        api.RegisterHotKey(nameof(T), displayText, hotKey, HotkeyType.GUIOrOtherControls, altPressed, ctrlPressed, shiftPressed);
-        api.SetHotKeyHandler(nameof(T), _ => dialogueFactory().TryOpen());
+        iapi.RegisterHotKey(nameof(T), displayText, hotKey, HotkeyType.GUIOrOtherControls, altPressed, ctrlPressed, shiftPressed);
+        iapi.SetHotKeyHandler(nameof(T), _ => dialogueFactory().ToggleGui());
     }
 }
