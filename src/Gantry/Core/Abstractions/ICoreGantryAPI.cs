@@ -1,5 +1,6 @@
-﻿using ApacheTech.Common.BrighterSlim;
+﻿using ApacheTech.Common.Mediator.Commands.Processor;
 using Gantry.Core.Helpers;
+using Gantry.Core.Hosting.Annotation;
 using Gantry.Services.HarmonyPatches;
 using Gantry.Services.IO.Abstractions.Contracts;
 using Gantry.Services.IO.Configuration;
@@ -84,7 +85,7 @@ public interface ICoreGantryAPI
     /// <summary>
     ///     Brighter command processor for CQRS and messaging patterns.
     /// </summary>
-    IAmACommandProcessor CommandProcessor => Resolve<IAmACommandProcessor>();
+    ICommandProcessor CommandProcessor => Resolve<ICommandProcessor>();
 
     /// <summary>
     ///     File system service for mod data and configuration file access.
@@ -103,4 +104,75 @@ public interface ICoreGantryAPI
     /// <param name="args">Arguments for formatting the message.</param>
     public void Log(string messageTemplate, params object[] args)
         => Logger.VerboseDebug(messageTemplate, args);
+
+    /// <summary>
+    ///     Injects the required services based on the specified application side.
+    /// </summary>
+    /// <param name="instance">The instance to inject services into.</param>
+    public void Compose<T>(T instance)
+        where T : notnull
+    {
+        if (Services is null) return;
+
+        //
+        // Instance property injection
+        //
+
+        var properties = instance
+            .GetType()
+            .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
+            .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), inherit: false)
+                .Cast<InjectAttribute>()
+                .Any(attr => attr.Side == EnumAppSide.Universal || attr.Side == Side))
+            .ToList();
+
+        foreach (var property in properties)
+        {
+            var propertyType = property.PropertyType;
+            var service = Services.GetService(propertyType);
+            if (service is null)
+            {
+                Logger.Error(
+                    $"Failed to inject service of type {propertyType.FullName} into property {property.Name} of mod system {GetType().FullName} for side {Side}.");
+                continue;
+            }
+            property.SetValue(instance, service);
+
+        }
+
+        //
+        // Sided<> support
+        // 
+
+        var staticSidedProperties = instance
+            .GetType()
+            .GetProperties(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy)
+            .Where(p => p.GetCustomAttributes(typeof(InjectAttribute), inherit: false)
+                .Cast<InjectAttribute>()
+                .Any(attr => attr.Side == EnumAppSide.Universal || attr.Side == Side))
+            .Where(p => p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() == typeof(Sided<>))
+            .ToList();
+
+        foreach (var property in staticSidedProperties)
+        {
+            var sidedType = property.PropertyType;
+            var genericArg = sidedType.GetGenericArguments().First();
+            var service = Services.GetService(genericArg);
+            if (service is null)
+            {
+                Logger.Error(
+                    $"Failed to inject service of type {genericArg.FullName} into static sided property {property.Name} of mod system {GetType().FullName} for side {Side}.");
+                continue;
+            }
+            if (property.GetValue(instance) is not ISidedInstance sidedInstance)
+            {
+                Logger.Error(
+                    $"Failed to inject service of type {genericArg.FullName} into static sided property {property.Name} of mod system {GetType().FullName} for side {Side} because the Sided<> instance is null.");
+                continue;
+            }
+            sidedInstance.Set(Side, service);
+        }
+
+        // ROADMAP: Add MEF composition support here in future.
+    }
 }

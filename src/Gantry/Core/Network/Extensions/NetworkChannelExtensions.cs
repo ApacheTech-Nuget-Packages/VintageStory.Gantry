@@ -1,5 +1,4 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core.Abstractions;
 using Vintagestory.API.Util;
 
 namespace Gantry.Core.Network.Extensions;

@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.GameContent.Extensions;
+﻿using Gantry.GameContent.Extensions;
 
 namespace Gantry.GameContent;
 

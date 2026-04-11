@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Services.HarmonyPatches;
+﻿namespace Gantry.Services.HarmonyPatches;
 
 /// <summary>
 ///     Options for creating the Harmony Patching Service.

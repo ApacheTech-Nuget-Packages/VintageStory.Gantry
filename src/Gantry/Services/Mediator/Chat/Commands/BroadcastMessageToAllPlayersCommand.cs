@@ -1,6 +1,6 @@
-﻿using Gantry.Services.Brighter.Abstractions;
+﻿using Gantry.Services.Mediator.Abstractions;
 
-namespace Gantry.Services.BrighterChat.Commands;
+namespace Gantry.Services.Mediator.Chat.Commands;
 
 /// <summary>
 ///     Broadcasts a message to all players on the server.
@@ -8,11 +8,11 @@ namespace Gantry.Services.BrighterChat.Commands;
 /// <param name="messageCode">The i18n code for the message to send to all the players on the server.</param>
 /// <param name="localiseForEachPlayer">Determines whether the message should be localised on the server, before sending.</param>
 /// <param name="args">An options set of arguments to pass into the localised message.</param>
-/// <seealso cref="CommandBase" />
+/// <seealso cref="GantryCommandBase" />
 public class BroadcastMessageToAllPlayersCommand(
     string messageCode, 
     bool localiseForEachPlayer = false, 
-    params object[] args) : CommandBase
+    params object[] args) : GantryCommandBase
 {
     /// <summary>
     ///     The i18n code for the message to send to all the players on the server.

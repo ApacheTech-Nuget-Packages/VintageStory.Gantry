@@ -38,8 +38,8 @@ public static class ServiceCollectionExtensions
 
     private static object CreateInstance(this IServiceProvider services, ServiceDescriptor descriptor)
     {
-        if (descriptor.Implementation is not null)
-            return descriptor.Implementation;
+        if (descriptor.ImplementationInstance is not null)
+            return descriptor.ImplementationInstance;
 
         if (descriptor.ImplementationFactory is not null)
             return descriptor.ImplementationFactory(services);

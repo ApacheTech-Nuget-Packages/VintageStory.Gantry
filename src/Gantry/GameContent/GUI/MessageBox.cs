@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.GameContent.GUI.Abstractions;
+﻿using Gantry.GameContent.GUI.Abstractions;
 using Gantry.GameContent.GUI.Models;
 
 namespace Gantry.GameContent.GUI;

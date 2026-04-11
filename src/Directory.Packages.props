@@ -1,23 +1,24 @@
 ﻿<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-  </PropertyGroup>
-  <ItemGroup Label="Framework Dependencies">
-    <PackageVersion Include="ApacheTech.Common.BrighterSlim" Version="9.8.0" />
-    <PackageVersion Include="IronSoftware.System.Drawing" Version="2023.11.1" />
-    <PackageVersion Include="PolySharp" Version="1.15.0" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="RedGate.SmartAssembly.Attributes" Version="8.3.1.5568" />
-    <PackageVersion Include="System.ComponentModel.Composition" Version="9.0.0" />
-  </ItemGroup>
-  <ItemGroup Label="Common Dependencies">
-    <PackageVersion Include="ApacheTech.Common.Extensions.Harmony" Version="2.1.0" />
-    <PackageVersion Include="ApacheTech.Common.Extensions" Version="2.1.1" />
-    <PackageVersion Include="ApacheTech.Common.FunctionalCSharp" Version="1.1.0" />
-    <PackageVersion Include="ApacheTech.Common.DependencyInjection" Version="2.3.1" />
-    <PackageVersion Include="ApacheTech.Common.DependencyInjection.Abstractions" Version="2.3.0" />
-  </ItemGroup>
-  <ItemGroup Label="Gantry Core">
-    <PackageVersion Include="VintageStory.Gantry.Core" Version="0.5.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	<ItemGroup Label="Framework Dependencies">
+		<PackageVersion Include="IronSoftware.System.Drawing" Version="2023.11.1" />
+		<PackageVersion Include="PolySharp" Version="1.15.0" />
+		<PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.201" />
+		<PackageVersion Include="RedGate.SmartAssembly.Attributes" Version="8.3.1.5568" />
+		<PackageVersion Include="System.ComponentModel.Composition" Version="9.0.0" />
+	</ItemGroup>
+	<ItemGroup Label="Common Dependencies">
+		<PackageVersion Include="ApacheTech.Common.Extensions.Harmony" Version="2.1.0" />
+		<PackageVersion Include="ApacheTech.Common.Extensions" Version="2.2.0" />
+		<PackageVersion Include="ApacheTech.Common.FunctionalCSharp" Version="1.1.0" />
+		<PackageVersion Include="ApacheTech.Common.DependencyInjection" Version="2.5.2" />
+		<PackageVersion Include="ApacheTech.Common.DependencyInjection.Abstractions" Version="2.5.2" />
+		<PackageVersion Include="ApacheTech.Common.Mediator" Version="1.0.0" />
+		<PackageVersion Include="ApacheTech.Common.Mediator.Hosting" Version="1.0.0" />
+	</ItemGroup>
+	<ItemGroup Label="Gantry Core">
+		<PackageVersion Include="VintageStory.Gantry.Core" Version="0.5.0" />
+	</ItemGroup>
 </Project>

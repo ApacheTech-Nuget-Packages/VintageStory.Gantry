@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.Core.Network.Extensions;
+﻿using Gantry.Core.Network.Extensions;
 using Gantry.GameContent.ChatCommands.DataStructures;
 using Gantry.GameContent.Extensions.Gui;
 using Gantry.GameContent.GUI.Abstractions;

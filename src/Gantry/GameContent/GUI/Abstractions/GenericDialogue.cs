@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.GameContent.Extensions.Gui;
+﻿using Gantry.GameContent.Extensions.Gui;
 using Gantry.GameContent.GUI.Helpers;
 using Vintagestory.Client;
 

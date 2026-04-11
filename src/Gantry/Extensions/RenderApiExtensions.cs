@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.GameContent.AssetEnum;
+﻿using Gantry.GameContent.AssetEnum;
 using Vintagestory.API.MathTools;
 
 namespace Gantry.Extensions;

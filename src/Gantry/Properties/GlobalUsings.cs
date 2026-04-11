@@ -10,6 +10,7 @@ global using System.Diagnostics.CodeAnalysis;
 global using System.Collections.Generic;
 
 global using Gantry.Core.Hosting;
+global using Gantry.Core.Abstractions;
 global using Gantry.Core;
 
 global using HarmonyLib;
@@ -19,6 +20,11 @@ global using ApacheTech.Common.Extensions.DotNet;
 global using ApacheTech.Common.DependencyInjection.Abstractions;
 global using ApacheTech.Common.DependencyInjection.Abstractions.Annotation;
 global using ApacheTech.Common.DependencyInjection.Abstractions.Extensions;
+
+global using ApacheTech.Common.Mediator.Commands;
+global using ApacheTech.Common.Mediator.Commands.Filters;
+global using ApacheTech.Common.Mediator.Diagnostics;
+global using ApacheTech.Common.Mediator.Filters;
 
 global using Vintagestory.API.Common;
 global using Vintagestory.API.Config;

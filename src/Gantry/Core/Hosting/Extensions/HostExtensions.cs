@@ -1,5 +1,4 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core.Abstractions;
 using Gantry.Core.Hosting.Annotation;
 using Gantry.Extensions.Api;
 
@@ -147,17 +146,4 @@ public static class HostExtensions
         }
         return service is not null;
     }
-
-    /// <summary>
-    ///     Gets the service object of the specified type.
-    /// </summary>
-    /// <param name="serviceProvider">And object that provides access to the service collection.</param>
-    /// <typeparam name="T">The type of service object to get.</typeparam>
-    /// <returns>A service object of type <typeparamref name="T" />.
-    /// 
-    /// -or-
-    /// 
-    /// <see langword="null" /> if there is no service object of type <typeparamref name="T" />.</returns>
-    public static T? GetService<T>(this IServiceProvider serviceProvider) where T : class
-        => serviceProvider.GetService(typeof(T)) as T;
 }

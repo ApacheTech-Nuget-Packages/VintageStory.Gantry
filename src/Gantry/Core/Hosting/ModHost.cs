@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.Core.Abstractions.ModSystems;
+﻿using Gantry.Core.Abstractions.ModSystems;
 using Vintagestory.Common;
 
 namespace Gantry.Core.Hosting;

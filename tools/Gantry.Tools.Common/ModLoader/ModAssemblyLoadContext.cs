@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
-using Vintagestory.API.Config;
 
 namespace Gantry.Tools.Common.ModLoader;
 

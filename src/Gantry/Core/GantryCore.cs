@@ -1,5 +1,4 @@
 ﻿using ApacheTech.Common.FunctionalCSharp.Monads.Extensions;
-using Gantry.Core.Abstractions;
 using Gantry.Core.Diagnostics;
 using Gantry.Core.Helpers;
 using Gantry.Core.Hosting.Registration;

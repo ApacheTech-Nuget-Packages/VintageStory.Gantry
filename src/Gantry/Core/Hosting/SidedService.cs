@@ -1,11 +1,11 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Core.Hosting;
+﻿namespace Gantry.Core.Hosting;
 
 /// <summary>
 ///     Represents a service that provides access to both client and server instances of a specified type.
 /// </summary>
-public class SidedService<TClientInstance, TServerInstance>
+public class SidedService<TClientInstance, TServerInstance> 
+    where TClientInstance : notnull 
+    where TServerInstance : notnull
 {
     private readonly ICoreGantryAPI _core;
 

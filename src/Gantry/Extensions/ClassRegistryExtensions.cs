@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Extensions;
+﻿namespace Gantry.Extensions;
 
 /// <summary>
 ///     Extension methods to help register classes with the game engine.

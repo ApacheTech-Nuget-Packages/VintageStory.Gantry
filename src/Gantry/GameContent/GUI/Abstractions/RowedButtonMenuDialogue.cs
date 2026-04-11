@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.GameContent.GUI.Abstractions;
+﻿namespace Gantry.GameContent.GUI.Abstractions;
 
 /// <summary>
 ///     A simple GUI that contains a single column of buttons, or other elements.

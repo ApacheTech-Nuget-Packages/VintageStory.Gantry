@@ -1,5 +1,4 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core.Abstractions;
 using Gantry.Core.Abstractions.ModSystems;
 using Gantry.Core.Annotation;
 using Gantry.Core.Hosting.Registration;
@@ -347,7 +346,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         var existingPlayer = list.SingleOrDefault(p => p.Id == result.Uid);
         var isRemoved = existingPlayer is not null && list.Remove(existingPlayer);
         if (!isRemoved) list.Add(result!);
-        Core.Settings.World.Save(Settings);
+        Core.Settings.For(Scope).Save(Settings);
         ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
         var message = Core.Lang.TranslateG("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
         return TextCommandResult.Success(message);

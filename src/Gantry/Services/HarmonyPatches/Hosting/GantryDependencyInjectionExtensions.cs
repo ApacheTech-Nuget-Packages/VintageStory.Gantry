@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Services.HarmonyPatches.Hosting;
+﻿namespace Gantry.Services.HarmonyPatches.Hosting;
 
 /// <summary>
 ///     Extension methods to aid the registration of the Harmony Patching service, into a Gantry MDK IOC Container.
@@ -18,7 +16,8 @@ public static class GantryDependencyInjectionExtensions
         Action<HarmonyPatchingServiceOptions>? options = null)
     {
         var harmonyOptions = HarmonyPatchingServiceOptions.Default(core).With(options);
-        services.TryAddSingleton<IHarmonyPatchingService>(new HarmonyPatchingService(core, harmonyOptions));
+        services.AddScoped<IHarmonyPatchingService>(sp
+            => ActivatorUtilities.CreateInstance<HarmonyPatchingService>(sp, harmonyOptions));
         return services;
     }
 }

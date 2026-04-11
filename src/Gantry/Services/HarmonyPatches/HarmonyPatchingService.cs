@@ -1,9 +1,9 @@
 ﻿using ApacheTech.Common.Extensions.Reflection;
-using Gantry.Core.Abstractions;
 using Gantry.Core.Annotation;
 using Gantry.Services.HarmonyPatches.Abstractions;
 using Gantry.Services.HarmonyPatches.Annotations;
 using Gantry.Services.HarmonyPatches.Extensions;
+using Gantry.Services.Mediator.Filters;
 
 namespace Gantry.Services.HarmonyPatches;
 
@@ -351,12 +351,12 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     /// </remarks>
     private bool HasMissingDependencies(Type type)
     {
-        var attributes = type.GetCustomAttributes<RequiresModAttribute>().ToArray();
-        if (attributes.Length <= 0) return false;
-        foreach (var attribute in attributes)
+        var attribute = type.GetCustomAttribute<HarmonyRequiresModAttribute>();
+        if (attribute is null) return false;
+        foreach (var modId in attribute.ModIds)
         {
-            if (_api.ModLoader.IsModEnabled(attribute.ModId)) continue;
-            _gantry.Log($"Skipping patches for {type.Name} due to missing dependency: {attribute.ModId}");
+            if (_api.ModLoader.IsModEnabled(modId)) continue;
+            _gantry.Log($"Skipping patches for {type.Name} due to missing dependency: {modId}");
             return true;
         }
         return false;

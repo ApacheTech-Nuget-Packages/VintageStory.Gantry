@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.Services.IO.Abstractions;
+﻿using Gantry.Services.IO.Abstractions;
 using Gantry.Services.IO.DataStructures;
 using Gantry.Services.IO.FileAdaptors;
 

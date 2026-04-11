@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Extensions.Api;
+﻿namespace Gantry.Extensions.Api;
 
 /// <summary>
 ///     Provides extension methods for the <see cref="IEventAPI" /> interface.

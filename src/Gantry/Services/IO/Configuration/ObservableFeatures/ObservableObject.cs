@@ -1,8 +1,6 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core.Abstractions;
 using Gantry.Services.IO.Configuration.Abstractions;
 using System.ComponentModel;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Gantry.Services.IO.Configuration.ObservableFeatures;

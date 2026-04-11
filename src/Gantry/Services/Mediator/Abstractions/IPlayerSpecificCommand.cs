@@ -1,4 +1,4 @@
-﻿namespace Gantry.Services.Brighter.Abstractions;
+﻿namespace Gantry.Services.Mediator.Abstractions;
 
 /// <summary>
 ///     Represents a command that is executed on behalf of a specific player.

@@ -42,7 +42,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IHostedModSystem
     /// <param name="core">The Gantry Core API for the current mod and app side.</param>
     void IHostedModSystem.SetCore(ICoreGantryAPI core)
     {
-        var modSystemName = GetType().Name;
+        //var modSystemName = GetType().Name;
         Core = core;
     }
 
@@ -59,6 +59,7 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IHostedModSystem
         if (Instance is IModHost host)
             host.InitialiseCore(api);
 
+        Core?.Compose(this);
         StartPreUniversal(api);
         switch (api)
         {
@@ -72,8 +73,16 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IHostedModSystem
     }
 
     /// <inheritdoc />
-    public override double ExecuteOrder() => 0.05;
+    public override void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+        if (UApi is null || Instance != this) return;
+        _instance.Dispose(UApi.Side);
+    }
 
+    /// <inheritdoc />
+    public override double ExecuteOrder() => 0.05;
     /// <summary>
     ///     Called during initial mod loading, called before any mod receives the call to Start().
     /// </summary>
@@ -88,13 +97,4 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IHostedModSystem
     ///     Called during initial mod loading, called before any mod receives the call to Start().
     /// </summary>
     protected virtual void StartPreClientSide(ICoreClientAPI capi) { }
-
-    /// <inheritdoc />
-    public override void Dispose()
-    {
-        if (_disposed) return;
-        _disposed = true;
-        if (UApi is null || Instance != this) return;
-        _instance.Dispose(UApi.Side);
-    }
 }

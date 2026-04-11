@@ -16,7 +16,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ApacheTech.Common.BrighterSlim" />
 		<PackageReference Include="ApacheTech.Common.DependencyInjection" />
 		<PackageReference Include="ApacheTech.Common.DependencyInjection.Abstractions" />
 	</ItemGroup>

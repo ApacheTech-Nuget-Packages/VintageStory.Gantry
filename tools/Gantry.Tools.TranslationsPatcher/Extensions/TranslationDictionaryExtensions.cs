@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Gantry.Tools.TranslationsPatcher.Extensions;
 
 /// <summary>

@@ -2,7 +2,6 @@
 using Gantry.Tools.ModPackager;
 using Gantry.Tools.ModPackager.Steps;
 using Serilog;
-using System.Diagnostics;
 
 var parsedResult = Parser.Default.ParseArguments<CommandLineArgs>(args);
 await parsedResult.WithParsedAsync(async args =>

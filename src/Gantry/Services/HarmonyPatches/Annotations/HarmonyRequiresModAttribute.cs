@@ -1,20 +1,21 @@
-﻿namespace Gantry.Services.HarmonyPatches.Annotations;
+﻿using Gantry.Services.Mediator.Filters;
+
+namespace Gantry.Services.HarmonyPatches.Annotations;
 
 /// <summary>
 ///     Denotes that the decorated object requires a specific mod to be enabled within the gameworld.
-///     It is up to the developer to enforce this restriction.
 /// </summary>
-[AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
-public sealed class RequiresModAttribute : Attribute
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+public sealed class HarmonyRequiresModAttribute : Attribute
 {
     /// <summary>
     ///  	Initialises a new instance of the <see cref="RequiresModAttribute"/> class.
     /// </summary>
-    /// <param name="modId">The mod identifier of the required mod.</param>
-    public RequiresModAttribute(string modId) => ModId = modId;
+    /// <param name="modIds">The mod identifiers of the required mods.</param>
+    public HarmonyRequiresModAttribute(params string[] modIds) => ModIds = modIds;
 
     /// <summary>
-    ///     The ModID of the required mod.
+    ///     The ModIDs of the required mods.
     /// </summary>
-    public string ModId { get; }
+    public string[] ModIds { get; }
 }

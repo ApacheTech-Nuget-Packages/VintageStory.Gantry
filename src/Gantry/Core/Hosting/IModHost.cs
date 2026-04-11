@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Core.Hosting;
+﻿namespace Gantry.Core.Hosting;
 
 /// <summary>
 ///     An interface representing a mod host in the Gantry framework.

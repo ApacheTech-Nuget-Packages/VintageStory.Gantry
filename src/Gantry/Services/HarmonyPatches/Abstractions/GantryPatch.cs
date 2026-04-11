@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Services.HarmonyPatches.Abstractions;
+﻿namespace Gantry.Services.HarmonyPatches.Abstractions;
 
 /// <summary>
 ///     Represents a base class for creating Harmony patches that do not require feature settings.

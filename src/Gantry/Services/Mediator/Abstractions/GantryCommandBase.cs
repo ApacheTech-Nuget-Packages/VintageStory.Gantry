@@ -1,23 +1,10 @@
-﻿using ApacheTech.Common.BrighterSlim;
-
-namespace Gantry.Services.Brighter.Abstractions;
+﻿namespace Gantry.Services.Mediator.Abstractions;
 
 /// <summary>
 ///     Acts as a base class for all Brighter commands.
 /// </summary>
-public abstract class CommandBase : IRequest
+public abstract class GantryCommandBase : CommandBase
 {
-    /// <summary>
-    ///     The unique identifier for this request.
-    /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-
-    /// <summary>
-    ///     Gets or sets the span that this operation lives within.
-    /// </summary>
-    [JsonIgnore]
-    public Activity? Span { get; set; }
-
     /// <summary>
     ///     Determines whether the execution of the command was successful, or not.
     /// </summary>

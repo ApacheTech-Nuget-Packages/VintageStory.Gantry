@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Core.Hosting.Registration;
+﻿namespace Gantry.Core.Hosting.Registration;
 
 /// <summary>
 ///     Represents a class that can add services to the Client IOC container. Implements <see cref="IDisposable" />.

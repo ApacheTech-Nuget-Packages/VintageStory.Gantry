@@ -1,6 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-
-namespace Gantry.Services.HarmonyPatches.Abstractions;
+﻿namespace Gantry.Services.HarmonyPatches.Abstractions;
 
 /// <summary>
 ///     Represents a class that contains Harmony patches to be applied to the game.

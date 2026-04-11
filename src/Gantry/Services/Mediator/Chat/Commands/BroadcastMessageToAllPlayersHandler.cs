@@ -1,17 +1,17 @@
-﻿using ApacheTech.Common.BrighterSlim;
+﻿using ApacheTech.Common.Mediator.Commands.Handlers;
 using Gantry.Core.Annotation;
-using Gantry.Services.Brighter.Filters;
+using Gantry.Services.Mediator.Filters;
 
-namespace Gantry.Services.BrighterChat.Commands;
+namespace Gantry.Services.Mediator.Chat.Commands;
 
 /// <summary>
 ///     Broadcasts a message to all players on the server.
 /// </summary>
 [ServerSide]
-internal class BroadcastMessageToAllPlayersHandler(ServerMain game) : RequestHandler<BroadcastMessageToAllPlayersCommand>
+internal class BroadcastMessageToAllPlayersHandler(ServerMain game) : CommandHandlerBase<BroadcastMessageToAllPlayersCommand>
 {
     [HandledOnServer]
-    public override BroadcastMessageToAllPlayersCommand Handle(BroadcastMessageToAllPlayersCommand command)
+    public override async Task HandleAsync(BroadcastMessageToAllPlayersCommand command, CancellationToken cancellationToken)
     {
         foreach (var player in game.AllOnlinePlayers.Cast<IServerPlayer>())
         {
@@ -20,6 +20,5 @@ internal class BroadcastMessageToAllPlayersHandler(ServerMain game) : RequestHan
                 : Lang.Get(command.MessageCode, command.Arguments);
             game.SendMessage(player, GlobalConstants.AllChatGroups, message, EnumChatType.Notification);
         }
-        return base.Handle(command);
     }
 }

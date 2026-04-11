@@ -1,3 +1,4 @@
+using ApacheTech.Common.Mediator.Commands.Processor;
 using Gantry.Services.EasyX.Hosting;
 
 /// <summary>
@@ -99,8 +100,8 @@ internal static partial class G
     /// <summary>
     ///     Brighter command processor for CQRS and messaging patterns.
     /// </summary>
-    internal static IAmACommandProcessor CommandProcessor 
-        => Services.GetRequiredService<IAmACommandProcessor>();
+    internal static ICommandProcessor CommandProcessor 
+        => Services.GetRequiredService<ICommandProcessor>();
 
     /// <summary>
     ///     File system service for mod data and configuration file access.

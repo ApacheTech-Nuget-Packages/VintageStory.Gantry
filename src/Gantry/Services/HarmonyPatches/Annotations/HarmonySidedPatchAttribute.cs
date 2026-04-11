@@ -1,6 +1,4 @@
-﻿using Gantry.Services.HarmonyPatches.Annotations.Generic;
-
-namespace Gantry.Services.HarmonyPatches.Annotations;
+﻿namespace Gantry.Services.HarmonyPatches.Annotations;
 
 /// <summary>
 ///     Indicates that the decorated class or method should be applied as a patch, but only for a specified app-side.

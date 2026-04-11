@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.Services.IO.Configuration.Abstractions;
+﻿using Gantry.Services.IO.Configuration.Abstractions;
 
 namespace Gantry.Extensions.Api;
 
@@ -20,7 +19,7 @@ public static class ApiGantryExtensions
     ///     Returns a service of the specified type from the Gantry service provider.
     /// </summary>
     /// <param name="api">The core game API.</param>
-    public static T GetRequiredService<T>(this ICoreAPI api) 
+    public static T GetRequiredService<T>(this ICoreAPI api) where T : notnull
         => api.GantryCore().Services.GetRequiredService<T>();
 
     /// <summary>

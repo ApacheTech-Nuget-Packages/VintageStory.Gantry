@@ -337,6 +337,8 @@
 		<PackageReference Include="ApacheTech.Common.Extensions" />
 		<PackageReference Include="ApacheTech.Common.Extensions.Harmony" />
 		<PackageReference Include="ApacheTech.Common.FunctionalCSharp" />
+		<PackageReference Include="ApacheTech.Common.Mediator" />
+		<PackageReference Include="ApacheTech.Common.Mediator.Hosting" />
 	</ItemGroup>
 
 </Project>

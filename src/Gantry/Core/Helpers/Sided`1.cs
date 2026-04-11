@@ -3,10 +3,10 @@
 namespace Gantry.Core.Helpers;
 
 /// <summary>
-///     A monad that holds a value of type <typeparamref name="T"/> for both the client and server sides.
+///     A monad that holds a value of type <typeparamref name="T"/>, for both the client and server sides.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class Sided<T>()
+public class Sided<T>() : ISidedInstance
 {
     private readonly AsyncLocal<T?> _clientT = new();
     private readonly AsyncLocal<T?> _serverT = new();
@@ -68,14 +68,15 @@ public class Sided<T>()
     /// </summary>
     /// <param name="side">The side for which to set the value.</param>
     /// <param name="value">The value to set.</param>
-    public void Set(EnumAppSide side, T? value)
+    public void Set(EnumAppSide side, object? value)
     {
+        if (value is not T instance) return;
         side.Invoke(() =>
         {
-            _clientT.Value = value;
+            _clientT.Value = instance;
         }, () =>
         {
-            _serverT.Value = value;
+            _serverT.Value = instance;
         });
     }
 

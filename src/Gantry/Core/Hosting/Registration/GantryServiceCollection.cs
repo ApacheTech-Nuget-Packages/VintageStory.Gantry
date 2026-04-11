@@ -1,9 +1,8 @@
 ﻿using ApacheTech.Common.DependencyInjection;
 using ApacheTech.Common.DependencyInjection.Extensions;
-using Gantry.Core.Abstractions;
+using ApacheTech.Common.Mediator.Hosting;
 using Gantry.Core.Hosting.Extensions;
 using Gantry.Extensions.Api;
-using Gantry.Services.Brighter.Hosting;
 using Gantry.Services.HarmonyPatches.Hosting;
 using Gantry.Services.IO.Hosting;
 using Vintagestory.Client;
@@ -30,7 +29,7 @@ internal sealed class GantryServiceCollection : ServiceCollection
         //  2. Delegate mod service configuration to derived class.
         gantry.Log("BuildHost: Adding Core Universal Services.");
         services
-            .With(ioc => ConfigureBrighter(ioc, gantry))
+            .With(ioc => ConfigureMediator(ioc, gantry))
             .With(ioc => ConfigureUniversalModServices(ioc, gantry));
 
         //  3. Register all features that need registering.
@@ -56,8 +55,7 @@ internal sealed class GantryServiceCollection : ServiceCollection
         });
 
         //  5. Build IOC Container.
-        IServiceProvider serviceProvider = null!;
-        services.AddSingleton(serviceProvider = services.BuildServiceProvider(o => o.DisposableAssemblies = gantry.ModAssemblies));
+        var serviceProvider = services.BuildServiceProvider(o => o.DisposableAssemblies = gantry.ModAssemblies);
         gantry.Logger.Highlight($"BuildHost: ServiceProvider built with {services.Count} services");
 
         return serviceProvider;
@@ -65,16 +63,17 @@ internal sealed class GantryServiceCollection : ServiceCollection
 
     private static void RegisterGantryServices(IServiceCollection services, ICoreGantryAPI gantry)
     {
+        gantry.Log($" - Gantry Core Services");
         services.AddSingleton(gantry);
         services.AddSingleton(gantry.Mod);
         services.AddSingleton(gantry.Lang);
         services.AddSingleton(gantry.Logger);
         services.AddSingleton(gantry.ApiEx);
-        gantry.Log($" - Gantry Core Services");
     }
 
     private static void RegisterServerApiEndpoints(IServiceCollection services, ICoreGantryAPI gantry)
     {
+        gantry.Log($" - Server API Endpoints");
         var sapi = gantry.Uapi.To<ICoreServerAPI>();
         services.AddSingleton(sapi);
         services.AddSingleton(sapi.World);
@@ -84,11 +83,11 @@ internal sealed class GantryServiceCollection : ServiceCollection
         services.AddSingleton(sapi.ChatCommands);
         services.AddSingleton(sapi.Event);
         services.AddSingleton(sapi.Network);
-        gantry.Log($" - Server API Endpoints");
     }
 
     private static void RegisterClientApiEndpoints(IServiceCollection services, ICoreGantryAPI gantry)
     {
+        gantry.Log($" - Client API Endpoints");
         var capi = gantry.Uapi.To<ICoreClientAPI>();
         services.AddSingleton(capi);
         services.AddSingleton(capi.World);
@@ -100,7 +99,6 @@ internal sealed class GantryServiceCollection : ServiceCollection
         services.AddSingleton(capi.ChatCommands);
         services.AddSingleton(capi.Event);
         services.AddSingleton(capi.Network);
-        gantry.Log($" - Client API Endpoints");
     }
 
     private static void ConfigureUniversalModServices(IServiceCollection services, ICoreGantryAPI gantry)
@@ -111,14 +109,18 @@ internal sealed class GantryServiceCollection : ServiceCollection
             o.RegisterSettingsFiles = _options.RegisterSettingsFiles;
         });
 
-        gantry.Log($" - Harmony Patching Service");
+        gantry.Log($" - Harmony Patching Engine");
         services.AddHarmonyPatchingService(gantry, o => o.AutoPatchModAssembly = _options.ApplyPatches);
     }
 
-    private static void ConfigureBrighter(IServiceCollection services, ICoreGantryAPI gantry)
+    private static void ConfigureMediator(IServiceCollection services, ICoreGantryAPI gantry)
     {
-        var brighterBuilder = services.AddBrighter();
-        brighterBuilder.AutoFromAssemblies(gantry);
-        gantry.Log($" - Brighter Mediator Engine");
+        gantry.Log($" - ApacheTech Mediator Engine");
+        services.AddMediator(o =>
+        {
+            o.DefaultLifetime = ServiceLifetime.Transient;
+            o.Assemblies = gantry.ModAssemblies;
+            o.Logger = new GantryMediatorLogger(gantry.Logger);
+        });
     }
 }

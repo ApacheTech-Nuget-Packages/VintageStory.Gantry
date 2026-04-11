@@ -1,5 +1,4 @@
 ﻿using ApacheTech.Common.Extensions.Harmony;
-using Gantry.Core.Abstractions;
 using Gantry.GameContent.GUI.Abstractions;
 using Gantry.Services.IO.Configuration.Abstractions;
 

@@ -1,7 +1,7 @@
-﻿using ApacheTech.Common.BrighterSlim;
-using Gantry.Services.Brighter.Extensions;
+﻿using ApacheTech.Common.Mediator.Commands.Processor;
+using Gantry.Services.Mediator.Extensions;
 
-namespace Gantry.Services.BrighterChat;
+namespace Gantry.Services.Mediator.Chat;
 
 /// <summary>
 ///     Provides methods for handling chat commands using mediation.
@@ -15,7 +15,7 @@ public static class MediatedChatCommands
     /// <param name="commandProcessor">The command processor to use for handling the command.</param>
     /// <param name="args">The arguments for the chat command.</param>
     /// <returns>The result of executing the command.</returns>
-    public static TextCommandResult HandleCommand<TCommand>(TextCommandCallingArgs args, IAmACommandProcessor commandProcessor) where TCommand : MediatedChatCommand, new()
+    public static TextCommandResult HandleCommand<TCommand>(TextCommandCallingArgs args, ICommandProcessor commandProcessor) where TCommand : MediatedChatCommand, new()
         => commandProcessor.HandleCommand(new TCommand { Args = args });
 
     /// <summary>
@@ -25,6 +25,6 @@ public static class MediatedChatCommands
     /// <param name="commandProcessor">The command processor to use for handling the command.</param>
     /// <param name="command">The chat command.</param>
     /// <returns>The result of executing the command.</returns>
-    public static TextCommandResult HandleCommand<TCommand>(this IAmACommandProcessor commandProcessor, TCommand command) where TCommand : MediatedChatCommand 
+    public static TextCommandResult HandleCommand<TCommand>(this ICommandProcessor commandProcessor, TCommand command) where TCommand : MediatedChatCommand 
         => commandProcessor.Handle(command).Result;
 }

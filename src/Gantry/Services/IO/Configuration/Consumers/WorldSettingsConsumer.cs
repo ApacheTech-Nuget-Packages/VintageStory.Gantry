@@ -1,5 +1,4 @@
-﻿using Gantry.Core.Abstractions;
-using Gantry.Services.IO.Configuration.Abstractions;
+﻿using Gantry.Services.IO.Configuration.Abstractions;
 using Gantry.Services.IO.DataStructures;
 
 namespace Gantry.Services.IO.Configuration.Consumers;
