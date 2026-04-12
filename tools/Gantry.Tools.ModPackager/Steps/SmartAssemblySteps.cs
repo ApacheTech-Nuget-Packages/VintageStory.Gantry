@@ -206,6 +206,42 @@ public static class SmartAssemblySteps
         }
     }
 
+    public static void RemoveDependencyModsFromOutputFolder(this CommandLineArgs args, ModDetails details)
+    {
+        var outputDir = args.DebugDir();
+        _logger.Information("Removing dependency mods from output folder: {OutputDir}", outputDir);
+        foreach (var dependency in details.Dependencies.Keys)
+        {
+            var dependencyFiles = Directory.EnumerateFiles(outputDir, $"{dependency}.*", SearchOption.TopDirectoryOnly);
+            foreach (var file in dependencyFiles)
+            {
+                try
+                {
+                    File.Delete(file);
+                    _logger.Debug(" - Deleted dependency mod file: {File}", file);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Warning(ex, " - Failed to delete dependency mod file: {File}", file);
+                }
+            }
+        }
+    }
+
+    public static void CopyDllToModGac(this CommandLineArgs args, ModDetails details)
+    {
+        var sourceDir = args.DebugDir();
+        var modGacDir = Path.Combine(Constants.ModGacBaseDir);
+
+        _logger.Information("Copying DLL to mod GAC from {SourceDir} to {ModGacDir}", sourceDir, modGacDir);
+        Directory.CreateDirectory(modGacDir);
+
+        var mainAssemblyFile = new FileInfo(Path.Combine(sourceDir, $"{details.AssemblyName}.dll"));
+        var destinationPath = Path.Combine(modGacDir, $"{details.AssemblyName}.dll");
+        mainAssemblyFile.CopyTo(destinationPath, overwrite: true);
+        _logger.Information(" - Copied {AssemblyName} to mod GAC: {DestinationPath}", mainAssemblyFile, destinationPath);
+    }
+
     public static void CreateModArchive(this CommandLineArgs args, ModDetails details, List<AssemblyReference> mergedAssemblies)
     {
         var sourceDir = args.DebugDir();
@@ -230,6 +266,7 @@ public static class SmartAssemblySteps
 
             var archiveFileName = Path.Combine(destinationDir, $"{args.ProjectName()}_v{details.Version}{configurationSuffix}.zip");
             using var archive = ZipFile.Open(archiveFileName, ZipArchiveMode.Create);
+            var dependencyNames = details.Dependencies.Keys;
             foreach (var file in Directory.EnumerateFiles(sourceDir, "*.*", SearchOption.AllDirectories))
             {
                 var ext = Path.GetExtension(file);
@@ -241,6 +278,12 @@ public static class SmartAssemblySteps
                     if (mergedAssemblies.Any(a => a.Name is not null && fileName.StartsWith(a.Name, StringComparison.OrdinalIgnoreCase)))
                     {
                         _logger.Debug("Skipping merged assembly file: {File}", file);
+                        continue;
+                    }
+
+                    if (dependencyNames.Any(d => fileName.StartsWith(d, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        _logger.Debug("Skipping dependency assembly file: {File}", file);
                         continue;
                     }
                 }
@@ -272,6 +315,7 @@ public static class SmartAssemblySteps
                 _logger.Debug("Added file to archive: {File}", file);
             }
             _logger.Information("Mod archive created successfully: {ArchiveFile}", archiveFileName);
+
         }
         catch (Exception ex)
         {

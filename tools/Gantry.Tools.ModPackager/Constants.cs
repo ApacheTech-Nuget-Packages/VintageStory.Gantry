@@ -51,6 +51,11 @@ public static class Constants
     public const string GantryAssemblyFileName = "Gantry.dll";
 
     /// <summary>
+    ///     The base directory for the Gantry assembly in the GAC, used for referencing the assembly during compilation.
+    /// </summary>
+    public const string ModGacBaseDir = @"C:\dev\VintageStory\Mods\.artifacts\";
+
+    /// <summary>
     ///     The environment variable that points to the Vanilla installation directory.
     /// </summary>
     public static string VanillaDir() => Environment.GetEnvironmentVariable("VINTAGE_STORY")!;

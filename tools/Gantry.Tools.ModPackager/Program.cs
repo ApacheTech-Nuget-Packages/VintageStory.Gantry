@@ -21,6 +21,7 @@ await parsedResult.WithParsedAsync(async args =>
         var assemblyFile = new FileInfo(assemblyPath);
         var assemblyDependencies = assemblyFile.GetMergedAssemblies(args);
         args.CleanupDebugDir(assemblyDependencies);
+        args.RemoveDependencyModsFromOutputFolder(modDetails);
     }
     else
     {
@@ -28,6 +29,7 @@ await parsedResult.WithParsedAsync(async args =>
         args.BackupUnmergedModAssembly();
         var saProject = args.CreateDebugSmartAssemblyProject(out var mergedAssemblies);
         args.CleanupDebugDir(mergedAssemblies);
+        args.CopyDllToModGac(modDetails);
         saProject.GenerateSmartAssemblyProjectFile();
         saProject.RunSmartAssemblyProjectFile(args);
         args.CreateModArchive(modDetails, mergedAssemblies);
