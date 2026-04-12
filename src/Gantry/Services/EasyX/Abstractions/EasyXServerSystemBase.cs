@@ -223,7 +223,8 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         {
             if (property.GetCustomAttributes(typeof(ChatCommandAttribute), true).FirstOrDefault() is not ChatCommandAttribute) continue;
             var value = property.GetValue(Settings);
-            sb.AppendLine(Core.Lang.Translate(SubCommandName, property.Name, value));
+            var message = Core.Lang.Translate(SubCommandName, property.Name, SubCommandName, value);
+            sb.AppendLine(message);
         }
     }
 
