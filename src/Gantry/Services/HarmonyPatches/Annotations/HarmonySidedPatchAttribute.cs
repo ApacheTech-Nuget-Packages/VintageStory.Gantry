@@ -5,13 +5,13 @@
 /// </summary>
 /// <seealso cref="HarmonyPatch" />
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Delegate | AttributeTargets.Method, AllowMultiple = true)]
-public class HarmonySidedPatchAttribute : HarmonyPatch
+public class HarmonySidedPatchAttribute : HarmonyPatch, IConditionalOnSide
 {
     /// <summary>
-    ///     Gets the app-side to run the patch on.
+    ///     The app-side to run the patch on.
     /// </summary>
     /// <value>The app-side to run the patch on.</value>
-    internal EnumAppSide Side { get; }
+    public EnumAppSide Side { get; }
 
     /// <summary>
     /// 	Initialises a new instance of the <see cref="HarmonySidedPatchAttribute"/> class.

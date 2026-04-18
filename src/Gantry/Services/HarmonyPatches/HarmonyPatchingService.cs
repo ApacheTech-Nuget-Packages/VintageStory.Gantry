@@ -101,13 +101,19 @@ public class HarmonyPatchingService : IHarmonyPatchingService
     private void PatchAll(Harmony instance, Assembly assembly)
     {
         var side = _api.Side;
+
         var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
-        foreach (var (type, attribute) in sidedPatches)
+        foreach (var (type, attribute) in sidedPatches) PatchType(type, attribute);
+
+        var patchContainers = assembly.GetTypesWithAttribute<ContainsPatchesAttribute>();
+        foreach (var (type, attribute) in patchContainers) PatchType(type, attribute);
+
+        void PatchType(Type type, IConditionalOnSide attribute)
         {
-            if (HasMissingDependencies(type)) continue;
-            if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) continue;
+            if (HasMissingDependencies(type)) return;
+            if (attribute.Side is not EnumAppSide.Universal && attribute.Side != _api.Side) return;
             var methods = GetMethodsForSide(type, side).ToArray();
-            if (methods.Length == 0) continue;
+            if (methods.Length == 0) return;
             PatchMethods(instance, type, methods, side);
         }
     }
@@ -148,7 +154,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             var sidedAttribute = m.GetCustomAttribute<HarmonySidedPatchAttribute>();
             var runsOnAttribute = m.GetCustomAttribute<SidedAttribute>();
             if (sidedAttribute?.Side == EnumAppSide.Universal || sidedAttribute?.Side == side
-            ||  runsOnAttribute?.Side == EnumAppSide.Universal || runsOnAttribute?.Side == side)
+            || runsOnAttribute?.Side == EnumAppSide.Universal || runsOnAttribute?.Side == side)
             {
                 yield return m;
             }
@@ -175,27 +181,63 @@ public class HarmonyPatchingService : IHarmonyPatchingService
             var patchedMethod = new HarmonyMethod(method) { before = [$"{method.Name}_{side}"] };
             if (method.GetCustomAttribute<HarmonyPrefix>() is not null)
             {
-                if (originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
-                _gantry.Log($" - Applying {side} prefix patch: {method.Name}_{side}");
-                instance.Patch(originalMethod, prefix: patchedMethod);
+                try
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Prefix, $"{method.Name}_{side}")) continue;
+                    _gantry.Log($" - Applying {side} prefix patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, prefix: patchedMethod);
+                }
+                catch (Exception ex)
+                {
+                    _gantry.Logger.Error(ex);
+                    _gantry.Log($" - Failed to apply {side} prefix patch: {method.Name}_{side}");
+                    continue;
+                }
             }
             else if (method.GetCustomAttribute<HarmonyPostfix>() is not null)
             {
-                if (originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
-                _gantry.Log($" - Applying {side} postfix patch: {method.Name}_{side}");
-                instance.Patch(originalMethod, postfix: patchedMethod);
+                try
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Postfix, $"{method.Name}_{side}")) continue;
+                    _gantry.Log($" - Applying {side} postfix patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, postfix: patchedMethod);
+                }
+                catch (Exception ex)
+                {
+                    _gantry.Logger.Error(ex);
+                    _gantry.Log($" - Failed to apply {side} postfix patch: {method.Name}_{side}");
+                    continue;
+                }
             }
             else if (method.GetCustomAttribute<HarmonyTranspiler>() is not null)
             {
-                if (originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
-                _gantry.Log($" - Applying {side} transpiler patch: {method.Name}_{side}");
-                instance.Patch(originalMethod, transpiler: patchedMethod);
+                try
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Transpiler, $"{method.Name}_{side}")) continue;
+                    _gantry.Log($" - Applying {side} transpiler patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, transpiler: patchedMethod);
+                }
+                catch (Exception ex)
+                {
+                    _gantry.Logger.Error(ex);
+                    _gantry.Log($" - Failed to apply {side} transpiler patch: {method.Name}_{side}");
+                    continue;
+                }
             }
             else if (method.GetCustomAttribute<HarmonyFinalizer>() is not null)
             {
-                if (originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
-                _gantry.Log($" - Applying {side} finaliser patch: {method.Name}_{side}");
-                instance.Patch(originalMethod, finalizer: patchedMethod);
+                try
+                {
+                    if (originalMethod.HasPatch(HarmonyPatchType.Finalizer, $"{method.Name}_{side}")) continue;
+                    _gantry.Log($" - Applying {side} finaliser patch: {method.Name}_{side}");
+                    instance.Patch(originalMethod, finalizer: patchedMethod);
+                }
+                catch (Exception ex)
+                {
+                    _gantry.Logger.Error(ex);
+                    _gantry.Log($" - Failed to apply {side} finaliser patch: {method.Name}_{side}");
+                    continue;
+                }
             }
         }
     }
