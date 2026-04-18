@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Pegue a semente do mundo.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Abra a pasta Gantry logs.",
-    "Features.Diagnostics.WorldSeed":  "Semente do Mundo: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Abre a pasta de registos do Gantry.",
+    "Features.Diagnostics.WorldSeed.Description":  "Apanha a semente do mundo.",
+    "Features.Diagnostics.WorldSeed":  "Cabeça de série mundial: {0}"
 }

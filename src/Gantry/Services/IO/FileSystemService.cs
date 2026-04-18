@@ -210,7 +210,7 @@ public sealed class FileSystemService : IFileSystemService
     public void RegisterSettingsFile(string fileName, ModFileScope scope)
     {
         RegisterFile(fileName, ModFileType.Settings, scope);
-        var harmony = _gantry.Harmony.CreateOrUseInstance($"{_gantry.Mod.Info.ModID}_FeatureSettings");
+        var harmony = _gantry.Harmony.CreateOrUseInstance($"{_gantry.Mod.Info.ModID}_FeatureSettings_{scope}_{_gantry.Side}");
         var file = JsonSettingsFile.FromJsonFile(GetJsonFile(fileName), _gantry, scope, harmony);
         _gantry.Settings.Set(_gantry.Side, scope, file);
     }

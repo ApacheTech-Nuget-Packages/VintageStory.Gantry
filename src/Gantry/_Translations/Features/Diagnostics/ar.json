@@ -1,5 +1,5 @@
 ﻿{
+    "Features.Diagnostics.OpenLogsFolder.Description":  "افتح مجلد سجلات Gantry.",
     "Features.Diagnostics.WorldSeed.Description":  "احصل على بذور العالم.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "افتح مجلد سجلات القنطرة.",
-    "Features.Diagnostics.WorldSeed":  "بذرة العالم: {0}"
+    "Features.Diagnostics.WorldSeed":  "بذور العالم: {0}"
 }

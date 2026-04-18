@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Získejte semena světa.",
     "Features.Diagnostics.OpenLogsFolder.Description":  "Otevřete složku Gantry logs.",
-    "Features.Diagnostics.WorldSeed":  "Světové semínko: {0}"
+    "Features.Diagnostics.WorldSeed.Description":  "Získejte světové semínko.",
+    "Features.Diagnostics.WorldSeed":  "Světové nasazení: {0}"
 }

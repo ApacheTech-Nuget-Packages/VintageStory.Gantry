@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Prendi il seme del mondo.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Aprire la cartella dei registri Gantry.",
-    "Features.Diagnostics.WorldSeed":  "Seme mondiale: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Apri la cartella dei registri Gantry.",
+    "Features.Diagnostics.WorldSeed.Description":  "Prendi il seed del mondo.",
+    "Features.Diagnostics.WorldSeed":  "Testa di serie mondiale: {0}"
 }

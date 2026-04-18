@@ -19,7 +19,7 @@ public static class PlayerLocationExtensions
     {
         if (api is not ICoreClientAPI capi) return;
         if (targetPos is null) return;
-        capi.AsClientMain().TeleportToPoint(targetPos);
+        capi.ClientMain.TeleportToPoint(targetPos);
     }
 
     /// <summary>

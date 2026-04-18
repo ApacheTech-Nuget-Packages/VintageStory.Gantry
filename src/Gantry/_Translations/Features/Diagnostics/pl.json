@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Zdobądź ziarno świata.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Otwórz folder Dzienniki portalu.",
-    "Features.Diagnostics.WorldSeed":  "Mistrzostwa świata: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Otwórz folder logów Gantry.",
+    "Features.Diagnostics.WorldSeed.Description":  "Zdobądź światowe nasiono.",
+    "Features.Diagnostics.WorldSeed":  "Światowe nasiono: {0}"
 }

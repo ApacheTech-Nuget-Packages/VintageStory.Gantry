@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Krijg het wereldzaad.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Open de map Gantry-logboeken.",
-    "Features.Diagnostics.WorldSeed":  "Wereld Zaad: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Open de map Gantry logs.",
+    "Features.Diagnostics.WorldSeed.Description":  "Haal het wereldzaad.",
+    "Features.Diagnostics.WorldSeed":  "Wereldzaad: {0}"
 }

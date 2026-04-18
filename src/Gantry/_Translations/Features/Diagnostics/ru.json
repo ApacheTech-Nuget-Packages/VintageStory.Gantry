@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Получите мировое семя.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Откройте папку журналов портала.",
-    "Features.Diagnostics.WorldSeed":  "Посев в мире: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Откройте папку журналов Гантри.",
+    "Features.Diagnostics.WorldSeed.Description":  "Добудь семя мира.",
+    "Features.Diagnostics.WorldSeed":  "Мировой посев: {0}"
 }

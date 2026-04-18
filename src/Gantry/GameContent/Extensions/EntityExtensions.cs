@@ -121,7 +121,7 @@ public static class EntityExtensions
     /// <returns><c>true</c> if the agent is looking at the specified target position; otherwise, <c>false</c>.</returns>
     public static bool IsLookingAt(this EntityAgent agent, Vec3d targetPos, float radThreshold)
     {
-        var agentPos = agent.SidedPos;
+        var agentPos = agent.Pos;
         var relativePos = agentPos.Copy().LookAt(targetPos);
 
         var pitchDiff = Math.Abs(agentPos.Pitch) - Math.Abs(relativePos.Pitch);

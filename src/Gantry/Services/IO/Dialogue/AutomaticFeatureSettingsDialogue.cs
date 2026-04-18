@@ -22,6 +22,18 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     {
     }
 
+    private double GetLabelWidth(CairoFont font)
+    {
+        var longestLabel = Properties
+            .Select(p => Gantry.Lang.Translate(FeatureName, $"Dialogue.lbl{p.Name}"))
+            .OrderBy(p => p.Length)
+            .Last();
+
+        var titleWidth = font.GetTextExtents(Gantry.Lang.Translate(FeatureName, "Dialogue.Title")).Width + 10;
+
+        return Math.Max(font.GetTextExtents(longestLabel).Width, titleWidth);
+    }
+
     /// <summary>
     ///     A collection of the boolean properties available on the settings object.
     /// </summary>
@@ -35,10 +47,13 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     ///     Composes the header for the GUI.
     /// </summary>
     /// <param name="composer">The composer.</param>
-    protected override void ComposeBody(GuiComposer composer)
+    protected sealed override void ComposeBody(GuiComposer composer)
     {
-        var left = ElementBounds.Fixed(0, GuiStyle.TitleBarHeight + 1.0, 250, 20);
-        var right = ElementBounds.Fixed(260, GuiStyle.TitleBarHeight, 20, 20);
+        var font = CairoFont.WhiteSmallText();
+        var leftWidth = GetLabelWidth(font);
+
+        var left = ElementBounds.Fixed(0, GuiStyle.TitleBarHeight + 1.0, leftWidth, 20);
+        var right = ElementBounds.Fixed(leftWidth + 10, GuiStyle.TitleBarHeight, 20, 20);
 
         foreach (var propertyInfo in Properties)
         {
@@ -82,7 +97,7 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     /// <summary>
     ///     Refreshes the displayed values on the form, updating all switch controls to match the current settings.
     /// </summary>
-    protected override void RefreshValues()
+    protected sealed override void RefreshValues()
     {
         if (!IsOpened()) return;
 
@@ -93,4 +108,11 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
                 .SetValue((bool)propertyInfo.GetValue(Settings)!);
         }
     }
+
+    /// <summary>
+    ///     Gets whether it is preferred for the mouse to be not grabbed while this dialog is opened.
+    ///     If true (default), the Alt button needs to be held to manually grab the mouse.
+    /// </summary>
+    /// <value><c>true</c> if the GUI prefers an un-grabbed mouse; otherwise, <c>false</c>.</value>
+    public sealed override bool PrefersUngrabbedMouse => true;
 }

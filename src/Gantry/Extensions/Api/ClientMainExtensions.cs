@@ -29,12 +29,12 @@ public static class ClientMainExtensions
         var yaw = t.Field<float>("yaw").Value;
         var pitch = t.Field<float>("pitch").Value;
 
-        game.EntityPlayer.SidedPos.X = t.Field<double>("x").Value;
-        game.EntityPlayer.SidedPos.Y = t.Field<double>("y").Value;
-        game.EntityPlayer.SidedPos.Z = t.Field<double>("z").Value;
-        game.EntityPlayer.SidedPos.Yaw = yaw;
-        game.EntityPlayer.SidedPos.Pitch = pitch;
-        game.EntityPlayer.SidedPos.Roll = t.Field<float>("roll").Value;
+        game.EntityPlayer.Pos.X = t.Field<double>("x").Value;
+        game.EntityPlayer.Pos.Y = t.Field<double>("y").Value;
+        game.EntityPlayer.Pos.Z = t.Field<double>("z").Value;
+        game.EntityPlayer.Pos.Yaw = yaw;
+        game.EntityPlayer.Pos.Pitch = pitch;
+        game.EntityPlayer.Pos.Roll = t.Field<float>("roll").Value;
         game.mouseYaw = yaw;
         game.mousePitch = pitch;
     }

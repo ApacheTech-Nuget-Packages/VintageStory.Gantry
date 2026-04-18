@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Dünya tohumunu alın.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Portal günlükleri klasörünü açın.",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Gantry kayıtları klasörünü açın.",
+    "Features.Diagnostics.WorldSeed.Description":  "Dünya tohumunu al.",
     "Features.Diagnostics.WorldSeed":  "Dünya Tohumu: {0}"
 }

@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Få verdens seed.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Åbn mappen Portallogfiler.",
-    "Features.Diagnostics.WorldSeed":  "Verdensseed: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Åbn mappen Gantry logs.",
+    "Features.Diagnostics.WorldSeed.Description":  "Få verdensfrøet.",
+    "Features.Diagnostics.WorldSeed":  "Verdensseedet: {0}"
 }

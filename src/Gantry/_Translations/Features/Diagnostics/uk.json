@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Отримай насіння світу.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Відкрийте папку Gantry logs.",
-    "Features.Diagnostics.WorldSeed":  "Світове насіння: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Відкрийте папку журналів Гантрі.",
+    "Features.Diagnostics.WorldSeed.Description":  "Отримай світове насіння.",
+    "Features.Diagnostics.WorldSeed":  "Світовий посів: {0}"
 }

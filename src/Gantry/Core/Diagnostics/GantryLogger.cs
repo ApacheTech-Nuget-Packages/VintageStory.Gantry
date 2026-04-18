@@ -91,9 +91,8 @@ public abstract class GantryLogger<T> : Logger where T : ModHost<T>
 
             var type = logType == EnumLogType.StoryEvent ? "Event" : logType.ToString() ?? string.Empty;
             var timestampFormat = logType == EnumLogType.VerboseDebug ? "d.M.yyyy HH:mm:ss.fff" : "d.M.yyyy HH:mm:ss";
-            var timestamp = DateTime.Now.ToString(timestampFormat);
-            value.writer.WriteLine($"{timestamp} [{type}] [{_side}] [{ModInfo.Name}] {string.Format(message, args)}");
-            value.writer.Flush();
+            var timestamp = DateTime.Now.ToString(timestampFormat);            
+            value.WriteLine($"{timestamp} [{type}] [{_side}] [{ModInfo.Name}] {string.Format(message, args)}");
         }
         catch (FormatException)
         {

@@ -93,7 +93,7 @@ public static class HostExtensions
         api.Invoke(
             capi =>
             {
-                var clientSystems = capi.AsClientMain().GetField<ClientSystem[]>("clientSystems");
+                var clientSystems = capi.ClientMain.GetField<ClientSystem[]>("clientSystems");
                 if (clientSystems is null) return;
                 foreach (var system in clientSystems)
                 {
@@ -103,7 +103,7 @@ public static class HostExtensions
             },
             sapi =>
             {
-                var serverSystems = sapi.AsServerMain().GetField<ServerSystem[]>("Systems");
+                var serverSystems = sapi.ServerMain.GetField<ServerSystem[]>("Systems");
                 if (serverSystems is null) return;
                 foreach (var system in serverSystems)
                 {

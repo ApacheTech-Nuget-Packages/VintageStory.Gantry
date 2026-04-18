@@ -1,0 +1,5 @@
+﻿{
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Atidarykite portalinių žurnalų aplanką.",
+    "Features.Diagnostics.WorldSeed.Description":  "Gaukite pasaulio sėklą.",
+    "Features.Diagnostics.WorldSeed":  "Pasaulio sėkla: {0}"
+}

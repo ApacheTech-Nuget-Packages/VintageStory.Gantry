@@ -156,7 +156,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         if (!player.Privileges.Contains(Privilege.controlserver)) return;
         Settings.UpdateSettings(packet);
         ServerChannel?.BroadcastPacket(Settings);
-        ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
+        ServerChannel?.BroadcastUniquePacket(Sapi.ServerMain, GeneratePacket);
         ServerChannel?.SendPacket(new SettingsSavedPacket { FeatureName = SubCommandName }, player);
     }
 
@@ -243,7 +243,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
 
         Settings.Mode = mode.Value;
         var modeMessage = Core.Lang.TranslateG("EasyX", "SetMode", SubCommandName, Settings.Mode);
-        ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
+        ServerChannel?.BroadcastUniquePacket(Sapi.ServerMain, GeneratePacket);
         return TextCommandResult.Success(modeMessage);
     }
 
@@ -298,7 +298,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         }
         Settings.SetProperty(propertyName, value);
         var message = Core.Lang.Translate(SubCommandName, propertyName, value);
-        ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
+        ServerChannel?.BroadcastUniquePacket(Sapi.ServerMain, GeneratePacket);
         return TextCommandResult.Success(message);
     }
 
@@ -315,7 +315,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         }
         Settings.SetProperty(propertyName, value);
         var message = Core.Lang.Translate(SubCommandName, propertyName, value);
-        ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
+        ServerChannel?.BroadcastUniquePacket(Sapi.ServerMain, GeneratePacket);
         return TextCommandResult.Success(message);
     }
 
@@ -348,7 +348,7 @@ public abstract class EasyXServerSystemBase<TModSystem, TServerSettings, TClient
         var isRemoved = existingPlayer is not null && list.Remove(existingPlayer);
         if (!isRemoved) list.Add(result!);
         Core.Settings.For(Scope).Save(Settings);
-        ServerChannel?.BroadcastUniquePacket(Sapi.AsServerMain(), GeneratePacket);
+        ServerChannel?.BroadcastUniquePacket(Sapi.ServerMain, GeneratePacket);
         var message = Core.Lang.TranslateG("EasyX", $"{listType}.{(isRemoved ? "PlayerRemoved" : "PlayerAdded")}", result.Name, SubCommandName);
         return TextCommandResult.Success(message);
     }

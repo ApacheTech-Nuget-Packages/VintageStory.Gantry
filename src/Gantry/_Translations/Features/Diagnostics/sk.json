@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "Získajte svetové semienko.",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "Otvorte priečinok denníkov portálu.",
-    "Features.Diagnostics.WorldSeed":  "Svetové semeno: {0}"
+    "Features.Diagnostics.OpenLogsFolder.Description":  "Otvorte priečinok Gantry logs.",
+    "Features.Diagnostics.WorldSeed.Description":  "Získajte semienko sveta.",
+    "Features.Diagnostics.WorldSeed":  "Svetové nasadenie: {0}"
 }

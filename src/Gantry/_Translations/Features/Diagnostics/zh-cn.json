@@ -1,5 +1,5 @@
 ﻿{
-    "Features.Diagnostics.WorldSeed.Description":  "获取世界种子。",
-    "Features.Diagnostics.OpenLogsFolder.Description":  "打开 Gantry 日志文件夹。",
+    "Features.Diagnostics.OpenLogsFolder.Description":  "打开Gantry日志文件夹。",
+    "Features.Diagnostics.WorldSeed.Description":  "去拿世界种子。",
     "Features.Diagnostics.WorldSeed":  "世界种子： {0}"
 }

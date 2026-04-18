@@ -12,29 +12,35 @@ public static class ApiExtensions
 {
     #region Client
 
-    /// <summary>
-    ///     Returns the <see cref="ClientMain"/> from the current <see cref="IWorldAccessor"/> instance.
-    /// </summary>
-    public static ClientMain AsClientMain(this IWorldAccessor world)
+    extension (IWorldAccessor world)
     {
-        return (ClientMain)world;
+        /// <summary>
+        ///     Returns the <see cref="ClientMain"/> from the current <see cref="IWorldAccessor"/> instance.
+        /// </summary>
+        public ClientMain ClientMain => (ClientMain)world;
+
+        /// <summary>
+        ///     Returns the <see cref="ServerMain"/> from the current <see cref="IWorldAccessor"/> instance.
+        /// </summary>
+        public ServerMain ServerMain => (ServerMain)world;
     }
 
-    /// <summary>
-    ///     Returns the <see cref="ClientMain"/> from the current <see cref="ICoreClientAPI"/> instance.
-    /// </summary>
-    public static ClientMain AsClientMain(this ICoreClientAPI api)
+    extension(ICoreClientAPI capi)
     {
-        return (ClientMain)api.World;
+        /// <summary>
+        ///     Returns the <see cref="ClientMain"/> from the current <see cref="ICoreClientAPI"/> instance.
+        /// </summary>
+        public ClientMain ClientMain => (ClientMain)capi.World;
     }
 
-    /// <summary>
-    ///     Returns the <see cref="ICoreClientAPI"/> from the current <see cref="ClientMain"/> instance.
-    /// </summary>
-    public static ICoreClientAPI AsApi(this ClientMain game)
+    extension(ICoreServerAPI sapi)
     {
-        return (ICoreClientAPI)game.Api;
+        /// <summary>
+        ///     Returns the <see cref="ServerMain"/> from the current <see cref="ICoreServerAPI"/> instance.
+        /// </summary>
+        public ServerMain ServerMain => (ServerMain)sapi.World;
     }
+
 
     /// <summary>
     ///     Returns the dimensions of the physical viewport the game is currently running on.
@@ -133,22 +139,6 @@ public static class ApiExtensions
     #region Server
 
     /// <summary>
-    ///     Returns the <see cref="ServerMain"/> from the current <see cref="IWorldAccessor"/> instance.
-    /// </summary>
-    public static ServerMain AsServerMain(this IWorldAccessor world)
-    {
-        return (ServerMain)world;
-    }
-
-    /// <summary>
-    ///     Returns the <see cref="ServerMain"/> from the current <see cref="ICoreServerAPI"/> instance.
-    /// </summary>
-    public static ServerMain AsServerMain(this ICoreServerAPI api)
-    {
-        return (ServerMain)api.World;
-    }
-
-    /// <summary>
     ///     Returns the <see cref="ServerMain"/> from the current <see cref="ICoreServerAPI"/> instance.
     /// </summary>
     public static ServerProgramArgs CommandLineArguments(this ICoreServerAPI api)
@@ -232,7 +222,7 @@ public static class ApiExtensions
         return api.Invoke(
             capi => capi.IsSinglePlayer,
             sapi => !sapi.IsDedicatedServerProcess()
-                    || sapi.AsServerMain().MainSockets.Any(x => x is not DummyTcpNetServer));
+                    || sapi.ServerMain.MainSockets.Any(x => x is not DummyTcpNetServer));
     }
 
     /// <summary>
