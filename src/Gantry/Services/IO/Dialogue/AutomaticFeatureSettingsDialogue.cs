@@ -22,18 +22,6 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     {
     }
 
-    private double GetLabelWidth(CairoFont font)
-    {
-        var longestLabel = Properties
-            .Select(p => Gantry.Lang.Translate(FeatureName, $"Dialogue.lbl{p.Name}"))
-            .OrderBy(p => p.Length)
-            .Last();
-
-        var titleWidth = font.GetTextExtents(Gantry.Lang.Translate(FeatureName, "Dialogue.Title")).Width + 10;
-
-        return Math.Max(font.GetTextExtents(longestLabel).Width, titleWidth);
-    }
-
     /// <summary>
     ///     A collection of the boolean properties available on the settings object.
     /// </summary>
@@ -50,7 +38,7 @@ public abstract class AutomaticFeatureSettingsDialogue<TFeatureSettings> : Featu
     protected sealed override void ComposeBody(GuiComposer composer)
     {
         var font = CairoFont.WhiteSmallText();
-        var leftWidth = GetLabelWidth(font);
+        var leftWidth = GetMaxWidth(font, FeatureName, Properties.Select(p => p.Name));
 
         var left = ElementBounds.Fixed(0, GuiStyle.TitleBarHeight + 1.0, leftWidth, 20);
         var right = ElementBounds.Fixed(leftWidth + 10, GuiStyle.TitleBarHeight, 20, 20);
