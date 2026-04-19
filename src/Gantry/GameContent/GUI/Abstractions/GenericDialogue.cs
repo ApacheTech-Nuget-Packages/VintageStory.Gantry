@@ -40,6 +40,26 @@ public abstract class GenericDialogue : GuiDialog
     }
 
     /// <summary>
+    ///     Retrieves the maximum width required to display the longest label, 
+    ///     for a given feature, within this dialogue box, based on the provided font and label keys.
+    /// </summary>
+    /// <param name="font">The font to use for measuring text width.</param>
+    /// <param name="featureName">The name of the feature for which to retrieve labels.</param>
+    /// <param name="labels">A collection of label keys to measure.</param>
+    /// <returns>The maximum width required to display the longest label.</returns>
+    protected double GetMaxWidth(CairoFont font, string featureName, IEnumerable<string> labels)
+    {
+        var longestLabel = labels
+            .Select(p => Gantry.Lang.Translate(featureName, $"Dialogue.lbl{p}"))
+            .OrderBy(p => p.Length)
+            .Last();
+
+        var titleWidth = font.GetTextExtents(Gantry.Lang.Translate(featureName, "Dialogue.Title")).Width + 10;
+
+        return Math.Max(font.GetTextExtents(longestLabel).Width, titleWidth);
+    }
+
+    /// <summary>
     ///     The key combination string that toggles this GUI object.
     /// </summary>
     /// <value>The toggle key combination code.</value>
