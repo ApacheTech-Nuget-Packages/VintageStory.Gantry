@@ -36,6 +36,17 @@ public abstract class FeatureSettings<TSettings> : FeatureSettings where TSettin
     }
 
     /// <summary>
+    ///     Creates a lambda expression that represents a getter for the specified property.
+    /// </summary>
+    /// <typeparam name="TProperty">The type of the property.</typeparam>
+    /// <param name="property">An expression representing the property.</param>
+    /// <returns>A lambda expression that gets the value of the specified property.</returns>
+    public LambdaExpression Lambda<TProperty>(Expression<System.Func<TSettings, TProperty>> property) 
+        => Expression.Lambda<Func<TProperty>>(
+                Expression.Property(Expression.Constant(this), 
+                (PropertyInfo)((MemberExpression)property.Body).Member));
+
+    /// <summary>
     ///     Update the settings within this class, and save the changes.
     /// </summary>
     /// <param name="newSettings"></param>
