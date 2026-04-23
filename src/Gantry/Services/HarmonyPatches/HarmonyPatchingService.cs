@@ -105,7 +105,7 @@ public class HarmonyPatchingService : IHarmonyPatchingService
         var sidedPatches = assembly.GetTypesWithAttribute<HarmonySidedPatchAttribute>();
         foreach (var (type, attribute) in sidedPatches) PatchType(type, attribute);
 
-        var patchContainers = assembly.GetTypesWithAttribute<ContainsPatchesAttribute>();
+        var patchContainers = assembly.GetTypesWithAttribute<HarmonyPatchContainerAttribute>();
         foreach (var (type, attribute) in patchContainers) PatchType(type, attribute);
 
         void PatchType(Type type, IConditionalOnSide attribute)
