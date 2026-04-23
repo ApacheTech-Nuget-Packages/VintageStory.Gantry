@@ -1,5 +1,4 @@
-using ApacheTech.Common.Mediator.Commands.Processor;
-using Gantry.Services.EasyX.Hosting;
+
 
 /// <summary>
 ///     Provides the core API surface for Gantry mods, exposing logging, dependency injection, localisation, mod metadata, and core services.
@@ -120,6 +119,12 @@ internal static partial class G
     /// </summary>
     public static IWorldAccessor World
         => Uapi.World;
+
+    /// <summary>
+    ///     The cancellation token for the mod's lifetime, which is triggered when the mod is unloaded or the game is shutting down.
+    /// </summary>
+    public static CancellationToken CancellationToken
+        => Core.CancellationToken;
 
     /// <summary>
     ///     Writes a verbose debug message to the mod logger.
