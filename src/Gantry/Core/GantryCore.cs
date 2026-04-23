@@ -13,6 +13,8 @@ namespace Gantry.Core;
 /// </summary>
 internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
 {
+    private readonly CancellationTokenSource _cancellationTokenSource;
+
     private class GantryServerCore(ICoreAPI api, ModContainer mod) : GantryCore<T>(api, mod);
     private class GantryClientCore(ICoreAPI api, ModContainer mod) : GantryCore<T>(api, mod);
 
@@ -38,6 +40,8 @@ internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
         HolaMundo();
         Logger.VerboseDebug($"GantryCore: Version: {mod.Info.Version}");
         Logger.VerboseDebug($"GantryCore: Mod Assembly: {ModAssembly.FullName}");
+        _cancellationTokenSource = new CancellationTokenSource();
+        Logger.VerboseDebug($"GantryCore: Mod CancellationTokenSource initialised");
         ApiEx = new ModApiContext(this);
         Logger.VerboseDebug($"GantryCore: ApiEx now online");
         Lang = new StringTranslator(mod.Info.ModID);
@@ -95,4 +99,7 @@ internal class GantryCore<T> : ICoreGantryAPI where T : ModHost<T>
 
     /// <inheritdoc />
     public ICoreAPI Uapi { get; }
+
+    /// <inheritdoc />
+    public CancellationToken CancellationToken => _cancellationTokenSource.Token;
 }

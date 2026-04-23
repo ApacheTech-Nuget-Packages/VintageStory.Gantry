@@ -98,6 +98,11 @@ public interface ICoreGantryAPI
     IModSettingsService Settings => Resolve<IModSettingsService>();
 
     /// <summary>
+    ///     The cancellation token for the mod's lifetime, which is triggered when the mod is unloaded or the game is shutting down.
+    /// </summary>
+    CancellationToken CancellationToken { get; }
+
+    /// <summary>
     ///     Writes a verbose debug message to the mod logger.
     /// </summary>
     /// <param name="messageTemplate">The message template to log.</param>
