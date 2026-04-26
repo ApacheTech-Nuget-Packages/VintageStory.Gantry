@@ -1,4 +1,6 @@
-﻿namespace Gantry.GameContent.Blocks;
+﻿using Gantry.Extensions.Api;
+
+namespace Gantry.GameContent.Blocks;
 
 /// <summary>
 ///     Basic class for block entities - a data structures to hold custom
@@ -12,6 +14,11 @@ public abstract class BlockEntityBehaviour<TBlockEntity> : BlockEntityBehavior w
     ///     The <see cref="BlockEntity"/> this behaviour is applied to.
     /// </summary>
     protected TBlockEntity Entity { get; }
+
+    /// <summary>
+    ///     The Gantry API instance, providing access to various game systems and utilities.
+    /// </summary>
+    protected ICoreGantryAPI Gantry => Api.GantryCore();
 
     /// <summary>
     ///     Initialises a new instance of the <see cref="BlockEntityBehaviour{TBlockEntity}"/> class.
