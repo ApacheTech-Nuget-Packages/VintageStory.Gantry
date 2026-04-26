@@ -228,4 +228,15 @@ public static class PlayerExtensions
         player.SetMovementSpeed(moveSpeed);
         ((IServerPlayer)player).BroadcastPlayerData(false);
     }
+
+    /// <summary>
+    ///     Gets the specified behaviour from the player, if it exists. This is a thread-safe method that can be called from either side.
+    /// </summary>
+    /// <typeparam name="TBehaviour">The type of the behaviour.</typeparam>
+    /// <param name="player">The player entity.</param>
+    /// <param name="behaviourName">The name of the behaviour.</param>
+    /// <returns>The specified behaviour if it exists; otherwise, null.</returns>
+    public static TBehaviour? GetBehaviour<TBehaviour>(this EntityPlayer player, string behaviourName)
+        where TBehaviour : EntityBehavior
+        => player.GetBehavior(behaviourName) as TBehaviour;
 }

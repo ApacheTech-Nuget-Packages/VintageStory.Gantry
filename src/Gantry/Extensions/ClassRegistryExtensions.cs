@@ -87,6 +87,20 @@ public static class ClassRegistryExtensions
     }
 
     /// <summary>
+    ///     Registers a new Entity Behaviour. <br/>
+    ///     Must happen before any entities are loaded. <br/>
+    ///     Must be registered on both the client, and server.
+    /// </summary>
+    /// <typeparam name="T">The type of the Entity Behaviour to register.</typeparam>
+    /// <param name="api">The game's internal API.</param>
+    /// <param name="friendlyName">A friendly name to give to the behaviour.</param>
+    public static void RegisterEntityBehaviour<T>(this ICoreAPICommon api, string? friendlyName = null)
+    {
+        var type = typeof(T);
+        api.RegisterEntityBehaviorClass(friendlyName?.IfNullOrEmpty(type.Name), type);
+    }
+
+    /// <summary>
     ///     Registers a new Block Behaviour. <br/>
     ///     Must happen before any blocks are loaded. <br/>
     ///     Must be registered on both the client, and server.
