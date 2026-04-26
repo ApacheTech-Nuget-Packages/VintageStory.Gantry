@@ -1,4 +1,5 @@
 ﻿using Gantry.Extensions;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
 using Vintagestory.ServerMods.NoObf;
 using JsonPatchAlias = Vintagestory.ServerMods.NoObf.JsonPatch;
@@ -102,6 +103,44 @@ public static class TavisExtensions
         where TBehaviour : BlockEntityBehavior
     {
         api.RegisterBlockEntityBehaviour<TBehaviour>();
+        api.ApplyJsonPatchAlias(new JsonPatchAlias
+        {
+            Op = EnumJsonPatchOp.AddEach,
+            File = fileAsset,
+            Path = "/entityBehaviors",
+            Value = JsonObject.FromJson($"[{{ \"name\": \"{typeof(TBehaviour).Name}\" }}]")
+        });
+    }
+
+    /// <summary>
+    ///     Registers a BlockEntityBehaviour with the API, and patches the JSON file to add the behaviour to the block.
+    /// </summary>
+    /// <typeparam name="TBehaviour">The type of <see cref="BlockEntityBehavior"/> to register.</typeparam>
+    /// <param name="api">The API to register the <see cref="BlockEntityBehavior"/> with.</param>
+    /// <param name="fileAsset">The file to patch.</param>
+    public static void PatchBlockEntityBehaviour<TBehaviour>(this ICoreServerAPI api, AssetLocation fileAsset)
+        where TBehaviour : BlockEntityBehavior
+    {
+        api.RegisterBlockEntityBehaviour<TBehaviour>();
+        api.ApplyJsonPatchAlias(new JsonPatchAlias
+        {
+            Op = EnumJsonPatchOp.AddEach,
+            File = fileAsset,
+            Path = "/entityBehaviors",
+            Value = JsonObject.FromJson($"[{{ \"name\": \"{typeof(TBehaviour).Name}\" }}]")
+        });
+    }
+
+    /// <summary>
+    ///     Registers a EntityBehaviour with the API, and patches the JSON file to add the behaviour to the entity.
+    /// </summary>
+    /// <typeparam name="TBehaviour">The type of <see cref="EntityBehavior"/> to register.</typeparam>
+    /// <param name="api">The API to register the <see cref="EntityBehavior"/> with.</param>
+    /// <param name="fileAsset">The file to patch.</param>
+    public static void PatchEntityBehaviour<TBehaviour>(this ICoreAPI api, AssetLocation fileAsset)
+        where TBehaviour : EntityBehavior
+    {
+        api.RegisterEntityBehaviour<TBehaviour>();
         api.ApplyJsonPatchAlias(new JsonPatchAlias
         {
             Op = EnumJsonPatchOp.AddEach,
