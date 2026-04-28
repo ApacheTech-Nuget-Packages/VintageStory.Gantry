@@ -14,6 +14,14 @@ public abstract class ModSystemBase<TModSystem> : ModSystem, IHostedModSystem
     private bool _disposed;
 
     /// <summary>
+    ///     Allows for the mod system to be disabled, preventing it from being loaded and having its hooks called.
+    /// </summary>
+    protected virtual bool Enabled => true;
+
+    /// <inheritdoc />
+    public override bool ShouldLoad(EnumAppSide forSide) => Enabled;
+
+    /// <summary>
     ///     Provides access to the current instance of the mod system.
     /// </summary>
     public static TModSystem Instance => _instance.Current;
