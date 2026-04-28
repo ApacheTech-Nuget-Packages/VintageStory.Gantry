@@ -12,6 +12,9 @@ public sealed class MessageBox : GenericDialogue
     private readonly ButtonLayout _buttons;
     private readonly string _message;
 
+    private string? OkButtonText { get; set; }
+    private string? CancelButtonText { get; set; }
+
     private Action? OnOkAction { get; set; }
     private Action? OnCancelAction { get; set; }
 
@@ -37,13 +40,25 @@ public sealed class MessageBox : GenericDialogue
     /// <param name="title">A <see cref="string"/> that specifies the title bar caption to display.</param>
     /// <param name="message">A <see cref="string"/> that specifies the text to display.</param>
     /// <param name="buttons">A <see cref="ButtonLayout"/> value that specifies which button or buttons to display.</param>
+    /// <param name="okButtonText">A <see cref="string"/> that specifies the text to display on the OK button.</param>
+    /// <param name="cancelButtonText">A <see cref="string"/> that specifies the text to display on the Cancel button.</param>
     /// <param name="onOkButtonPressed">The <see cref="Action"/> to be invoked if the user selects the confirm option.</param>
     /// <param name="onCancelButtonPressed">The <see cref="Action"/> to be invoked if the user selects the cancel option.</param>
-    public static void Show(ICoreGantryAPI api, string title, string message, ButtonLayout buttons = ButtonLayout.Ok, Action? onOkButtonPressed = null, Action? onCancelButtonPressed = null)
+    public static void Show(
+        ICoreGantryAPI api, 
+        string title, 
+        string message,
+        ButtonLayout buttons = ButtonLayout.Ok, 
+        string? okButtonText = null,
+        string? cancelButtonText = null,
+        Action? onOkButtonPressed = null,
+        Action? onCancelButtonPressed = null)
     {
         var messageBox = new MessageBox(api, title, message, buttons)
         {
+            CancelButtonText = cancelButtonText,
             OnCancelAction = onCancelButtonPressed,
+            OkButtonText = okButtonText,
             OnOkAction = onOkButtonPressed,
             ModalTransparency = 0.6f
         };
@@ -79,8 +94,8 @@ public sealed class MessageBox : GenericDialogue
             
         composer.AddStaticText(_message, messageFont, EnumTextOrientation.Center, messageBounds);
             
-        var confirmButtonText = Gantry.Lang.Confirmation("ok");
-        var cancelButtonText = Gantry.Lang.Confirmation("cancel");
+        var confirmButtonText = OkButtonText ?? Gantry.Lang.Confirmation("ok");
+        var cancelButtonText = CancelButtonText ?? Gantry.Lang.Confirmation("cancel");
 
         var controlRowBoundsLeftFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.LeftBottom);
         var controlRowBoundsRightFixed = ElementBounds.FixedSize(150, 30).WithAlignment(EnumDialogArea.RightBottom);
