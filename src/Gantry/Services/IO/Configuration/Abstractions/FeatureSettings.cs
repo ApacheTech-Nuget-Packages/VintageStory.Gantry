@@ -10,6 +10,7 @@ public abstract class FeatureSettings : IDisposable
     ///     Defines which app side this settings class is intended for.
     /// </summary>
     [DoNotPatch]
+    [JsonIgnore]
     public EnumAppSide Side { get; init; } = EnumAppSide.Universal;
 
     /// <summary>
